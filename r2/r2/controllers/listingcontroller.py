@@ -149,7 +149,7 @@ class ListingController(RedditController):
                                page_classes=self.extra_page_classes,
                                show_sidebar=self.show_sidebar,
                                show_chooser=self.show_chooser,
-                               show_newsletterbar=True,
+                               show_newsletterbar=False,
                                nav_menus=self.menus,
                                title=self.title(),
                                infotext=self.infotext,
@@ -414,7 +414,7 @@ class ListingWithPromos(SubredditListingController):
 
         show_promo = False
         keywords = []
-        can_show_promo = not c.user.pref_hide_ads or not c.user.gold and c.site.allow_ads
+        can_show_promo = 0
         try_show_promo = ((c.user_is_loggedin and random.random() > 0.5) or
                           not c.user_is_loggedin)
 
@@ -482,7 +482,7 @@ class ListingWithPromos(SubredditListingController):
 class HotController(ListingWithPromos):
     where = 'hot'
     extra_page_classes = ListingController.extra_page_classes + ['hot-page']
-    show_chooser = True
+    show_chooser = False
     next_suggestions_cls = ListingSuggestions
     show_organic = True
 

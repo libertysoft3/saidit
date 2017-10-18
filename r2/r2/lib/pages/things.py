@@ -39,6 +39,10 @@ from pylons import tmpl_context as c
 from pylons import app_globals as g
 from pylons.i18n import _, ungettext
 
+# CUSTOM
+import re
+from urllib import quote
+
 class PrintableButtons(Styled):
     cachable = False
 
@@ -135,6 +139,33 @@ class LinkButtons(PrintableButtons):
                              c.user_special_distinguish)
                             and getattr(thing, "expand_children", False))
 
+        # CUSTOM - Open chat in new tab link
+        # Note: Shown to all users if sub has chat enabled
+        show_chat_link = False
+        chat_popout_url = ''
+        chat_enabling_post_content = g.live_config['chat_enabling_post_content']
+        if feature.is_enabled('chat') and thing.subreddit.chat_enabled and thing.selftext == chat_enabling_post_content:
+          show_chat_link = True
+          chat_client = g.live_config['chat_client']
+          chat_client_url = g.live_config['chat_client_url']
+          chat_username = g.live_config['chat_default_username']
+          chat_password = chat_username
+          if c.user_is_loggedin and c.user.pref_irc_username:
+            chat_username = c.user.pref_irc_username
+            chat_password = chat_username
+          elif c.user_is_loggedin:  
+            chat_username = c.user.name
+            chat_password = chat_username
+          if c.user.pref_irc_password:
+            chat_password = c.user.pref_irc_password
+          irc_sanitized_post_title = re.sub(r'[^a-zA-Z0-9]','-', thing.title)
+          chat_channels = g.live_config['chat_channel_name_prefix'] + thing.subreddit.name + '-' + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
+          chat_channels = re.sub('\-+', '-', chat_channels)
+          chat_channels = quote(chat_channels)
+
+          # Note: Omitting nofocus param
+          chat_popout_url = chat_client_url + '/?tls=true&lockchannel&autologin&user=' + chat_username + '&al-password=' +  chat_password + '&autoconnect&nick=' + chat_username + '&username=' + chat_username + '&realname=' + chat_username + '&join=' + chat_channels
+        
         permalink = thing.permalink
 
         kw = {}
@@ -189,6 +220,10 @@ class LinkButtons(PrintableButtons):
                                   # promotion
                                   promoted = thing.promoted,
                                   is_link = True,
+
+                                  # CUSTOM
+                                  show_chat_link = show_chat_link,
+                                  chat_popout_url = chat_popout_url,
                                   **kw)
 
 class CommentButtons(PrintableButtons):
@@ -239,6 +274,35 @@ class CommentButtons(PrintableButtons):
 
             embed_button.build()
 
+        # CUSTOM - Open chat in new tab link
+        # Note: Shown to all users if sub has chat enabled
+        show_chat_link = False
+        chat_popout_url = ''
+        chat_enabling_post_content = g.live_config['chat_enabling_post_content']
+        if feature.is_enabled('chat') and thing.subreddit.chat_enabled and thing.body.find(chat_enabling_post_content) == 0:
+          show_chat_link = True
+          chat_client = g.live_config['chat_client']
+          chat_client_url = g.live_config['chat_client_url']
+          chat_username = g.live_config['chat_default_username']
+          chat_password = chat_username
+          if c.user_is_loggedin and c.user.pref_irc_username:
+            chat_username = c.user.pref_irc_username
+            chat_password = chat_username
+          elif c.user_is_loggedin:  
+            chat_username = c.user.name
+            chat_password = chat_username
+          if c.user.pref_irc_password:
+            chat_password = c.user.pref_irc_password
+          irc_sanitized_post_title = thing.body.replace(chat_enabling_post_content,"")[:15]
+          irc_sanitized_post_title = re.sub(r'[^a-zA-Z0-9]','-', irc_sanitized_post_title)
+          chat_channels = g.live_config['chat_channel_name_prefix'] + thing.subreddit.name + '-' + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
+          chat_channels = re.sub('\-+', '-', chat_channels)
+          chat_channels = quote(chat_channels)
+
+          # Note: Omitting nofocus param
+          chat_popout_url = chat_client_url + '/?tls=true&lockchannel&autologin&user=' + chat_username + '&al-password=' +  chat_password + '&autoconnect&nick=' + chat_username + '&username=' + chat_username + '&realname=' + chat_username + '&join=' + chat_channels
+        
+
         PrintableButtons.__init__(self, "commentbuttons", thing,
                                   is_author = is_author, 
                                   profilepage = c.profilepage,
@@ -263,6 +327,10 @@ class CommentButtons(PrintableButtons):
                                   show_givegold=show_givegold,
                                   embed_button=embed_button,
                                   show_admin_context=show_admin_context,
+
+                                  # CUSTOM
+                                  show_chat_link = show_chat_link,
+                                  chat_popout_url = chat_popout_url,
         )
 
 class MessageButtons(PrintableButtons):

@@ -1,0 +1,40 @@
+# after editing this file, run "make ini" to
+# generate a new development.ini
+
+[DEFAULT]
+# global debug flag -- displays pylons stacktrace rather than 500 page on error when true
+# WARNING: a pylons stacktrace allows remote code execution. Make sure this is false
+# if your server is publicly accessible.
+debug = false
+
+
+short_description = antiextremes.com - the truth is in the middle
+
+disable_ads = true
+disable_captcha = true
+disable_ratelimit = true
+disable_require_admin_otp = true
+
+domain = antiextremes.com
+oauth_domain = antiextremes.com
+feature_force_https = on
+https_endpoint = https://antiextremes.com
+
+plugins =
+# plugins = about adzerk gold liveupdate private
+media_provider = filesystem
+media_fs_root = /srv/www/media
+media_fs_base_url_http = http://antiextemes.com/media/
+
+[server:main]
+port = 8001
+
+[live_config]
+# Specify global admins and permissions, each user should have one of admin, sponsor, or employee as their permission level
+employees = reddit:admin, magnora7:admin, d3rr:admin
+
+# a message placed in the infobar
+# announcement_message = announcement message here
+
+# an info message placed in the sidebar
+# sidebar_message = ["sidebar_message 1", "sidebar message 2"]

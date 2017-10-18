@@ -432,6 +432,13 @@
     ${report_reasons()}
   %endif
 
+  ## CUSTOM
+  % if thing.show_chat_link:
+    <li class="chat-popout">
+      <a target="_blank" href="${thing.chat_popout_url}">${_("open chat in new tab")}</a>
+    </li>
+  %endif
+
 </%def>
 
 <%def name="commentbuttons()">
@@ -522,6 +529,13 @@
     %if thing.show_reports and not thing.show_spam and (thing.mod_reports or thing.user_reports):
       ${report_reasons()}
     %endif
+
+    ## CUSTOM
+    % if thing.show_chat_link:
+      <li class="chat-popout">
+        <a target="_blank" href="${thing.chat_popout_url}">${_("open chat in new tab")}</a>
+      </li>
+  %endif
 
   %endif
 </%def>

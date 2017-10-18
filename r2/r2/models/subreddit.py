@@ -266,6 +266,9 @@ class Subreddit(Thing, Printable, BaseSite):
         hide_ads=False,
         ban_count=0,
         quarantine=False,
+
+        # CUSTOM
+        chat_enabled = True,
     )
 
     # special attributes that shouldn't set Thing data attributes because they

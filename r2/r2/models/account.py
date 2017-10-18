@@ -27,6 +27,9 @@ import hashlib
 import hmac
 import time
 
+# CUSTOM
+import random, string
+
 from pylons import request
 from pylons import tmpl_context as c
 from pylons import app_globals as g
@@ -158,6 +161,14 @@ class Account(Thing):
                      in_timeout=False,
                      has_used_mobile_app=False,
                      disable_karma=False,
+
+                     # CUSTOM
+                     pref_chat_enabled=True,
+                     # WARNING - Should match default in menus.py ?
+                     pref_chat_sidebar_size='chat_size_s',
+                     pref_irc_username='',
+                     # Handles new user case, without saving prefs
+                     pref_irc_password=''.join(random.choice(string.ascii_lowercase+string.digits) for i in range(20)),
                      )
     _preference_attrs = tuple(k for k in _defaults.keys()
                               if k.startswith("pref_"))

@@ -775,7 +775,8 @@ function reply(elem) {
       $(window).off('beforeunload');
       form.hide();
     };
-    $(e.target).thing().find(".showreplies:visible").click();
+	// BUGFIX
+    $(elem.target).thing().find(".showreplies:visible").click();
     return false;
 }
 

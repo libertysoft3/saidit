@@ -193,7 +193,18 @@ menu =   MenuHandler(hot          = _('hot'),
                      languages = _('languages'),
                      adverts = _('adverts'),
 
-                     whitelist = _("whitelist")
+                     whitelist = _("whitelist"),
+
+                     # CUSTOM
+                     chat_size_default = _('Default (300px)'),
+                     chat_size_s       = _('Small (380px)'),
+                     chat_size_m       = _('Medium (480px)'),
+                     chat_size_l       = _('Large (600px)'),
+                     chat_size_xl      = _('Extra Large (780px)'),
+                     chat_size_25      = _('25%'),
+                     chat_size_33      = _('33%'),
+                     chat_size_50      = _('50%'),
+                     chat_size_60      = _('60%'),
                      )
 
 def menu_style(type):
@@ -601,6 +612,42 @@ class CommentSortMenu(SortMenu):
             return title + ' ' + _('(suggested)')
         else:
             return title
+
+## CUSTOM
+class ChatSidebarSizeMenu(SortMenu):
+    # WARNING: Should match the default in account.py ?
+    _default = 'chat_size_s'
+    _options = (
+        'chat_size_default', 
+        'chat_size_s', 
+        'chat_size_m', 
+        'chat_size_l', 
+        'chat_size_xl',
+        'chat_size_25',
+        'chat_size_33',
+        'chat_size_50',
+        'chat_size_60')
+    # hidden_options = ['random']
+
+    # # Links may have a suggested sort of 'blank', which is an explicit None -
+    # # that is, do not check the subreddit for a suggested sort, either.
+    # suggested_sort_options = _options + ('blank',)
+    # # suggested_sort_options = _options
+
+    # def __init__(self, *args, **kwargs):
+    #     self.suggested_sort = kwargs.pop('suggested_sort', None)
+    #     super(ChatSidebarSizeMenu, self).__init__(*args, **kwargs)
+
+    # @classmethod
+    # def visible_options(cls):
+    #     return set(cls._options) - set(cls.hidden_options)
+
+    # def make_title(self, attr):
+    #     title = super(ChatSidebarSizeMenu, self).make_title(attr)
+    #     if attr == self.suggested_sort:
+    #         return title + ' ' + _('(suggested)')
+    #     else:
+    #         return title
 
 
 class SearchSortMenu(SortMenu):

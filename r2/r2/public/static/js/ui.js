@@ -9,7 +9,7 @@ r.ui.init = function() {
         store.safeSet('ui.shown.welcome', true)
     }
 
-    var smallScreen = r.ui.isSmallScreen();
+    var smallScreen = 0; //r.ui.isSmallScreen();
 
     // mweb beta banner
     var mwebOptInCookieName = "__cf_mob_redir";
@@ -195,7 +195,7 @@ r.ui.initReadNext = function() {
 
     this.readNext = new r.ui.ReadNext({
         el: $readNextContainer,
-        fixToBottom: !r.ui.isSmallScreen(),
+        fixToBottom: 1, //!r.ui.isSmallScreen(),
         currentLinkFullname: currentLinkFullname,
         ttl: ttl,
     });

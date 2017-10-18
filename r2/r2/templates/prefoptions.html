@@ -24,6 +24,10 @@
    from r2.config import feature
    from r2.lib.errors import error_list
    from r2.lib.menus import CommentSortMenu
+
+   ## CUSTOM
+   from r2.lib.menus import ChatSidebarSizeMenu
+
    from r2.lib.template_helpers import add_sr, _wsf, format_html, make_url_protocol_relative
    from r2.lib.utils import UrlParser
    import random
@@ -69,16 +73,18 @@
   </select>
 </%def>
 
+
+
 <%def name="media_radio(val, label)">
-  <input id="media_${val}" class="nomargin" 
+  <input id="media_${val}" class="nomargin"
          type="radio"  value="${val}" name="media"
-         ${"checked='checked'" if c.user.pref_media == val else ''} /> 
+         ${"checked='checked'" if c.user.pref_media == val else ''} />
   <label for="media_${val}">${label}</label>
   <br/>
 </%def>
 
 <%def name="media_preview_radio(val, label)">
-  <input id="media_preview_${val}" class="nomargin" 
+  <input id="media_preview_${val}" class="nomargin"
          type="radio"  value="${val}" name="media_preview"
          ${"checked='checked'" if c.user.pref_media_preview == val else ''}>
   <label for="media_preview_${val}">${label}</label>
@@ -107,9 +113,9 @@
 
 <%
    if c.user_is_loggedin:
-       action = "/post/options" 
+       action = "/post/options"
    else:
-       action = "/post/unlogged_options" 
+       action = "/post/unlogged_options"
    action = add_sr(action, sr_path=False)
  %>
 <form action="${action}" method="post" class="pretty-form short-text">
@@ -245,7 +251,7 @@
     ${checkbox(_(u"show a dagger (†) on comments voted controversial"), "highlight_controversial")}
     &#32;<span class="details">${_("(a controversial comment is one that's been both upvoted and downvoted significantly)")}</span>
     </p>
-    <% 
+    <%
        input = unsafe(capture(num_input, c.user.pref_min_comment_score,
                               'min_comment_score'))
        %>
@@ -254,7 +260,7 @@
       &#32;<span class="details">${_("(leave blank to show all comments)")}</span>
     </p>
     <p>
-      <% 
+      <%
        input = unsafe(capture(num_input, c.user.pref_num_comments,
                               'num_comments'))
        %>
@@ -268,6 +274,9 @@
     </span>
     </td>
   </tr>
+
+
+
   <tr>
     <th>${_("messaging options")}</th>
     <td class="prefright">
@@ -315,7 +324,7 @@
       ${checkbox(_("show link flair"), "show_link_flair")}
       %if c.user.pref_show_promote is not None:
         <br/>
-        ${checkbox(_("show self-serve advertising tab on front page"), 
+        ${checkbox(_("show self-serve advertising tab on front page"),
           "show_promote")}
       %endif
       %if feature.is_enabled('legacy_search_pref'):
@@ -332,7 +341,7 @@
       <br/>
         ${checkbox(_("label posts that are not safe for work (NSFW)"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(requires not 'safer for work' mode)")}
       <br/>
-        ${checkbox(_("enable private RSS feeds"), "private_feeds")} 
+        ${checkbox(_("enable private RSS feeds"), "private_feeds")}
        &#32;<span class="details">
         ${_("(available from the 'RSS feed' tab in prefs)")}</span>
     </td>
@@ -387,6 +396,59 @@
   %endif
   %endif
 
+  ## CUSTOM
+  <%def name="chat_sidebar_size_options()">
+    <% menu = ChatSidebarSizeMenu() %>
+    <select name="chat_sidebar_size">
+          %for sort in menu._options:
+          <option ${'selected="selected"' if sort == c.user.pref_chat_sidebar_size else ""}
+                  value="${sort}">
+            ${menu.make_title(sort)}&#32;${_('(recommended)') if sort == menu._default else ''}
+          </option>
+          %endfor
+    </select>
+  </%def>
+  % if feature.is_enabled('chat'):
+  <tr>
+    <th>${_("chat options")}</th>
+    <td class="prefright">
+        ${checkbox(_("enabled"), "chat_enabled")}
+      <br/>
+      <p>
+        ${_wsf("sidebar size when chat present %(sort)s", sort=unsafe(capture(chat_sidebar_size_options)))}
+      </p>
+      <p>
+          <%
+           input = unsafe(capture(text_input, c.user.pref_irc_username,
+                                  'irc_username'))
+           %>
+        <% s = c.user.pref_irc_username %>
+        ${_wsf("IRC username %(irc_username)s", irc_username=input)}
+        &#32;
+        <span class="details">
+          ${_("(to chat with a different username, or if username already taken. may not take affect immediately.)")}
+        </span>
+      </p>
+      <p>
+          <%
+           input = unsafe(capture(text_input, c.user.pref_irc_password,
+                                  'irc_password'))
+           %>
+        <% s = c.user.pref_irc_password %>
+        ${_wsf("IRC client password %(irc_password)s", irc_password=input)}
+        &#32;
+        <span class="details">
+          ${_("(you may need this if you are forced to re-login to the chat client)")}
+        </span>
+      </p>
+      <% chat_enabler = g.live_config['chat_enabling_post_content'] %>
+      <p>${_("Chat Post:")}&#32;&#32;<span class="gray">${_("Submit a new text post with any title and text '")}${chat_enabler}${_("' (only). The title of your post will determine the chat channel/topic.")}</span></p>
+      <p>${_("Chat Comment:")}&#32;&#32;<span class="gray">${_("Comment starting with  '")}${chat_enabler}${_("' followed by a space. The next 15 characters of your comment will determine the chat channel/topic.")}</span></p>
+      <p>${_("Troubleshooting:")}&#32;&#32;<span class="gray">If you get "not connected" errors, type and send "/connect" a few times until you re-connect to the IRC server. </span></p>
+    </td>
+  </tr>
+  % endif
+
   %if c.user.gold:
   <tr class="gold-accent">
     <th>${_("gold options")}</th>
@@ -422,6 +484,8 @@
     </td>
   </tr>
   %endif
+
+
 
   %if feature.is_enabled('stylesheets_everywhere'):
     <tr class="gold-accent">

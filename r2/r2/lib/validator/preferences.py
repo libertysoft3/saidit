@@ -25,12 +25,19 @@ from pylons import app_globals as g
 
 from r2.config import feature
 from r2.lib.menus import CommentSortMenu
+
+# CUSTOM
+from r2.lib.menus import ChatSidebarSizeMenu
+
 from r2.lib.validator.validator import (
     VBoolean,
     VInt,
     VLang,
     VOneOf,
     VSRByName,
+
+    # CUSTOM
+    VNop
 )
 from r2.lib.errors import errors
 from r2.models import Subreddit, NotFound
@@ -91,6 +98,14 @@ PREFS_VALIDATORS = dict(
     pref_beta=VBoolean('beta'),
     pref_legacy_search=VBoolean('legacy_search'),
     pref_threaded_modmail=VBoolean('threaded_modmail', False),
+
+    # CUSTOM
+    pref_chat_enabled=VBoolean("chat_enabled"),
+    pref_chat_sidebar_size=VOneOf('chat_sidebar_size', ChatSidebarSizeMenu._options),
+
+    # TODO - Maxlength 20
+    pref_irc_username=VNop('irc_username'),
+    pref_irc_password=VNop('irc_password'),
 )
 
 

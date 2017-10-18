@@ -2316,6 +2316,21 @@ class VOneOf(Validator):
                                                   for s in self.options),
         }
 
+# CUSTOM
+class VNop(Validator):
+    def __init__(self, param, options = (), *a, **kw):
+        Validator.__init__(self, param, *a, **kw)
+        self.options = options
+
+    def run(self, val):
+        return val
+
+    def param_docs(self):
+        return {
+            self.param: 'nop one of (%s)' % ', '.join("`%s`" % s
+                                                  for s in self.options),
+        }
+
 
 class VList(Validator):
     def __init__(self, param, separator=",", choices=None,

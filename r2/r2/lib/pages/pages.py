@@ -297,6 +297,17 @@ class Reddit(Templated):
         if feature.is_enabled("expando_nsfw_flow"):
             self.feature_expando_nsfw_flow = True
 
+        # CUSTOM
+        if feature.is_enabled("chat"):
+            self.chat_include_css = True
+
+        # CUSTOM
+        self.show_sidebar_chat = False
+        self.chat_size_sidebar = "d"
+        if isinstance(c.site, Subreddit) and feature.is_enabled("chat") and c.site.chat_enabled and c.user.pref_chat_enabled:
+            self.show_sidebar_chat = True
+            self.chat_size_sidebar = "d"
+
         # generate a canonical link for google
         canonical_url = UrlParser(canonical_link or request.url)
         canonical_url.canonicalize()
@@ -347,7 +358,7 @@ class Reddit(Templated):
                 self.infobar = RedditInfoBar(message=strings.all_minus_gold_only,
                                        extra_class="gold")
 
-            if not c.user_is_loggedin:
+            if 0:
                 if getattr(self, "show_welcomebar", True):
                     self.welcomebar = WelcomeBar()
                 if self.show_newsletterbar:
@@ -655,6 +666,12 @@ class Reddit(Templated):
         if isinstance(c.site, DomainSR) and c.user_is_admin:
             from r2.lib.pages.admin_pages import AdminNotesSidebar
             notebar = AdminNotesSidebar('domain', c.site.domain)
+            ps.append(notebar)
+
+        # CUSTOM - Add Sidebar Chat on subreddits
+        if isinstance(c.site, Subreddit) and feature.is_enabled('chat') and c.user.pref_chat_enabled and c.site.chat_enabled:
+            from r2.lib.pages.chat import SidebarChat
+            notebar = SidebarChat('subreddit', c.site.name)
             ps.append(notebar)
 
         if isinstance(c.site, Subreddit) and c.user_is_admin:
@@ -1080,6 +1097,7 @@ class AccountActivityBox(Templated):
         super(AccountActivityBox, self).__init__()
 
 
+
 class RedditFooter(CachedTemplate):
     def cachable_attrs(self):
         return [('path', request.path),
@@ -1088,49 +1106,42 @@ class RedditFooter(CachedTemplate):
     def __init__(self):
         self.nav = [
             NavMenu([
-                    NamedButton("blog", False, dest="/blog"),
-                    OffsiteButton("about", "https://about.reddit.com/"),
-                    NamedButton("source_code", False, dest="/code"),
-                    NamedButton("advertising", False),
-                    NamedButton("jobs", False),
-                ],
+                   OffsiteButton("blog", "https://antiextremes.com/r/antiextremes"),
+				OffsiteButton("about", "https://antiextremes.com/r/AntiExtremes/comments/3a/welcome_to_antiextremescom/"),
+                    ],
                 title = _("about"),
                 type = "flat_vert",
                 separator = ""),
 
             NavMenu([
-                    NamedButton("rules", False),
-                    OffsiteButton(_("FAQ"), "https://reddit.zendesk.com"),
-                    NamedButton("wiki", False),
-                    NamedButton("reddiquette", False, dest="/wiki/reddiquette"),
-                    NamedButton("transparency", False, dest="/wiki/transparency"),
-                    NamedButton("contact", False),
+                  OffsiteButton(_("contact"), "https://antiextremes.com/ContactUs"),
                 ],
                 title = _("help"),
                 type = "flat_vert",
                 separator = ""),
 
             NavMenu([
-                    OffsiteButton(_("Reddit for iPhone"),
-                        "https://itunes.apple.com/us/app/reddit-the-official-app/id1064216828?mt=8"),
-                    OffsiteButton(_("Reddit for Android"),
-                        "https://play.google.com/store/apps/details?id=com.reddit.frontpage"),
-                    OffsiteButton(_("mobile website"), "https://m.reddit.com"),
-                    NamedButton("buttons", False),
+                    OffsiteButton(_("RESAE"),
+                        "https://antiextremes.com/r/AntiExtremes/comments/3e/information_about_resae_antiextremes_version_of/"),
+                
                 ],
                 title = _("apps & tools"),
                 type = "flat_vert",
                 separator = ""),
 
             NavMenu([
-                    NamedButton("gold", False, dest="/gold/about", css_class="buygold"),
-                    OffsiteButton(_("redditgifts"), "//redditgifts.com"),
+                                      OffsiteButton(_("Patreon"), "https://www.patreon.com/AntiExtremes"),
+OffsiteButton(_("donate Bitcoin"), "https://antiextremes.com/DonateBitcoin"),
+OffsiteButton(_("donate Litecoin"), "https://antiextremes.com/DonateLitecoin"),
+OffsiteButton(_("donate Dogecoin"), "https://antiextremes.com/DonateDogecoin"),
                 ],
                 title = _("<3"),
                 type = "flat_vert",
                 separator = "")
         ]
         CachedTemplate.__init__(self)
+
+
 
 class ClickGadget(Templated):
     def __init__(self, links, *a, **kw):
@@ -4895,10 +4906,55 @@ class SelfTextChild(LinkChild):
     css_style = "selftext"
 
     def content(self):
+
+        # CUSTOM
+        is_chat_post = False
+        is_guest = False
+        chat_username = g.live_config['chat_default_username']
+        chat_password = chat_username
+        chat_client = g.live_config['chat_client']
+        chat_client_url = g.live_config['chat_client_url']
+        chat_channel = ''
+        if feature.is_enabled('chat') and c.user.pref_chat_enabled:
+            subreddit_chat_enabled = self.link.subreddit.chat_enabled
+            subreddit_name = self.link.subreddit.name # cannot do in UserText, lose link.subreddit
+            chat_enabling_post_content = g.live_config['chat_enabling_post_content']
+            # is_stickied = self.link.is_stickied(self.link.subreddit)
+
+            if subreddit_chat_enabled and subreddit_name and self.link.selftext == chat_enabling_post_content and not self.link.expunged:
+                is_chat_post = True
+                irc_sanitized_post_title = re.sub(r'[^a-zA-Z0-9]','-', self.link.title)
+                chat_channel = g.live_config['chat_channel_name_prefix'] + subreddit_name + '-' + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
+                chat_channel = re.sub('\-+', '-', chat_channel)
+                chat_channel = quote(chat_channel)
+                if c.user_is_loggedin:
+                    if c.user.pref_irc_username:
+                        chat_username = c.user.pref_irc_username
+                    else:
+                        chat_username = c.user.name
+                    chat_password = chat_username
+
+                    if c.user.pref_irc_password:
+                        chat_password = c.user.pref_irc_password
+
+                else:
+                    is_guest = True
+
+        # g.log.warning("!!!!!!!!!!!!! dbg: %s" % self.link.selftext)
+
         u = UserText(self.link, self.link.selftext,
                      editable = c.user == self.link.author,
                      nofollow = self.nofollow,
-                     expunged=self.link.expunged)
+                     expunged=self.link.expunged,
+
+                     # CUSTOM
+                     is_chat_post = is_chat_post,
+                     chat_client = chat_client,
+                     chat_client_url = chat_client_url,
+                     chat_channel = chat_channel,
+                     chat_username = chat_username,
+                     chat_password = chat_password,
+                     is_guest = is_guest)
         return u.render()
 
 class UserText(CachedTemplate):
@@ -4924,6 +4980,15 @@ class UserText(CachedTemplate):
                  admin_takedown=False,
                  data_attrs={},
                  source=None,
+
+                 # CUSTOM
+                 is_chat_post = False,
+                 chat_client = '',
+                 chat_client_url = '',
+                 chat_username = '',
+                 chat_password = '',
+                 chat_channel = '',
+                 is_guest = True,
                 ):
 
         css_class = "usertext"
@@ -4945,6 +5010,10 @@ class UserText(CachedTemplate):
             if not getattr(item, 'deleted', False) or c.user_is_admin:
                 fullname = item._fullname
 
+        # CUSTOM
+        if is_chat_post:
+            css_class += " chat"
+
         CachedTemplate.__init__(self,
                                 fullname = fullname,
                                 text = text,
@@ -4965,6 +5034,15 @@ class UserText(CachedTemplate):
                                 admin_takedown=admin_takedown,
                                 data_attrs=data_attrs,
                                 source=source,
+
+                                # CUSTOM
+                                is_chat_post=is_chat_post,
+                                chat_client=chat_client,
+                                chat_client_url=chat_client_url,
+                                chat_username=chat_username,
+                                chat_password=chat_password,
+                                chat_channel=chat_channel,
+                                is_guest = is_guest
                                )
 
 class MediaEmbedBody(CachedTemplate):

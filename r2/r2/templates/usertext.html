@@ -24,6 +24,9 @@
    from r2.lib.filters import unsafe, safemarkdown, keep_space
    from r2.lib.strings import strings
    from r2.lib.utils import randstr
+
+   ### CUSTOM
+   from r2.config import feature
 %>
 
 <%namespace file="printablebuttons.html" import="toggle_button" />
@@ -129,13 +132,32 @@
     <input type="hidden" name="source" value="${thing.source}">
   %endif
 
-  %if not thing.creating:
+  % if not thing.creating:
     <div class="usertext-body may-blank-within md-container ${'admin_takedown' if thing.admin_takedown else ''}">
       % if not thing.expunged:
-      ${unsafe(safemarkdown(thing.text, nofollow = thing.nofollow,
+        ## CUSTOM
+        % if feature.is_enabled('chat') and thing.is_chat_post:
+          % if thing.chat_client == 'kiwiirc':
+            % if thing.is_guest:
+              <iframe class="chat-iframe kiwiirc" src="https://kiwiirc.com/client/irc.foonetic.net/?nick=${thing.chat_username}|?#${thing.chat_channel}"></iframe>
+            % else:
+              <iframe class="chat-iframe kiwiirc" src="https://kiwiirc.com/client/irc.foonetic.net/?nick=${thing.chat_username}#${thing.chat_channel}"></iframe>
+            % endif
+
+          % elif thing.chat_client == 'thelounge':
+            % if thing.is_guest:
+              <iframe class="chat-iframe thelounge" src="${thing.chat_client_url}/?tls=true&nofocus&lockchannel&autologin&user=guest&autoconnect&nick=guest&username=guest&realname=guest&join=${thing.chat_channel}"></iframe>
+            % else:
+              <iframe class="chat-iframe thelounge" src="${thing.chat_client_url}/?tls=true&nofocus&lockchannel&autologin&user=${thing.chat_username}&al-password=${thing.chat_password}&autoconnect&nick=${thing.chat_username}&username=${thing.chat_username}&realname=${thing.chat_username}&join=${thing.chat_channel}"></iframe>
+            % endif
+          % endif
+
+        % else:
+          ${unsafe(safemarkdown(thing.text, nofollow = thing.nofollow,
                                         target = thing.target))}
+        % endif
       % else:
-      <em>${_("[removed]")}</em>&#32;
+        <em>${_("[removed]")}</em>&#32;
       % endif
     </div>
   %endif

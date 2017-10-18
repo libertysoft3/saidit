@@ -32,11 +32,11 @@
 <%namespace file="printablebuttons.html" import="toggle_button, simple_button" />
 
 <%namespace name="utils" file="utils.html"/>
- 
+
 %if not thing.site and not c.user.can_create_subreddit:
 <div class="infobar">${_md("""
 # your account is too new to create a subreddit
-    
+
 try participating in other communities on reddit for a little while first before creating your own. please post to /r/help if you need more information about this restriction, or if you require a specific exemption you can [contact the admins](/contact) to request one.
 """)}</div>
 %else:
@@ -158,7 +158,7 @@ try participating in other communities on reddit for a little while first before
                            is_employees_only)}
       %endif
 
-      <% 
+      <%
           is_gold_only = thing.site and thing.site.type == 'gold_only'
           can_set_gold_only = (is_gold_only or c.user_is_admin or
                   (not thing.site and (c.user.gold or c.user.gold_charter)))
@@ -234,7 +234,7 @@ try participating in other communities on reddit for a little while first before
     <div class="delete-field">
     <label for="wiki_edit_karma">${_('Subreddit karma required to edit and create wiki pages:')}</label>
         %if thing.site:
-            <input id="wiki_edit_karma" type="text" name="wiki_edit_karma" 
+            <input id="wiki_edit_karma" type="text" name="wiki_edit_karma"
                    value="${thing.site.wiki_edit_karma}"/>
         %else:
             <input id="wiki_edit_karma" type="text" name="wiki_edit_karma" value="100" />
@@ -244,7 +244,7 @@ try participating in other communities on reddit for a little while first before
     <div class="delete-field">
     <label for="wiki_edit_age">${_('Account age (days) required to edit and create wiki pages:')}</label>
         %if thing.site:
-            <input id="wiki_edit_age" type="text" name="wiki_edit_age" 
+            <input id="wiki_edit_age" type="text" name="wiki_edit_age"
                    value="${thing.site.wiki_edit_age}"/>
         %else:
             <input id="wiki_edit_age" type="text" name="wiki_edit_age" value="0" />
@@ -253,7 +253,7 @@ try participating in other communities on reddit for a little while first before
     </div>
     </div>
   </%utils:line_field>
-  
+
   <%utils:line_field title="${_('spam filter strength')}">
   	<div class="delete-field">
         <p class="little gray">${_("high is the standard filter, low disables most filtering, all will filter every post initially and they will need to be approved manually to be visible.")}</p>
@@ -405,7 +405,7 @@ try participating in other communities on reddit for a little while first before
       <div class="delete-field">
         <label for="comment_score_hide_mins">${_('Minutes to hide comment scores:')}</label>
             %if thing.site:
-                <input id="comment_score_hide_mins" type="text" name="comment_score_hide_mins" placeholder="0" 
+                <input id="comment_score_hide_mins" type="text" name="comment_score_hide_mins" placeholder="0"
                        value="${thing.site.comment_score_hide_mins}" />
             %else:
                 <input id="comment_score_hide_mins" type="text" name="comment_score_hide_mins" value="0" placeholder="0" />
@@ -453,7 +453,7 @@ try participating in other communities on reddit for a little while first before
                    />
           </li>
           <li>
-            <%utils:image_upload post_target="/api/upload_sr_img" 
+            <%utils:image_upload post_target="/api/upload_sr_img"
                                  current_image="${thing.site.header}"
                                  label="${_('upload header image')}"
                                  ask_type="${True}">
@@ -469,7 +469,7 @@ try participating in other communities on reddit for a little while first before
               <input type="hidden" name="uh" value="${c.modhash}" />
               <input type="hidden" name="r"  value="${c.site.name}" />
               <input type="hidden" name="header" value="1" />
-    
+
               <script type="text/javascript">
                 function on_image_success(img) {
                    $("#header-img").log().attr("src", img.attr("src"));
@@ -623,6 +623,24 @@ try participating in other communities on reddit for a little while first before
         </ul>
       </li>
     </ul>
+  </%utils:line_field>
+%endif
+
+### CUSTOM
+% if feature.is_enabled('chat'):
+  <%utils:line_field title="${_('chat')}">
+    <div class="delete-field">
+      <ul>
+        <li>
+          <input class="nomargin" type="checkbox"
+                 name="chat_enabled" id="chat_enabled"
+                 ${thing.site and thing.site.chat_enabled and "checked='checked'" or ""}>
+          <label for="chat_enabled">
+            ${_("Enable Chat")}&#32;&#32;<span class="gray">${_("Add sidebar chat, allow chat posts and chat comments")}</span>
+          </label>
+        </li>
+      </ul>
+    </div>
   </%utils:line_field>
 %endif
 
