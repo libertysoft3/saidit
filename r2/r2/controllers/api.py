@@ -2879,6 +2879,11 @@ class ApiController(RedditController):
             form.set_error(errors.CANT_CREATE_SR, "")
             c.errors.add(errors.CANT_CREATE_SR, field="")
 
+	# CUSTOM - Bugfix - check min_membership_create_community
+        if not sr and c.user._age.days < g.min_membership_create_community:
+            form.set_error(errors.CANT_CREATE_SR, "")
+            c.errors.add(errors.CANT_CREATE_SR, field="")
+
         # only care about captcha if this is creating a subreddit
         if not sr and form.has_errors("captcha", errors.BAD_CAPTCHA):
             return

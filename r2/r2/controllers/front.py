@@ -556,7 +556,12 @@ class FrontController(RedditController):
     @validate(VUser(),
               name=nop('name'))
     def GET_newreddit(self, name):
-        """Create a subreddit form"""
+        
+	# CUSTOM - Bugfix - check min_membership_create_community
+        if c.user._age.days < g.min_membership_create_community:
+            self.abort404()
+
+	"""Create a subreddit form"""
         VNotInTimeout().run(action_name="pageview", details_text="newreddit")
         title = _('create a subreddit')
         captcha = Captcha() if c.user.needs_captcha() else None
