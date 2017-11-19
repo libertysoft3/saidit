@@ -824,7 +824,7 @@ class Reddit(Templated):
                     c.user.can_create_subreddit):
                 subtitles = get_funny_translated_string("create_subreddit", 2)
                 data_attrs = {'event-action': 'createsubreddit'}
-                ps.append(SideBox(_('Create your own subreddit'),
+                ps.append(SideBox(_('Create your own subX'),
                            '/subreddits/create', 'create',
                            subtitles=subtitles,
                            data_attrs=data_attrs,
@@ -1131,9 +1131,10 @@ class RedditFooter(CachedTemplate):
 
             NavMenu([
                                       OffsiteButton(_("Patreon"), "https://www.patreon.com/AntiExtremes"),
-OffsiteButton(_("donate Bitcoin"), "https://antiextremes.com/DonateBitcoin"),
-OffsiteButton(_("donate Litecoin"), "https://antiextremes.com/DonateLitecoin"),
-OffsiteButton(_("donate Dogecoin"), "https://antiextremes.com/DonateDogecoin"),
+OffsiteButton(_("donate Bitcoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
+OffsiteButton(_("donate Litecoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
+OffsiteButton(_("donate Dogecoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
+OffsiteButton(_("donate Ethereum"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
                 ],
                 title = _("<3"),
                 type = "flat_vert",
@@ -2223,7 +2224,7 @@ class EditReddit(Reddit):
             is_moderator = c.user_is_loggedin and \
                 c.site.is_moderator(c.user) or c.user_is_admin
 
-            title = (_('subreddit settings') if is_moderator else
+            title = (_('subextreme settings') if is_moderator else
                      _('about %(site)s') % dict(site=c.site.name))
 
         Reddit.__init__(self, title=title, *a, **kw)
@@ -2291,7 +2292,7 @@ class SubredditsPage(Reddit):
         subscribe_box = SubscriptionBox(srs,
                                         multi_text=strings.subscribed_multi)
         num_reddits = len(subscribe_box.srs)
-        ps.append(SideContentBox(_("your front page subreddits (%s)") %
+        ps.append(SideContentBox(_("your front page subextremes (%s)") %
                                  num_reddits, [subscribe_box]))
         return ps
 
@@ -2846,7 +2847,7 @@ class SubredditTopBar(CachedTemplate):
                                            css_class = 'bottom-option',
                                            dest = '/subreddits/'))
         return SubredditMenu(drop_down_buttons,
-                             title = _('my subreddits'),
+                             title = _('my subXes'),
                              type = 'srdrop')
 
     def subscribed_reddits(self):

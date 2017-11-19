@@ -634,7 +634,7 @@ try participating in other communities on reddit for a little while first before
         <li>
           <input class="nomargin" type="checkbox"
                  name="chat_enabled" id="chat_enabled"
-                 ${thing.site and thing.site.chat_enabled and "checked='checked'" or ""}>
+                 ${(not thing.site or (thing.site and thing.site.chat_enabled)) and "checked='checked'" or ""}>
           <label for="chat_enabled">
             ${_("Enable Chat")}&#32;&#32;<span class="gray">${_("Add sidebar chat, allow chat posts and chat comments")}</span>
           </label>

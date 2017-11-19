@@ -1459,7 +1459,7 @@ class RedditsController(ListingController):
     extra_page_classes = ListingController.extra_page_classes + ['subreddits-page']
 
     def title(self):
-        return _('subXes')
+        return _('subreddits')
 
     def keep_fn(self):
         base_keep_fn = ListingController.keep_fn(self)

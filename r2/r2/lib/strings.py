@@ -69,7 +69,7 @@ string_dict = dict(
 
     already_submitted = _("that link has already been submitted, but you can try to [submit it again](%s)."),
 
-    multiple_submitted = _("that link has been submitted to multiple subreddits. you can try to [submit it again](%s)."),
+    multiple_submitted = _("that link has been submitted to multiple subextremes. you can try to [submit it again](%s)."),
 
     user_deactivated = _("your account has been deactivated, but we won't judge you for it."),
 
@@ -80,20 +80,20 @@ string_dict = dict(
 
     friends = _('to view reddit with only submissions from your friends, use [reddit.com/r/friends](%s)'),
 
-    sr_created = _('your subreddit has been created'),
+    sr_created = _('your subX has been created'),
 
     more_info_link = _("visit [%(link)s](%(link)s) for more information"),
 
     sr_messages = dict(
-        empty =  _('you have not subscribed to any subreddits.'),
-        subscriber =  _('below are the subreddits you have subscribed to.'),
-        contributor =  _('below are the subreddits that you are an approved submitter on.'),
-        moderator = _('below are the subreddits that you have moderator access to.')
+        empty =  _('you have not subscribed to any subextremes.'),
+        subscriber =  _('below are the subextremes you have subscribed to.'),
+        contributor =  _('below are the subextremes that you are an approved submitter on.'),
+        moderator = _('below are the subextremes that you have moderator access to.')
         ),
 
-    sr_subscribe =  _('click the `subscribe` or `unsubscribe` buttons to choose which subreddits appear on your front page.'),
+    sr_subscribe =  _('click the `subscribe` or `unsubscribe` buttons to choose which subextremes appear on your front page.'),
 
-    searching_a_reddit = _('you\'re searching within the [%(reddit_name)s](%(reddit_link)s) subreddit. '+
+    searching_a_reddit = _('you\'re searching within the [%(reddit_name)s](%(reddit_link)s) subextreme. '+
                            'you can also search within [all subreddits](%(all_reddits_link)s)'),
 
     permalink_title = _("%(author)s comments on %(title)s"),
@@ -146,7 +146,7 @@ string_dict = dict(
     archived_post_message = _("This is an archived post. You won't be able to vote or comment."),
     locked_post_message = _("This post is locked. You won't be able to comment."),
     account_activity_blurb = _("This page shows a history of recent activity on your account. If you notice unusual activity, you should change your password immediately. Location information is guessed from your computer's IP address and may be wildly wrong, especially for visits from mobile devices."),
-    your_current_ip_is = _("You are currently accessing reddit from this IP address: %(address)s."),
+    your_current_ip_is = _("You are currently accessing AntiExtremes from this IP address: %(address)s."),
     account_activity_apps_blurb = _("""
 These apps are authorized to access your account. Signing out of all sessions
 will revoke access from all apps. You may also revoke access from individual
@@ -159,20 +159,20 @@ apps below.
     traffic_help_email = _("Questions? Email self serve support: %(email)s"),
 
     traffic_subreddit_explanation = _("""
-Below are the traffic statistics for your subreddit. Each graph represents one of the following over the interval specified.
+Below are the traffic statistics for your subextreme. Each graph represents one of the following over the interval specified.
 
 * **pageviews** are all hits to %(subreddit)s, including both listing pages and comment pages.
 * **uniques** are the total number of unique visitors (determined by a combination of their IP address and User Agent string) that generate the above pageviews. This is independent of whether or not they are signed in.
 * **subscriptions** is the number of new subscriptions that have been generated in a given day. This number is less accurate than the first two metrics, as, though we can track new subscriptions, we have no way to track unsubscriptions.
 
-Note: there are a couple of places outside of your subreddit where someone can click "subscribe", so it is possible (though unlikely) that the subscription count can exceed the unique count on a given day.
+Note: there are a couple of places outside of your subextreme where someone can click "subscribe", so it is possible (though unlikely) that the subscription count can exceed the unique count on a given day.
 """),
 
-    subscribed_multi = _("multireddit of your subscriptions"),
-    mod_multi = _("multireddit of subreddits you moderate"),
+    subscribed_multi = _("multiextreme of your subscriptions"),
+    mod_multi = _("multiextreme of subextremes you moderate"),
 
-    r_all_description = _("/r/all displays content from all of reddit, including subreddits you aren't subscribed to. Some subreddits have chosen to exclude themselves from /r/all."),
-    r_all_minus_description = _("Displaying content from /r/all of reddit, except the following subreddits:"),
+    r_all_description = _("/r/all displays content from all of AntiExtremes, including subextremes you aren't subscribed to. Some subextremes have chosen to exclude themselves from /r/all."),
+    r_all_minus_description = _("Displaying content from /r/all of reddit, except the following subextremes:"),
     all_minus_gold_only = _('Filtering /r/all is a feature only available to [reddit gold](/gold/about) subscribers. Displaying unfiltered results from /r/all.'),
 )
 
