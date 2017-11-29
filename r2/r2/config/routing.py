@@ -70,7 +70,7 @@ def make_map(config):
     mc('/submit', controller='front', action='submit')
 
     # redirect old urls to the new
-    ABOUT_BASE = "https://about.reddit.com/"
+    ABOUT_BASE = "https://antiextremes.com/"
     mc('/about', controller='redirect', action='redirect', dest=ABOUT_BASE, 
        conditions={'function':not_in_sr})
     mc('/about/values', controller='redirect', action='redirect', dest=ABOUT_BASE)
@@ -103,21 +103,25 @@ def make_map(config):
                                "quarantine|featured"))
     # If no subreddit is specified, might as well show a list of 'em.
     mc('/r', controller='redirect', action='redirect', dest='/subreddits')
-
     mc('/subreddits/mine/:where', controller='myreddits', action='listing',
        where='subscriber', conditions={'function':not_in_sr},
        requirements=dict(where='subscriber|contributor|moderator'))
 
     # These routes are kept for backwards-compatibility reasons
     # Using the above /subreddits/ ones instead is preferable
-    mc('/reddits/create', controller='front', action='newreddit')
-    mc('/reddits/search', controller='front', action='search_reddits')
-    mc('/reddits/login', controller='forms', action='login')
-    mc('/reddits/:where', controller='reddits', action='listing',
+    mc('/subxes/create', controller='front', action='newreddit')
+    mc('/subxes/search', controller='front', action='search_reddits')
+    mc('/subxes/login', controller='forms', action='login')
+    mc('/subxes/:where', controller='reddits', action='listing',
        where='popular', conditions={'function':not_in_sr},
        requirements=dict(where="popular|new|banned"))
 
-    mc('/reddits/mine/:where', controller='myreddits', action='listing',
+    mc('/x/:where', controller='reddits', action='listing',
+       where='popular', conditions={'function':not_in_sr},
+       requirements=dict(where="popular|new|banned"))
+
+
+    mc('/subxes/mine/:where', controller='myreddits', action='listing',
        where='subscriber', conditions={'function':not_in_sr},
        requirements=dict(where='subscriber|contributor|moderator'))
 
@@ -206,10 +210,10 @@ def make_map(config):
 
     mc('/u/:username', controller='redirect', action='user_redirect')
     mc('/u/:username/*rest', controller='redirect', action='user_redirect')
-
+    
     # preserve timereddit URLs from 4/1/2012
-    mc('/t/:timereddit', controller='redirect', action='timereddit_redirect')
-    mc('/t/:timereddit/*rest', controller='redirect',
+    mc('/x/:timereddit', controller='redirect', action='timereddit_redirect')
+    mc('/x/:timereddit/*rest', controller='redirect',
        action='timereddit_redirect')
 
     # /prefs/friends is also aliased to /api/v1/me/friends

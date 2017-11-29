@@ -49,7 +49,7 @@ class RedirectController(BaseController):
         return self.redirect(str(url), code=301)
 
     def GET_timereddit_redirect(self, timereddit, rest=None):
-        sr_name = "t:" + timereddit
+        sr_name = timereddit
         if not Subreddit.is_valid_name(sr_name, allow_time_srs=True):
             abort(400)
         if rest:
