@@ -2316,6 +2316,7 @@ class VOneOf(Validator):
                                                   for s in self.options),
         }
 
+
 # CUSTOM
 class VNop(Validator):
     def __init__(self, param, options = (), *a, **kw):
@@ -2330,6 +2331,67 @@ class VNop(Validator):
             self.param: 'nop one of (%s)' % ', '.join("`%s`" % s
                                                   for s in self.options),
         }
+
+# CUSTOM - Defaults to reddit username
+class VChatUser(Validator):
+    def __init__(self, param, default = "", **kw):
+        Validator.__init__(self, param, default, **kw)
+
+    def run(self, val):
+        if val is "" and c.user_is_loggedin:
+            val = c.user.name
+        elif val is "" and not c.user_is_loggedin:
+            val = g.live_config['chat_default_username']
+        return val
+
+    def param_docs(self):
+        return {
+            self.param: 'nop one of (%s)',
+        }
+
+# CUSTOM - Defaults to random if logged in, "guest" otherwise (for The Lounge custom feature)
+class VChatClientUser(Validator):
+    def __init__(self, param, default = "", **kw):
+        Validator.__init__(self, param, default, **kw)
+
+    max_chat_client_user_length = 20
+    def run(self, val):
+        if val is "" and c.user_is_loggedin:
+            val = "".join(random.choice(string.ascii_letters+string.digits) for i in range(self.max_chat_client_user_length))
+        elif val is "" and not c.user_is_loggedin:
+            val = g.live_config['chat_default_username']
+
+        if val and len(val) > self.max_chat_client_user_length:
+            self.set_error(errors.TOO_LONG, {'max_length': self.max_chat_client_user_length}, code=400)
+
+        return val
+
+    def param_docs(self):
+        return {
+            self.param: 'generate a random username if null, guests get a default username',
+        }
+
+# CUSTOM - Defaults to empty string for guests and random for logged in.
+class VChatClientAuthToken(Validator):
+    def __init__(self, param, default = "", **kw):
+        Validator.__init__(self, param, default, **kw)
+
+    token_length = 20
+    def run(self, val):
+
+        if val is "" and c.user_is_loggedin:
+            val = "".join(random.choice(string.ascii_letters+string.digits) for i in range(self.token_length))
+
+        if val and len(val) > self.token_length:
+            self.set_error(errors.TOO_LONG, {'max_length': self.token_length}, code=400)
+
+        return val
+
+    def param_docs(self):
+        return {
+            self.param: 'generate a random token if null and logged in',
+        }
+
 
 
 class VList(Validator):

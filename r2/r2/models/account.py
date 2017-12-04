@@ -161,14 +161,13 @@ class Account(Thing):
                      in_timeout=False,
                      has_used_mobile_app=False,
                      disable_karma=False,
-
-                     # CUSTOM
+			
+		     # CUSTOM
                      pref_chat_enabled=True,
-                     # WARNING - Should match default in menus.py ?
-                     pref_chat_sidebar_size='chat_size_s',
-                     pref_irc_username='',
-                     # Handles new user case, without saving prefs
-                     pref_irc_password=''.join(random.choice(string.ascii_lowercase+string.digits) for i in range(20)),
+                     pref_chat_sidebar_size=g.live_config['chat_default_sidebar_size'],
+                     pref_chat_user=g.live_config['chat_default_username'],
+                     pref_chat_client_user=g.live_config['chat_default_username'],
+                     pref_chat_client_password='',
                      )
     _preference_attrs = tuple(k for k in _defaults.keys()
                               if k.startswith("pref_"))
@@ -931,6 +930,12 @@ def register(name, password, registration_ip):
                 # new accounts keep the profanity filter settings until opting out
                 pref_no_profanity=True,
                 registration_ip=registration_ip,
+
+		# CUSTOM - Set chat defaults
+                pref_chat_user=name,
+                pref_chat_client_user=''.join(random.choice(string.ascii_letters+string.digits) for i in range(20)),
+                pref_chat_client_password=''.join(random.choice(string.ascii_letters+string.digits) for i in range(20)),
+
             )
             account._commit()
 

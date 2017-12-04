@@ -1875,40 +1875,30 @@ class Comment(Thing, Printable):
             #will seem less horrible when add_props is in pages.py
             from r2.lib.pages import UserText
 
-            # CUSTOM - Chat widgets in comments
-            show_chat = False
+	    # CUSTOM - Chat widgets in comments
+            is_chat_post = False
             chat_popout_url = ''
             chat_enabling_post_content = g.live_config['chat_enabling_post_content']
             chat_client = ''
             chat_client_url = ''
             chat_channel = ''
-            chat_username = ''
-            chat_password = ''
-            # TODO refactor to use loggedin as name
-            is_guest = False if c.user_is_loggedin else True
+            chat_user = ''
+            chat_client_user = ''
+            chat_client_password = ''
             chat_channels = ''
 
             if feature.is_enabled('chat') and c.user.pref_chat_enabled and item.subreddit and item.subreddit.chat_enabled and item.body.find(chat_enabling_post_content) == 0:
-              show_chat = True
+              is_chat_post = True
               chat_client = g.live_config['chat_client']
               chat_client_url = g.live_config['chat_client_url']
-              chat_username = g.live_config['chat_default_username']
-              chat_password = chat_username
-              if c.user_is_loggedin and c.user.pref_irc_username:
-                chat_username = c.user.pref_irc_username
-                chat_password = chat_username
-              elif c.user_is_loggedin:
-                chat_username = c.user.name
-                chat_password = chat_username
-              if c.user.pref_irc_password:
-                chat_password = c.user.pref_irc_password
+              chat_user = c.user.pref_chat_user
+              chat_client_user = c.user.pref_chat_client_user
+              chat_client_password = c.user.pref_chat_client_password
+                
               irc_sanitized_post_title = item.body.replace(chat_enabling_post_content,"")[:15]
-              irc_sanitized_post_title = re.sub(r'[^a-zA-Z0-9]','-', irc_sanitized_post_title)
-              chat_channels = g.live_config['chat_channel_name_prefix'] + item.subreddit.name + '-' + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
-              chat_channels = re.sub('\-+', '-', chat_channels)
-              chat_channels = chat_channels.strip(' -')
+              irc_sanitized_post_title = re.sub('\-+', '-', re.sub(r'[^a-zA-Z0-9]','-', irc_sanitized_post_title)).strip(' -')
+              chat_channels = g.live_config['chat_channel_name_prefix'] + item.subreddit.name + '/' + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
               chat_channels = quote(chat_channels)
-
 
             item.usertext = UserText(item, item.body,
                                      editable=item.is_author,
@@ -1918,17 +1908,20 @@ class Comment(Thing, Printable):
                                      have_form=item.have_form,
 
                                      # CUSTOM
-                                     is_chat_post = show_chat,
+                                     is_chat_post = is_chat_post,
+                                     chat_user_is_guest = not c.user_is_loggedin,
+                                     user_chat_enabled = c.user.pref_chat_enabled,
                                      chat_client = chat_client,
                                      chat_client_url = chat_client_url,
                                      chat_channel = chat_channels,
-                                     chat_username = chat_username,
-                                     chat_password = chat_password,
-                                     is_guest = is_guest
+                                     chat_user = chat_user,
+                                     chat_client_user = chat_client_user,
+                                     chat_client_password = chat_client_password,
 
                                      )
             # g.log.warning("!!!!!!!!!!!!! dbg: usertext %s " % item.usertext)
             # g.log.warning("!!!!!!!!!!!!! dbg: from body: %s" % item.body)
+
             
             item.lastedited = CachedVariable("lastedited")
 

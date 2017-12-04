@@ -101,6 +101,12 @@
          name="${name}" value="${s if s is not None else ''}">
 </%def>
 
+## CUSTOM
+<%def name="text_input_all(s, name, size, disabled)">
+  <input type="text" class="text" size="${size}" maxlength="${size}"
+         name="${name}" value="${s if s is not None else ''}" ${"disabled='disabled'" if disabled else ""} ${"style='width:auto'" if size and size > 20 else ""}>
+</%def>
+
 %if c.user_is_loggedin:
   %if thing.done:
     <p class="green">${_("your preferences have been updated")}</p>
@@ -410,41 +416,72 @@
   </%def>
   % if feature.is_enabled('chat'):
   <tr>
-    <th>${_("chat options")}</th>
+    <th>${_("chat")}</th>
     <td class="prefright">
-        ${checkbox(_("enabled"), "chat_enabled")}
+      ${checkbox(_("enable chat"), "chat_enabled")}
       <br/>
       <p>
-        ${_wsf("sidebar size when chat present %(sort)s", sort=unsafe(capture(chat_sidebar_size_options)))}
+        ${_wsf("sidebar chat width %(sort)s", sort=unsafe(capture(chat_sidebar_size_options)))}
+      </p>
+      <!-- 
+      ${checkbox(_("click to load sidebar chats"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(coming soon)")}
+      <br/>
+        ${checkbox(_("click to load post chats"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(coming soon)")}
+      <br/>
+        ${checkbox(_("click to load comment chats"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(coming soon)")}
+      <br/> -->
+      <p>
+          <%
+           input = unsafe(capture(text_input_all, c.user.pref_chat_user,
+                                  'chat_user', 30, False))
+           %>
+        <% s = c.user.pref_chat_user %>
+        ${_wsf("IRC nickname %(chat_user)s", chat_user=input)}
+        &#32; <span class="details">${_("(changing will generate new chat client credentials)")}</span>
+        <!--
+        &#32;
+         <span class="details">
+          ${_("(as well as IRC username and realname)")}
+        </span> 
+        -->
       </p>
       <p>
           <%
-           input = unsafe(capture(text_input, c.user.pref_irc_username,
-                                  'irc_username'))
+           disabled = True
+           input = unsafe(capture(text_input_all, c.user.pref_chat_client_user,
+                                  'chat_client_user', 30, disabled))
            %>
-        <% s = c.user.pref_irc_username %>
-        ${_wsf("IRC username %(irc_username)s", irc_username=input)}
-        &#32;
-        <span class="details">
-          ${_("(to chat with a different username, or if username already taken. may not take affect immediately.)")}
-        </span>
+        <% s = c.user.pref_chat_client_user %>
+        ${_wsf("chat client username %(val)s", val=input)}
+        <!-- &#32; <span class="details">${_("(clear field and save to generate new credentials)")}</span> -->
       </p>
       <p>
           <%
-           input = unsafe(capture(text_input, c.user.pref_irc_password,
-                                  'irc_password'))
+           disabled = True
+           input = unsafe(capture(text_input_all, c.user.pref_chat_client_password,
+                                  'chat_client_password', 30, disabled))
            %>
-        <% s = c.user.pref_irc_password %>
-        ${_wsf("IRC client password %(irc_password)s", irc_password=input)}
-        &#32;
-        <span class="details">
-          ${_("(you may need this if you are forced to re-login to the chat client)")}
-        </span>
+        <% s = c.user.pref_chat_client_password %>
+        ${_wsf("chat client password %(val)s", val=input)}
       </p>
+
+      <br>
+      <p>${_("creating chat widgets")}</p>
       <% chat_enabler = g.live_config['chat_enabling_post_content'] %>
-      <p>${_("Chat Post:")}&#32;&#32;<span class="gray">${_("Submit a new text post with any title and text '")}${chat_enabler}${_("' (only). The title of your post will determine the chat channel/topic.")}</span></p>
-      <p>${_("Chat Comment:")}&#32;&#32;<span class="gray">${_("Comment starting with  '")}${chat_enabler}${_("' followed by a space. The next 15 characters of your comment will determine the chat channel/topic.")}</span></p>
-      <p>${_("Troubleshooting:")}&#32;&#32;<span class="gray">If you get "not connected" errors, type and send "/connect" a few times until you re-connect to the IRC server. </span></p>
+      <p>&#8226; ${_("post chat:")} submit a text post with any title and set the optional text to "${chat_enabler}". the title of the post will be the chat channel/topic &#32;<span class="details">(if ${_(g.live_config['name_community'])} allows)</span></p>
+      <p>&#8226; ${_("comment chat:")} comment "${chat_enabler}" followed by your desired chat channel/topic &#32;<span class="details">(if ${_(g.live_config['name_community'])} allows)</span></p>
+      
+      <br>
+      <p>${_("bring your own IRC client")}</p>
+      <p>&#8226; connect to: coming soon
+        ## &nbsp;<a href="${g.live_config['chat_external_url_href']}">${g.live_config['chat_external_url']}</a>
+      </p>
+
+      <br>
+      <p>${_("troubleshooting")}</p>
+      <p>&#8226; disconnect from unused IRC channels to improve performance</p>
+      <p>&#8226; "not connected": type and send IRC command "/connect" a few times until you re-connect to the IRC server</p>
+      <p>&#8226; "authentication failed": refresh the page. ensure other browser tabs with chat are closed. try clearing your cache and cookies and login to this site again. if you still get this error, set a new IRC nickname above and click "save options".</p>
     </td>
   </tr>
   % endif
@@ -556,3 +593,4 @@
     </div>
   </div>
 </%def>
+

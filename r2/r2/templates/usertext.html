@@ -135,21 +135,20 @@
   % if not thing.creating:
     <div class="usertext-body may-blank-within md-container ${'admin_takedown' if thing.admin_takedown else ''}">
       % if not thing.expunged:
-        ## CUSTOM
-        % if feature.is_enabled('chat') and thing.is_chat_post:
-          % if thing.chat_client == 'kiwiirc':
-            % if thing.is_guest:
-              <iframe class="chat-iframe kiwiirc" src="https://kiwiirc.com/client/irc.foonetic.net/?nick=${thing.chat_username}|?#${thing.chat_channel}"></iframe>
-            % else:
-              <iframe class="chat-iframe kiwiirc" src="https://kiwiirc.com/client/irc.foonetic.net/?nick=${thing.chat_username}#${thing.chat_channel}"></iframe>
-            % endif
 
-          % elif thing.chat_client == 'thelounge':
-            % if thing.is_guest:
-              <iframe class="chat-iframe thelounge" src="${thing.chat_client_url}/?tls=true&nofocus&lockchannel&autologin&user=guest&autoconnect&nick=guest&username=guest&realname=guest&join=${thing.chat_channel}"></iframe>
-            % else:
-              <iframe class="chat-iframe thelounge" src="${thing.chat_client_url}/?tls=true&nofocus&lockchannel&autologin&user=${thing.chat_username}&al-password=${thing.chat_password}&autoconnect&nick=${thing.chat_username}&username=${thing.chat_username}&realname=${thing.chat_username}&join=${thing.chat_channel}"></iframe>
-            % endif
+        ## CUSTOM
+        % if thing.is_chat_post and thing.user_chat_enabled and thing.chat_client == 'kiwiirc':
+          % if thing.chat_user_is_guest:
+            <iframe class="chat-iframe kiwiirc" src="${thing.chat_client_url}/?nick=${thing.chat_user}|?#${thing.chat_channel}"></iframe>
+          % else:
+            <iframe class="chat-iframe kiwiirc" src="${thing.chat_client_url}/?nick=${thing.chat_user}#${thing.chat_channel}"></iframe>
+          % endif
+
+        % elif thing.is_chat_post and thing.user_chat_enabled and thing.chat_client == 'thelounge':
+          % if thing.chat_user_is_guest:
+            <iframe class="chat-iframe thelounge" src="${thing.chat_client_url}/?tls=true&nofocus&lockchannel&autologin&user=${thing.chat_client_user}&autoconnect&nick=${thing.chat_user}&username=${thing.chat_user}&realname=${thing.chat_user}&join=${thing.chat_channel}"></iframe>
+          % else:
+            <iframe class="chat-iframe thelounge" src="${thing.chat_client_url}/?tls=true&nofocus&lockchannel&autologin&user=${thing.chat_client_user}&al-password=${thing.chat_client_password}&autoconnect&nick=${thing.chat_user}&username=${thing.chat_user}&realname=${thing.chat_user}&join=${thing.chat_channel}"></iframe>
           % endif
 
         % else:
@@ -211,3 +210,4 @@
 %else:
   </div>
 %endif
+

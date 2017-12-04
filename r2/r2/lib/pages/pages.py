@@ -303,10 +303,8 @@ class Reddit(Templated):
 
         # CUSTOM
         self.show_sidebar_chat = False
-        self.chat_size_sidebar = "d"
         if isinstance(c.site, Subreddit) and feature.is_enabled("chat") and c.site.chat_enabled and c.user.pref_chat_enabled:
             self.show_sidebar_chat = True
-            self.chat_size_sidebar = "d"
 
         # generate a canonical link for google
         canonical_url = UrlParser(canonical_link or request.url)
@@ -4908,40 +4906,32 @@ class SelfTextChild(LinkChild):
 
     def content(self):
 
-        # CUSTOM
+        # CUSTOM - Post Chats
         is_chat_post = False
-        is_guest = False
-        chat_username = g.live_config['chat_default_username']
-        chat_password = chat_username
-        chat_client = g.live_config['chat_client']
-        chat_client_url = g.live_config['chat_client_url']
+        user_chat_enabled = c.user.pref_chat_enabled
+        chat_user_is_guest = True
+        chat_user = ''
+        chat_client_user = ''
+        chat_client_password = ''
+        chat_client = ''
+        chat_client_url = ''
         chat_channel = ''
-        if feature.is_enabled('chat') and c.user.pref_chat_enabled:
-            subreddit_chat_enabled = self.link.subreddit.chat_enabled
-            subreddit_name = self.link.subreddit.name # cannot do in UserText, lose link.subreddit
-            chat_enabling_post_content = g.live_config['chat_enabling_post_content']
-            # is_stickied = self.link.is_stickied(self.link.subreddit)
-
-            if subreddit_chat_enabled and subreddit_name and self.link.selftext == chat_enabling_post_content and not self.link.expunged:
+        if feature.is_enabled('chat') and self.link.subreddit.chat_enabled and self.link.selftext == g.live_config['chat_enabling_post_content'] and not self.link.expunged:
+                # g.log.warning("!!!!!!!!!!!!! dbg: %s" % self.link.selftext)
                 is_chat_post = True
-                irc_sanitized_post_title = re.sub(r'[^a-zA-Z0-9]','-', self.link.title)
-                chat_channel = g.live_config['chat_channel_name_prefix'] + subreddit_name + '-' + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
-                chat_channel = re.sub('\-+', '-', chat_channel)
+                irc_sanitized_post_title = re.sub('\-+', '-', re.sub(r'[^a-zA-Z0-9]','-', self.link.title))[:15].strip(' -')
+                chat_channel = g.live_config['chat_channel_name_prefix'] + self.link.subreddit.name + g.live_config['chat_channel_topic_separator'] + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
                 chat_channel = quote(chat_channel)
-                if c.user_is_loggedin:
-                    if c.user.pref_irc_username:
-                        chat_username = c.user.pref_irc_username
-                    else:
-                        chat_username = c.user.name
-                    chat_password = chat_username
 
-                    if c.user.pref_irc_password:
-                        chat_password = c.user.pref_irc_password
-
-                else:
-                    is_guest = True
-
-        # g.log.warning("!!!!!!!!!!!!! dbg: %s" % self.link.selftext)
+                # NOTE - Don't have to check c.user_is_loggedin before accessing c.user.pref_*, there are defaults
+                if c.user.pref_chat_enabled:
+                    chat_user = c.user.pref_chat_user
+                    chat_client_user = c.user.pref_chat_client_user
+                    chat_client_password = c.user.pref_chat_client_password
+                    chat_client = g.live_config['chat_client']
+                    chat_client_url = g.live_config['chat_client_url']
+                    if c.user_is_loggedin:
+                        chat_user_is_guest = False
 
         u = UserText(self.link, self.link.selftext,
                      editable = c.user == self.link.author,
@@ -4950,12 +4940,14 @@ class SelfTextChild(LinkChild):
 
                      # CUSTOM
                      is_chat_post = is_chat_post,
+                     user_chat_enabled = user_chat_enabled,
+                     chat_user = chat_user,
+                     chat_user_is_guest = chat_user_is_guest,
+                     chat_client_user = chat_client_user,
+                     chat_client_password = chat_client_password,
                      chat_client = chat_client,
                      chat_client_url = chat_client_url,
-                     chat_channel = chat_channel,
-                     chat_username = chat_username,
-                     chat_password = chat_password,
-                     is_guest = is_guest)
+                     chat_channel = chat_channel)
         return u.render()
 
 class UserText(CachedTemplate):
@@ -4986,10 +4978,12 @@ class UserText(CachedTemplate):
                  is_chat_post = False,
                  chat_client = '',
                  chat_client_url = '',
-                 chat_username = '',
-                 chat_password = '',
+                 chat_user = '',
+                 chat_client_user = '',
+                 chat_client_password = '',
                  chat_channel = '',
-                 is_guest = True,
+                 chat_user_is_guest = True,
+                 user_chat_enabled = True,
                 ):
 
         css_class = "usertext"
@@ -5040,11 +5034,14 @@ class UserText(CachedTemplate):
                                 is_chat_post=is_chat_post,
                                 chat_client=chat_client,
                                 chat_client_url=chat_client_url,
-                                chat_username=chat_username,
-                                chat_password=chat_password,
                                 chat_channel=chat_channel,
-                                is_guest = is_guest
+                                chat_user_is_guest = chat_user_is_guest,
+                                chat_user = chat_user,
+                                chat_client_user = chat_client_user,
+                                chat_client_password = chat_client_password,
+                                user_chat_enabled = user_chat_enabled,
                                )
+
 
 class MediaEmbedBody(CachedTemplate):
     """What's rendered inside the iframe that contains media objects"""

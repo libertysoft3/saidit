@@ -35,12 +35,17 @@ from r2.lib.validator.validator import (
     VLang,
     VOneOf,
     VSRByName,
-
+	
     # CUSTOM
-    VNop
+    VNop,
+    VChatUser,
+    VChatClientUser,
+    VChatClientAuthToken,
 )
 from r2.lib.errors import errors
-from r2.models import Subreddit, NotFound
+
+# CUSTOM
+from r2.models import Subreddit, NotFound, Account
 
 # Validators that map directly to Account._preference_attrs
 # The key MUST be the same string as the value in _preference_attrs
@@ -103,9 +108,14 @@ PREFS_VALIDATORS = dict(
     pref_chat_enabled=VBoolean("chat_enabled"),
     pref_chat_sidebar_size=VOneOf('chat_sidebar_size', ChatSidebarSizeMenu._options),
 
-    # TODO - Maxlength 20
-    pref_irc_username=VNop('irc_username'),
-    pref_irc_password=VNop('irc_password'),
+    # empty user defaults to user.name in this validator
+    pref_chat_user=VChatUser('chat_user'),
+    
+    # empty user defaults to prefixed random user in this validator
+    pref_chat_client_user=VChatClientUser('chat_client_user'),
+
+    # empty password defaults to prefixed random in this validator
+    pref_chat_client_password=VChatClientAuthToken('chat_client_password'),
 )
 
 
@@ -121,6 +131,23 @@ def set_prefs(user, prefs):
             except NotFound:
                 g.log.warning("Could not find beta subreddit '%s'. It may "
                               "need to be created." % g.beta_sr)
+
+        # CUSTOM: refuse empty IRC nick
+        elif k == 'pref_chat_user' and v is None:
+           continue
+        # CUSTOM: Nick change: force generate new chat client credentials, avoids user having to change their 
+        # nick in the chat client. Forces new chat client session and account.
+        elif k == 'pref_chat_user' and v != user.pref_chat_user:
+            setattr(user, 'pref_chat_client_user', None)
+            setattr(user, 'pref_chat_client_password', None)
+            
+            # CUSTOM: "update caches" (from account.py, for delete user case). Clears comment cache (sidebar block is not cached/always updates)
+            # TODO - Post cache does not clear, chat posts are wonky on IRC nick change. only known way is reddit-flush. asking for too much liveness?
+            blah = Account._by_name(user.name, allow_deleted = True, _update = True)
+        elif k == 'pref_chat_client_user' and v is None:
+           continue
+        elif k == 'pref_chat_client_password' and v is None:
+           continue
 
         setattr(user, k, v)
 
