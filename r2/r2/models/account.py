@@ -374,6 +374,23 @@ class Account(Thing):
         if (self.link_karma < g.live_config["create_sr_link_karma"] and
                 self.comment_karma < g.live_config["create_sr_comment_karma"]):
             return False
+		
+	# CUSTOM - allow subreddit creation once every X days
+        # To avoid checking all subs, we get a list of user's contributed to subs,
+        # and then check the sub author and sub creation date. Works even if they
+        # create a sub then quit as moderator.
+        # NOTE: user_subreddits() safely covers subs returned by special_reddits() with "contributor" and "moderator"
+        # TODO: Use the can_create_subreddit hook to do this stuff elsewhere
+        if g.live_config["create_sr_ratelimit_once_per_days"] > 0:
+            from r2.models import Subreddit
+            user_sr_ids = Subreddit.user_subreddits(self)
+            if user_sr_ids:
+                min_last_created = datetime.today() - timedelta(days=int(g.live_config["create_sr_ratelimit_once_per_days"]))
+                srs = Subreddit._byID(user_sr_ids)
+                for sr in srs.itervalues():
+                    if sr.author_id == self._id and sr._date > min_last_created.replace(tzinfo=g.tz) and not c.user_is_admin and not self.employee:
+                        # g.log.warning("!!! dbg: user %s cannot create sub, created %s at %s, once every %s days max" % (self.name, sr.name, sr._date, g.live_config["create_sr_ratelimit_once_per_days"]))
+                        return False
 
         return True
 
