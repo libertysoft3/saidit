@@ -196,6 +196,7 @@ menu =   MenuHandler(hot          = _('hot'),
                      whitelist = _("whitelist"),
 
                      # CUSTOM
+		     global_user_bans  = _('global bans'),
                      chat_size_default = _('Default (300px)'),
                      chat_size_s       = _('Small (380px)'),
                      chat_size_m       = _('Medium (480px)'),

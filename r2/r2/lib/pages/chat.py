@@ -20,14 +20,14 @@ class SidebarChat(Templated):
 
         # CUSTOM - chat plugin upgrade script
         if c.user_is_loggedin and c.user.pref_chat_client_user == "guest":
-            g.log.warning("!!! chat plugin: upgrading chat preferences for user: %s" % c.user.name)
+            # g.log.warning("!!! chat plugin: upgrading chat preferences for user: %s" % c.user.name)
             prefs = {
                 'pref_chat_client_user': "".join(random.choice(string.ascii_letters+string.digits) for i in range(20)),
                 'pref_chat_client_password': "".join(random.choice(string.ascii_letters+string.digits) for i in range(20))
             }
 
             if c.user.pref_chat_user == "guest":
-                g.log.warning("!!! chat plugin: upgrading chat user for user: %s" % c.user.name)
+                # g.log.warning("!!! chat plugin: upgrading chat user for user: %s" % c.user.name)
                 prefs["pref_chat_user"] = c.user.name
 
             set_prefs(c.user, prefs)

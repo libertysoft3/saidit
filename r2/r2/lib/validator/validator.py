@@ -3358,3 +3358,21 @@ class VSigned(Validator):
 
 def need_provider_captcha():
     return False
+
+# CUSTOM - detect user already having a ban
+class VGlobalBanByUsername(Validator):
+    def run(self, username, required_fullname=None):
+        if not username:
+            return self.set_error(errors.NO_TEXT)
+
+        try:
+            user = Account._by_name(username)
+            a = GlobalBan._by_user_id(user._id)
+        except NotFound:
+            a = None
+
+        if a and required_fullname and a._fullname != required_fullname:
+            return self.set_error(errors.INVALID_OPTION)
+        else:
+            return a
+

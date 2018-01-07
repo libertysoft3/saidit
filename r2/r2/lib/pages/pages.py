@@ -707,7 +707,8 @@ class Reddit(Templated):
                     box = SubscriptionBox(srs)
                 ps.append(SideContentBox(_('these subreddits'), [box]))
 
-        user_banned = c.user_is_loggedin and c.site.is_banned(c.user)
+	# CUSTOM: Global Bans
+	user_banned = c.user_is_loggedin and (c.site.is_banned(c.user) or c.user.is_global_banned)
 
         if (self.submit_box
                 and (c.user_is_loggedin or not g.read_only_mode)
@@ -2410,7 +2411,10 @@ class ProfilePage(Reddit):
             from admin_pages import AdminSidebar
 
             rb.push(AdminSidebar(self.user))
-            rb.push(AdminNotesSidebar('user', self.user.name))
+            
+	    # CUSTOM - Global Bans
+	    # passing in full user object to display user ban status
+	    rb.push(AdminNotesSidebar('user', self.user.name, self.user))
         elif c.user_is_sponsor:
             from admin_pages import SponsorSidebar
             rb.push(SponsorSidebar(self.user))
@@ -4921,7 +4925,6 @@ class SelfTextChild(LinkChild):
         chat_client_url = ''
         chat_channel = ''
         if feature.is_enabled('chat') and self.link.subreddit.chat_enabled and self.link.selftext == g.live_config['chat_enabling_post_content'] and not self.link.expunged:
-                # g.log.warning("!!!!!!!!!!!!! dbg: %s" % self.link.selftext)
                 is_chat_post = True
                 irc_sanitized_post_title = re.sub('\-+', '-', re.sub(r'[^a-zA-Z0-9]','-', self.link.title))[:15].strip(' -')
                 chat_channel = g.live_config['chat_channel_name_prefix'] + self.link.subreddit.name + g.live_config['chat_channel_topic_separator'] + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
@@ -5896,3 +5899,21 @@ class GeotargetNotice(Templated):
 
 class ShareClose(Templated):
     pass
+
+# CUSTOM
+class AdminGlobalUserBans(Templated):
+    def __init__(self):
+        from r2.models import GlobalBan
+        Templated.__init__(self)
+        self.bans = GlobalBan._all_global_bans()
+
+        # load accounts by ban's user_id, not using proper reddit relationships here
+        self.accounts = {}
+        for ban in self.bans:
+            try:
+                account = Account._byID(ban.user_id)
+                if account:
+                    self.accounts[ban.user_id] = account
+            except NotFound:
+                pass
+

@@ -1919,9 +1919,6 @@ class Comment(Thing, Printable):
                                      chat_client_password = chat_client_password,
 
                                      )
-            # g.log.warning("!!!!!!!!!!!!! dbg: usertext %s " % item.usertext)
-            # g.log.warning("!!!!!!!!!!!!! dbg: from body: %s" % item.body)
-
             
             item.lastedited = CachedVariable("lastedited")
 

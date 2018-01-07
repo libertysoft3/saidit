@@ -152,6 +152,9 @@ def make_map(config):
     mc('/admin/creddits', controller='admintool', action='creddits')
     mc('/admin/gold', controller='admintool', action='gold')
 
+    # CUSTOM
+    mc('/admin/globaluserbans', controller='globaluserbans')
+
     mc('/user/:username/about', controller='user', action='about',
        where='overview')
     mc('/user/:username/trophies', controller='user', action='trophies')

@@ -736,7 +736,9 @@ class Subreddit(Thing, Printable, BaseSite):
 
         if override is not None:
             return override
-        elif self.is_banned(user):
+
+	# CUSTOM: Global Bans
+        elif self.is_banned(user) or self.is_global_banned(user):
             return False
         elif self.type == 'gold_restricted' and user.gold:
             return True
@@ -758,7 +760,10 @@ class Subreddit(Thing, Printable, BaseSite):
             return True
         elif self.is_banned(user) and not promotion:
             return False
-        elif self.spammy():
+	# CUSTOM: Global Bans
+        elif self.is_global_banned(user):
+	    return False
+	elif self.spammy():
             return False
         elif self.type == 'public':
             return True
@@ -1013,6 +1018,15 @@ class Subreddit(Thing, Printable, BaseSite):
                     banned_srids.add(sr_id)
                 elif rel_name == "muted":
                     muted_srids.add(sr_id)
+	
+	# CUSTOM: Global Bans
+	# this ensures that get_trimmed_sr_dicts() gets a correct .banned value.
+	global_banned = False
+	if user and c.user_is_loggedin:
+	    from r2.models import GlobalBan
+ 	    if GlobalBan._user_banned(user._id):
+		global_banned = True
+		# g.log.warning("!!! dbg: user '%s' is globally banned!" % user.name)
 
         ret = {}
         for sr in srs:
@@ -1021,7 +1035,8 @@ class Subreddit(Thing, Printable, BaseSite):
                 subscriber=sr_id in subscriber_srids,
                 moderator=sr_id in moderator_srids,
                 contributor=sr_id in contributor_srids,
-                banned=sr_id in banned_srids,
+                # CUSTOM: Global Bans
+		banned=sr_id in banned_srids or global_banned,
                 muted=sr_id in muted_srids,
             )
         return ret
@@ -1449,6 +1464,10 @@ class Subreddit(Thing, Printable, BaseSite):
             return False
         return len(self.sticky_fullnames) >= self.MAX_STICKIES
 
+    # CUSTOM: Global Bans
+    def is_global_banned(self, user):
+	from r2.models import GlobalBan
+	return GlobalBan._user_banned(user._id)
 
 class SubscribedSubredditsByAccount(tdb_cassandra.DenormalizedRelation):
     _use_db = True

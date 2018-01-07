@@ -391,6 +391,14 @@ class Account(Thing):
                     if sr.author_id == self._id and sr._date > min_last_created.replace(tzinfo=g.tz) and not c.user_is_admin and not self.employee:
                         # g.log.warning("!!! dbg: user %s cannot create sub, created %s at %s, once every %s days max" % (self.name, sr.name, sr._date, g.live_config["create_sr_ratelimit_once_per_days"]))
                         return False
+	
+	# CUSTOM - Global Ban enforcement
+        # TODO: Use the can_create_subreddit hook to do this stuff elsewhere
+        from r2.models.globalban import GlobalBan
+        if GlobalBan._user_banned(self._id):
+            # g.log.warning("!!! dbg: user %s cannot create sub, is globally banned" % self.name)
+            return False
+
 
         return True
 
@@ -778,6 +786,11 @@ class Account(Thing):
         """
         return 'force_password_reset' in self._t
 
+    # CUSTOM: Global Bans
+    @property
+    def is_global_banned(self):
+	from r2.models.globalban import GlobalBan
+	return GlobalBan._user_banned(self._id)
 
 class FakeAccount(Account):
     _nodb = True

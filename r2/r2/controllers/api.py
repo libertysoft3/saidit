@@ -1055,7 +1055,7 @@ class ApiController(RedditController):
         unbanned_types = ("moderator", "moderator_invite",
                           "contributor", "wikicontributor")
         if type in unbanned_types:
-            if container.is_banned(friend):
+            if container.is_banned(friend) or container.is_global_banned(friend):
                 c.errors.add(errors.BANNED_FROM_SUBREDDIT, field="name")
                 form.set_error(errors.BANNED_FROM_SUBREDDIT, "name")
                 return
@@ -1741,7 +1741,7 @@ class ApiController(RedditController):
 
         if not (c.user._spam or
                 c.user.ignorereports or
-                (sr and sr.is_banned(c.user))):
+		(sr and (sr.is_banned(c.user) or sr.is_global_banned(c.user)))):
             Report.new(c.user, thing, reason)
             admintools.report(thing)
 
@@ -5254,3 +5254,55 @@ class ApiController(RedditController):
         c.user.pref_use_global_defaults = True
         c.user._commit()
         jquery.refresh()
+
+    # CUSTOM: Global Bans
+    # TODO: form validation and error display is janky
+    @validatedForm(VAdmin(),
+                   VModhash(),
+                   globalban=VByName("fullname"),
+                   colliding_globalban=VGlobalBanByUsername(("recipient", "fullname")),
+                   recipient=VExistingUname("recipient"),
+                   notes=VLength("notes", max_length = 1000, empty_error=None))
+    def POST_editglobalban(self, form, jquery, globalban, colliding_globalban, recipient, notes):
+
+        # INVALID_OPTION is set by VGlobalBanByUsername
+        if form.has_errors("recipient", errors.INVALID_OPTION):
+            form.set_text(".status", "user already globally banned")
+            return
+
+        if form.has_error():
+            return
+
+        if recipient is None:
+            form.set_text(".status", "user does not exist")
+            return
+
+        if globalban is None:
+            GlobalBan._new(recipient._id, notes)
+            form.set_html(".status", "saved, <a href='#' onclick='location.reload();'>reload</a> to see changes")
+            return
+
+        globalban.notes = notes
+        globalban._commit()
+        form.set_html(".status", _('saved, <a href="#" onclick="location.reload();">reload</a> to see changes'))
+
+
+    # CUSTOM: Global Bans
+    @validatedForm(VAdmin(),
+                VModhash(),
+                thing = VByName('globalban_id'))
+    def POST_deleteglobalban(self, form, jquery, thing):
+        if not thing or thing._deleted: return
+        if not isinstance(thing, GlobalBan): return
+        if form.has_error():
+            return
+
+        thing._deleted = True
+        thing._commit()
+
+        # _new() handles this for creation
+        cache_clear = GlobalBan._all_global_bans(True)
+        cache_clear = GlobalBan._all_banned_users_cache(_update=True)
+	form.set_html(".status", _('deleted, <a href="#" onclick="location.reload();">reload</a> to see it'))
+
+
