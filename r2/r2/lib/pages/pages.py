@@ -1112,7 +1112,7 @@ class RedditFooter(CachedTemplate):
                 separator = ""),
 
             NavMenu([
-                  OffsiteButton(_("contact"), "https://antiextremes.com/ContactUs"),
+                  OffsiteButton(_("contact"), "https://antiextremes.com/r/help"),
                 ],
                 title = _("help"),
                 type = "flat_vert",
@@ -1121,6 +1121,10 @@ class RedditFooter(CachedTemplate):
             NavMenu([
                     OffsiteButton(_("RESAE"),
                         "https://antiextremes.com/r/AntiExtremes/comments/3e/information_about_resae_antiextremes_version_of/"),
+
+                    OffsiteButton(_("list all SubXes"),
+                        "https://antiextremes.com/subxes"),
+
                 
                 ],
                 title = _("apps & tools"),
@@ -1128,13 +1132,13 @@ class RedditFooter(CachedTemplate):
                 separator = ""),
 
             NavMenu([
-                                      OffsiteButton(_("Patreon"), "https://www.patreon.com/AntiExtremes"),
-OffsiteButton(_("donate Bitcoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
-OffsiteButton(_("donate Litecoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
-OffsiteButton(_("donate Dogecoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
-OffsiteButton(_("donate Ethereum"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
+                                      OffsiteButton(_("patreon"), "https://www.patreon.com/AntiExtremes"),
+OffsiteButton(_("bitcoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
+OffsiteButton(_("litecoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
+OffsiteButton(_("dogecoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
+OffsiteButton(_("ethereum"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
                 ],
-                title = _("<3"),
+                title = _("support"),
                 type = "flat_vert",
                 separator = "")
         ]

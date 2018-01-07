@@ -37,3 +37,6 @@ r2/r2/lib/utils/comment_tree_utils.c
 
 # vagrant
 .vagrant/
+
+# AE CUSTOM
+r2/r2/public/.well-known/
