@@ -87,8 +87,11 @@ clean_ini:
 
 #################### CSS file lists
 SPRITED_STYLESHEETS += reddit.less compact.css modtools.less expando.less
+
+# CUSTOM
 LESS_STYLESHEETS := wiki.less adminbar.less policies.less reddit-embed.less feature-chat.less theme-custom.less
-OTHER_STYLESHEETS := mobile.css highlight.css
+
+OTHER_STYLESHEETS := mobile.css highlight.css 
 
 #################### Static Files
 STATIC_ROOT := r2/public
@@ -96,6 +99,7 @@ STATIC_FILES := $(shell find $(STATIC_ROOT) -readable)
 STATIC_BUILD_ROOT := $(BUILD_DIR)/public
 STATIC_BUILD_DIR := $(STATIC_BUILD_ROOT)/static
 STATIC_BUILDSTAMP := $(BUILD_DIR)/static-buildstamp
+CSS_DEST_DIR := $(STATIC_BUILD_DIR)/compiled-css
 
 .PHONY: clean_static
 
@@ -106,6 +110,7 @@ clean_static:
 
 $(STATIC_BUILDSTAMP): $(STATIC_FILES)
 	cp -ruTL $(STATIC_ROOT) $(STATIC_BUILD_ROOT)
+	test -d $(CSS_DEST_DIR) || mkdir $(CSS_DEST_DIR)
 	touch $@
 
 #################### Plugin static files
@@ -131,12 +136,12 @@ LESSC := lessc
 CSS_COMPRESS := $(PYTHON) r2/lib/contrib/rcssmin.py
 CSS_SOURCE_DIR := $(STATIC_BUILD_DIR)/css
 
-PROCESSED_SPRITED_STYLESHEETS := $(addprefix $(STATIC_BUILD_DIR)/, $(SPRITED_STYLESHEETS:.less=.css))
-SPRITES := $(addprefix $(STATIC_BUILD_DIR)/, $(patsubst %.css,sprite-%.png, $(SPRITED_STYLESHEETS:.less=.css)))
+PROCESSED_SPRITED_STYLESHEETS := $(addprefix $(CSS_DEST_DIR)/, $(SPRITED_STYLESHEETS:.less=.css))
+SPRITES := $(addprefix $(CSS_DEST_DIR)/, $(patsubst %.css,sprite-%.png, $(SPRITED_STYLESHEETS:.less=.css)))
 
-LESS_OUTPUTS := $(addprefix $(STATIC_BUILD_DIR)/, $(patsubst %.less,%.css, $(LESS_STYLESHEETS)))
+LESS_OUTPUTS := $(addprefix $(CSS_DEST_DIR)/, $(patsubst %.less,%.css, $(LESS_STYLESHEETS)))
 
-MINIFIED_OTHER_STYLESHEETS := $(addprefix $(STATIC_BUILD_DIR)/, $(OTHER_STYLESHEETS))
+MINIFIED_OTHER_STYLESHEETS := $(addprefix $(CSS_DEST_DIR)/, $(OTHER_STYLESHEETS))
 
 PROCESSED_STYLESHEETS := $(PROCESSED_SPRITED_STYLESHEETS) $(MINIFIED_OTHER_STYLESHEETS) $(LESS_OUTPUTS)
 
@@ -148,31 +153,31 @@ css: $(STATIC_BUILDSTAMP) $(CSS_OUTPUTS)
 
 
 # the LESSC invocation is separated so the recipe fails in case of LESS errors.
-$(LESS_OUTPUTS): $(STATIC_BUILD_DIR)/%.css : $(CSS_SOURCE_DIR)/%.less
+$(LESS_OUTPUTS): $(CSS_DEST_DIR)/%.css : $(CSS_SOURCE_DIR)/%.less
 	rm -f $@
 	$(LESSC) $< > $@.tmp
 	$(CSS_COMPRESS) < $@.tmp > $@
 	rm $@.tmp
 
-$(MINIFIED_OTHER_STYLESHEETS): $(STATIC_BUILD_DIR)/%.css: $(CSS_SOURCE_DIR)/%.css
+$(MINIFIED_OTHER_STYLESHEETS): $(CSS_DEST_DIR)/%.css: $(CSS_SOURCE_DIR)/%.css
 	# when static file names are mangled, the original becomes a symlink to the mangled name
 	# remove the original file here in case it's a symlink so we don't just rewrite the old file
 	rm -f $@
 	$(CAT) $< | $(CSS_COMPRESS) > $@
 
-$(STATIC_BUILD_DIR)/sprite-%.png $(STATIC_BUILD_DIR)/%.css: $(CSS_SOURCE_DIR)/%.less $(STATIC_BUILDSTAMP)
+$(CSS_DEST_DIR)/sprite-%.png $(CSS_DEST_DIR)/%.css: $(CSS_SOURCE_DIR)/%.less $(STATIC_BUILDSTAMP)
 	# see above
-	rm -f $(STATIC_BUILD_DIR)/sprite-$*.png $(STATIC_BUILD_DIR)/$*.css
-	$(PYTHON) r2/lib/nymph.py $(CSS_SOURCE_DIR)/$*.less $(STATIC_BUILD_DIR)/sprite-$*.png > $(CSS_SOURCE_DIR)/$*.less.tmp
-	$(LESSC) $(CSS_SOURCE_DIR)/$*.less.tmp > $(STATIC_BUILD_DIR)/$*.css.tmp
-	$(CSS_COMPRESS) < $(STATIC_BUILD_DIR)/$*.css.tmp > $(STATIC_BUILD_DIR)/$*.css
-	rm $(CSS_SOURCE_DIR)/$*.less.tmp $(STATIC_BUILD_DIR)/$*.css.tmp
+	rm -f $(CSS_DEST_DIR)/sprite-$*.png $(CSS_DEST_DIR)/$*.css
+	$(PYTHON) r2/lib/nymph.py $(CSS_SOURCE_DIR)/$*.less $(CSS_DEST_DIR)/sprite-$*.png > $(CSS_SOURCE_DIR)/$*.less.tmp
+	$(LESSC) $(CSS_SOURCE_DIR)/$*.less.tmp > $(CSS_DEST_DIR)/$*.css.tmp
+	$(CSS_COMPRESS) < $(CSS_DEST_DIR)/$*.css.tmp > $(CSS_DEST_DIR)/$*.css
+	rm $(CSS_SOURCE_DIR)/$*.less.tmp $(CSS_DEST_DIR)/$*.css.tmp
 
 # deprecated; remove once compact.scss has been converted to LESS
-$(STATIC_BUILD_DIR)/sprite-%.png $(STATIC_BUILD_DIR)/%.css: $(CSS_SOURCE_DIR)/%.css $(STATIC_BUILDSTAMP)
+$(CSS_DEST_DIR)/sprite-%.png $(CSS_DEST_DIR)/%.css: $(CSS_SOURCE_DIR)/%.css $(STATIC_BUILDSTAMP)
 	# see above
-	rm -f $(STATIC_BUILD_DIR)/sprite-$*.png $(STATIC_BUILD_DIR)/$*.css
-	$(PYTHON) r2/lib/nymph.py $< $(STATIC_BUILD_DIR)/sprite-$*.png | $(CSS_COMPRESS) > $(STATIC_BUILD_DIR)/$*.css
+	rm -f $(CSS_DEST_DIR)/sprite-$*.png $(CSS_DEST_DIR)/$*.css
+	$(PYTHON) r2/lib/nymph.py $< $(CSS_DEST_DIR)/sprite-$*.png | $(CSS_COMPRESS) > $(CSS_DEST_DIR)/$*.css
 
 clean_css:
 	rm -f $(CSS_OUTPUTS)
@@ -216,3 +221,4 @@ clean_names:
 	rm -f $(MANGLE_BUILDSTAMP) $(NAMES_FILE) $(MANGLEABLE_FILES) $(MANGLED_FILES)
 
 $(shell rm -f $(DEFS_FILE))
+

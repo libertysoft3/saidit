@@ -74,10 +74,12 @@ def update_static_names(names_file, files):
     base = os.path.dirname(names_file)
     for path in files:
         name = os.path.relpath(path, base)
+        basename = os.path.basename(name)
         mangled_name = generate_static_name(name, base)
-        names[name] = mangled_name
+        names[basename] = mangled_name
 
         if not os.path.islink(path):
+            mangled_basename = os.path.basename(mangled_name)
             mangled_path = os.path.join(base, mangled_name)
             shutil.move(path, mangled_path)
             # When on NFS, cp has a bad habit of turning our symlinks into
@@ -85,7 +87,7 @@ def update_static_names(names_file, files):
             # the case of hardlinks to the same inode.
             if os.path.exists(path):
                 os.unlink(path)
-            os.symlink(mangled_name, path)
+            os.symlink(mangled_basename, path)
 
     json_enc = json.JSONEncoder(indent=2, sort_keys=True)
     open(names_file, "w").write(json_enc.encode(names))
@@ -95,3 +97,4 @@ def update_static_names(names_file, files):
 
 if __name__ == "__main__":
     update_static_names(sys.argv[1], sys.argv[2:])
+
