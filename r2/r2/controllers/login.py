@@ -33,6 +33,9 @@ from r2.lib.errors import errors, reddit_http_error
 
 from r2.models.account import register, AccountExists
 
+# CUSTOM: Auto Subscribe All
+from r2.config import feature
+from r2.models.subreddit import Subreddit
 
 def handle_login(
     controller, form, responder, user, rem=None, signature=None, **kwargs
@@ -183,4 +186,9 @@ def handle_register(
                 g.log.warning("Failed to subscribe: %r" % e)
 
         controller._login(responder, user, rem)
+
+        # CUSTOM: Auto Subscribe All, calling subscribe_defaults() asap
+        if feature.is_enabled('auto_subscribe_all'):
+            Subreddit.subscribe_defaults(c.user)
+
         _event(error=None)

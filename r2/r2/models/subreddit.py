@@ -1265,6 +1265,16 @@ class Subreddit(Thing, Printable, BaseSite):
             user.has_subscribed = True
             user._commit()
             srs = cls.user_subreddits(user=None, ids=False, limit=None)
+
+            # CUSTOM: Auto Subscribe All
+            if feature.is_enabled('auto_subscribe_all'):
+                sr_ids = NamedGlobals.get("popular_sr_ids")
+                if g.live_config['auto_subscribe_all_include_over_18']:
+                    sr_ids = sr_ids + NamedGlobals.get("popular_over_18_sr_ids")
+                if len(sr_ids) > int(g.live_config['auto_subscribe_all_limit']) and int(g.live_config['auto_subscribe_all_limit']) > 0:
+                    sr_ids = sr_ids[:int(g.live_config['auto_subscribe_all_limit'])]
+                srs = Subreddit._byID(sr_ids, data=True, return_dict=False, stale=True)
+
             cls.subscribe_multiple(user, srs)
 
     def keep_item(self, wrapped):

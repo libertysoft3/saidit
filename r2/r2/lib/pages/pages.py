@@ -297,14 +297,17 @@ class Reddit(Templated):
         if feature.is_enabled("expando_nsfw_flow"):
             self.feature_expando_nsfw_flow = True
 
-        # CUSTOM
+        # CUSTOM: Add chat css preferences to sidebar
+        self.chat_include_css = False
+        self.show_sidebar_chat = False
         if feature.is_enabled("chat"):
             self.chat_include_css = True
-
-        # CUSTOM
-        self.show_sidebar_chat = False
-        if isinstance(c.site, Subreddit) and feature.is_enabled("chat") and c.site.chat_enabled and c.user.pref_chat_enabled:
-            self.show_sidebar_chat = True
+            if isinstance(c.site, Subreddit) and c.site.chat_enabled and c.user.pref_chat_enabled:
+                self.show_sidebar_chat = True
+            elif isinstance(c.site, AllSR) and g.live_config['chat_all'] == 'on' and c.user.pref_chat_enabled:
+                self.show_sidebar_chat = True
+            elif isinstance(c.site, DefaultSR) and g.live_config['chat_front'] == 'on' and c.user.pref_chat_enabled:
+                self.show_sidebar_chat = True
 
         # generate a canonical link for google
         canonical_url = UrlParser(canonical_link or request.url)
@@ -666,11 +669,18 @@ class Reddit(Templated):
             notebar = AdminNotesSidebar('domain', c.site.domain)
             ps.append(notebar)
 
-        # CUSTOM - Add Sidebar Chat on subreddits
-        if isinstance(c.site, Subreddit) and feature.is_enabled('chat') and c.user.pref_chat_enabled and c.site.chat_enabled:
+        # CUSTOM: add Sidebar Chat to Subreddits, /r/all, / (front)
+        if feature.is_enabled('chat') and c.user.pref_chat_enabled:
             from r2.lib.pages.chat import SidebarChat
-            notebar = SidebarChat('subreddit', c.site.name)
-            ps.append(notebar)
+            if isinstance(c.site, Subreddit) and c.site.chat_enabled:
+                notebar = SidebarChat('subreddit', c.site.name)
+                ps.append(notebar)
+            elif isinstance(c.site, AllSR) and g.live_config['chat_all'] == 'on':
+                notebar = SidebarChat('subreddit', g.live_config['chat_all_channel'])
+                ps.append(notebar)
+            elif isinstance(c.site, DefaultSR) and g.live_config['chat_front'] == 'on':
+                notebar = SidebarChat('subreddit', g.live_config['chat_front_channel'])
+                ps.append(notebar)
 
         if isinstance(c.site, Subreddit) and c.user_is_admin:
             from r2.lib.pages.admin_pages import AdminNotesSidebar
