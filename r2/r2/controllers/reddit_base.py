@@ -132,6 +132,9 @@ from r2.models import (
     valid_admin_cookie,
     valid_feed,
     valid_otp_cookie,
+
+    # CUSTOM
+    AllSR,
 )
 from r2.lib.db import tdb_cassandra
 
@@ -290,6 +293,10 @@ def set_subreddit():
     can_stale = request.method.upper() in ('GET', 'HEAD')
 
     c.site = Frontpage
+    
+    if feature.is_enabled('all_on_front'):
+	c.site = All
+
     if not sr_name:
         #check for cnames
         cname = request.environ.get('legacy-cname')
@@ -352,8 +359,9 @@ def set_subreddit():
             elif not c.error_page and not request.path.startswith("/api/login/") :
                 abort(404)
 
+    # CUSTOM: All On Front
     #if we didn't find a subreddit, check for a domain listing
-    if not sr_name and isinstance(c.site, DefaultSR) and domain:
+    if not sr_name and (isinstance(c.site, DefaultSR) or (feature.is_enabled('all_on_front') and isinstance(c.site, AllSR))) and domain:
         # Redirect IDN to their IDNA name if necessary
         try:
             idna = _force_unicode(domain).encode("idna")

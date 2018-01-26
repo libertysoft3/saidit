@@ -296,17 +296,17 @@ class Reddit(Templated):
             self.feature_new_expando_icons = True
         if feature.is_enabled("expando_nsfw_flow"):
             self.feature_expando_nsfw_flow = True
-
-        # CUSTOM: Add chat css preferences to sidebar
+	
+	# CUSTOM: Add chat css preferences to sidebar
         self.chat_include_css = False
         self.show_sidebar_chat = False
-        if feature.is_enabled("chat"):
+        if feature.is_enabled('chat') and c.user.pref_chat_enabled:
             self.chat_include_css = True
-            if isinstance(c.site, Subreddit) and c.site.chat_enabled and c.user.pref_chat_enabled:
+            if isinstance(c.site, Subreddit) and c.site.chat_enabled:
                 self.show_sidebar_chat = True
-            elif isinstance(c.site, AllSR) and g.live_config['chat_all'] == 'on' and c.user.pref_chat_enabled:
+            elif isinstance(c.site, AllSR) and g.live_config['chat_all'] == 'on':
                 self.show_sidebar_chat = True
-            elif isinstance(c.site, DefaultSR) and g.live_config['chat_front'] == 'on' and c.user.pref_chat_enabled:
+            elif isinstance(c.site, DefaultSR) and g.live_config['chat_front'] == 'on':
                 self.show_sidebar_chat = True
 
         # generate a canonical link for google
@@ -435,6 +435,10 @@ class Reddit(Templated):
                 c.site.name == g.live_config["listing_chooser_explore_sr"]
             )
         )
+
+	# CUSTOM: Listing Chooser flag
+        if self.show_chooser and not feature.is_enabled('listing_chooser'):
+            self.show_chooser = False
 
         self.toolbars = self.build_toolbars()
 
@@ -651,15 +655,22 @@ class Reddit(Templated):
         if self.searchbox:
             ps.append(SearchForm())
 
+	# CUSTOM: All On Front
         sidebar_message = g.live_config.get("sidebar_message")
         if sidebar_message and isinstance(c.site, DefaultSR):
             ps.append(SidebarMessage(sidebar_message[0]))
+        elif feature.is_enabled('all_on_front') and sidebar_message and isinstance(c.site, AllSR):
+            ps.append(SidebarMessage(sidebar_message[0]))
 
+        # CUSTOM: All On Front
         gold_sidebar_message = g.live_config.get("gold_sidebar_message")
         if (c.user_is_loggedin and c.user.gold and
                 gold_sidebar_message and isinstance(c.site, DefaultSR)):
             ps.append(SidebarMessage(gold_sidebar_message[0],
                                      extra_class="gold"))
+        elif (feature.is_enabled('all_on_front') and c.user_is_loggedin and
+                c.user.gold and gold_sidebar_message and isinstance(c.site, AllSR)):
+            ps.append(SidebarMessage(gold_sidebar_message[0], extra_class="gold"))
 
         if not c.user_is_loggedin and self.loginbox and not g.read_only_mode:
             ps.append(LoginFormWide())
@@ -693,8 +704,11 @@ class Reddit(Templated):
         if (isinstance(c.site, Filtered) and not
             (isinstance(c.site, AllSR) and not c.user.gold)):
             ps.append(FilteredInfoBar())
-        elif isinstance(c.site, AllSR):
-            ps.append(AllInfoBar(c.site, c.user))
+	elif isinstance(c.site, AllSR):
+            if feature.is_enabled('all_on_front') and g.live_config['all_on_front_show_all_info_bar'] == 'true':
+                ps.append(AllInfoBar(c.site, c.user))
+            elif not feature.is_enabled('all_on_front'):
+                ps.append(AllInfoBar(c.site, c.user))
         elif isinstance(c.site, ModSR):
             ps.append(ModSRInfoBar())
 
@@ -998,13 +1012,25 @@ class Reddit(Templated):
         if more_buttons:
             toolbar.append(NavMenu(more_buttons, title=menu.more, type='tabdrop'))
 
-        if not isinstance(c.site, DefaultSR):
+	if not isinstance(c.site, DefaultSR):
             func = 'subreddit'
             if isinstance(c.site, DomainSR):
                 func = 'domain'
+
+            # CUSTOM: All On Front
+            elif isinstance(c.site, AllSR) and feature.is_enabled('all_on_front'):
+                if g.live_config['all_on_front_show_all_header_title'] == 'true':
+                    func = 'subredditheadertitle'
+                else:
+                    func = 'subredditnontitled'
+
             toolbar.insert(0, PageNameNav(func))
 
-        return toolbar
+        # CUSTOM: All On Front
+        elif isinstance(c.site, DefaultSR) and feature.is_enabled('all_on_front'):
+            toolbar.insert(0, PageNameNav('subredditheadertitle'))
+
+	return toolbar
 
     def __repr__(self):
         return "<Reddit>"
@@ -2889,7 +2915,12 @@ class SubredditTopBar(CachedTemplate):
         css_classes = {Random: "random",
                        RandomSubscription: "gold"}
         reddits = [Frontpage, All, Random]
-        if getattr(c.site, "over_18", False):
+        
+	# CUSTOM: All On Front
+        if feature.is_enabled('all_on_front'):
+            reddits = [All, Frontpage, Random]
+
+	if getattr(c.site, "over_18", False):
             reddits.append(RandomNSFW)
         if c.user_is_loggedin:
             if c.user.gold:

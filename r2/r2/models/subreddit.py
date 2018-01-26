@@ -1269,7 +1269,7 @@ class Subreddit(Thing, Printable, BaseSite):
             # CUSTOM: Auto Subscribe All
             if feature.is_enabled('auto_subscribe_all'):
                 sr_ids = NamedGlobals.get("popular_sr_ids")
-                if g.live_config['auto_subscribe_all_include_over_18']:
+                if g.live_config['auto_subscribe_all_include_over_18'] == 'on':
                     sr_ids = sr_ids + NamedGlobals.get("popular_over_18_sr_ids")
                 if len(sr_ids) > int(g.live_config['auto_subscribe_all_limit']) and int(g.live_config['auto_subscribe_all_limit']) > 0:
                     sr_ids = sr_ids[:int(g.live_config['auto_subscribe_all_limit'])]
@@ -1704,6 +1704,13 @@ class AllSR(FakeSubreddit):
     title = 'all subreddits'
     path = '/r/all'
 
+    # CUSTOM: All On Front
+    if feature.is_enabled('all_on_front'):
+        header = g.default_header_url
+        name = g.live_config['all_on_front_all_name']
+        path = g.live_config['all_on_front_all_path']
+        header_title = g.live_config['all_on_front_all_header_title']
+
     def keep_for_rising(self, sr_id):
         return True
 
@@ -1742,6 +1749,14 @@ class AllSR(FakeSubreddit):
             qs.append(queries.get_reported_comments(None))
 
         return MergedCachedQuery(qs)
+
+    # CUSTOM: All On Front
+    @property
+    def title(self):
+        if feature.is_enabled('all_on_front'):
+            return _(g.short_description)
+        else:
+            return 'all subreddits'
 
 class AllMinus(AllSR):
     analytics_name = "all"
@@ -1817,6 +1832,12 @@ class _DefaultSR(FakeSubreddit):
     path = '/'
     header = g.default_header_url
 
+    # CUSTOM: All On Front
+    if feature.is_enabled('all_on_front'):
+        analytics_name = g.live_config['all_on_front_front_name']
+        name = g.live_config['all_on_front_front_name']
+        path = g.live_config['all_on_front_front_path']
+
     def _get_sr_ids(self):
         if not c.defaultsr_cached_sr_ids:
             user = c.user if c.user_is_loggedin else None
@@ -1833,9 +1854,13 @@ class _DefaultSR(FakeSubreddit):
         sr_ids = self._get_sr_ids()
         return get_links_sr_ids(sr_ids, sort, time)
 
+    # CUSTOM: All On Front
     @property
     def title(self):
-        return _(g.short_description)
+        if feature.is_enabled('all_on_front'):
+            return _(g.live_config['all_on_front_front_page_title'])
+        else:
+            return _(g.short_description)
 
 # This is the base class for the instantiated front page reddit
 class DefaultSR(_DefaultSR):
@@ -1896,7 +1921,12 @@ class DefaultSR(_DefaultSR):
 
     @property
     def header_title(self):
-        return (self._base and self._base.header_title) or ""
+
+        # CUSTOM: All On Front
+        if feature.is_enabled('all_on_front'):
+            return g.live_config['all_on_front_front_header_title']
+        else:
+            return (self._base and self._base.header_title) or ""
 
     @property
     def header_size(self):

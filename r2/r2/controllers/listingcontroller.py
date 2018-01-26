@@ -199,8 +199,15 @@ class ListingController(RedditController):
             wouldkeep = item.keep_item(item)
 
             if isinstance(c.site, AllSR):
-                if not item.subreddit.discoverable:
-                    return False
+                
+		# CUSTOM: All On Front
+                # support c.site being AllSR on the /subreddits path, if feature_all_on_front=on
+                # distinguish subs vs. links when checking sub.discoverable
+		if hasattr(item, 'subreddit') and not item.subreddit.discoverable:
+                	return False
+		elif hasattr(item, 'discoverable') and not item.discoverable:
+                	return False
+
             elif isinstance(c.site, FriendsSR):
                 if item.author._deleted or item.author._spam:
                     return False
@@ -321,8 +328,12 @@ class SubredditListingController(ListingController):
     def render_params(self):
         render_params = {}
 
-        if isinstance(c.site, DefaultSR):
+	# CUSTOM: All On Front
+        if feature.is_enabled('all_on_front') and isinstance(c.site, AllSR):
             render_params.update({'show_locationbar': True})
+        elif not feature.is_enabled('all_on_front') and isinstance(c.site, DefaultSR):
+            render_params.update({'show_locationbar': True})
+
         else:
             if not c.user_is_loggedin:
                 # This data is only for scrapers, which shouldn't be logged in.
@@ -458,7 +469,12 @@ class ListingWithPromos(SubredditListingController):
             show_sponsors = not c.user.pref_hide_ads or not c.user.gold
             show_organic = self.show_organic and c.user.pref_organic
             on_frontpage = isinstance(c.site, DefaultSR)
-            requested_ad = request.GET.get('ad')
+            
+            # CUSTOM: All On Front
+            if feature.is_enabled('all_on_front'):
+                on_frontpage = isinstance(c.site, AllSR)
+
+	    requested_ad = request.GET.get('ad')
 
             if on_frontpage:
                 self.extra_page_classes = \

@@ -32,6 +32,8 @@ from r2.lib.strings import StringHandler, plurals
 from r2.lib.utils import  class_property, query_string, timeago
 from r2.lib.wrapped import Styled
 
+# CUSTOM: All On Front
+from r2.models.subreddit import DefaultSR, AllSR
 
 class MenuHandler(StringHandler):
     """Bastard child of StringHandler and plurals.  Menus are
@@ -448,7 +450,14 @@ class SubredditButton(NavButton):
     def __init__(self, sr, css_class='', data=None):
         self.path = sr.path
         name = self.name_overrides.get(sr)
-        name = _(name) if name else sr.name
+        
+	# CUSTOM: All On Front
+        if isinstance(sr, DefaultSR) and feature.is_enabled('all_on_front'):
+            name = g.live_config['all_on_front_front_name']
+        elif isinstance(sr, AllSR) and feature.is_enabled('all_on_front'):
+            name = g.live_config['all_on_front_all_name']
+
+	name = _(name) if name else sr.name
         self.isselected = (c.site == sr)
         NavButton.__init__(self, name, sr.path, sr_path=False,
                            css_class=css_class, data=data)
