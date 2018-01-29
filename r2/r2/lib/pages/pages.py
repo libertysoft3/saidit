@@ -1019,10 +1019,10 @@ class Reddit(Templated):
 
             # CUSTOM: All On Front
             elif isinstance(c.site, AllSR) and feature.is_enabled('all_on_front'):
-                if g.live_config['all_on_front_show_all_header_title'] == 'true':
+                if g.live_config['all_on_front_show_all_info_bar'] == 'true':
                     func = 'subredditheadertitle'
                 else:
-                    func = 'subredditnontitled'
+                    func = 'subredditnositelink'
 
             toolbar.insert(0, PageNameNav(func))
 
@@ -1498,7 +1498,12 @@ class BoringPage(Reddit):
 
     def build_toolbars(self):
         if not isinstance(c.site, DefaultSR):
-            return [PageNameNav('subreddit', title = self.pagename)]
+            
+      	    # CUSTOM
+	    if feature.is_enabled('all_on_front') and isinstance(c.site, AllSR) and g.live_config['all_on_front_show_all_info_bar'] == 'false':
+                return [PageNameNav('subredditnositelink', title = self.pagename)]
+            else:
+                return [PageNameNav('subreddit', title = self.pagename)]
         else:
             return [PageNameNav('nomenu', title = self.pagename)]
 
@@ -2918,7 +2923,13 @@ class SubredditTopBar(CachedTemplate):
         
 	# CUSTOM: All On Front
         if feature.is_enabled('all_on_front'):
-            reddits = [All, Frontpage, Random]
+            reddits = []
+            if g.live_config['all_on_front_show_all_in_menu'] == 'true':
+                reddits.append(All)
+            if g.live_config['all_on_front_show_front_in_menu'] == 'true':
+                reddits.append(Frontpage)
+            if g.live_config['all_on_front_show_random_in_menu'] == 'true':
+                reddits.append(Random)
 
 	if getattr(c.site, "over_18", False):
             reddits.append(RandomNSFW)

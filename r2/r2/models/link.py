@@ -54,6 +54,9 @@ from subreddit import (
     FakeSubreddit,
     Subreddit,
     SubredditsActiveForFrontPage,
+
+    # CUSTOM
+    AllSR,
 )
 from printable import Printable
 from r2.config import extensions
@@ -670,6 +673,12 @@ class Link(Thing, Printable):
                     show_media = True
                 elif pref_media != 'off' and not user.pref_compress:
                     show_media = True
+
+	    # CUSTOM
+            elif feature.is_enabled('force_show_media_front') and isinstance(site, DefaultSR) and pref_media != 'off':
+                show_media = True
+            elif feature.is_enabled('force_show_media_all') and isinstance(site, AllSR) and pref_media != 'off':
+                show_media = True
 
             show_media_preview = False
             if feature.is_enabled('autoexpand_media_previews'):
