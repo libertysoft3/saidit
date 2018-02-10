@@ -24,7 +24,7 @@ from pylons import tmpl_context as c
 from pylons import app_globals as g
 
 from r2.config import feature
-from r2.lib.menus import CommentSortMenu
+from r2.lib.menus import CommentSortMenu, SubscriptionsSubscribeMenu
 
 # CUSTOM
 from r2.lib.menus import ChatSidebarSizeMenu
@@ -107,15 +107,13 @@ PREFS_VALIDATORS = dict(
     # CUSTOM
     pref_chat_enabled=VBoolean("chat_enabled"),
     pref_chat_sidebar_size=VOneOf('chat_sidebar_size', ChatSidebarSizeMenu._options),
-
     # empty user defaults to user.name in this validator
     pref_chat_user=VChatUser('chat_user'),
-    
     # empty user defaults to prefixed random user in this validator
     pref_chat_client_user=VChatClientUser('chat_client_user'),
-
     # empty password defaults to prefixed random in this validator
     pref_chat_client_password=VChatClientAuthToken('chat_client_password'),
+    pref_subscriptions_unsubscribe=VOneOf('subscriptions_unsubscribe', SubscriptionsSubscribeMenu._options),
 )
 
 
@@ -148,6 +146,14 @@ def set_prefs(user, prefs):
            continue
         elif k == 'pref_chat_client_password' and v is None:
            continue
+
+        # CUSTOM: mass unsubscribe
+        # TODO: create Subreddit.unsubscribe_multiple(cls, user, sr_ids)
+        elif k == 'pref_subscriptions_unsubscribe' and v == 'subs_reset_subscriptions':
+            subscriber_srs = Subreddit.user_subreddits(user, ids=False, limit=None)
+            for sub in subscriber_srs:
+                sub.remove_subscriber(user)
+            continue
 
         setattr(user, k, v)
 

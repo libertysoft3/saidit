@@ -26,7 +26,7 @@
    from r2.lib.menus import CommentSortMenu
 
    ## CUSTOM
-   from r2.lib.menus import ChatSidebarSizeMenu
+   from r2.lib.menus import ChatSidebarSizeMenu, SubscriptionsSubscribeMenu
 
    from r2.lib.template_helpers import add_sr, _wsf, format_html, make_url_protocol_relative
    from r2.lib.utils import UrlParser
@@ -402,7 +402,28 @@
   %endif
   %endif
 
-  ## CUSTOM
+  ## CUSTOM: subscriptions, mass unsubscribe
+  <%def name="unsubscribe_actions_options()">
+    <% menu = SubscriptionsSubscribeMenu() %>
+    <select id="subscription-unsubsribe" name="subscriptions_unsubscribe" onchange="if ($(this).val() != 'subs_do_nothing') { if (!confirm('really unsubscribe from all subs?')){$(this).val('subs_do_nothing')}}">
+          %for sort in menu._options:
+          <option ${'selected="selected"' if sort == c.user.pref_subscriptions_unsubscribe else ""}
+                  value="${sort}">
+            ${menu.make_title(sort)}&#32;${_('(recommended)') if sort == menu._default else ''}
+          </option>
+          %endfor
+    </select>
+  </%def>
+  <tr>
+    <th>${_("subscriptions")}</th>
+      <td class="prefright">
+        <p>
+          ${_wsf("unsubscribe from all %(sort)s", sort=unsafe(capture(unsubscribe_actions_options)))}
+        </p>
+    </td>
+  </tr>
+
+  ## CUSTOM: chat
   <%def name="chat_sidebar_size_options()">
     <% menu = ChatSidebarSizeMenu() %>
     <select name="chat_sidebar_size">

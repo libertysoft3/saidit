@@ -197,18 +197,20 @@ menu =   MenuHandler(hot          = _('hot'),
 
                      whitelist = _("whitelist"),
 
-                     # CUSTOM
-		     global_user_bans  = _('global bans'),
-                     chat_size_default = _('Default (300px)'),
-                     chat_size_s       = _('Small (380px)'),
-                     chat_size_m       = _('Medium (480px)'),
-                     chat_size_l       = _('Large (600px)'),
-                     chat_size_xl      = _('Extra Large (780px)'),
-                     chat_size_25      = _('25%'),
-                     chat_size_33      = _('33%'),
-		     chat_size_40      = _('40%'),
-                     chat_size_50      = _('50%'),
-                     chat_size_60      = _('60%'),
+		     # CUSTOM
+                     global_user_bans               = _('global bans'),
+                     chat_size_default              = _('default (300px)'),
+                     chat_size_s                    = _('small (380px)'),
+                     chat_size_m                    = _('medium (480px)'),
+                     chat_size_l                    = _('large (600px)'),
+                     chat_size_xl                   = _('extra large (780px)'),
+                     chat_size_25                   = _('25%'),
+                     chat_size_33                   = _('33%'),
+                     chat_size_40                   = _('40%'),
+                     chat_size_50                   = _('50%'),
+                     chat_size_60                   = _('60%'),
+                     subs_do_nothing                = _('no'),
+                     subs_reset_subscriptions       = _('yes, unsubscribe from all'),
                      )
 
 def menu_style(type):
@@ -736,3 +738,10 @@ class AdminTimeMenu(TimeMenu):
     get_param = 't'
     _default = 'day'
     _options = ('hour', 'day', 'week')
+
+# CUSTOM: mass unsubscribe
+class SubscriptionsSubscribeMenu(SortMenu):
+    _options = (
+        'subs_do_nothing',
+        'subs_reset_subscriptions')
+
