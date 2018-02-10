@@ -1169,8 +1169,10 @@ class Subreddit(Thing, Printable, BaseSite):
             sr_ids = NamedGlobals.get("popular_sr_ids")
 
         if user:
-            excludes = set(cls.user_subreddits(user, limit=None))
-            sr_ids = list(set(sr_ids) - excludes)
+	    # CUSTOM
+            if not feature.is_enabled('random_includes_subscriptions'):
+                excludes = set(cls.user_subreddits(user, limit=None))
+                sr_ids = list(set(sr_ids) - excludes)
 
         if not sr_ids:
             return Subreddit._by_name(g.default_sr)
