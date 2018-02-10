@@ -561,7 +561,7 @@ class FrontController(RedditController):
         title = _('create a subreddit')
         captcha = Captcha() if c.user.needs_captcha() else None
         content = CreateSubreddit(name=name or '', captcha=captcha)
-        res = FormPage(_("create a subX"),
+        res = FormPage(_("create a sub"),
                        content=content,
                        captcha=captcha,
                        ).render()

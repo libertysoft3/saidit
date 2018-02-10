@@ -281,7 +281,7 @@ class WikiMayContributeListing(ContributorListing):
 class InvitedModListing(UserListing):
     type = 'moderator_invite'
     form_title = _('invite moderator')
-    remove_self_title = _('you are a moderator of this subextreme. %(action)s')
+    remove_self_title = _('you are a moderator of this sub. %(action)s')
 
     @property
     def permissions_form(self):

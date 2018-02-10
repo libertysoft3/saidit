@@ -67,13 +67,13 @@ except Exception, e:
 redditbroke =  \
 '''<html>
   <head>
-    <title>AntiExtremes broke!</title>
+    <title>SaidIt broke!</title>
   </head>
   <body>
     <div style="margin: auto; text-align: center">
       <p>
         <a href="/">
-          <img border="0" src="%s" alt="you broke antiextremes" />
+          <img border="0" src="%s" alt="SaidIt Broke!" />
         </a>
       </p>
       <p>

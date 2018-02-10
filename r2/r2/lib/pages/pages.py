@@ -847,7 +847,7 @@ class Reddit(Templated):
                     c.user.can_create_subreddit):
                 subtitles = get_funny_translated_string("create_subreddit", 2)
                 data_attrs = {'event-action': 'createsubreddit'}
-                ps.append(SideBox(_('Create your own subX'),
+                ps.append(SideBox(_('Create your own sub'),
                            '/subreddits/create', 'create',
                            subtitles=subtitles,
                            data_attrs=data_attrs,
@@ -1159,8 +1159,11 @@ class RedditFooter(CachedTemplate):
                     OffsiteButton(_("RESAE"),
                         "https://antiextremes.com/r/AntiExtremes/comments/3e/information_about_resae_antiextremes_version_of/"),
 
-                    OffsiteButton(_("list all SubXes"),
+                    OffsiteButton(_("list all subs"),
                         "https://antiextremes.com/subxes"),
+
+				OffsiteButton(_("open source code"),
+                        "https://github.com/libertysoft3/reddit-ae"),
 
                 
                 ],
@@ -1169,7 +1172,7 @@ class RedditFooter(CachedTemplate):
                 separator = ""),
 
             NavMenu([
-                                      OffsiteButton(_("patreon"), "https://www.patreon.com/AntiExtremes"),
+                                      OffsiteButton(_("patreon"), "https://www.patreon.com/SaidIt"),
 OffsiteButton(_("bitcoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
 OffsiteButton(_("litecoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
 OffsiteButton(_("dogecoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
@@ -2268,7 +2271,7 @@ class EditReddit(Reddit):
             is_moderator = c.user_is_loggedin and \
                 c.site.is_moderator(c.user) or c.user_is_admin
 
-            title = (_('subextreme settings') if is_moderator else
+            title = (_('sub settings') if is_moderator else
                      _('about %(site)s') % dict(site=c.site.name))
 
         Reddit.__init__(self, title=title, *a, **kw)
@@ -2336,7 +2339,7 @@ class SubredditsPage(Reddit):
         subscribe_box = SubscriptionBox(srs,
                                         multi_text=strings.subscribed_multi)
         num_reddits = len(subscribe_box.srs)
-        ps.append(SideContentBox(_("your front page subextremes (%s)") %
+        ps.append(SideContentBox(_("your front page subs (%s)") %
                                  num_reddits, [subscribe_box]))
         return ps
 
@@ -2894,7 +2897,7 @@ class SubredditTopBar(CachedTemplate):
                                            css_class = 'bottom-option',
                                            dest = '/subreddits/'))
         return SubredditMenu(drop_down_buttons,
-                             title = _('my subXes'),
+                             title = _('my subs'),
                              type = 'srdrop')
 
     def subscribed_reddits(self):
