@@ -283,8 +283,9 @@ class Subreddit(Thing, Printable, BaseSite):
                                                'gilding_server_seconds',
                                                'ban_count')
 
-    sr_limit = 50
-    gold_limit = 100
+    # CUSTOM: configurable limits
+    # sr_limit = 50
+    # gold_limit = 100
     DEFAULT_LIMIT = object()
 
     ICON_EXACT_SIZE = (256, 256)
@@ -1233,10 +1234,13 @@ class Subreddit(Thing, Printable, BaseSite):
         # if no explicit limit was passed
         if limit is Subreddit.DEFAULT_LIMIT:
             if user and user.gold:
-                # Goldies get extra subreddits
-                limit = Subreddit.gold_limit
+
+                # CUSTOM: configurable limit, 50 maybe not enough
+		# Goldies get extra subreddits
+		limit = g.gold_limit
             else:
-                limit = Subreddit.sr_limit
+		# CUSTOM: configurable limit, 100 maybe not enough
+		limit = g.sr_limit
 
         # note: for user not logged in, the fake user account has
         # has_subscribed == False by default.

@@ -2998,7 +2998,6 @@ class MultiInfoBar(Templated):
         else:
             self.share_url = None
 
-
 class SubscriptionBox(Templated):
     """The list of reddits a user is currently subscribed to to go in
     the right pane."""
@@ -3014,17 +3013,18 @@ class SubscriptionBox(Templated):
         if multi_text:
             self.multi_path = '/r/' + '+'.join([sr.name for sr in srs])
 
-        if len(srs) > Subreddit.sr_limit and c.user_is_loggedin:
+        # CUSTOM: configurable limits
+        if len(srs) > g.sr_limit and c.user_is_loggedin:
             if not c.user.gold:
                 self.goldlink = "/gold"
-                self.goldmsg = _("raise it to %s") % Subreddit.gold_limit
+                self.goldmsg = _("raise it to %s") % g.gold_limit
                 self.prelink = ["/wiki/faq#wiki_how_many_subreddits_can_i_subscribe_to.3F",
-                                _("%s visible") % Subreddit.sr_limit]
+                                _("%s visible") % g.sr_limit]
             else:
                 self.goldlink = "/gold/about"
-                extra = min(len(srs) - Subreddit.sr_limit,
-                            Subreddit.gold_limit - Subreddit.sr_limit)
-                visible = min(len(srs), Subreddit.gold_limit)
+                extra = min(len(srs) - g.sr_limit,
+                            g.gold_limit - g.sr_limit)
+                visible = min(len(srs), g.gold_limit)
                 bonus = {"bonus": extra}
                 self.goldmsg = _("%(bonus)s bonus subreddits") % bonus
                 self.prelink = ["/wiki/faq#wiki_how_many_subreddits_can_i_subscribe_to.3F",
@@ -3032,7 +3032,6 @@ class SubscriptionBox(Templated):
 
         Templated.__init__(self, srs=srs, goldlink=self.goldlink,
                            goldmsg=self.goldmsg)
-
     @property
     def reddits(self):
         return wrap_links(self.srs)
