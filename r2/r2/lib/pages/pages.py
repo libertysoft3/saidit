@@ -1141,15 +1141,16 @@ class RedditFooter(CachedTemplate):
     def __init__(self):
         self.nav = [
             NavMenu([
-                   OffsiteButton("blog", "https://antiextremes.com/r/antiextremes"),
-				OffsiteButton("about", "https://antiextremes.com/r/AntiExtremes/comments/3a/welcome_to_antiextremescom/"),
+                   OffsiteButton("blog", "https://saidit.net/r/saidit"),
+				OffsiteButton("about", "https://saidit.net/r/AntiExtremes/comments/3a/welcome_to_antiextremescom/"),
+				OffsiteButton("terms & content policy", "https://saidit.net/r/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/"),
                     ],
                 title = _("about"),
                 type = "flat_vert",
                 separator = ""),
 
             NavMenu([
-                  OffsiteButton(_("contact"), "https://antiextremes.com/r/help"),
+                  OffsiteButton(_("contact"), "https://saidit.net/r/help"),
                 ],
                 title = _("help"),
                 type = "flat_vert",
@@ -1157,10 +1158,10 @@ class RedditFooter(CachedTemplate):
 
             NavMenu([
                     OffsiteButton(_("RESAE"),
-                        "https://antiextremes.com/r/AntiExtremes/comments/3e/information_about_resae_antiextremes_version_of/"),
+                        "https://saidit.net/r/AntiExtremes/comments/3e/information_about_resae_antiextremes_version_of/"),
 
                     OffsiteButton(_("list all subs"),
-                        "https://antiextremes.com/subxes"),
+                        "https://saidit.net/subs"),
 
 				OffsiteButton(_("open source code"),
                         "https://github.com/libertysoft3/reddit-ae"),
@@ -1173,10 +1174,10 @@ class RedditFooter(CachedTemplate):
 
             NavMenu([
                                       OffsiteButton(_("patreon"), "https://www.patreon.com/SaidIt"),
-OffsiteButton(_("bitcoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
-OffsiteButton(_("litecoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
-OffsiteButton(_("dogecoin"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
-OffsiteButton(_("ethereum"), "https://antiextremes.com/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
+OffsiteButton(_("bitcoin"), "https://saidit.net/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
+OffsiteButton(_("litecoin"), "https://saidit.net/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
+OffsiteButton(_("dogecoin"), "https://saidit.net/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
+OffsiteButton(_("ethereum"), "https://saidit.net/r/AntiExtremes/comments/3d/donate_bitcoin_litecoin_or_dogecoin_to_support/"),
                 ],
                 title = _("support"),
                 type = "flat_vert",

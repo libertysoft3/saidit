@@ -94,34 +94,34 @@ def make_map(config):
        action='subreddit_traffic_report')
     mc('/account-activity', controller='front', action='account_activity')
 
-    mc('/subreddits/create', controller='front', action='newreddit')
-    mc('/subreddits/search', controller='front', action='search_reddits')
-    mc('/subreddits/login', controller='forms', action='login')
-    mc('/subreddits/:where', controller='reddits', action='listing',
+    mc('/subs/create', controller='front', action='newreddit')
+    mc('/subs/search', controller='front', action='search_reddits')
+    mc('/subs/login', controller='forms', action='login')
+    mc('/subs/:where', controller='reddits', action='listing',
        where='popular', conditions={'function':not_in_sr},
        requirements=dict(where="popular|new|banned|employee|gold|default|"
                                "quarantine|featured"))
     # If no subreddit is specified, might as well show a list of 'em.
-    mc('/r', controller='redirect', action='redirect', dest='/subreddits')
-    mc('/subreddits/mine/:where', controller='myreddits', action='listing',
+    mc('/r', controller='redirect', action='redirect', dest='/subs')
+    mc('/subs/mine/:where', controller='myreddits', action='listing',
        where='subscriber', conditions={'function':not_in_sr},
        requirements=dict(where='subscriber|contributor|moderator'))
 
     # These routes are kept for backwards-compatibility reasons
     # Using the above /subreddits/ ones instead is preferable
-    mc('/subxes/create', controller='front', action='newreddit')
-    mc('/subxes/search', controller='front', action='search_reddits')
-    mc('/subxes/login', controller='forms', action='login')
-    mc('/subxes/:where', controller='reddits', action='listing',
+    mc('/subreddits/create', controller='front', action='newreddit')
+    mc('/subreddits/search', controller='front', action='search_reddits')
+    mc('/subreddits/login', controller='forms', action='login')
+    mc('/subreddits/:where', controller='reddits', action='listing',
        where='popular', conditions={'function':not_in_sr},
        requirements=dict(where="popular|new|banned"))
 
-    mc('/x/:where', controller='reddits', action='listing',
+    mc('/s/:where', controller='reddits', action='listing',
        where='popular', conditions={'function':not_in_sr},
        requirements=dict(where="popular|new|banned"))
 
 
-    mc('/subxes/mine/:where', controller='myreddits', action='listing',
+    mc('/subreddits/mine/:where', controller='myreddits', action='listing',
        where='subscriber', conditions={'function':not_in_sr},
        requirements=dict(where='subscriber|contributor|moderator'))
 
@@ -215,8 +215,8 @@ def make_map(config):
     mc('/u/:username/*rest', controller='redirect', action='user_redirect')
     
     # preserve timereddit URLs from 4/1/2012
-    mc('/x/:timereddit', controller='redirect', action='timereddit_redirect')
-    mc('/x/:timereddit/*rest', controller='redirect',
+    mc('/s/:timereddit', controller='redirect', action='timereddit_redirect')
+    mc('/s/:timereddit/*rest', controller='redirect',
        action='timereddit_redirect')
 
     # /prefs/friends is also aliased to /api/v1/me/friends

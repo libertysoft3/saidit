@@ -1475,7 +1475,7 @@ class RedditsController(ListingController):
     extra_page_classes = ListingController.extra_page_classes + ['subreddits-page']
 
     def title(self):
-        return _('subXes')
+        return _('subs')
 
     def keep_fn(self):
         base_keep_fn = ListingController.keep_fn(self)
@@ -1585,12 +1585,12 @@ class RedditsController(ListingController):
 
     @require_oauth2_scope("read")
     @listing_api_doc(section=api_section.subreddits,
-                     uri='/subreddits/{where}',
+                     uri='/subs/{where}',
                      uri_variants=[
-                         '/subreddits/popular',
-                         '/subreddits/new',
-                         '/subreddits/gold',
-                         '/subreddits/default',
+                         '/subs/popular',
+                         '/subs/new',
+                         '/subs/gold',
+                         '/subs/default',
                      ])
     def GET_listing(self, where, **env):
         """Get all subreddits.
@@ -1614,11 +1614,11 @@ class MyredditsController(ListingController):
                     NavButton(getattr(plurals, "approved submitter"), 'contributor'),
                     NavButton(plurals.moderator,   'moderator'))
 
-        return [NavMenu(buttons, base_path = '/subreddits/mine/',
+        return [NavMenu(buttons, base_path = '/subs/mine/',
                         default = 'subscriber', type = "flatlist")]
 
     def title(self):
-        return _('subreddits: ') + self.where
+        return _('subs: ') + self.where
 
     def builder_wrapper(self, thing):
         w = ListingController.builder_wrapper(thing)
@@ -1693,8 +1693,8 @@ class MyredditsController(ListingController):
     @require_oauth2_scope("mysubreddits")
     @validate(VUser())
     @listing_api_doc(section=api_section.subreddits,
-                     uri='/subreddits/mine/{where}',
-                     uri_variants=['/subreddits/mine/subscriber', '/subreddits/mine/contributor', '/subreddits/mine/moderator'])
+                     uri='/subs/mine/{where}',
+                     uri_variants=['/subs/mine/subscriber', '/subs/mine/contributor', '/subs/mine/moderator'])
     def GET_listing(self, where='subscriber', **env):
         """Get subreddits the user has a relationship with.
 
