@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.036713
+_modified_time = 1512376380.923682
 _enable_loop = True
 _template_filename = u'/home/reddit/src/reddit/r2/r2/templates/base.html'
 _template_uri = u'/base.html'
@@ -32,15 +32,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 29
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c78e2710', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c78e2710')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f4ed7360950', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f4ed7360950')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2710')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f4ed7360950')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
         googletagmanager = _import_ns.get('googletagmanager', context.get('googletagmanager', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
@@ -143,7 +143,7 @@ def render_head(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2710')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f4ed7360950')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
         googleanalytics = _import_ns.get('googleanalytics', context.get('googleanalytics', UNDEFINED))
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         hasattr = _import_ns.get('hasattr', context.get('hasattr', UNDEFINED))
@@ -162,7 +162,7 @@ def render_javascript_bottom(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2710')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f4ed7360950')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
         __M_writer = context.writer()
         # SOURCE LINE 100
         __M_writer(u'\n')
@@ -175,7 +175,7 @@ def render_Title(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2710')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f4ed7360950')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
         __M_writer = context.writer()
         # SOURCE LINE 68
         __M_writer(u'\n')
@@ -191,7 +191,7 @@ def render_javascript(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2710')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f4ed7360950')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
         __M_writer = context.writer()
         # SOURCE LINE 97
         __M_writer(u'\n')
@@ -204,7 +204,7 @@ def render_robots(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2710')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f4ed7360950')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         hasattr = _import_ns.get('hasattr', context.get('hasattr', UNDEFINED))
         __M_writer = context.writer()
@@ -225,10 +225,10 @@ def render_keywords(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2710')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f4ed7360950')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
         __M_writer = context.writer()
         # SOURCE LINE 73
-        __M_writer(u'\nantiextremes, anti extremes, antiextremes.com, saidit, saidit.net, said it, vote, voting, comment, reddit, reddit replacement, new reddit, besides reddit, other than reddit, other reddit, saiditnet, anonymous, anonymous social media, comments, links, social media, posts, submit links\n')
+        __M_writer(u'\nantiextremes, anti extremes, antiextremes.com, saidit.net, vote, social media, saidit, SaidIt, Saiditnet, reddit, voting, comment, comments, links, posts, submit links\n')
         return ''
     finally:
         context.caller_stack._pop_frame()
@@ -238,7 +238,7 @@ def render_stylesheet(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2710')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f4ed7360950')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
         __M_writer = context.writer()
         # SOURCE LINE 94
         __M_writer(u'\n')
@@ -251,7 +251,7 @@ def render_bodyContent(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2710')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f4ed7360950')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
         __M_writer = context.writer()
         # SOURCE LINE 65
         __M_writer(u'\n')
@@ -264,7 +264,7 @@ def render_pagemeta(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2710')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f4ed7360950')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
         __M_writer = context.writer()
         # SOURCE LINE 91
         __M_writer(u'\n')
@@ -277,7 +277,7 @@ def render_viewport(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2710')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f4ed7360950')._populate(_import_ns, [u'js_setup', u'googleanalytics', u'googletagmanager', u'classes'])
         __M_writer = context.writer()
         # SOURCE LINE 77
         __M_writer(u'\n<meta name="viewport" content="width=1024">\n')

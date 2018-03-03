@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.38078
+_modified_time = 1505003484.682784
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/linkinfobar.html'
 _template_uri = '/linkinfobar.html'
@@ -32,20 +32,20 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 30
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c783a850', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c783a850')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f36089e05d0', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f36089e05d0')] = ns
 
     # SOURCE LINE 31
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c783a990', context._clean_inheritance_tokens(), templateuri=u'printable.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c783a990')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f36089e0750', context._clean_inheritance_tokens(), templateuri=u'printable.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f36089e0750')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a850')._populate(_import_ns, [u'state_button'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a990')._populate(_import_ns, [u'thing_css_class'])
+        _mako_get_namespace(context, '__anon_0x7f36089e05d0')._populate(_import_ns, [u'state_button'])
+        _mako_get_namespace(context, '__anon_0x7f36089e0750')._populate(_import_ns, [u'thing_css_class'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         dict = _import_ns.get('dict', context.get('dict', UNDEFINED))
@@ -100,8 +100,8 @@ def render_info_table(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a850')._populate(_import_ns, [u'state_button'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a990')._populate(_import_ns, [u'thing_css_class'])
+        _mako_get_namespace(context, '__anon_0x7f36089e05d0')._populate(_import_ns, [u'state_button'])
+        _mako_get_namespace(context, '__anon_0x7f36089e0750')._populate(_import_ns, [u'thing_css_class'])
         __M_writer = context.writer()
         # SOURCE LINE 64
         __M_writer(u'\n')

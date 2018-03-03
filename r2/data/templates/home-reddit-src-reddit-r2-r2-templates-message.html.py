@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060935.72681
+_modified_time = 1505022610.942555
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/message.html'
 _template_uri = '/message.html'
@@ -38,12 +38,12 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 37
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c796f2d0', context._clean_inheritance_tokens(), templateuri=u'wrappeduser.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c796f2d0')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3607b3af50', context._clean_inheritance_tokens(), templateuri=u'wrappeduser.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3607b3af50')] = ns
 
     # SOURCE LINE 36
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c796f210', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c796f210')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3607f1cc90', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3607f1cc90')] = ns
 
 def _mako_inherit(template, context):
     _mako_generate_namespaces(context)
@@ -53,8 +53,8 @@ def render_body(context,**pageargs):
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c796f2d0')._populate(_import_ns, [u'make_distinguish'])
-        _mako_get_namespace(context, '__anon_0x7fc7c796f210')._populate(_import_ns, [u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607b3af50')._populate(_import_ns, [u'make_distinguish'])
+        _mako_get_namespace(context, '__anon_0x7f3607f1cc90')._populate(_import_ns, [u'thing_timestamp'])
         __M_writer = context.writer()
         # SOURCE LINE 22
         __M_writer(u'\n')
@@ -95,8 +95,8 @@ def render_buttons(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c796f2d0')._populate(_import_ns, [u'make_distinguish'])
-        _mako_get_namespace(context, '__anon_0x7fc7c796f210')._populate(_import_ns, [u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607b3af50')._populate(_import_ns, [u'make_distinguish'])
+        _mako_get_namespace(context, '__anon_0x7f3607f1cc90')._populate(_import_ns, [u'thing_timestamp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 205
@@ -113,8 +113,8 @@ def render_tagline(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c796f2d0')._populate(_import_ns, [u'make_distinguish'])
-        _mako_get_namespace(context, '__anon_0x7fc7c796f210')._populate(_import_ns, [u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607b3af50')._populate(_import_ns, [u'make_distinguish'])
+        _mako_get_namespace(context, '__anon_0x7f3607f1cc90')._populate(_import_ns, [u'thing_timestamp'])
         capture = _import_ns.get('capture', context.get('capture', UNDEFINED))
         thing_timestamp = _import_ns.get('thing_timestamp', context.get('thing_timestamp', UNDEFINED))
         make_distinguish = _import_ns.get('make_distinguish', context.get('make_distinguish', UNDEFINED))
@@ -200,8 +200,8 @@ def render_ParentDiv(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c796f2d0')._populate(_import_ns, [u'make_distinguish'])
-        _mako_get_namespace(context, '__anon_0x7fc7c796f210')._populate(_import_ns, [u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607b3af50')._populate(_import_ns, [u'make_distinguish'])
+        _mako_get_namespace(context, '__anon_0x7f3607f1cc90')._populate(_import_ns, [u'thing_timestamp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
@@ -226,8 +226,8 @@ def render_thing_css_rowclass(context,what):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c796f2d0')._populate(_import_ns, [u'make_distinguish'])
-        _mako_get_namespace(context, '__anon_0x7fc7c796f210')._populate(_import_ns, [u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607b3af50')._populate(_import_ns, [u'make_distinguish'])
+        _mako_get_namespace(context, '__anon_0x7f3607f1cc90')._populate(_import_ns, [u'thing_timestamp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         parent = _import_ns.get('parent', context.get('parent', UNDEFINED))
@@ -257,8 +257,8 @@ def render_midcol(context,cls=''):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c796f2d0')._populate(_import_ns, [u'make_distinguish'])
-        _mako_get_namespace(context, '__anon_0x7fc7c796f210')._populate(_import_ns, [u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607b3af50')._populate(_import_ns, [u'make_distinguish'])
+        _mako_get_namespace(context, '__anon_0x7f3607f1cc90')._populate(_import_ns, [u'thing_timestamp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         parent = _import_ns.get('parent', context.get('parent', UNDEFINED))
         __M_writer = context.writer()
@@ -283,8 +283,8 @@ def render_thing_data_attributes(context,what):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c796f2d0')._populate(_import_ns, [u'make_distinguish'])
-        _mako_get_namespace(context, '__anon_0x7fc7c796f210')._populate(_import_ns, [u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607b3af50')._populate(_import_ns, [u'make_distinguish'])
+        _mako_get_namespace(context, '__anon_0x7f3607f1cc90')._populate(_import_ns, [u'thing_timestamp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         parent = _import_ns.get('parent', context.get('parent', UNDEFINED))
@@ -316,8 +316,8 @@ def render_entry(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c796f2d0')._populate(_import_ns, [u'make_distinguish'])
-        _mako_get_namespace(context, '__anon_0x7fc7c796f210')._populate(_import_ns, [u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607b3af50')._populate(_import_ns, [u'make_distinguish'])
+        _mako_get_namespace(context, '__anon_0x7f3607f1cc90')._populate(_import_ns, [u'thing_timestamp'])
         parent = _import_ns.get('parent', context.get('parent', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 209
@@ -334,8 +334,8 @@ def render_commentBody(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c796f2d0')._populate(_import_ns, [u'make_distinguish'])
-        _mako_get_namespace(context, '__anon_0x7fc7c796f210')._populate(_import_ns, [u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607b3af50')._populate(_import_ns, [u'make_distinguish'])
+        _mako_get_namespace(context, '__anon_0x7f3607f1cc90')._populate(_import_ns, [u'thing_timestamp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         hasattr = _import_ns.get('hasattr', context.get('hasattr', UNDEFINED))
         __M_writer = context.writer()
@@ -368,8 +368,8 @@ def render_thing_css_class(context,what):
     try:
         context._push_buffer()
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c796f2d0')._populate(_import_ns, [u'make_distinguish'])
-        _mako_get_namespace(context, '__anon_0x7fc7c796f210')._populate(_import_ns, [u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607b3af50')._populate(_import_ns, [u'make_distinguish'])
+        _mako_get_namespace(context, '__anon_0x7f3607f1cc90')._populate(_import_ns, [u'thing_timestamp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         parent = _import_ns.get('parent', context.get('parent', UNDEFINED))
@@ -416,8 +416,8 @@ def render_subject(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c796f2d0')._populate(_import_ns, [u'make_distinguish'])
-        _mako_get_namespace(context, '__anon_0x7fc7c796f210')._populate(_import_ns, [u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607b3af50')._populate(_import_ns, [u'make_distinguish'])
+        _mako_get_namespace(context, '__anon_0x7f3607f1cc90')._populate(_import_ns, [u'thing_timestamp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         __M_writer = context.writer()

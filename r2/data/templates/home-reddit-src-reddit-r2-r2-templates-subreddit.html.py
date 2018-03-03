@@ -4,10 +4,10 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.505816
+_modified_time = 1505003389.77501
 _enable_loop = True
-_template_filename = '/home/reddit/src/reddit/r2/r2/templates/subreddit.html'
-_template_uri = '/subreddit.html'
+_template_filename = u'/home/reddit/src/reddit/r2/r2/templates/subreddit.html'
+_template_uri = u'/subreddit.html'
 _source_encoding = 'utf-8'
 from r2.lib.filters import websafe, unsafe, conditional_websafe
 from pylons import request
@@ -33,8 +33,8 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 31
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c782c9d0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c782c9d0')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3608c91d90', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3608c91d90')] = ns
 
 def _mako_inherit(template, context):
     _mako_generate_namespaces(context)
@@ -44,7 +44,7 @@ def render_body(context,**pageargs):
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c782c9d0')._populate(_import_ns, [u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f3608c91d90')._populate(_import_ns, [u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 22
         __M_writer(u'\n')
@@ -77,7 +77,7 @@ def render_sr_type_icon(context,name,title):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c782c9d0')._populate(_import_ns, [u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f3608c91d90')._populate(_import_ns, [u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 65
         __M_writer(u'\n  <span class="sr-type-icon sr-type-icon-')
@@ -99,7 +99,7 @@ def render_numcol(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c782c9d0')._populate(_import_ns, [u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f3608c91d90')._populate(_import_ns, [u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 33
         __M_writer(u'\n')
@@ -112,7 +112,7 @@ def render_tagline(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c782c9d0')._populate(_import_ns, [u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f3608c91d90')._populate(_import_ns, [u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         dict = _import_ns.get('dict', context.get('dict', UNDEFINED))
@@ -138,7 +138,7 @@ def render_permission_icons(context,sr):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c782c9d0')._populate(_import_ns, [u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f3608c91d90')._populate(_import_ns, [u'plain_link'])
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 72
@@ -204,7 +204,7 @@ def render_midcol(context,display=True,cls=''):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c782c9d0')._populate(_import_ns, [u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f3608c91d90')._populate(_import_ns, [u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         def permission_icons(sr):
             return render_permission_icons(context,sr)
@@ -226,7 +226,7 @@ def render_child(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c782c9d0')._populate(_import_ns, [u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f3608c91d90')._populate(_import_ns, [u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 107
         __M_writer(u'\n')
@@ -239,7 +239,7 @@ def render_entry(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c782c9d0')._populate(_import_ns, [u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f3608c91d90')._populate(_import_ns, [u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         plain_link = _import_ns.get('plain_link', context.get('plain_link', UNDEFINED))

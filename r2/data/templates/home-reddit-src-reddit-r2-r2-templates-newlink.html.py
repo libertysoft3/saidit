@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520057702.557776
+_modified_time = 1505003402.500909
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/newlink.html'
 _template_uri = '/newlink.html'
@@ -37,15 +37,15 @@ def _mako_generate_namespaces(context):
     context.namespaces[(__name__, u'utils')] = ns
 
     # SOURCE LINE 30
-    ns = runtime.TemplateNamespace('__anon_0x7f64951e8c50', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7f64951e8c50')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3608adcc10', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3608adcc10')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7f64951e8c50')._populate(_import_ns, [u'error_field', u'submit_form', u'_a_buffered', u'text_with_links'])
+        _mako_get_namespace(context, '__anon_0x7f3608adcc10')._populate(_import_ns, [u'error_field', u'submit_form', u'_a_buffered', u'text_with_links'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         utils = _mako_get_namespace(context, 'utils')
         _a_buffered = _import_ns.get('_a_buffered', context.get('_a_buffered', UNDEFINED))
@@ -63,7 +63,7 @@ def render_body(context,**pageargs):
         if thing.default_sr:
           sr = format_html("&#32;%s", unsafe(_a_buffered(thing.default_sr.name, href=thing.default_sr.path)))
         else:
-          sr = _("reddit")
+          sr = _("SaidIt")
         
         
         __M_locals_builtin_stored = __M_locals_builtin()
@@ -249,16 +249,12 @@ def render_body(context,**pageargs):
                 __M_writer(conditional_websafe(thing.captcha))
                 __M_writer(u'\n    \n</div>\n\n<div class="roundfield info-notice">\n  ')
                 # SOURCE LINE 133
-                __M_writer(conditional_websafe(text_with_links(_("please be mindful of reddit's %(content_policy)s and practice %(good_reddiquette)s."),
+                __M_writer(conditional_websafe(text_with_links(_("please be mindful of SaidIt's %(content_policy)s."),
       content_policy=dict(
         link_text=_("content policy"),
-        path="/help/contentpolicy",
-        target="_blank"),
-      good_reddiquette=dict(
-        link_text=_("good reddiquette"),
-        path="/wiki/reddiquette",
-        target="_blank"),
-  )))
+        path="/r/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/",
+        target="_blank")
+        )))
                 # SOURCE LINE 142
                 __M_writer(u'\n</div>\n\n<input name="resubmit" value="')
                 # SOURCE LINE 145

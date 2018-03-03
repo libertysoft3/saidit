@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060938.326321
+_modified_time = 1505003903.156287
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/profilebar.html'
 _template_uri = '/profilebar.html'
@@ -32,20 +32,20 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 28
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7630e90', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7630e90')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3607e222d0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3607e222d0')] = ns
 
     # SOURCE LINE 29
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7630f50', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7630f50')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3607e22f90', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3607e22f90')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7630e90')._populate(_import_ns, [u'submit_form', u'plain_link', u'thing_timestamp'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7630f50')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f3607e222d0')._populate(_import_ns, [u'submit_form', u'plain_link', u'thing_timestamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607e22f90')._populate(_import_ns, [u'toggle_button'])
         toggle_button = _import_ns.get('toggle_button', context.get('toggle_button', UNDEFINED))
         thing_timestamp = _import_ns.get('thing_timestamp', context.get('thing_timestamp', UNDEFINED))
         len = _import_ns.get('len', context.get('len', UNDEFINED))
@@ -265,7 +265,7 @@ def render_body(context,**pageargs):
         # SOURCE LINE 179
         __M_writer(u'\n    <span class="age">\n      ')
         # SOURCE LINE 181
-        __M_writer(conditional_websafe(_("redditor for")))
+        __M_writer(conditional_websafe(_("AntiExtremer for")))
         __M_writer(u'&#32;')
         __M_writer(conditional_websafe(thing_timestamp(thing.user)))
         __M_writer(u'\n    </span>\n  </div>\n\n  <div class="clear"> </div>\n\n</div>\n')

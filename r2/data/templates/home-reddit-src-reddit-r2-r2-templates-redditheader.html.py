@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.109039
+_modified_time = 1505002596.173328
 _enable_loop = True
 _template_filename = u'/home/reddit/src/reddit/r2/r2/templates/redditheader.html'
 _template_uri = u'/redditheader.html'
@@ -40,15 +40,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 36
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7b90c50', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7b90c50')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fde6026a290', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fde6026a290')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7b90c50')._populate(_import_ns, [u'plain_link', u'img_link', u'text_with_links', u'separator', u'logout'])
+        _mako_get_namespace(context, '__anon_0x7fde6026a290')._populate(_import_ns, [u'plain_link', u'img_link', u'text_with_links', u'separator', u'logout'])
         img_link = _import_ns.get('img_link', context.get('img_link', UNDEFINED))
         text_with_links = _import_ns.get('text_with_links', context.get('text_with_links', UNDEFINED))
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))

@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060955.684459
+_modified_time = 1505002596.500615
 _enable_loop = True
 _template_filename = u'/home/reddit/src/reddit/r2/r2/templates/captcha.html'
 _template_uri = u'/captcha.html'
@@ -32,15 +32,15 @@ def _mako_generate_namespaces(context):
     context.namespaces[(__name__, u'utils')] = ns
 
     # SOURCE LINE 25
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c75f9e90', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c75f9e90')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fde5fec4a50', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fde5fec4a50')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c75f9e90')._populate(_import_ns, [u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fde5fec4a50')._populate(_import_ns, [u'error_field'])
         def rounded_captcha():
             return render_rounded_captcha(context._locals(__M_locals))
         __M_writer = context.writer()
@@ -72,7 +72,7 @@ def render_captcha_basics(context,iden=''):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c75f9e90')._populate(_import_ns, [u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fde5fec4a50')._populate(_import_ns, [u'error_field'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         hasattr = _import_ns.get('hasattr', context.get('hasattr', UNDEFINED))
@@ -112,7 +112,7 @@ def render_captchagen(context,iden,error='',tabulate=False,tabular=True,size=60,
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c75f9e90')._populate(_import_ns, [u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fde5fec4a50')._populate(_import_ns, [u'error_field'])
         def captcha_basics(iden=''):
             return render_captcha_basics(context,iden)
         error_field = _import_ns.get('error_field', context.get('error_field', UNDEFINED))
@@ -193,7 +193,7 @@ def render_rounded_captcha(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c75f9e90')._populate(_import_ns, [u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fde5fec4a50')._populate(_import_ns, [u'error_field'])
         utils = _mako_get_namespace(context, 'utils')
         __M_writer = context.writer()
         # SOURCE LINE 48

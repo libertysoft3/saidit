@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.87095
+_modified_time = 1505003802.287525
 _enable_loop = True
 _template_filename = u'/home/reddit/src/reddit/r2/r2/templates/printable.htmllite'
 _template_uri = u'/printable.htmllite'
@@ -25,20 +25,20 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 23
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7784310', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7784310')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3607eb0bd0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3607eb0bd0')] = ns
 
     # SOURCE LINE 24
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7784ad0', context._clean_inheritance_tokens(), templateuri=u'printable.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7784ad0')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3607eb0cd0', context._clean_inheritance_tokens(), templateuri=u'printable.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3607eb0cd0')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7784310')._populate(_import_ns, [u'optionalstyle'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7784ad0')._populate(_import_ns, [u'arrow'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0bd0')._populate(_import_ns, [u'optionalstyle'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0cd0')._populate(_import_ns, [u'arrow'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
@@ -95,8 +95,8 @@ def render_iframe_arrows(context,thing):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7784310')._populate(_import_ns, [u'optionalstyle'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7784ad0')._populate(_import_ns, [u'arrow'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0bd0')._populate(_import_ns, [u'optionalstyle'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0cd0')._populate(_import_ns, [u'arrow'])
         isinstance = _import_ns.get('isinstance', context.get('isinstance', UNDEFINED))
         optionalstyle = _import_ns.get('optionalstyle', context.get('optionalstyle', UNDEFINED))
         __M_writer = context.writer()
@@ -141,8 +141,8 @@ def render_parent(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7784310')._populate(_import_ns, [u'optionalstyle'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7784ad0')._populate(_import_ns, [u'arrow'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0bd0')._populate(_import_ns, [u'optionalstyle'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0cd0')._populate(_import_ns, [u'arrow'])
         __M_writer = context.writer()
         # SOURCE LINE 39
         __M_writer(u'\n')
@@ -155,8 +155,8 @@ def render_real_arrows(context,thing):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7784310')._populate(_import_ns, [u'optionalstyle'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7784ad0')._populate(_import_ns, [u'arrow'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0bd0')._populate(_import_ns, [u'optionalstyle'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0cd0')._populate(_import_ns, [u'arrow'])
         arrow = _import_ns.get('arrow', context.get('arrow', UNDEFINED))
         optionalstyle = _import_ns.get('optionalstyle', context.get('optionalstyle', UNDEFINED))
         __M_writer = context.writer()
@@ -182,8 +182,8 @@ def render_arrows(context,thing):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7784310')._populate(_import_ns, [u'optionalstyle'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7784ad0')._populate(_import_ns, [u'arrow'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0bd0')._populate(_import_ns, [u'optionalstyle'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0cd0')._populate(_import_ns, [u'arrow'])
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         __M_writer = context.writer()
@@ -216,8 +216,8 @@ def render_Child(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7784310')._populate(_import_ns, [u'optionalstyle'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7784ad0')._populate(_import_ns, [u'arrow'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0bd0')._populate(_import_ns, [u'optionalstyle'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0cd0')._populate(_import_ns, [u'arrow'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         __M_writer = context.writer()
@@ -235,8 +235,8 @@ def render_entry(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7784310')._populate(_import_ns, [u'optionalstyle'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7784ad0')._populate(_import_ns, [u'arrow'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0bd0')._populate(_import_ns, [u'optionalstyle'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0cd0')._populate(_import_ns, [u'arrow'])
         __M_writer = context.writer()
         # SOURCE LINE 46
         __M_writer(u'\n')
@@ -249,8 +249,8 @@ def render_static_arrows(context,thing):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7784310')._populate(_import_ns, [u'optionalstyle'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7784ad0')._populate(_import_ns, [u'arrow'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0bd0')._populate(_import_ns, [u'optionalstyle'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb0cd0')._populate(_import_ns, [u'arrow'])
         optionalstyle = _import_ns.get('optionalstyle', context.get('optionalstyle', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 50

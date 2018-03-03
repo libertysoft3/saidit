@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060955.658198
+_modified_time = 1505002596.476016
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/login.html'
 _template_uri = '/login.html'
@@ -34,21 +34,21 @@ def _mako_get_namespace(context, name):
         _mako_generate_namespaces(context)
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
-    # SOURCE LINE 31
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7563f50', context._clean_inheritance_tokens(), templateuri=u'captcha.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7563f50')] = ns
-
     # SOURCE LINE 32
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c756c050', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c756c050')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fde5fe6ba90', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fde5fe6ba90')] = ns
+
+    # SOURCE LINE 31
+    ns = runtime.TemplateNamespace('__anon_0x7fde5fe6b9d0', context._clean_inheritance_tokens(), templateuri=u'captcha.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fde5fe6b9d0')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7563f50')._populate(_import_ns, [u'captchagen'])
-        _mako_get_namespace(context, '__anon_0x7fc7c756c050')._populate(_import_ns, [u'error_field', u'img_link', u'form_group', u'text_with_links'])
+        _mako_get_namespace(context, '__anon_0x7fde5fe6ba90')._populate(_import_ns, [u'error_field', u'img_link', u'form_group', u'text_with_links'])
+        _mako_get_namespace(context, '__anon_0x7fde5fe6b9d0')._populate(_import_ns, [u'captchagen'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         def login_form(register=False,user='',dest='',compact=False,autofocus=True):
             return render_login_form(context._locals(__M_locals),register,user,dest,compact,autofocus)
@@ -102,8 +102,8 @@ def render_login_form(context,register=False,user='',dest='',compact=False,autof
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7563f50')._populate(_import_ns, [u'captchagen'])
-        _mako_get_namespace(context, '__anon_0x7fc7c756c050')._populate(_import_ns, [u'error_field', u'img_link', u'form_group', u'text_with_links'])
+        _mako_get_namespace(context, '__anon_0x7fde5fe6ba90')._populate(_import_ns, [u'error_field', u'img_link', u'form_group', u'text_with_links'])
+        _mako_get_namespace(context, '__anon_0x7fde5fe6b9d0')._populate(_import_ns, [u'captchagen'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         captchagen = _import_ns.get('captchagen', context.get('captchagen', UNDEFINED))
         form_group = _import_ns.get('form_group', context.get('form_group', UNDEFINED))
@@ -308,19 +308,7 @@ def render_login_form(context,register=False,user='',dest='',compact=False,autof
                 __M_writer(u'</a>\n')
             # SOURCE LINE 119
             __M_writer(u'      </div>\n')
-            # SOURCE LINE 120
-            if register:
-                # SOURCE LINE 121
-                __M_writer(u'      <div class="c-checkbox">\n        <input type="checkbox" name="newsletter_subscribe" id="newsletter_subscribe" tabindex="')
-                # SOURCE LINE 122
-                __M_writer(conditional_websafe(tabindex))
-                __M_writer(u'"\n          data-validate-url="/api/check_email.json"\n          data-validate-on="change blur"\n          data-validate-with="email"\n        >\n        <label for="newsletter_subscribe">\n          ')
-                # SOURCE LINE 128
-                __M_writer(conditional_websafe(_('get the best of reddit emailed to you once a week.')))
-                __M_writer(u'&#32;\n          <a href="/newsletter" target="_blank">')
-                # SOURCE LINE 129
-                __M_writer(conditional_websafe(_('learn more')))
-                __M_writer(u'</a>\n        </label>\n      </div>\n')
+            
             # SOURCE LINE 133
             __M_writer(u'      <div class="c-clearfix c-submit-group">\n        <span class="c-form-throbber"></span>\n        <button type="submit" class="c-btn c-btn-primary c-pull-right" tabindex="')
             # SOURCE LINE 135
@@ -542,8 +530,8 @@ def render_login_panel(context,lf,user_reg='',user_login='',dest='',registration
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7563f50')._populate(_import_ns, [u'captchagen'])
-        _mako_get_namespace(context, '__anon_0x7fc7c756c050')._populate(_import_ns, [u'error_field', u'img_link', u'form_group', u'text_with_links'])
+        _mako_get_namespace(context, '__anon_0x7fde5fe6ba90')._populate(_import_ns, [u'error_field', u'img_link', u'form_group', u'text_with_links'])
+        _mako_get_namespace(context, '__anon_0x7fde5fe6b9d0')._populate(_import_ns, [u'captchagen'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         dict = _import_ns.get('dict', context.get('dict', UNDEFINED))
         text_with_links = _import_ns.get('text_with_links', context.get('text_with_links', UNDEFINED))
@@ -568,11 +556,11 @@ def render_login_panel(context,lf,user_reg='',user_login='',dest='',registration
         __M_writer(u'\n    </div>\n  </div>\n  <p class="login-disclaimer">\n    ')
         # SOURCE LINE 256
         __M_writer(conditional_websafe(text_with_links(
-      _("By signing up, you agree to our %(terms)s and that you have read our %(privacy_policy)s and %(content_policy)s."),
-        terms=dict(link_text=_("Terms"), path="/help/useragreement/"),
-        privacy_policy=dict(link_text=_("Privacy Policy"), path="/help/privacypolicy/"),
-        content_policy=dict(link_text=_("Content Policy"), path="/help/contentpolicy/"),
-    )))
+      _("By signing up, you agree to our %(policy)s."),
+        policy=dict(link_text=_("Terms and Content Policy"), path="/r/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/"),    )))
+
+
+
         # SOURCE LINE 261
         __M_writer(u'\n  </p>\n')
         return ''

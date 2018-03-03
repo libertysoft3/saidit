@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.823527
+_modified_time = 1505002596.43013
 _enable_loop = True
 _template_filename = u'/home/reddit/src/reddit/r2/r2/templates/interstitial.html'
 _template_uri = u'/interstitial.html'
@@ -31,15 +31,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 28
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7837cd0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7837cd0')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fde5ff2a650', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fde5ff2a650')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7837cd0')._populate(_import_ns, [u'md'])
+        _mako_get_namespace(context, '__anon_0x7fde5ff2a650')._populate(_import_ns, [u'md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         md = _import_ns.get('md', context.get('md', UNDEFINED))
@@ -91,7 +91,7 @@ def render_interstitial_image_attrs(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7837cd0')._populate(_import_ns, [u'md'])
+        _mako_get_namespace(context, '__anon_0x7fde5ff2a650')._populate(_import_ns, [u'md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 54
@@ -108,7 +108,7 @@ def render_interstitial_message(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7837cd0')._populate(_import_ns, [u'md'])
+        _mako_get_namespace(context, '__anon_0x7fde5ff2a650')._populate(_import_ns, [u'md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         md = _import_ns.get('md', context.get('md', UNDEFINED))
         __M_writer = context.writer()
@@ -129,7 +129,7 @@ def render_interstitial_title(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7837cd0')._populate(_import_ns, [u'md'])
+        _mako_get_namespace(context, '__anon_0x7fde5ff2a650')._populate(_import_ns, [u'md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 58
@@ -146,12 +146,12 @@ def render_interstitial_buttons(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7837cd0')._populate(_import_ns, [u'md'])
+        _mako_get_namespace(context, '__anon_0x7fde5ff2a650')._populate(_import_ns, [u'md'])
         __M_writer = context.writer()
         # SOURCE LINE 68
         __M_writer(u'\n  <div class="buttons">\n    <a href="/" class="c-btn c-btn-primary">')
         # SOURCE LINE 70
-        __M_writer(conditional_websafe(_("back to Reddit")))
+        __M_writer(conditional_websafe(_("back to SaidIt")))
         __M_writer(u'</a>\n  </div>\n')
         return ''
     finally:

@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.701158
+_modified_time = 1505003146.571713
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/reportformtemplates.html'
 _template_uri = '/reportformtemplates.html'
@@ -30,15 +30,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 27
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7784f50', context._clean_inheritance_tokens(), templateuri=u'subredditreportform.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7784f50')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3609512310', context._clean_inheritance_tokens(), templateuri=u'subredditreportform.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3609512310')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7784f50')._populate(_import_ns, [u'subreddit_report_form', u'reddit_report_form', u'report_form_reason'])
+        _mako_get_namespace(context, '__anon_0x7f3609512310')._populate(_import_ns, [u'subreddit_report_form', u'reddit_report_form', u'report_form_reason'])
         reddit_report_form = _import_ns.get('reddit_report_form', context.get('reddit_report_form', UNDEFINED))
         subreddit_report_form = _import_ns.get('subreddit_report_form', context.get('subreddit_report_form', UNDEFINED))
         report_form_reason = _import_ns.get('report_form_reason', context.get('report_form_reason', UNDEFINED))

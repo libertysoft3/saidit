@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060980.39783
+_modified_time = 1505002596.263841
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/spotlightlisting.html'
 _template_uri = '/spotlightlisting.html'
@@ -30,20 +30,20 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 23
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7474b50', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7474b50')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fde601bb610', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fde601bb610')] = ns
 
     # SOURCE LINE 24
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7474d10', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7474d10')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fde601bb8d0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fde601bb8d0')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7474b50')._populate(_import_ns, [u'ynbutton'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7474d10')._populate(_import_ns, [u'tags', u'text_with_links', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7fde601bb610')._populate(_import_ns, [u'ynbutton'])
+        _mako_get_namespace(context, '__anon_0x7fde601bb8d0')._populate(_import_ns, [u'tags', u'text_with_links', u'classes'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         classes = _import_ns.get('classes', context.get('classes', UNDEFINED))
         dict = _import_ns.get('dict', context.get('dict', UNDEFINED))
@@ -90,9 +90,7 @@ def render_body(context,**pageargs):
             # SOURCE LINE 45
             __M_writer(u'    <div class="thing interestbar" style="display:none">\n      ')
             # SOURCE LINE 46
-            __M_writer(conditional_websafe(unsafe(thing.interestbar.render())))
-            __M_writer(u'\n    </div>\n')
-        # SOURCE LINE 49
+                      # SOURCE LINE 49
         __M_writer(u'\n')
         # SOURCE LINE 50
         if thing.navigable:

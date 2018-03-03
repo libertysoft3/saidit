@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.002499
+_modified_time = 1505002596.118689
 _enable_loop = True
 _template_filename = u'/home/reddit/src/reddit/r2/r2/templates/adminbar.html'
 _template_uri = u'/adminbar.html'
@@ -29,21 +29,21 @@ def _mako_get_namespace(context, name):
         _mako_generate_namespaces(context)
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
-    # SOURCE LINE 27
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7c6c750', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7c6c750')] = ns
-
     # SOURCE LINE 26
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7b30ad0', context._clean_inheritance_tokens(), templateuri=u'less.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7b30ad0')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fde601e2250', context._clean_inheritance_tokens(), templateuri=u'less.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fde601e2250')] = ns
+
+    # SOURCE LINE 27
+    ns = runtime.TemplateNamespace('__anon_0x7fde601e2350', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fde601e2350')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7c6c750')._populate(_import_ns, [u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b30ad0')._populate(_import_ns, [u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7fde601e2250')._populate(_import_ns, [u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7fde601e2350')._populate(_import_ns, [u'classes'])
         def indicator(name,label,on):
             return render_indicator(context._locals(__M_locals),name,label,on)
         classes = _import_ns.get('classes', context.get('classes', UNDEFINED))
@@ -131,8 +131,8 @@ def render_adminbar_stylesheet(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7c6c750')._populate(_import_ns, [u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b30ad0')._populate(_import_ns, [u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7fde601e2250')._populate(_import_ns, [u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7fde601e2350')._populate(_import_ns, [u'classes'])
         less_stylesheet = _import_ns.get('less_stylesheet', context.get('less_stylesheet', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 29
@@ -152,8 +152,8 @@ def render_indicator(context,name,label,on):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7c6c750')._populate(_import_ns, [u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b30ad0')._populate(_import_ns, [u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7fde601e2250')._populate(_import_ns, [u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7fde601e2350')._populate(_import_ns, [u'classes'])
         __M_writer = context.writer()
         # SOURCE LINE 35
         __M_writer(u'\n')

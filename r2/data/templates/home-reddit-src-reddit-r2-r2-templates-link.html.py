@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.619255
+_modified_time = 1505003062.181779
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/link.html'
 _template_uri = '/link.html'
@@ -41,13 +41,13 @@ def _mako_get_namespace(context, name):
         _mako_generate_namespaces(context)
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
-    # SOURCE LINE 40
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c783a2d0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c783a2d0')] = ns
-
     # SOURCE LINE 41
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c783a390', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c783a390')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f36095cc710', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f36095cc710')] = ns
+
+    # SOURCE LINE 40
+    ns = runtime.TemplateNamespace('__anon_0x7f36095cc650', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f36095cc650')] = ns
 
 def _mako_inherit(template, context):
     _mako_generate_namespaces(context)
@@ -57,8 +57,8 @@ def render_body(context,**pageargs):
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         __M_writer = context.writer()
         # SOURCE LINE 22
         __M_writer(u'\n')
@@ -107,8 +107,8 @@ def render_domain(context,link=True):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 222
@@ -145,8 +145,8 @@ def render_numcol(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 43
@@ -163,8 +163,8 @@ def render_tagline(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         edited = _import_ns.get('edited', context.get('edited', UNDEFINED))
         thing_timestamp = _import_ns.get('thing_timestamp', context.get('thing_timestamp', UNDEFINED))
         capture = _import_ns.get('capture', context.get('capture', UNDEFINED))
@@ -220,8 +220,8 @@ def render_thumbnail(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         def make_link(name,css_class,tabindex=0):
             return render_make_link(context,name,css_class,tabindex)
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
@@ -260,8 +260,8 @@ def render_subreddit(context):
     try:
         context._push_buffer()
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         plain_link = _import_ns.get('plain_link', context.get('plain_link', UNDEFINED))
         __M_writer = context.writer()
@@ -282,8 +282,8 @@ def render_buttons(context,comments=True,delete=True,report=True,additional=''):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 262
@@ -303,8 +303,8 @@ def render_thing_data_attributes(context,what):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         parent = _import_ns.get('parent', context.get('parent', UNDEFINED))
@@ -356,8 +356,8 @@ def render_midcol(context,display=True,cls=''):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         __M_writer = context.writer()
@@ -402,8 +402,8 @@ def render_child(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         __M_writer = context.writer()
         # SOURCE LINE 259
         __M_writer(u'\n')
@@ -416,8 +416,8 @@ def render_make_link(context,name,css_class,tabindex=0):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         caller = _import_ns.get('caller', context.get('caller', UNDEFINED))
@@ -481,8 +481,8 @@ def render_entry(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         def make_link(name,css_class,tabindex=0):
             return render_make_link(context,name,css_class,tabindex)
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
@@ -643,8 +643,8 @@ def render_bottom_buttons(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         quarantine_stamp = _import_ns.get('quarantine_stamp', context.get('quarantine_stamp', UNDEFINED))
@@ -686,8 +686,8 @@ def render_thing_css_class(context,what):
     try:
         context._push_buffer()
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         parent = _import_ns.get('parent', context.get('parent', UNDEFINED))
         __M_writer = context.writer()
@@ -713,8 +713,8 @@ def render_flair(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783a2d0')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
-        _mako_get_namespace(context, '__anon_0x7fc7c783a390')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc710')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f36095cc650')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'edited', u'nsfw_stamp', u'quarantine_stamp', u'thumbnail_img'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 95

@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060828.107133
+_modified_time = 1512370184.196398
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/usertext.html'
 _template_uri = '/usertext.html'
@@ -35,20 +35,20 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 33
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7a52210', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7a52210')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fa55a36eed0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fa55a36eed0')] = ns
 
     # SOURCE LINE 32
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7a52110', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7a52110')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fa55a36edd0', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fa55a36edd0')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a52210')._populate(_import_ns, [u'data', u'error_field', u'md', u'_md'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a52110')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7fa55a36eed0')._populate(_import_ns, [u'data', u'error_field', u'md', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7fa55a36edd0')._populate(_import_ns, [u'toggle_button'])
         toggle_button = _import_ns.get('toggle_button', context.get('toggle_button', UNDEFINED))
         def action_button(name,btn_type,onclick,display):
             return render_action_button(context._locals(__M_locals),name,btn_type,onclick,display)
@@ -297,8 +297,8 @@ def render_action_button(context,name,btn_type,onclick,display):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a52210')._populate(_import_ns, [u'data', u'error_field', u'md', u'_md'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a52110')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7fa55a36eed0')._populate(_import_ns, [u'data', u'error_field', u'md', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7fa55a36edd0')._populate(_import_ns, [u'toggle_button'])
         __M_writer = context.writer()
         # SOURCE LINE 110
         __M_writer(u'\n  <button type="')
@@ -324,8 +324,8 @@ def render_markhelp(context,show_embed_help=False):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a52210')._populate(_import_ns, [u'data', u'error_field', u'md', u'_md'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a52110')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7fa55a36eed0')._populate(_import_ns, [u'data', u'error_field', u'md', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7fa55a36edd0')._populate(_import_ns, [u'toggle_button'])
         md = _import_ns.get('md', context.get('md', UNDEFINED))
         _md = _import_ns.get('_md', context.get('_md', UNDEFINED))
         __M_writer = context.writer()

@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520059070.48598
+_modified_time = 1505982951.283852
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/wikieditpage.html'
 _template_uri = '/wikieditpage.html'
@@ -30,20 +30,20 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 27
-    ns = runtime.TemplateNamespace('__anon_0x7f6494e62310', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7f6494e62310')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f20bc9a7990', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f20bc9a7990')] = ns
 
     # SOURCE LINE 28
-    ns = runtime.TemplateNamespace('__anon_0x7f6494e62410', context._clean_inheritance_tokens(), templateuri=u'usertext.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7f6494e62410')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f20bc9a7950', context._clean_inheritance_tokens(), templateuri=u'usertext.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f20bc9a7950')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7f6494e62310')._populate(_import_ns, [u'toggle_button'])
-        _mako_get_namespace(context, '__anon_0x7f6494e62410')._populate(_import_ns, [u'markhelp'])
+        _mako_get_namespace(context, '__anon_0x7f20bc9a7990')._populate(_import_ns, [u'toggle_button'])
+        _mako_get_namespace(context, '__anon_0x7f20bc9a7950')._populate(_import_ns, [u'markhelp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         toggle_button = _import_ns.get('toggle_button', context.get('toggle_button', UNDEFINED))
         markhelp = _import_ns.get('markhelp', context.get('markhelp', UNDEFINED))

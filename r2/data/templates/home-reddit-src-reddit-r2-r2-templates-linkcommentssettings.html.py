@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.684049
+_modified_time = 1505003484.708136
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/linkcommentssettings.html'
 _template_uri = '/linkcommentssettings.html'
@@ -31,15 +31,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 28
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c777d110', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c777d110')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f36080dba10', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f36080dba10')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c777d110')._populate(_import_ns, [u'ynbutton'])
+        _mako_get_namespace(context, '__anon_0x7f36080dba10')._populate(_import_ns, [u'ynbutton'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         dict = _import_ns.get('dict', context.get('dict', UNDEFINED))
         ynbutton = _import_ns.get('ynbutton', context.get('ynbutton', UNDEFINED))
@@ -186,7 +186,7 @@ def render_suggested_clear_type(context,name,value=None):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c777d110')._populate(_import_ns, [u'ynbutton'])
+        _mako_get_namespace(context, '__anon_0x7f36080dba10')._populate(_import_ns, [u'ynbutton'])
         __M_writer = context.writer()
         # SOURCE LINE 31
         __M_writer(u'\n  <a href="javascript:void(0)"\n     onclick="return set_suggested_sort(this, \'')
@@ -204,7 +204,7 @@ def render_clear_suggested_sort(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c777d110')._populate(_import_ns, [u'ynbutton'])
+        _mako_get_namespace(context, '__anon_0x7f36080dba10')._populate(_import_ns, [u'ynbutton'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         def suggested_clear_type(name,value=None):
             return render_suggested_clear_type(context,name,value)

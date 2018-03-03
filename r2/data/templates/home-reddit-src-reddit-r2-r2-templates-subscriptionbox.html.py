@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520055391.032643
+_modified_time = 1505003389.760331
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/subscriptionbox.html'
 _template_uri = '/subscriptionbox.html'
@@ -25,20 +25,20 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 23
-    ns = runtime.TemplateNamespace('__anon_0x7f6495243a50', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7f6495243a50')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3608c1e0d0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3608c1e0d0')] = ns
 
     # SOURCE LINE 24
-    ns = runtime.TemplateNamespace('__anon_0x7f6495243ad0', context._clean_inheritance_tokens(), templateuri=u'subreddit.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7f6495243ad0')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3608c1ec10', context._clean_inheritance_tokens(), templateuri=u'subreddit.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3608c1ec10')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7f6495243a50')._populate(_import_ns, [u'plain_link'])
-        _mako_get_namespace(context, '__anon_0x7f6495243ad0')._populate(_import_ns, [u'permission_icons'])
+        _mako_get_namespace(context, '__anon_0x7f3608c1e0d0')._populate(_import_ns, [u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f3608c1ec10')._populate(_import_ns, [u'permission_icons'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         permission_icons = _import_ns.get('permission_icons', context.get('permission_icons', UNDEFINED))
         isinstance = _import_ns.get('isinstance', context.get('isinstance', UNDEFINED))

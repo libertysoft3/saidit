@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520056307.824672
+_modified_time = 1512466108.369682
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/createsubreddit.html'
 _template_uri = '/createsubreddit.html'
@@ -33,30 +33,30 @@ def _mako_get_namespace(context, name):
         _mako_generate_namespaces(context)
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
-    # SOURCE LINE 32
-    ns = runtime.TemplateNamespace('__anon_0x7f6494f5ab90', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7f6494f5ab90')] = ns
+    # SOURCE LINE 31
+    ns = runtime.TemplateNamespace('__anon_0x7f2e07f58e90', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f2e07f58e90')] = ns
+
+    # SOURCE LINE 30
+    ns = runtime.TemplateNamespace('__anon_0x7f2e07f58dd0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f2e07f58dd0')] = ns
 
     # SOURCE LINE 34
     ns = runtime.TemplateNamespace(u'utils', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
     context.namespaces[(__name__, u'utils')] = ns
 
-    # SOURCE LINE 31
-    ns = runtime.TemplateNamespace('__anon_0x7f6494f5aad0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7f6494f5aad0')] = ns
-
-    # SOURCE LINE 30
-    ns = runtime.TemplateNamespace('__anon_0x7f6494f5aa50', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7f6494f5aa50')] = ns
+    # SOURCE LINE 32
+    ns = runtime.TemplateNamespace('__anon_0x7f2e07f58f50', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f2e07f58f50')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7f6494f5ab90')._populate(_import_ns, [u'toggle_button', u'simple_button'])
-        _mako_get_namespace(context, '__anon_0x7f6494f5aad0')._populate(_import_ns, [u'image_upload'])
-        _mako_get_namespace(context, '__anon_0x7f6494f5aa50')._populate(_import_ns, [u'_md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f2e07f58e90')._populate(_import_ns, [u'image_upload'])
+        _mako_get_namespace(context, '__anon_0x7f2e07f58dd0')._populate(_import_ns, [u'_md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f2e07f58f50')._populate(_import_ns, [u'toggle_button', u'simple_button'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         utils = _mako_get_namespace(context, 'utils')
         error_field = _import_ns.get('error_field', context.get('error_field', UNDEFINED))

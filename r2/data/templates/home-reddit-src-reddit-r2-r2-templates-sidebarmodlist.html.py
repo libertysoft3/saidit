@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060938.339793
+_modified_time = 1505839975.037472
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/sidebarmodlist.html'
 _template_uri = '/sidebarmodlist.html'
@@ -30,15 +30,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 27
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c757acd0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c757acd0')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f2f68662f10', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f2f68662f10')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c757acd0')._populate(_import_ns, [u'nsfw_stamp', u'quarantine_stamp'])
+        _mako_get_namespace(context, '__anon_0x7f2f68662f10')._populate(_import_ns, [u'nsfw_stamp', u'quarantine_stamp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         quarantine_stamp = _import_ns.get('quarantine_stamp', context.get('quarantine_stamp', UNDEFINED))
         nsfw_stamp = _import_ns.get('nsfw_stamp', context.get('nsfw_stamp', UNDEFINED))

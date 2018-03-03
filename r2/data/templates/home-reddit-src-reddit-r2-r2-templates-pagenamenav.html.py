@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.185722
+_modified_time = 1517221699.45076
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/pagenamenav.html'
 _template_uri = '/pagenamenav.html'
@@ -25,15 +25,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 23
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c78e2450', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c78e2450')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f59815ed410', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f59815ed410')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2450')._populate(_import_ns, [u'plain_link', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f59815ed410')._populate(_import_ns, [u'plain_link', u'_md'])
         __M_writer = context.writer()
         # SOURCE LINE 22
         __M_writer(u'\n')
@@ -64,7 +64,7 @@ def render_domain(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2450')._populate(_import_ns, [u'plain_link', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f59815ed410')._populate(_import_ns, [u'plain_link', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         plain_link = _import_ns.get('plain_link', context.get('plain_link', UNDEFINED))
@@ -105,7 +105,7 @@ def render_help(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2450')._populate(_import_ns, [u'plain_link', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f59815ed410')._populate(_import_ns, [u'plain_link', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         plain_link = _import_ns.get('plain_link', context.get('plain_link', UNDEFINED))
         __M_writer = context.writer()
@@ -123,7 +123,7 @@ def render_nomenu(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2450')._populate(_import_ns, [u'plain_link', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f59815ed410')._populate(_import_ns, [u'plain_link', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 63
@@ -140,7 +140,7 @@ def render_subreddits(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2450')._populate(_import_ns, [u'plain_link', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f59815ed410')._populate(_import_ns, [u'plain_link', u'_md'])
         plain_link = _import_ns.get('plain_link', context.get('plain_link', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 57
@@ -157,7 +157,7 @@ def render_subreddit(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2450')._populate(_import_ns, [u'plain_link', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f59815ed410')._populate(_import_ns, [u'plain_link', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         plain_link = _import_ns.get('plain_link', context.get('plain_link', UNDEFINED))
         hasattr = _import_ns.get('hasattr', context.get('hasattr', UNDEFINED))
@@ -184,7 +184,7 @@ def render_newpagelink(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2450')._populate(_import_ns, [u'plain_link', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f59815ed410')._populate(_import_ns, [u'plain_link', u'_md'])
         plain_link = _import_ns.get('plain_link', context.get('plain_link', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 73
@@ -201,7 +201,7 @@ def render_subredditheadertitle(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2450')._populate(_import_ns, [u'plain_link', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f59815ed410')._populate(_import_ns, [u'plain_link', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         plain_link = _import_ns.get('plain_link', context.get('plain_link', UNDEFINED))
         hasattr = _import_ns.get('hasattr', context.get('hasattr', UNDEFINED))
@@ -228,7 +228,7 @@ def render_subredditnositelink(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c78e2450')._populate(_import_ns, [u'plain_link', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f59815ed410')._populate(_import_ns, [u'plain_link', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         hasattr = _import_ns.get('hasattr', context.get('hasattr', UNDEFINED))
         __M_writer = context.writer()

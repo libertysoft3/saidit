@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.454367
+_modified_time = 1505003395.880026
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/subredditinfobar.html'
 _template_uri = '/subredditinfobar.html'
@@ -34,21 +34,21 @@ def _mako_get_namespace(context, name):
         _mako_generate_namespaces(context)
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
-    # SOURCE LINE 32
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c782c590', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c782c590')] = ns
-
     # SOURCE LINE 33
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c782c450', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c782c450')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3608ba8ad0', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3608ba8ad0')] = ns
+
+    # SOURCE LINE 32
+    ns = runtime.TemplateNamespace('__anon_0x7f3608ba8a50', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3608ba8a50')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c782c590')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'text_with_links', u'_mdf'])
-        _mako_get_namespace(context, '__anon_0x7fc7c782c450')._populate(_import_ns, [u'ynbutton', u'state_button'])
+        _mako_get_namespace(context, '__anon_0x7f3608ba8ad0')._populate(_import_ns, [u'ynbutton', u'state_button'])
+        _mako_get_namespace(context, '__anon_0x7f3608ba8a50')._populate(_import_ns, [u'plain_link', u'thing_timestamp', u'text_with_links', u'_mdf'])
         thing_timestamp = _import_ns.get('thing_timestamp', context.get('thing_timestamp', UNDEFINED))
         ynbutton = _import_ns.get('ynbutton', context.get('ynbutton', UNDEFINED))
         text_with_links = _import_ns.get('text_with_links', context.get('text_with_links', UNDEFINED))
@@ -135,7 +135,7 @@ def render_body(context,**pageargs):
                title=_('leave'),
                executed=_('you are no longer an approved submitter'),
                question=_('stop being an approved submitter?'),
-               format=_('you are an approved submitter on this subreddit. (%(leave)s)'),
+               format=_('you are an approved submitter on this sub. (%(leave)s)'),
                format_arg='leave',
                hidden_data=dict(
                  id=thing.sr._fullname),

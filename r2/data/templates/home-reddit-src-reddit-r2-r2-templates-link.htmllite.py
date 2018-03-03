@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.307248
+_modified_time = 1505003802.235101
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/link.htmllite'
 _template_uri = '/link.htmllite'
@@ -31,8 +31,8 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 23
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7834dd0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7834dd0')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3607f0c710', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3607f0c710')] = ns
 
 def _mako_inherit(template, context):
     _mako_generate_namespaces(context)
@@ -42,7 +42,7 @@ def render_body(context,**pageargs):
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7834dd0')._populate(_import_ns, [u'optionalstyle', u'nsfw_stamp', u'quarantine_stamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607f0c710')._populate(_import_ns, [u'optionalstyle', u'nsfw_stamp', u'quarantine_stamp'])
         __M_writer = context.writer()
         # SOURCE LINE 22
         __M_writer(u'\n')
@@ -67,7 +67,7 @@ def render_entry(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7834dd0')._populate(_import_ns, [u'optionalstyle', u'nsfw_stamp', u'quarantine_stamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607f0c710')._populate(_import_ns, [u'optionalstyle', u'nsfw_stamp', u'quarantine_stamp'])
         def hide_if_appropriate(state):
             return render_hide_if_appropriate(context,state)
         optionalstyle = _import_ns.get('optionalstyle', context.get('optionalstyle', UNDEFINED))
@@ -248,7 +248,7 @@ def render_hide_if_appropriate(context,state):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7834dd0')._populate(_import_ns, [u'optionalstyle', u'nsfw_stamp', u'quarantine_stamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607f0c710')._populate(_import_ns, [u'optionalstyle', u'nsfw_stamp', u'quarantine_stamp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         optionalstyle = _import_ns.get('optionalstyle', context.get('optionalstyle', UNDEFINED))
         __M_writer = context.writer()
@@ -269,7 +269,7 @@ def render_flair(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7834dd0')._populate(_import_ns, [u'optionalstyle', u'nsfw_stamp', u'quarantine_stamp'])
+        _mako_get_namespace(context, '__anon_0x7f3607f0c710')._populate(_import_ns, [u'optionalstyle', u'nsfw_stamp', u'quarantine_stamp'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         optionalstyle = _import_ns.get('optionalstyle', context.get('optionalstyle', UNDEFINED))
         __M_writer = context.writer()

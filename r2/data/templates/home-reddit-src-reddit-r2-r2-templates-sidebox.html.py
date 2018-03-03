@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.42823
+_modified_time = 1505002596.243327
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/sidebox.html'
 _template_uri = '/sidebox.html'
@@ -25,15 +25,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 23
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c783bc10', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c783bc10')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fde601c47d0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fde601c47d0')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c783bc10')._populate(_import_ns, [u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fde601c47d0')._populate(_import_ns, [u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         plain_link = _import_ns.get('plain_link', context.get('plain_link', UNDEFINED))
         __M_writer = context.writer()

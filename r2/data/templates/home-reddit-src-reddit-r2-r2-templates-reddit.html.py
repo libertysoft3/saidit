@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060828.964822
+_modified_time = 1508151151.130448
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/reddit.html'
 _template_uri = '/reddit.html'
@@ -44,16 +44,16 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 41
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7a45ad0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7a45ad0')] = ns
-
-    # SOURCE LINE 42
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7b5f950', context._clean_inheritance_tokens(), templateuri=u'adminbar.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7b5f950')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f16213d6990', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f16213d6990')] = ns
 
     # SOURCE LINE 40
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7a45d50', context._clean_inheritance_tokens(), templateuri=u'less.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7a45d50')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f16213cd390', context._clean_inheritance_tokens(), templateuri=u'less.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f16213cd390')] = ns
+
+    # SOURCE LINE 42
+    ns = runtime.TemplateNamespace('__anon_0x7f16213d6a50', context._clean_inheritance_tokens(), templateuri=u'adminbar.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f16213d6a50')] = ns
 
 def _mako_inherit(template, context):
     _mako_generate_namespaces(context)
@@ -63,9 +63,9 @@ def render_body(context,**pageargs):
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45ad0')._populate(_import_ns, [u'tags', u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b5f950')._populate(_import_ns, [u'adminbar_stylesheet'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45d50')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6990')._populate(_import_ns, [u'tags', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f16213cd390')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6a50')._populate(_import_ns, [u'adminbar_stylesheet'])
         __M_writer = context.writer()
         # SOURCE LINE 22
         __M_writer(u'\n')
@@ -108,9 +108,9 @@ def render_global_stylesheets(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45ad0')._populate(_import_ns, [u'tags', u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b5f950')._populate(_import_ns, [u'adminbar_stylesheet'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45d50')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6990')._populate(_import_ns, [u'tags', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f16213cd390')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6a50')._populate(_import_ns, [u'adminbar_stylesheet'])
         less_stylesheet = _import_ns.get('less_stylesheet', context.get('less_stylesheet', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
@@ -147,9 +147,9 @@ def render_javascript_bottom(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45ad0')._populate(_import_ns, [u'tags', u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b5f950')._populate(_import_ns, [u'adminbar_stylesheet'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45d50')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6990')._populate(_import_ns, [u'tags', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f16213cd390')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6a50')._populate(_import_ns, [u'adminbar_stylesheet'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         __M_writer = context.writer()
@@ -181,9 +181,9 @@ def render_Title(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45ad0')._populate(_import_ns, [u'tags', u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b5f950')._populate(_import_ns, [u'adminbar_stylesheet'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45d50')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6990')._populate(_import_ns, [u'tags', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f16213cd390')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6a50')._populate(_import_ns, [u'adminbar_stylesheet'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         parent = _import_ns.get('parent', context.get('parent', UNDEFINED))
         __M_writer = context.writer()
@@ -210,9 +210,9 @@ def render_javascript(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45ad0')._populate(_import_ns, [u'tags', u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b5f950')._populate(_import_ns, [u'adminbar_stylesheet'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45d50')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6990')._populate(_import_ns, [u'tags', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f16213cd390')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6a50')._populate(_import_ns, [u'adminbar_stylesheet'])
         less_js = _import_ns.get('less_js', context.get('less_js', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 121
@@ -239,9 +239,9 @@ def render_sr_stylesheets(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45ad0')._populate(_import_ns, [u'tags', u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b5f950')._populate(_import_ns, [u'adminbar_stylesheet'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45d50')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6990')._populate(_import_ns, [u'tags', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f16213cd390')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6a50')._populate(_import_ns, [u'adminbar_stylesheet'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 66
@@ -262,9 +262,9 @@ def render_stylesheet(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45ad0')._populate(_import_ns, [u'tags', u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b5f950')._populate(_import_ns, [u'adminbar_stylesheet'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45d50')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6990')._populate(_import_ns, [u'tags', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f16213cd390')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6a50')._populate(_import_ns, [u'adminbar_stylesheet'])
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 115
@@ -287,9 +287,9 @@ def render_bodyContent(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45ad0')._populate(_import_ns, [u'tags', u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b5f950')._populate(_import_ns, [u'adminbar_stylesheet'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45d50')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6990')._populate(_import_ns, [u'tags', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f16213cd390')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6a50')._populate(_import_ns, [u'adminbar_stylesheet'])
         tags = _import_ns.get('tags', context.get('tags', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
@@ -421,9 +421,9 @@ def render_pagemeta(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45ad0')._populate(_import_ns, [u'tags', u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b5f950')._populate(_import_ns, [u'adminbar_stylesheet'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45d50')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6990')._populate(_import_ns, [u'tags', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f16213cd390')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6a50')._populate(_import_ns, [u'adminbar_stylesheet'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         hasattr = _import_ns.get('hasattr', context.get('hasattr', UNDEFINED))
         __M_writer = context.writer()
@@ -494,9 +494,9 @@ def render_sidebar(context,content=None):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45ad0')._populate(_import_ns, [u'tags', u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b5f950')._populate(_import_ns, [u'adminbar_stylesheet'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45d50')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6990')._populate(_import_ns, [u'tags', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f16213cd390')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6a50')._populate(_import_ns, [u'adminbar_stylesheet'])
         __M_writer = context.writer()
         # SOURCE LINE 224
         __M_writer(u'\n  ')
@@ -512,9 +512,9 @@ def render_extra_stylesheets(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45ad0')._populate(_import_ns, [u'tags', u'classes'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7b5f950')._populate(_import_ns, [u'adminbar_stylesheet'])
-        _mako_get_namespace(context, '__anon_0x7fc7c7a45d50')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6990')._populate(_import_ns, [u'tags', u'classes'])
+        _mako_get_namespace(context, '__anon_0x7f16213cd390')._populate(_import_ns, [u'less_js', u'less_stylesheet'])
+        _mako_get_namespace(context, '__anon_0x7f16213d6a50')._populate(_import_ns, [u'adminbar_stylesheet'])
         adminbar_stylesheet = _import_ns.get('adminbar_stylesheet', context.get('adminbar_stylesheet', UNDEFINED))
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))

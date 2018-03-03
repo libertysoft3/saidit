@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060828.435521
+_modified_time = 1512369983.582252
 _enable_loop = True
 _template_filename = u'/home/reddit/src/reddit/r2/r2/templates/printablebuttons.html'
 _template_uri = u'/printablebuttons.html'
@@ -34,15 +34,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 23
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7a2aa10', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7a2aa10')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fa55a70a150', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fa55a70a150')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         __M_writer = context.writer()
         # SOURCE LINE 22
         __M_writer(u'\n')
@@ -105,7 +105,7 @@ def render_state_button(context,name,title,onclick,executed,clicked=False,a_clas
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         def _link():
             __M_caller = context.caller_stack._push_frame()
             try:
@@ -197,7 +197,7 @@ def render_reports_button(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 280
@@ -227,7 +227,7 @@ def render_linkbuttons(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         def toggle_button(class_name,title,alt_title,callback,cancelback,css_class='',alt_css_class='',reverse=False,login_required=False,style='',data_attrs=None):
             return render_toggle_button(context,class_name,title,alt_title,callback,cancelback,css_class,alt_css_class,reverse,login_required,style,data_attrs)
         def report_reasons():
@@ -429,7 +429,7 @@ def render_big_modbuttons(context,thing):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         def ignore_reports_toggle(thing):
             return render_ignore_reports_toggle(context,thing)
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
@@ -494,7 +494,7 @@ def render_report_reasons(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 294
@@ -568,7 +568,7 @@ def render_ynbutton(context,title,executed,op,callback='null',question=None,post
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         capture = _import_ns.get('capture', context.get('capture', UNDEFINED))
         data = _import_ns.get('data', context.get('data', UNDEFINED))
         __M_writer = context.writer()
@@ -643,7 +643,7 @@ def render_distinguish_options(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         def distinguish_setter(name,value=None,event_action='distinguish'):
             return render_distinguish_setter(context,name,value,event_action)
@@ -704,7 +704,7 @@ def render_show_admin_context(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 268
@@ -728,7 +728,7 @@ def render_undistinguish_options(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         def distinguish_noop(text):
             return render_distinguish_noop(context,text)
         def distinguish_setter(name,value=None,event_action='distinguish'):
@@ -759,7 +759,7 @@ def render_bylink_button(context,title,link,sr_path=True,a_class='bylink',event_
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         plain_link = _import_ns.get('plain_link', context.get('plain_link', UNDEFINED))
         __M_writer = context.writer()
@@ -800,7 +800,7 @@ def render_commentbuttons(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         def report_reasons():
             return render_report_reasons(context)
         def reports_button():
@@ -992,7 +992,7 @@ def render_ignore_reports_toggle(context,thing):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         pretty_button = _import_ns.get('pretty_button', context.get('pretty_button', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 222
@@ -1022,7 +1022,7 @@ def render_ajax_ynbutton(context,title,op,question=None,_class='',hidden_data={}
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         __M_writer = context.writer()
         # SOURCE LINE 664
         __M_writer(u'\n  <form method="post" action="/api/')
@@ -1068,7 +1068,7 @@ def render_toggle_button(context,class_name,title,alt_title,callback,cancelback,
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         dict = _import_ns.get('dict', context.get('dict', UNDEFINED))
         data = _import_ns.get('data', context.get('data', UNDEFINED))
         __M_writer = context.writer()
@@ -1143,7 +1143,7 @@ def render_distinguish_setter(context,name,value=None,event_action='distinguish'
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         __M_writer = context.writer()
         # SOURCE LINE 99
         __M_writer(u'\n  <a class="access-required"\n     href="javascript:void(0)"\n     data-event-action="')
@@ -1164,7 +1164,7 @@ def render_distinguish_help(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         __M_writer = context.writer()
         # SOURCE LINE 122
         __M_writer(u'\n  <a class="nonbutton" href="/wiki/moderation#wiki_distinguishing">\n    ')
@@ -1180,7 +1180,7 @@ def render_distinguish_label(context,distinguish_clicked):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         __M_writer = context.writer()
         # SOURCE LINE 112
         __M_writer(u'\n  ')
@@ -1203,7 +1203,7 @@ def render_messagebuttons(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         def ynbutton(title,executed,op,callback='null',question=None,post_callback='null',format='%(link)s',format_arg='link',hidden_data={},access_required=True,event_target=None,event_action=None,event_detail=None,_class=''):
@@ -1340,7 +1340,7 @@ def render_banbuttons(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         dict = _import_ns.get('dict', context.get('dict', UNDEFINED))
@@ -1451,7 +1451,7 @@ def render_give_gold(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 210
@@ -1478,7 +1478,7 @@ def render_simple_button(context,title,nameFunc,css_class='',event_action=None):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         __M_writer = context.writer()
         # SOURCE LINE 734
         __M_writer(u'\n <a class="')
@@ -1506,7 +1506,7 @@ def render_distinguish_noop(context,text):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         __M_writer = context.writer()
         # SOURCE LINE 106
         __M_writer(u'\n  <a class="access-required"\n     href="javascript:void(0)"\n     onclick="return toggle_distinguish_span(this)">')
@@ -1522,7 +1522,7 @@ def render_distinguish(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a2aa10')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
+        _mako_get_namespace(context, '__anon_0x7fa55a70a150')._populate(_import_ns, [u'plain_link', u'pretty_button', u'data', u'error_field'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         def undistinguish_options():
             return render_undistinguish_options(context)

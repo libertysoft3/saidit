@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.147017
+_modified_time = 1505002596.196736
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/navmenu.html'
 _template_uri = '/navmenu.html'
@@ -25,15 +25,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 23
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7b26050', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7b26050')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fde6027fe50', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fde6027fe50')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7b26050')._populate(_import_ns, [u'plain_link', u'post_link', u'img_link', u'separator'])
+        _mako_get_namespace(context, '__anon_0x7fde6027fe50')._populate(_import_ns, [u'plain_link', u'post_link', u'img_link', u'separator'])
         __M_writer = context.writer()
         # SOURCE LINE 22
         __M_writer(u'\n')
@@ -54,7 +54,7 @@ def render_tabmenu(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7b26050')._populate(_import_ns, [u'plain_link', u'post_link', u'img_link', u'separator'])
+        _mako_get_namespace(context, '__anon_0x7fde6027fe50')._populate(_import_ns, [u'plain_link', u'post_link', u'img_link', u'separator'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         str = _import_ns.get('str', context.get('str', UNDEFINED))
@@ -106,7 +106,7 @@ def render_flatlist(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7b26050')._populate(_import_ns, [u'plain_link', u'post_link', u'img_link', u'separator'])
+        _mako_get_namespace(context, '__anon_0x7fde6027fe50')._populate(_import_ns, [u'plain_link', u'post_link', u'img_link', u'separator'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         separator = _import_ns.get('separator', context.get('separator', UNDEFINED))
         str = _import_ns.get('str', context.get('str', UNDEFINED))
@@ -176,7 +176,7 @@ def render_dropdown(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7b26050')._populate(_import_ns, [u'plain_link', u'post_link', u'img_link', u'separator'])
+        _mako_get_namespace(context, '__anon_0x7fde6027fe50')._populate(_import_ns, [u'plain_link', u'post_link', u'img_link', u'separator'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         str = _import_ns.get('str', context.get('str', UNDEFINED))
         __M_writer = context.writer()

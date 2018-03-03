@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.766698
+_modified_time = 1505003146.619403
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/goldpayment.html'
 _template_uri = '/goldpayment.html'
@@ -31,15 +31,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 26
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7944410', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7944410')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f36091641d0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f36091641d0')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7944410')._populate(_import_ns, [u'md', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f36091641d0')._populate(_import_ns, [u'md', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         _md = _import_ns.get('_md', context.get('_md', UNDEFINED))
@@ -216,7 +216,7 @@ def render_stripe_button(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7944410')._populate(_import_ns, [u'md', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f36091641d0')._populate(_import_ns, [u'md', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 152
@@ -236,7 +236,7 @@ def render_creddits_button(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7944410')._populate(_import_ns, [u'md', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f36091641d0')._populate(_import_ns, [u'md', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         dict = _import_ns.get('dict', context.get('dict', UNDEFINED))
         __M_writer = context.writer()
@@ -267,7 +267,7 @@ def render_stripe_form(context,display=False):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7944410')._populate(_import_ns, [u'md', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f36091641d0')._populate(_import_ns, [u'md', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         def base_stripe_form():
             return render_base_stripe_form(context)
@@ -301,7 +301,7 @@ def render_paypal_button(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7944410')._populate(_import_ns, [u'md', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f36091641d0')._populate(_import_ns, [u'md', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 138
@@ -334,7 +334,7 @@ def render_base_stripe_form(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7944410')._populate(_import_ns, [u'md', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f36091641d0')._populate(_import_ns, [u'md', u'_md'])
         xrange = _import_ns.get('xrange', context.get('xrange', UNDEFINED))
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
@@ -424,7 +424,7 @@ def render_coinbase_button(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7944410')._populate(_import_ns, [u'md', u'_md'])
+        _mako_get_namespace(context, '__anon_0x7f36091641d0')._populate(_import_ns, [u'md', u'_md'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 247

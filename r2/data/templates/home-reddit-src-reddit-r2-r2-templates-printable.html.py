@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060828.200468
+_modified_time = 1505003062.313481
 _enable_loop = True
 _template_filename = u'/home/reddit/src/reddit/r2/r2/templates/printable.html'
 _template_uri = u'/printable.html'
@@ -34,15 +34,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 31
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7a270d0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7a270d0')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f36093a2dd0', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f36093a2dd0')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 22
@@ -93,7 +93,7 @@ def render_ParentDiv(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 200
         __M_writer(u'\n')
@@ -106,7 +106,7 @@ def render_midcol(context,display=True,cls=''):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
         __M_writer = context.writer()
@@ -133,7 +133,7 @@ def render_numcol(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 203
         __M_writer(u'\n')
@@ -146,7 +146,7 @@ def render_Child(context,display=True):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 209
@@ -171,7 +171,7 @@ def render_RenderPrintable(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         self = _import_ns.get('self', context.get('self', UNDEFINED))
@@ -262,7 +262,7 @@ def render_gildings(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 64
@@ -295,7 +295,7 @@ def render_buttons(context,ban=True):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 196
@@ -312,7 +312,7 @@ def render_thing_css_rowclass(context,what):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         hasattr = _import_ns.get('hasattr', context.get('hasattr', UNDEFINED))
         __M_writer = context.writer()
@@ -365,7 +365,7 @@ def render_score(context,thing,tag='span'):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         zip = _import_ns.get('zip', context.get('zip', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 240
@@ -393,7 +393,7 @@ def render_approval_checkmark(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         __M_writer = context.writer()
@@ -422,7 +422,7 @@ def render_arrow(context,this,dir,mod):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         classes = _import_ns.get('classes', context.get('classes', UNDEFINED))
@@ -475,7 +475,7 @@ def render_entry(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 206
         __M_writer(u'\n')
@@ -488,7 +488,7 @@ def render_thing_data_attributes(context,what):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         hasattr = _import_ns.get('hasattr', context.get('hasattr', UNDEFINED))
@@ -565,7 +565,7 @@ def render_admintagline(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         dict = _import_ns.get('dict', context.get('dict', UNDEFINED))
         __M_writer = context.writer()
@@ -618,7 +618,7 @@ def render_thing_css_class(context,what):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7a270d0')._populate(_import_ns, [u'classes', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7f36093a2dd0')._populate(_import_ns, [u'classes', u'plain_link'])
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 76

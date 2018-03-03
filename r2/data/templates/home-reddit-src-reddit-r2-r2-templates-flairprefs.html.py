@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060829.482991
+_modified_time = 1505003395.916171
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/flairprefs.html'
 _template_uri = '/flairprefs.html'
@@ -36,7 +36,7 @@ def render_body(context,**pageargs):
             # SOURCE LINE 29
             __M_writer(u'        >\n    <label for="flair_enabled">\n        ')
             # SOURCE LINE 31
-            __M_writer(conditional_websafe(_("Show my flair on this subreddit. It looks like:")))
+            __M_writer(conditional_websafe(_("Show my flair on this sub. It looks like:")))
             __M_writer(u'\n    </label>\n  </form>\n  <div class="tagline">')
             # SOURCE LINE 34
             __M_writer(conditional_websafe(thing.wrapped_user))

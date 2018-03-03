@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060938.350148
+_modified_time = 1505003903.175391
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/trophycase.html'
 _template_uri = '/trophycase.html'
@@ -25,15 +25,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 23
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c7562850', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c7562850')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7f3607eb9350', context._clean_inheritance_tokens(), templateuri=u'printablebuttons.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7f3607eb9350')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7562850')._populate(_import_ns, [u'ynbutton'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb9350')._populate(_import_ns, [u'ynbutton'])
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         def trophy_table(trophies,header=''):
             return render_trophy_table(context._locals(__M_locals),trophies,header)
@@ -72,7 +72,7 @@ def render_trophy_info(context,trophy,center):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7562850')._populate(_import_ns, [u'ynbutton'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb9350')._populate(_import_ns, [u'ynbutton'])
         dict = _import_ns.get('dict', context.get('dict', UNDEFINED))
         ynbutton = _import_ns.get('ynbutton', context.get('ynbutton', UNDEFINED))
         hasattr = _import_ns.get('hasattr', context.get('hasattr', UNDEFINED))
@@ -131,7 +131,7 @@ def render_trophy_table(context,trophies,header=''):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c7562850')._populate(_import_ns, [u'ynbutton'])
+        _mako_get_namespace(context, '__anon_0x7f3607eb9350')._populate(_import_ns, [u'ynbutton'])
         def trophy_info(trophy,center):
             return render_trophy_info(context,trophy,center)
         len = _import_ns.get('len', context.get('len', UNDEFINED))

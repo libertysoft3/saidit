@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520060955.76105
+_modified_time = 1512369675.484429
 _enable_loop = True
 _template_filename = u'/home/reddit/src/reddit/r2/r2/templates/prefoptions.html'
 _template_uri = u'/prefoptions.html'
@@ -14,7 +14,7 @@ from pylons import request
 from pylons import tmpl_context as c
 from pylons import app_globals as g
 from pylons.i18n import _, ungettext
-_exports = ['checkbox', 'chat_sidebar_size_options', 'comment_sort_options', 'unsubscribe_actions_options', 'media_radio', 'media_preview_radio', 'link_options', 'text_input', 'num_input', 'text_input_all', 'theme_item']
+_exports = ['checkbox', 'chat_sidebar_size_options', 'comment_sort_options', 'media_radio', 'media_preview_radio', 'link_options', 'text_input', 'num_input', 'text_input_all', 'theme_item']
 
 
 # SOURCE LINE 23
@@ -24,7 +24,7 @@ from r2.lib.errors import error_list
 from r2.lib.menus import CommentSortMenu
 
 ## CUSTOM
-from r2.lib.menus import ChatSidebarSizeMenu, SubscriptionsSubscribeMenu
+from r2.lib.menus import ChatSidebarSizeMenu
 
 from r2.lib.template_helpers import add_sr, _wsf, format_html, make_url_protocol_relative
 from r2.lib.utils import UrlParser
@@ -39,15 +39,15 @@ def _mako_get_namespace(context, name):
         return context.namespaces[(__name__, name)]
 def _mako_generate_namespaces(context):
     # SOURCE LINE 35
-    ns = runtime.TemplateNamespace('__anon_0x7fc7c746d710', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
-    context.namespaces[(__name__, '__anon_0x7fc7c746d710')] = ns
+    ns = runtime.TemplateNamespace('__anon_0x7fa55a395f90', context._clean_inheritance_tokens(), templateuri=u'utils.html', callables=None,  calling_uri=_template_uri)
+    context.namespaces[(__name__, '__anon_0x7fa55a395f90')] = ns
 
 def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fa55a395f90')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
         capture = _import_ns.get('capture', context.get('capture', UNDEFINED))
         def checkbox(text,name,disabled=False,disabled_text='',prefix='pref_'):
             return render_checkbox(context._locals(__M_locals),text,name,disabled,disabled_text,prefix)
@@ -55,15 +55,13 @@ def render_body(context,**pageargs):
             return render_chat_sidebar_size_options(context._locals(__M_locals))
         def comment_sort_options():
             return render_comment_sort_options(context._locals(__M_locals))
-        def media_radio(val,label):
-            return render_media_radio(context._locals(__M_locals),val,label)
         def media_preview_radio(val,label):
             return render_media_preview_radio(context._locals(__M_locals),val,label)
         thing = _import_ns.get('thing', context.get('thing', UNDEFINED))
         def link_options():
             return render_link_options(context._locals(__M_locals))
-        def unsubscribe_actions_options():
-            return render_unsubscribe_actions_options(context._locals(__M_locals))
+        def media_radio(val,label):
+            return render_media_radio(context._locals(__M_locals),val,label)
         language_tool = _import_ns.get('language_tool', context.get('language_tool', UNDEFINED))
         def num_input(s,name):
             return render_num_input(context._locals(__M_locals),s,name)
@@ -530,40 +528,30 @@ def render_body(context,**pageargs):
         # SOURCE LINE 406
         __M_writer(u'  ')
         # SOURCE LINE 416
-        __M_writer(u'\n  <tr>\n    <th>')
-        # SOURCE LINE 418
-        __M_writer(conditional_websafe(_("subscriptions")))
-        __M_writer(u'</th>\n      <td class="prefright">\n        <p>\n          ')
-        # SOURCE LINE 421
-        __M_writer(conditional_websafe(_wsf("unsubscribe from all %(sort)s", sort=unsafe(capture(unsubscribe_actions_options)))))
-        __M_writer(u'\n        </p>\n    </td>\n  </tr>\n\n')
-        # SOURCE LINE 427
-        __M_writer(u'  ')
-        # SOURCE LINE 437
         __M_writer(u'\n')
-        # SOURCE LINE 438
+        # SOURCE LINE 417
         if feature.is_enabled('chat'):
-            # SOURCE LINE 439
+            # SOURCE LINE 418
             __M_writer(u'  <tr>\n    <th>')
-            # SOURCE LINE 440
+            # SOURCE LINE 419
             __M_writer(conditional_websafe(_("chat")))
             __M_writer(u'</th>\n    <td class="prefright">\n      ')
-            # SOURCE LINE 442
+            # SOURCE LINE 421
             __M_writer(conditional_websafe(checkbox(_("enable chat"), "chat_enabled")))
             __M_writer(u'\n      <br/>\n      <p>\n        ')
-            # SOURCE LINE 445
+            # SOURCE LINE 424
             __M_writer(conditional_websafe(_wsf("sidebar chat width %(sort)s", sort=unsafe(capture(chat_sidebar_size_options)))))
             __M_writer(u'\n      </p>\n      <!-- \n      ')
-            # SOURCE LINE 448
+            # SOURCE LINE 427
             __M_writer(conditional_websafe(checkbox(_("click to load sidebar chats"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(coming soon)")))
             __M_writer(u'\n      <br/>\n        ')
-            # SOURCE LINE 450
+            # SOURCE LINE 429
             __M_writer(conditional_websafe(checkbox(_("click to load post chats"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(coming soon)")))
             __M_writer(u'\n      <br/>\n        ')
-            # SOURCE LINE 452
+            # SOURCE LINE 431
             __M_writer(conditional_websafe(checkbox(_("click to load comment chats"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(coming soon)")))
             __M_writer(u'\n      <br/> -->\n      <p>\n          ')
-            # SOURCE LINE 455
+            # SOURCE LINE 434
 
             input = unsafe(capture(text_input_all, c.user.pref_chat_user,
                                    'chat_user', 30, False))
@@ -571,24 +559,24 @@ def render_body(context,**pageargs):
             
             __M_locals_builtin_stored = __M_locals_builtin()
             __M_locals.update(__M_dict_builtin([(__M_key, __M_locals_builtin_stored[__M_key]) for __M_key in ['input'] if __M_key in __M_locals_builtin_stored]))
-            # SOURCE LINE 458
+            # SOURCE LINE 437
             __M_writer(u'\n        ')
-            # SOURCE LINE 459
+            # SOURCE LINE 438
             s = c.user.pref_chat_user 
             
             __M_locals_builtin_stored = __M_locals_builtin()
             __M_locals.update(__M_dict_builtin([(__M_key, __M_locals_builtin_stored[__M_key]) for __M_key in ['s'] if __M_key in __M_locals_builtin_stored]))
             __M_writer(u'\n        ')
-            # SOURCE LINE 460
+            # SOURCE LINE 439
             __M_writer(conditional_websafe(_wsf("IRC nickname %(chat_user)s", chat_user=input)))
             __M_writer(u'\n        &#32; <span class="details">')
-            # SOURCE LINE 461
+            # SOURCE LINE 440
             __M_writer(conditional_websafe(_("(changing will generate new chat client credentials)")))
             __M_writer(u'</span>\n        <!--\n        &#32;\n         <span class="details">\n          ')
-            # SOURCE LINE 465
+            # SOURCE LINE 444
             __M_writer(conditional_websafe(_("(as well as IRC username and realname)")))
             __M_writer(u'\n        </span> \n        -->\n      </p>\n      <p>\n          ')
-            # SOURCE LINE 470
+            # SOURCE LINE 449
 
             disabled = True
             input = unsafe(capture(text_input_all, c.user.pref_chat_client_user,
@@ -597,21 +585,21 @@ def render_body(context,**pageargs):
             
             __M_locals_builtin_stored = __M_locals_builtin()
             __M_locals.update(__M_dict_builtin([(__M_key, __M_locals_builtin_stored[__M_key]) for __M_key in ['disabled','input'] if __M_key in __M_locals_builtin_stored]))
-            # SOURCE LINE 474
+            # SOURCE LINE 453
             __M_writer(u'\n        ')
-            # SOURCE LINE 475
+            # SOURCE LINE 454
             s = c.user.pref_chat_client_user 
             
             __M_locals_builtin_stored = __M_locals_builtin()
             __M_locals.update(__M_dict_builtin([(__M_key, __M_locals_builtin_stored[__M_key]) for __M_key in ['s'] if __M_key in __M_locals_builtin_stored]))
             __M_writer(u'\n        ')
-            # SOURCE LINE 476
+            # SOURCE LINE 455
             __M_writer(conditional_websafe(_wsf("chat client username %(val)s", val=input)))
             __M_writer(u'\n        <!-- &#32; <span class="details">')
-            # SOURCE LINE 477
+            # SOURCE LINE 456
             __M_writer(conditional_websafe(_("(clear field and save to generate new credentials)")))
             __M_writer(u'</span> -->\n      </p>\n      <p>\n          ')
-            # SOURCE LINE 480
+            # SOURCE LINE 459
 
             disabled = True
             input = unsafe(capture(text_input_all, c.user.pref_chat_client_password,
@@ -620,132 +608,132 @@ def render_body(context,**pageargs):
             
             __M_locals_builtin_stored = __M_locals_builtin()
             __M_locals.update(__M_dict_builtin([(__M_key, __M_locals_builtin_stored[__M_key]) for __M_key in ['disabled','input'] if __M_key in __M_locals_builtin_stored]))
-            # SOURCE LINE 484
+            # SOURCE LINE 463
             __M_writer(u'\n        ')
-            # SOURCE LINE 485
+            # SOURCE LINE 464
             s = c.user.pref_chat_client_password 
             
             __M_locals_builtin_stored = __M_locals_builtin()
             __M_locals.update(__M_dict_builtin([(__M_key, __M_locals_builtin_stored[__M_key]) for __M_key in ['s'] if __M_key in __M_locals_builtin_stored]))
             __M_writer(u'\n        ')
-            # SOURCE LINE 486
+            # SOURCE LINE 465
             __M_writer(conditional_websafe(_wsf("chat client password %(val)s", val=input)))
             __M_writer(u'\n      </p>\n\n      <br>\n      <p>')
-            # SOURCE LINE 490
+            # SOURCE LINE 469
             __M_writer(conditional_websafe(_("creating chat widgets")))
             __M_writer(u'</p>\n      ')
-            # SOURCE LINE 491
+            # SOURCE LINE 470
             chat_enabler = g.live_config['chat_enabling_post_content'] 
             
             __M_locals_builtin_stored = __M_locals_builtin()
             __M_locals.update(__M_dict_builtin([(__M_key, __M_locals_builtin_stored[__M_key]) for __M_key in ['chat_enabler'] if __M_key in __M_locals_builtin_stored]))
             __M_writer(u'\n      <p>&#8226; ')
-            # SOURCE LINE 492
+            # SOURCE LINE 471
             __M_writer(conditional_websafe(_("post chat:")))
             __M_writer(u' submit a text post with any title and set the optional text to "')
             __M_writer(conditional_websafe(chat_enabler))
             __M_writer(u'". the title of the post will be the chat channel/topic &#32;<span class="details">(if ')
             __M_writer(conditional_websafe(_(g.live_config['name_community'])))
             __M_writer(u' allows)</span></p>\n      <p>&#8226; ')
-            # SOURCE LINE 493
+            # SOURCE LINE 472
             __M_writer(conditional_websafe(_("comment chat:")))
             __M_writer(u' comment "')
             __M_writer(conditional_websafe(chat_enabler))
             __M_writer(u'" followed by your desired chat channel/topic &#32;<span class="details">(if ')
             __M_writer(conditional_websafe(_(g.live_config['name_community'])))
             __M_writer(u' allows)</span></p>\n      \n      <br>\n      <p>')
-            # SOURCE LINE 496
+            # SOURCE LINE 475
             __M_writer(conditional_websafe(_("bring your own IRC client")))
             __M_writer(u'</p>\n      <p>&#8226; connect to: coming soon\n')
-            # SOURCE LINE 499
+            # SOURCE LINE 478
             __M_writer(u'      </p>\n\n      <br>\n      <p>')
-            # SOURCE LINE 502
+            # SOURCE LINE 481
             __M_writer(conditional_websafe(_("troubleshooting")))
             __M_writer(u'</p>\n      <p>&#8226; disconnect from unused IRC channels to improve performance</p>\n      <p>&#8226; "not connected": type and send IRC command "/connect" a few times until you re-connect to the IRC server</p>\n      <p>&#8226; "authentication failed": refresh the page. ensure other browser tabs with chat are closed. try clearing your cache and cookies and login to this site again. if you still get this error, set a new IRC nickname above and click "save options".</p>\n    </td>\n  </tr>\n')
-        # SOURCE LINE 509
+        # SOURCE LINE 488
         __M_writer(u'\n')
-        # SOURCE LINE 510
+        # SOURCE LINE 489
         if c.user.gold:
-            # SOURCE LINE 511
+            # SOURCE LINE 490
             __M_writer(u'  <tr class="gold-accent">\n    <th>')
-            # SOURCE LINE 512
+            # SOURCE LINE 491
             __M_writer(conditional_websafe(_("gold options")))
             __M_writer(u'</th>\n    <td class="prefright">\n        ')
-            # SOURCE LINE 514
+            # SOURCE LINE 493
             __M_writer(conditional_websafe(checkbox(_("hide ads"), "hide_ads")))
             __M_writer(u'\n        <br>\n        ')
-            # SOURCE LINE 516
+            # SOURCE LINE 495
             __M_writer(conditional_websafe(checkbox(_("remember what links I've visited"), "store_visits")))
             __M_writer(u'\n        &#32;<span class="details">(')
-            # SOURCE LINE 517
+            # SOURCE LINE 496
             __M_writer(conditional_websafe(_("we'll remember and mark what links you've already read, even between computers")))
             __M_writer(u')</span>\n        <br>\n        ')
-            # SOURCE LINE 519
+            # SOURCE LINE 498
             __M_writer(conditional_websafe(checkbox(_("highlight new comments"), "highlight_new_comments")))
             __M_writer(u'\n        &#32;<span class="details">\n          (')
-            # SOURCE LINE 521
+            # SOURCE LINE 500
             __M_writer(conditional_websafe(_("we'll remember your visits for 48 hours and show you which comments you haven't seen yet")))
             __M_writer(u')\n        </span>\n        <br>\n        ')
-            # SOURCE LINE 524
+            # SOURCE LINE 503
             __M_writer(conditional_websafe(checkbox(_("show gold expiration"), "show_gold_expiration")))
             __M_writer(u'\n        &#32;<span class="details">\n          (')
-            # SOURCE LINE 526
+            # SOURCE LINE 505
             __M_writer(conditional_websafe(_("show how much gold you have remaining on your userpage")))
             __M_writer(u')\n        </span>\n        <br>\n        ')
-            # SOURCE LINE 529
+            # SOURCE LINE 508
             creddit_link = unsafe('&#32;<a href="/creddits">creddit</a>&#32;') 
             
             __M_locals_builtin_stored = __M_locals_builtin()
             __M_locals.update(__M_dict_builtin([(__M_key, __M_locals_builtin_stored[__M_key]) for __M_key in ['creddit_link'] if __M_key in __M_locals_builtin_stored]))
             __M_writer(u'\n        ')
-            # SOURCE LINE 530
+            # SOURCE LINE 509
             __M_writer(conditional_websafe(checkbox(_wsf("use a %(creddit_link)s to automatically renew my gold if it expires", creddit_link=creddit_link), "creddit_autorenew")))
             __M_writer(u'\n    </td>\n  </tr>\n')
-            # SOURCE LINE 533
+            # SOURCE LINE 512
         elif c.user.is_moderator_somewhere:
-            # SOURCE LINE 534
+            # SOURCE LINE 513
             __M_writer(u'  <tr class="gold-accent">\n    <th>')
-            # SOURCE LINE 535
+            # SOURCE LINE 514
             __M_writer(conditional_websafe(_("gold options")))
             __M_writer(u'</th>\n    <td class="prefright">\n      ')
-            # SOURCE LINE 537
+            # SOURCE LINE 516
             __M_writer(conditional_websafe(checkbox(_("highlight new comments"), "highlight_new_comments")))
             __M_writer(u'\n      ')
-            # SOURCE LINE 538
+            # SOURCE LINE 517
             gold_link = unsafe('&#32;<a href="/gold/about">' + _("reddit gold") + '</a>') 
             
             __M_locals_builtin_stored = __M_locals_builtin()
             __M_locals.update(__M_dict_builtin([(__M_key, __M_locals_builtin_stored[__M_key]) for __M_key in ['gold_link'] if __M_key in __M_locals_builtin_stored]))
             __M_writer(u'\n      &#32;<span class="details">\n        (')
-            # SOURCE LINE 540
+            # SOURCE LINE 519
             __M_writer(conditional_websafe(_wsf("since you don't have %(gold_link)s, this will only apply in subreddits you moderate", gold_link=gold_link)))
             __M_writer(u')\n      </span>\n    </td>\n  </tr>\n')
-        # SOURCE LINE 545
+        # SOURCE LINE 524
         __M_writer(u'\n\n\n')
-        # SOURCE LINE 548
+        # SOURCE LINE 527
         if feature.is_enabled('stylesheets_everywhere'):
-            # SOURCE LINE 549
+            # SOURCE LINE 528
             __M_writer(u'    <tr class="gold-accent">\n      <th>')
-            # SOURCE LINE 550
+            # SOURCE LINE 529
             __M_writer(conditional_websafe(_("reddit themes")))
             __M_writer(u'</th>\n      <td class="prefright">\n        <div class="reddit-themes-description">\n          <span>\n            ')
-            # SOURCE LINE 554
+            # SOURCE LINE 533
             __M_writer(conditional_websafe(_("reddit themes change the appearance of reddit.  They are used anywhere another custom theme is not present.")))
             __M_writer(u'\n          </span>\n          <br />\n          <span class="details">\n            (')
-            # SOURCE LINE 558
+            # SOURCE LINE 537
             __M_writer(conditional_websafe(_("Note: For security reasons this page will not be changed by themes")))
             __M_writer(u')\n          </span>\n        </div>\n\n        ')
-            # SOURCE LINE 562
+            # SOURCE LINE 541
             __M_writer(conditional_websafe(checkbox(_("use reddit theme"), "enable_default_themes")))
             __M_writer(u'\n        &#32;<span class="details">(')
-            # SOURCE LINE 563
+            # SOURCE LINE 542
             __M_writer(conditional_websafe(_("hover to preview")))
             __M_writer(u')</span>\n\n        <div class="container reddit-themes">\n')
-            # SOURCE LINE 566
+            # SOURCE LINE 545
             if thing.themes:
-                # SOURCE LINE 567
+                # SOURCE LINE 546
                 for theme in thing.themes:
-                    # SOURCE LINE 568
+                    # SOURCE LINE 547
                     __M_writer(u'              ')
                     __M_writer(conditional_websafe(theme_item(
                 thumbnail_url=theme.thumbnail_url,
@@ -754,33 +742,33 @@ def render_body(context,**pageargs):
                 tagline=theme.tagline,
                 checked=theme.checked,
               )))
-                    # SOURCE LINE 574
+                    # SOURCE LINE 553
                     __M_writer(u'\n')
-            # SOURCE LINE 577
+            # SOURCE LINE 556
             __M_writer(u'\n          <div class="theme select-custom-theme">\n            <label><input type="radio" name="theme_selector" id="other_theme_selector" value="" ')
-            # SOURCE LINE 579
+            # SOURCE LINE 558
             __M_writer(conditional_websafe("checked" if thing.use_other_theme else ""))
             __M_writer(u'>use theme from /r/</label>\n              <input type="text" class="text" size="21" maxlength="21" name="other_theme" placeholder="subreddit" ')
-            # SOURCE LINE 580
+            # SOURCE LINE 559
             __M_writer(conditional_websafe("value=" + c.user.pref_default_theme_sr if thing.use_other_theme and c.user.pref_default_theme_sr else ""))
             __M_writer(u'>\n              <span class="details">\n                  (')
-            # SOURCE LINE 582
+            # SOURCE LINE 561
             __M_writer(conditional_websafe(_("warning: use non-featured themes at your own risk")))
             __M_writer(u')\n              </span>\n          </div>\n        </div>\n      </div>\n')
-            # SOURCE LINE 587
+            # SOURCE LINE 566
             if thing.error_style_override:
-                # SOURCE LINE 588
+                # SOURCE LINE 567
                 __M_writer(u'        <p class="error">')
                 __M_writer(conditional_websafe(_(error_list[thing.error_style_override])))
                 __M_writer(u'</p>\n')
-            # SOURCE LINE 590
+            # SOURCE LINE 569
             __M_writer(u'      </td>\n    </tr>\n')
-        # SOURCE LINE 593
+        # SOURCE LINE 572
         __M_writer(u'\n  <tr>\n    <td>\n      <input type="submit" class="btn" value="')
-        # SOURCE LINE 596
+        # SOURCE LINE 575
         __M_writer(conditional_websafe(_('save options')))
         __M_writer(u'"/>\n    </td>\n  </tr>\n</table>\n\n</form>\n\n ')
-        # SOURCE LINE 616
+        # SOURCE LINE 595
         __M_writer(u'\n\n')
         return ''
     finally:
@@ -791,7 +779,7 @@ def render_checkbox(context,text,name,disabled=False,disabled_text='',prefix='pr
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fa55a395f90')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
         getattr = _import_ns.get('getattr', context.get('getattr', UNDEFINED))
         __M_writer = context.writer()
         # SOURCE LINE 37
@@ -834,29 +822,29 @@ def render_chat_sidebar_size_options(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fa55a395f90')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
         __M_writer = context.writer()
-        # SOURCE LINE 427
+        # SOURCE LINE 406
         __M_writer(u'\n    ')
-        # SOURCE LINE 428
+        # SOURCE LINE 407
         menu = ChatSidebarSizeMenu() 
         
         __M_writer(u'\n    <select name="chat_sidebar_size">\n')
-        # SOURCE LINE 430
+        # SOURCE LINE 409
         for sort in menu._options:
-            # SOURCE LINE 431
+            # SOURCE LINE 410
             __M_writer(u'          <option ')
             __M_writer(conditional_websafe('selected="selected"' if sort == c.user.pref_chat_sidebar_size else ""))
             __M_writer(u'\n                  value="')
-            # SOURCE LINE 432
+            # SOURCE LINE 411
             __M_writer(conditional_websafe(sort))
             __M_writer(u'">\n            ')
-            # SOURCE LINE 433
+            # SOURCE LINE 412
             __M_writer(conditional_websafe(menu.make_title(sort)))
             __M_writer(u'&#32;')
             __M_writer(conditional_websafe(_('(recommended)') if sort == menu._default else ''))
             __M_writer(u'\n          </option>\n')
-        # SOURCE LINE 436
+        # SOURCE LINE 415
         __M_writer(u'    </select>\n  ')
         return ''
     finally:
@@ -867,7 +855,7 @@ def render_comment_sort_options(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fa55a395f90')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 64
         __M_writer(u'\n  ')
@@ -896,44 +884,11 @@ def render_comment_sort_options(context):
         context.caller_stack._pop_frame()
 
 
-def render_unsubscribe_actions_options(context):
-    __M_caller = context.caller_stack._push_frame()
-    try:
-        _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
-        __M_writer = context.writer()
-        # SOURCE LINE 406
-        __M_writer(u'\n    ')
-        # SOURCE LINE 407
-        menu = SubscriptionsSubscribeMenu() 
-        
-        __M_writer(u'\n    <select id="subscription-unsubsribe" name="subscriptions_unsubscribe" onchange="if ($(this).val() != \'subs_do_nothing\') { if (!confirm(\'really unsubscribe from all subs?\')){$(this).val(\'subs_do_nothing\')}}">\n')
-        # SOURCE LINE 409
-        for sort in menu._options:
-            # SOURCE LINE 410
-            __M_writer(u'          <option ')
-            __M_writer(conditional_websafe('selected="selected"' if sort == c.user.pref_subscriptions_unsubscribe else ""))
-            __M_writer(u'\n                  value="')
-            # SOURCE LINE 411
-            __M_writer(conditional_websafe(sort))
-            __M_writer(u'">\n            ')
-            # SOURCE LINE 412
-            __M_writer(conditional_websafe(menu.make_title(sort)))
-            __M_writer(u'&#32;')
-            __M_writer(conditional_websafe(_('(recommended)') if sort == menu._default else ''))
-            __M_writer(u'\n          </option>\n')
-        # SOURCE LINE 415
-        __M_writer(u'    </select>\n  ')
-        return ''
-    finally:
-        context.caller_stack._pop_frame()
-
-
 def render_media_radio(context,val,label):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fa55a395f90')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 78
         __M_writer(u'\n  <input id="media_')
@@ -960,7 +915,7 @@ def render_media_preview_radio(context,val,label):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fa55a395f90')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 86
         __M_writer(u'\n  <input id="media_preview_')
@@ -987,7 +942,7 @@ def render_link_options(context):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fa55a395f90')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 54
         __M_writer(u'\n  <select name="numsites">\n')
@@ -1011,7 +966,7 @@ def render_text_input(context,s,name):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fa55a395f90')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 99
         __M_writer(u'\n  <input type="text" class="text" size="20" maxlength="20"\n         name="')
@@ -1029,7 +984,7 @@ def render_num_input(context,s,name):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fa55a395f90')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 94
         __M_writer(u'\n  <input type="text" class="number" size="4" maxlength="4"\n         name="')
@@ -1047,7 +1002,7 @@ def render_text_input_all(context,s,name,size,disabled):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fa55a395f90')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
         __M_writer = context.writer()
         # SOURCE LINE 105
         __M_writer(u'\n  <input type="text" class="text" size="')
@@ -1074,28 +1029,28 @@ def render_theme_item(context,thumbnail_url,preview_url,id,tagline,checked):
     __M_caller = context.caller_stack._push_frame()
     try:
         _import_ns = {}
-        _mako_get_namespace(context, '__anon_0x7fc7c746d710')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
+        _mako_get_namespace(context, '__anon_0x7fa55a395f90')._populate(_import_ns, [u'md', u'error_field', u'language_tool', u'plain_link'])
         md = _import_ns.get('md', context.get('md', UNDEFINED))
         __M_writer = context.writer()
-        # SOURCE LINE 603
+        # SOURCE LINE 582
         __M_writer(u'\n  <div class="theme ')
-        # SOURCE LINE 604
+        # SOURCE LINE 583
         __M_writer(conditional_websafe('selected' if checked else ''))
         __M_writer(u'" id="')
         __M_writer(conditional_websafe(id))
         __M_writer(u'">\n    <div class="theme-container">\n      <div class="theme-thumbnail">\n        <img src="')
-        # SOURCE LINE 607
+        # SOURCE LINE 586
         __M_writer(conditional_websafe(make_url_protocol_relative(thumbnail_url)))
         __M_writer(u'"/>\n        <div class="theme-preview">\n          <img src="')
-        # SOURCE LINE 609
+        # SOURCE LINE 588
         __M_writer(conditional_websafe(make_url_protocol_relative(preview_url)))
         __M_writer(u'"/>\n        </div>\n      </div>\n      <label><input type="radio" name="theme_selector" value="')
-        # SOURCE LINE 612
+        # SOURCE LINE 591
         __M_writer(conditional_websafe(id))
         __M_writer(u'" ')
         __M_writer(conditional_websafe("checked" if checked else ""))
         __M_writer(u'>\n        ')
-        # SOURCE LINE 613
+        # SOURCE LINE 592
         __M_writer(conditional_websafe(md(tagline)))
         __M_writer(u'</label>\n    </div>\n  </div>\n')
         return ''

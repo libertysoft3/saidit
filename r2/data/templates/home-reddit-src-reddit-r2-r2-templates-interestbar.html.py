@@ -4,7 +4,7 @@ UNDEFINED = runtime.UNDEFINED
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 9
-_modified_time = 1520061016.894637
+_modified_time = 1505002596.390495
 _enable_loop = True
 _template_filename = '/home/reddit/src/reddit/r2/r2/templates/interestbar.html'
 _template_uri = '/interestbar.html'
@@ -28,7 +28,7 @@ def render_body(context,**pageargs):
         # SOURCE LINE 25
 
         if thing.has_subscribed:
-            msg = _("ready for something new? %s subscribe %s to some new subreddits.")
+            msg = _("ready for something new? %s subscribe %s to some new subs.")
         else:
             msg = _("it looks like you haven't %s subscribed %s to any subreddits yet. want some ideas?")
         
