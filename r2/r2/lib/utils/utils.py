@@ -274,12 +274,12 @@ def get_title(url):
 
         with codec(opener, "ignore") as reader:
             # Attempt to find the title in the first 1kb
-            data = reader.read(1024)
+            data = reader.read(10024)
             title = extract_title(data)
 
             # Title not found in the first kb, try searching an additional 10kb
             if not title:
-                data += reader.read(10240)
+                data += reader.read(10000240)
                 title = extract_title(data)
 
         return title
