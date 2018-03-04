@@ -24,9 +24,9 @@
   <div class="bubble">
     <%
         if thing.has_subscribed:
-            msg = _("ready for something new? %s subscribe %s to some new subreddits.")
+            msg = _("ready for something new? %s subscribe %s to some new subs.")
         else:
-            msg = _("it looks like you haven't %s subscribed %s to any subreddits yet. want some ideas?")
+            msg = _("it looks like you haven't %s subscribed %s to any subs yet. want some ideas?")
 
         pre, sub, post = msg.split("%s")
     %>
@@ -43,3 +43,4 @@
     </ul>
   </div>
 </div>
+

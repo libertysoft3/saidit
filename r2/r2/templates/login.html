@@ -117,7 +117,8 @@
           <a href="/password" class="c-pull-right">${_('reset password')}</a>
         %endif
       </div>
-      %if register:
+      %if false:
+      ## %if register:
       <div class="c-checkbox">
         <input type="checkbox" name="newsletter_subscribe" id="newsletter_subscribe" tabindex="${tabindex}"
           data-validate-url="/api/check_email.json"
@@ -254,10 +255,13 @@
   </div>
   <p class="login-disclaimer">
     ${text_with_links(
-      _("By signing up, you agree to our %(terms)s and that you have read our %(privacy_policy)s and %(content_policy)s."),
-        terms=dict(link_text=_("Terms"), path="/help/useragreement/"),
-        privacy_policy=dict(link_text=_("Privacy Policy"), path="/help/privacypolicy/"),
-        content_policy=dict(link_text=_("Content Policy"), path="/help/contentpolicy/"),
+      _("By signing up, you agree to our %(policy)s."),
+        policy=dict(link_text=_("Terms and Content Policy"), path="/r/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/"),
+        ## _("By signing up, you agree to our %(terms)s and that you have read our %(privacy_policy)s and %(content_policy)s."), 
+        ## terms=dict(link_text=_("Terms"), path="/help/useragreement/"),
+        ## privacy_policy=dict(link_text=_("Privacy Policy"), path="/help/privacypolicy/"),
+        ## content_policy=dict(link_text=_("Content Policy"), path="/help/contentpolicy/"),
     )}
   </p>
 </%def>
+
