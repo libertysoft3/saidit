@@ -5,8 +5,8 @@
 .DS_Store
 
 # mako
-# r2/data/
-# *.html.py
+r2/data/
+*.html.py
 
 # build outputs
 *.so
