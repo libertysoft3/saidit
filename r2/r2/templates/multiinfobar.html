@@ -108,7 +108,7 @@
   </div>
 
   <% sr_count = format_html('<span class="count">%s</span>&#32;', len(thing.srs)) %>
-  <h3>${_wsf('%(count)s subreddits in this multi:', count=sr_count)}</h3>
+  <h3>${_wsf('%(count)s subs in this multi:', count=sr_count)}</h3>
   <ul class="subreddits">
   %for sr in thing.srs:
     <li data-name="${sr.name}">
@@ -153,12 +153,12 @@
       <ul>
         <li>
           <a href="/r/ModeratorDuck/wiki/subreddit_classification" target="_blank">
-            ${_("check out subreddits by category")}
+            ${_("check out subs by category")}
           </a>
         </li>
         <li>
           <a href="/r/random" target="_blank">
-            ${_("explore a random subreddit")}
+            ${_("explore a random sub")}
           </a>
         </li>
         <li>
@@ -171,3 +171,4 @@
 
   </div>
 </div>
+
