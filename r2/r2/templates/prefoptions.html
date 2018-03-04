@@ -400,7 +400,6 @@
     </td>
   </tr>
   %endif
-  %endif
 
   ## CUSTOM: subscriptions, mass unsubscribe
   <%def name="unsubscribe_actions_options()">
@@ -506,6 +505,9 @@
     </td>
   </tr>
   % endif
+
+  ## end if logged in
+  %endif
 
   %if c.user.gold:
   <tr class="gold-accent">
@@ -614,4 +616,5 @@
     </div>
   </div>
 </%def>
+
 
