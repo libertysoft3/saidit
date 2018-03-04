@@ -34,7 +34,7 @@
   if thing.default_sr:
     sr = format_html("&#32;%s", unsafe(_a_buffered(thing.default_sr.name, href=thing.default_sr.path)))
   else:
-    sr = _("reddit")
+    sr = _("SaidIt")
 %>
 
 <h1>${_wsf("submit to %(sr)s", sr=sr)}</h1>
@@ -130,10 +130,10 @@ ${thing.captcha}
 </div>
 
 <div class="roundfield info-notice">
-  ${text_with_links(_("please be mindful of reddit's %(content_policy)s and practice %(good_reddiquette)s."),
+  ${text_with_links(_("please be mindful of SaidIt's %(content_policy)s"),
       content_policy=dict(
         link_text=_("content policy"),
-        path="/help/contentpolicy",
+        path="/r/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/",
         target="_blank"),
       good_reddiquette=dict(
         link_text=_("good reddiquette"),
@@ -163,3 +163,4 @@ ${thing.captcha}
   });
 </script>
 %endif
+
