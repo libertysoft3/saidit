@@ -11517,7 +11517,12 @@ body:not(.loggedin) .report-button {
     }
 }
 
+
+
+
 /* SAIDIT CUSTOM */
+/* TODO: Non-spritesheet styles should be in theme-custom.less */
+
 .footer-banner {
 	position: absolute;
 	bottom: 0;
@@ -11526,3 +11531,44 @@ body:not(.loggedin) .report-button {
 	background-image: url(../footer-banner.png); /* SPRITE */
 }
 
+/* header: background image, centered large logo */
+#header {
+	background-color: #000000;
+	background-image: url(../header-banner-85.png); /* SPRITE */
+	min-height: 83px; /* can fine tune and hide top of banner */
+	border-color: #000000;
+}
+#header-img.default-header {
+	width: 205px;
+	display: block;
+	margin: 3px auto 3px auto; /* can fine tune vertical posittion */
+	padding: 0;
+}
+.pagename, .pagename a {
+	color: #ffffff;
+}
+
+
+/* header: transparent header */
+#sr-header-area, #sr-more-link {
+	background: none;
+}
+#sr-more-link, .sr-bar a, .dropdown.srdrop .selected {
+	color: #ffffff;
+}
+#sr-more-link {
+	background: #000000;
+	padding-left: 5px;
+}
+#header-bottom-right {
+	background: none;
+	a, .user, .separator {
+		color: #ffffff;
+	}
+	.user a:hover {
+		text-decoration: underline;
+	}
+}
+#sr-header-area {
+	border-bottom: none;
+}
