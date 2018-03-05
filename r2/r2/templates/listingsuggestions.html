@@ -25,20 +25,12 @@
 %if thing.suggestion_type:
 
 <span class="next-suggestions">
-%if thing.suggestion_type == 'explore':
-  ${_('or')}
-  <a href="/explore">${_('explore')}</a>
-%elif thing.suggestion_type == 'multis':
-  ${_('or try a multi:')}
-  %for multi in thing.suggestions:
-      <a href="${multi.path}">/m/${multi.name}</a>
-  %endfor
-%elif thing.suggestion_type == 'random':
+
   ${text_with_links(
     _('or try a %(random_subreddit)s'),
     random_subreddit=dict(link_text=_("random sub"), path="/r/random")
   )}
-%endif
+
 </span>
 
 %endif
