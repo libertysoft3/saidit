@@ -268,7 +268,7 @@ ul.flat-vert {text-align: left;}
 
 #header-img.default-header {
     text-indent: -9999px;
-    background-image: url(../reddit.com.header.png); /* SPRITE */
+    background-image: url(../reddit.com.header.png); /* NOT-SPRITE */
     height: 40px;
     width: 100%;
     display: inline-block;
@@ -11528,21 +11528,24 @@ body:not(.loggedin) .report-button {
 	bottom: 0;
 	width: 100%;
 	min-height: 15px;
-	background-image: url(../footer-banner.png); /* SPRITE */
+	background: transparent url(../footer-banner.jpg) repeat-x bottom left;
 }
 
 /* header: background image, centered large logo */
 #header {
 	background-color: #000000;
-	background-image: url(../header-banner-85.png); /* SPRITE */
+	background-image: url(../header-banner-85.jpg);
+	background-position: top left;
 	min-height: 83px; /* can fine tune and hide top of banner */
 	border-color: #000000;
 }
 #header-img.default-header {
-	width: 205px;
 	display: block;
-	margin: 3px auto 3px auto; /* can fine tune vertical posittion */
-	padding: 0;
+	margin: 3px 0 3px 0; /* can fine tune vertical posittion */
+ 	
+	/* NOTE: you can only set these styles because the logo has been removed from the sprite image */
+	background-position: 391px 0;
+	background-repeat: no-repeat;
 }
 .pagename, .pagename a {
 	color: #ffffff;
@@ -11557,7 +11560,7 @@ body:not(.loggedin) .report-button {
 	color: #ffffff;
 }
 #sr-more-link {
-	background: #000000;
+	background-color: rgba(0,0,0,0.5);
 	padding-left: 5px;
 }
 #header-bottom-right {
@@ -11572,3 +11575,4 @@ body:not(.loggedin) .report-button {
 #sr-header-area {
 	border-bottom: none;
 }
+
