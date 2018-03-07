@@ -84,12 +84,14 @@ q:before,q:after { content:''; }
 body {
     font: normal x-small verdana, arial, helvetica, sans-serif;
     position: relative;
-    background-color: #FDFEFE;
+    background-color: #2f2f2f;
     z-index: 1;
     min-height: 100%;
 }
 
-textarea { font:  normal small verdana, arial, helvetica, sans-serif; }
+textarea { font:  normal small verdana, arial, helvetica, sans-serif; 
+	color: white;
+	background-color: #505050}
 
 /* [1] fixes a bug in old versions of WebKit, as used in Android 4.0. See
  * https://github.com/necolas/normalize.css/commit/79b3d21b697e ,
@@ -121,14 +123,14 @@ input[type=hidden] { position: absolute; }
 
 h1 { font-size: 18px; font-weight: normal; margin: 10px 0 }
 
-h2 { color: #369; font-size: 13px; }
+h2 { color: #5a90c5; font-size: 13px; }
 h2 a { text-decoration: none }
-h2 a:visited { color: #369 }
+h2 a:visited { color: #5a90c5 }
 h2 a:hover { text-decoration: underline }
 h3 { font-size:110%; /*text-transform:uppercase;*/ }
 
 a img { border: 0 none; }
-a { text-decoration: none; color: #369; }
+a { text-decoration: none; color: #5a90c5; }
 
 /* Polyfill for HTML5 hidden attribute: http://caniuse.com/#feat=hidden */
 [hidden] { display: none; }
@@ -242,7 +244,7 @@ ul.flat-vert {text-align: left;}
 
 .flat-vert.title {
     font-family:arial,verdana,helvetica,sans-serif;
-    color: #777;
+    color: #BBB;
     font-size: 18px;
     font-weight: normal;
     margin-bottom: 5px;
@@ -468,14 +470,14 @@ ul.flat-vert {text-align: left;}
 
 .tabmenu li a {
     padding: 2px 6px 0 6px;
-    background-color: #eff7ff;
+    background-color: #2f2f2f;
  }
 
 .tabmenu li.selected a{
     color: orangered;
-    background-color: white;
-    border: 1px solid #5f99cf;
-    border-bottom: 1px solid white;
+    background-color: #2f2f2f;
+    border: 1px solid #000;
+    border-bottom: 1px solid #2f2f2f;
     z-index: 100;
 }
 
@@ -484,6 +486,7 @@ ul.flat-vert {text-align: left;}
 .content {
     z-index: 1;
     margin: 7px 5px 0px 5px;
+	color: wheat;
 }
 
 .content .spacer { margin-bottom: 5px }
@@ -494,7 +497,7 @@ ul.flat-vert {text-align: left;}
 
 .side {
     float: right; 
-    background-color: white; 
+    background-color: #2f2f2f; 
     margin: 0px 5px 0 5px;
     width: 300px;
 }
@@ -592,7 +595,7 @@ ul.flat-vert {text-align: left;}
     right: -1px;
     height: 31px;
     width: 24px;
-    background: white none no-repeat scroll center left;
+    background: #2f2f2f none no-repeat scroll center left;
     background-image: url(../gradient-nub.png);  /* SPRITE */
 }
 
@@ -630,7 +633,7 @@ ul.flat-vert {text-align: left;}
     margin-top: 10px;
     padding: 5px 0 0 44px;
     min-height: 41px;
-    background: white none no-repeat scroll top left;
+    background: #2f2f2f none no-repeat scroll top left;
 }
 
 .sidebox .spacer.no-icon {
@@ -699,7 +702,7 @@ ul.flat-vert {text-align: left;}
 
 .sidebox .subtitle {
     margin-left: 10px;
-    color: dimgray;
+    color: #555;
     font-size: 110%;
 }
 
@@ -843,9 +846,9 @@ body > .content .link.compressed .midcol {
 }
 
 .tagline { color:#888; font-size:x-small; }
-.tagline a {color: #369; text-decoration: none; }
+.tagline a {color: #78bbec; text-decoration: none; }
 .tagline .friend    { color: orangered }
-.tagline .submitter { color: #0055df }
+.tagline .submitter { color: #4a8fff }
 .tagline .moderator, .green { color: @moderator-color }
 .tagline .admin { color: @admin-color; }
 .tagline .alum { color: #BE1337; }
@@ -1059,14 +1062,14 @@ a.banned-user { color: red; }
 .embededmedia { margin-top: 5px; margin-left: 60px; }
 
 .thing .title {
-    color: blue;
+    color: #78bbec;
     outline: none;
     margin-right: .4em;
     padding: 0px;
     overflow: hidden;
 }
 
-.thing .title:visited, .thing.visited .title { color: #551a8b }
+.thing .title:visited, .thing.visited .title { color: #8268e4 }
 
 .thing.stickied.link a.title {
   font-weight: bold;
@@ -1269,8 +1272,8 @@ body.with-listing-chooser.explore-page #header .pagename {
 
     a {
         padding: 1px 4px;
-        background: #eee;
-        border: 1px solid #ddd;
+        background: #f3f3f3;
+        border: 1px solid #807f7f;
         border-radius: 3px;
         font-weight: bold;
     }
@@ -1654,7 +1657,7 @@ body.with-listing-chooser.explore-page #header .pagename {
     overflow: hidden;
     position: relative;
 }
-.link.promotedlink.unpaid   { background-color: #FFC; }
+.link.promotedlink.unpaid   { background-color: #3a5869; }
 .link.promotedlink.unseen   { background-color: #FFC; }
 .link.promotedlink.accepted { background-color: #9F9; }
 .link.promotedlink.rejected { background-color: #FF9A9A; }
@@ -1745,6 +1748,7 @@ body.with-listing-chooser.explore-page #header .pagename {
     margin: 5px;
     overflow: hidden; 
     font-size: larger;
+    color: white;
 }
 
 .menuarea .spacer {display: inline; margin-right: 15px}
@@ -1759,6 +1763,7 @@ body.with-listing-chooser.explore-page #header .pagename {
     font-size: 16px;
     font-weight: normal;
     margin: 10px 0;
+	color: #ccc;
 }
 
 .panestack-title a.title-button {
@@ -2167,7 +2172,10 @@ a.star { text-decoration: none; color: #ff8b60 }
 
 /* comments */
 
-.comment, .content .details { margin-left: 10px; }
+.comment, .content .details { 
+	margin-left: 10px;
+	color: #888;
+ }
 
 .comment.noncollapsed {
     .numchildren {
@@ -2370,8 +2378,7 @@ textarea.gray { color: gray; }
     .md,
     blockquote,
     del {
-      color: inherit;
-    }
+          }
 }
 
 .message.recipient > .entry {
@@ -2380,7 +2387,7 @@ textarea.gray { color: gray; }
 
 .message.message-reply.recipient > .entry .head,
 .message.message-parent.recipient > .entry .head { 
-    color: black; 
+    color: #888; 
     font-weight: bold;
 }
 
@@ -2398,8 +2405,8 @@ textarea.gray { color: gray; }
   color:orangered; font-weight: bold;  
 }
 .message.new > .entry{ 
-    background-color:#F7F7F7;
-    border:1px solid #E9E9E9;
+    background-color:#4c4c4c;
+    border:1px solid #4e4e4e;
     padding: 6px;
 }
 
@@ -2410,14 +2417,14 @@ textarea.gray { color: gray; }
 
 .message.threaded .child {
     margin-left: 20px;
-    border-left: 2px dashed #E7E7E7;
+    border-left: 2px dashed #444444;
 }
 
 // message-reply and message-parent classes are only present in tree view
 .message.message-reply, .message.message-parent {
     &:not(.threaded) .entry {
         margin-left: 10px;
-        border-left: 2px dashed #E7E7E7;
+        border-left: 2px dashed #444444;
     }
 }
 
@@ -2521,7 +2528,7 @@ textarea.gray { color: gray; }
  }
 
 
-.message .subject { font-weight: bold; font-size: larger; }
+.message .subject { font-weight: bold; font-size: larger; color: white;}
 
 .message.gold {
     font-family: "Bitstream Charter", "Hoefler Text", "Palatino Linotype",
@@ -2683,7 +2690,7 @@ textarea.gray { color: gray; }
 
 
 
-.commentbody.border { background-color: #ffc; padding-left: 5px}
+.commentbody.border { background-color: #3a5869; padding-left: 5px}
 .commentbody.grayed {
     color: gray;
     background-color: #E0E0E0;
@@ -2733,7 +2740,7 @@ textarea.gray { color: gray; }
     color: gray;
     padding: 5px;
     margin: 15px auto;
-    border:1px solid #F0F0F0;
+    border:1px solid #807f7f;
     display: flex;
     display: -webkit-flex;
     max-width: 600px;
@@ -2746,7 +2753,7 @@ textarea.gray { color: gray; }
     flex: 0 0 25%;
     margin: 10px 0;
     padding: 0 15px;
-    border-left: 1px solid #E0E0E0;
+    border-left: 1px solid #807f7f;
     box-sizing: border-box;
  }
 
@@ -2813,6 +2820,7 @@ textarea.gray { color: gray; }
 
 .login-form-side #remember-me * {
     vertical-align:middle;
+	color: #ccc;
 }
 
 /*the checkbox*/
@@ -3167,12 +3175,14 @@ label + #moresearchinfo {
     border: 1px solid gray;
     font-size: 13px;
     font-family: verdana; /* Override Chrome's defaults. */
+	color: white;
     width: 300px;
     .box-sizing(border-box);
     padding: 6px;
     padding-right: 25px; /* 13px image + 6px right margin + 6px left margin */
     padding-left: 9px;
     vertical-align: middle;
+	background-color: #101010;
 }
 
 #search input[type=submit] {
@@ -4024,7 +4034,7 @@ button.button[disabled] {
 .blog5 .right { margin-right: 5px; font-size: medium; font-style: italic;  }
 
 .optional {color: green}
-.instructions { font-size: larger;  }
+.instructions { font-size: larger; color: wheat; }
 .instructions h1, .instructions h2, .instructions h3 { margin-top: 20px; margin-bottom: 20px;  }
 .instructions p { margin: 10px; max-width: 60em}
 .instructions pre { margin: 5px;  margin-right: 10px; }
@@ -4126,7 +4136,7 @@ body.contact-us-page {
 }
 
 .contact-us-page .details li {
-    background-color: #fafafa;
+    background-color: #464646;
     font-size: small;
     border: 1px solid #ccc;
     margin: 0px 40px 10px 40px;
@@ -4438,7 +4448,7 @@ form input[type=radio] {margin: 2px .5em 0 0; }
 
 .over18 button { margin: 0 10px 0 10px; padding: 5px}
 
-@color-stamp-text-dark: @color-semi-black;
+@color-stamp-text-dark: #c5c5c5;
 @color-stamp-text-light: @color-white;
 @color-nsfw-stamp: darken(@color-warning-red, 5%);
 @color-quarantine: @color-yellow;
@@ -4993,6 +5003,7 @@ ul#image-preview-list .description pre {
 
 .formtabs-content .infobar {
     margin: 0;
+	color: black;
     padding: 5px;
  }
 
@@ -5168,7 +5179,7 @@ ul.tabmenu.formtab {
     height: 23px;
     width: 23px;
     margin: 2px 5px 2px 0;
-    background: white none no-repeat scroll center center;
+    background: #2f2f2f none no-repeat scroll center center;
 }
 
 .expando-button.selftext.collapsed {
@@ -5221,14 +5232,14 @@ ul.tabmenu.formtab {
 /******** self text stuff ****/
 .subreddit .usertext .md {
     padding: 2px 5px;
-    background-color: #fafafa;
+    background-color: ##464646;
     border: 1px solid #CCC;
     border-radius: 7px;
 }
 
 .link .usertext-body .md {
-    background-color: #fafafa;
-    border: 1px solid #369;
+    background-color: #464646;
+    border: 1px solid #808080;
     border-radius: 7px;
 }
 
@@ -5250,7 +5261,7 @@ ul.tabmenu.formtab {
 
 /*permalinks*/
 .usertext.border .usertext-body {
-    background-color: #ffc; padding-left: 5px;
+    background-color: #3a5869; padding-left: 5px;
 }
 
 .usertext.grayed .usertext-body {
@@ -5299,7 +5310,7 @@ ul.tabmenu.formtab {
 /*** roundfield stuff *******/
 .roundfield {
     width: 500px;
-    background-color: #fffefe;
+    background-color: #050505;
     border-radius: 4px;
     padding: 5px 10px 10px 10px;
     font-size: large;
@@ -6184,8 +6195,7 @@ table.lined-table {
 }
 
 .trophy-area .content {
-    background-color: #f5f5f5;
-}
+   }
 
 .trophy-info {
     text-align: center;
@@ -7382,6 +7392,7 @@ dd { margin-left: 20px;  }
 /* title box */
 .titlebox {
     font-size: larger;
+	color: white;
 }
 
 .titlebox h1 {
@@ -7390,15 +7401,17 @@ dd { margin-left: 20px;  }
     margin-bottom: 5px;
     font-weight: bold;
     font-size: 19px;
+	color: white;
 }
 
 .titlebox h1 a {
-    color: black;
+    color: #888;
 }
 
 .titlebox .karma {
     font-size: 18px;
     font-weight: bold;
+	color: white;
 }
 
 .titlebox .fancy-toggle-button {
@@ -7848,7 +7861,7 @@ dd { margin-left: 20px;  }
     padding: 5px 0px;
     font-size: smaller;
     color: gray;
-    background: white none no-repeat scroll center left;
+    background: #2f2f2f none no-repeat scroll center left;
 }
 
 .usertable .moderator.toggle .main:before,
@@ -7909,7 +7922,7 @@ dd { margin-left: 20px;  }
 }
 
 .icon-menu a {
-    background: white none no-repeat scroll center left;
+    background: #2f2f2f none no-repeat scroll center left;
 } 
 .icon-menu li {margin: 5px 0;}
 
@@ -8653,8 +8666,8 @@ form#banned textarea {
 }
 
 .new-comment .usertext-body {
-    background-color: #e5efff;
-    border: solid 1px #cddaf3;
+    background-color: #4c4c4c;
+    border: solid 1px #4e4e4e;
     margin: -1px 0;
     padding: 0 4px;
 }
@@ -10826,8 +10839,8 @@ body.with-listing-chooser {
   input[type=text], input[type=email], textarea {
     .box-sizing(border-box);
     border: 1px solid @light;
-    color: @dark;
-    background-color: #fff;
+    color: #e8e8e8;
+    background-color: #505050;
     font-family: @gold-fonts;
     font-style: italic;
     padding: 5px;
@@ -11055,9 +11068,9 @@ body.with-listing-chooser {
     }
 
     .tabmenu li.selected a {
-      background-color: #ffffff;
-      border-color: @gold;
-      border-bottom-color: #ffffff;
+      background-color: #2f2f2f;
+      border-color: #000;
+      border-bottom-color: #2f2f2f;
     }
 
     #sr-header-area {
@@ -11154,8 +11167,8 @@ body.with-listing-chooser {
 }
 
 .subreddit-report-form {
-    @bg-color: #FBFBFB;
-    @text-color: @color-semi-black;
+    @bg-color: #f2f2f2;
+    @text-color: #c5c5c5;
 
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     background-color: @bg-color;
@@ -11536,6 +11549,7 @@ body:not(.loggedin) .report-button {
 	background-color: #000000;
 	background-image: url(../header-banner-85.jpg);
 	background-position: top left;
+	background-repeat: no-repeat;
 	min-height: 83px; /* can fine tune and hide top of banner */
 	border-color: #000000;
 }
