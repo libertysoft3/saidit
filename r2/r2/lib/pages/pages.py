@@ -2295,11 +2295,11 @@ class SubredditsPage(Reddit):
                         *a, **kw)
         self.searchbar = SearchBar(
             prev_search = prev_search,
-            header=_('search subreddits by name'),
+            header=_('search subs by name'),
             search_params={},
             simple=True,
             subreddit_search=True,
-            search_path="/subreddits/search",
+            search_path="/subs/search",
         )
         self.sr_infobar = InfoBar(message = strings.sr_subscribe)
         self.interestbar = InterestBar(True) if show_interestbar else None

@@ -168,12 +168,12 @@ Below are the traffic statistics for your sub. Each graph represents one of the 
 Note: there are a couple of places outside of your sub where someone can click "subscribe", so it is possible (though unlikely) that the subscription count can exceed the unique count on a given day.
 """),
 
-    subscribed_multi = _("multiextreme of your subscriptions"),
-    mod_multi = _("multiextreme of subs you moderate"),
+    subscribed_multi = _("multisub of your subscriptions"),
+    mod_multi = _("multisub of subs you moderate"),
 
     r_all_description = _("/r/all displays content from all of SaidIt, including subs you aren't subscribed to. Some subs have chosen to exclude themselves from /r/all."),
-    r_all_minus_description = _("Displaying content from /r/all of reddit, except the following subs:"),
-    all_minus_gold_only = _('Filtering /r/all is a feature only available to [reddit gold](/gold/about) subscribers. Displaying unfiltered results from /r/all.'),
+    r_all_minus_description = _("Displaying content from /r/all of saidit, except the following subs:"),
+    all_minus_gold_only = _('Filtering /r/all is a feature only available to [gold](/gold/about) subscribers. Displaying unfiltered results from /r/all.'),
 )
 
 class StringHandler(object):

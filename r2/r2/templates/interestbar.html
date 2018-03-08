@@ -19,28 +19,3 @@
 ## All portions of the code written by reddit are Copyright (c) 2006-2015
 ## reddit Inc. All Rights Reserved.
 ###############################################################################
-
-<div class="sr-interest-bar">
-  <div class="bubble">
-    <%
-        if thing.has_subscribed:
-            msg = _("ready for something new? %s subscribe %s to some new subs.")
-        else:
-            msg = _("it looks like you haven't %s subscribed %s to any subs yet. want some ideas?")
-
-        pre, sub, post = msg.split("%s")
-    %>
-    <p class="caption">${pre}&#32;<span class="subscribe">${sub}</span>&#32;${post}</p>
-    <p class="error-caption"></p>
-    <div class="query-box"><input class="query" placeholder="${_('what are you interested in?')}"><div class="throbber"></div></div>
-    <ul class="results">
-      <li>${_('try these:')}</li>
-      <li>
-        <a href="/r/random" class="random" target="_blank">
-          <span class="name">${_("serendipity")}</span>
-        </a>
-      </li>
-    </ul>
-  </div>
-</div>
-
