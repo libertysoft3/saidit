@@ -32,7 +32,7 @@ var buttonEmbed = (function() {
     var url = baseUrl
 
     if (query.sr) {
-      url += '/r/' + encodeURIComponent(query.sr)
+      url += '/s/' + encodeURIComponent(query.sr)
     }
 
     url += '/submit?url=' + encodeURIComponent(query.url)

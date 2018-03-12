@@ -679,7 +679,7 @@ class Thing(DataThing):
 
     @property
     def _score(self):
-        return sorts.score(self._ups, self._downs)
+        return sorts.score(self._ups, self._ups)
 
     @property
     def _controversy(self):
@@ -692,6 +692,21 @@ class Thing(DataThing):
     @property
     def num_votes(self):
         return self._ups + self._downs
+
+    @property
+    def num_votes_up(self):
+        return self._ups
+
+    @property
+    def num_votes_down(self):
+        return self._downs
+
+    @property
+    def num_votes_down_limited(self):
+        if(self._downs > 0): 
+            return self._downs
+        else:
+            return ' -'
 
     @property
     def is_distinguished(self):

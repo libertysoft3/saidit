@@ -225,7 +225,7 @@ class Subreddit(Thing, Printable, BaseSite):
         allow_top=False, # overridden in "_new"
         reported=0,
         valid_votes=0,
-        show_media=False,
+        show_media=True,
         show_media_preview=True,
         domain=None,
         suggested_comment_sort=None,

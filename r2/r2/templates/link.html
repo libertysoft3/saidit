@@ -41,9 +41,6 @@
 <%namespace file="printablebuttons.html" import="toggle_button" />
  
 <%def name="numcol()">
-  <span class="rank">
-    ${thing.num_text}
-  </span>
 </%def>
 
 <%def name="make_link(name, css_class, tabindex=0)">
@@ -204,6 +201,14 @@
     <div class="midcol ${cls}"
        ${not display and "style='display:none'" or ''}>
     ${self.arrow(thing, 1, thing.likes)}
+    ${self.arrow(thing, 0, thing.likes == False)}
+    
+  </div>
+
+
+    <div class="midcol ${cls}"
+       ${not display and "style='display:none'" or ''}>
+    
     %if thing.pref_compress:
       <div class="score-placeholder"></div>
     %elif thing.hide_score:
@@ -211,9 +216,12 @@
       <div class="score unvoted">&bull;</div> 
       <div class="score dislikes">&bull;</div> 
     %else:
-      ${self.score(thing, tag='div')}
+      ## ${self.score(thing, tag='div')}
+      <div class="whatever2" style="margin-top: 3px">${thing.num_votes_up}</div>
+      <div class="whatever" style="margin-top: 2px" >${thing.num_votes_down_limited}</div>
+
     %endif
-    ${self.arrow(thing, 0, thing.likes == False)}
+    
   </div>
  ${self.thumbnail()}
 </%def>

@@ -360,7 +360,7 @@ def make_map(config):
 
     mc('/c/:comment_id', controller='front', action='comment_by_id')
 
-    mc('/s/*urloid', controller='toolbar', action='s')
+    mc('/submit/*urloid', controller='toolbar', action='s')
     # additional toolbar-related rules just above the catchall
 
     mc('/resetpassword/:key', controller='forms',

@@ -98,7 +98,7 @@ string_dict = dict(
 
     permalink_title = _("%(author)s comments on %(title)s"),
     link_info_title = _("%(title)s : %(site)s"),
-    link_info_og_description = _("%(score)s points and %(num_comments)s comments so far on reddit"),
+    link_info_og_description = _("%(score)s points and %(num_comments)s comments so far on saidit"),
 
     submit_link = _("""You are submitting a link. The key to a successful submission is interesting content and a descriptive title."""),
     submit_text = _("""You are submitting a text-based post. Speak your mind. A title is required, but expanding further in the text field is not. Beginning your title with "vote up if" is violation of intergalactic law."""),

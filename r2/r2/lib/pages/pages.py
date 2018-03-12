@@ -5826,7 +5826,7 @@ class SubredditSelector(Templated):
 
         if include_user_subscriptions:
             self.subreddits.append((
-                _('your subscribed subreddits'),
+                _('your subscribed subs'),
                 Subreddit.user_subreddits(c.user, ids=False)
             ))
 
