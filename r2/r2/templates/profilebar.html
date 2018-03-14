@@ -62,7 +62,7 @@
     <table id="per-sr-karma"${" class='more-karmas'" if not c.user_is_admin else ""}>
      <thead>
         <tr>
-          <th id="sr-karma-header">subreddit</th>
+          <th id="sr-karma-header">sub</th>
           <th>post</th>
           <th>comment</th>
         </tr>
@@ -76,7 +76,7 @@
        %endif
 
         % if sr_name == "ancient history":
-          <th class="helpful" title="${_('really obscure karma from before it was cool to track per-subreddit')}"><span>${_(sr_name)}</span></th>
+          <th class="helpful" title="${_('really obscure karma from before it was cool to track per-sub')}"><span>${_(sr_name)}</span></th>
         % else:
           <th>${sr_name}</th>
         % endif
@@ -91,7 +91,7 @@
     <div class="karma-breakdown">
       <a href="javascript:void(0)"
          onclick="$('.more-karmas').show();$(this).hide();return false">
-         show karma breakdown by subreddit
+         show karma breakdown by sub
       </a>
     </div>
     % endif
@@ -119,7 +119,7 @@
             ${thing.gold_remaining}
           </span>
           <br>
-          ${_("of reddit gold remaining")}
+          ${_("of gold remaining")}
           <br>
           <a href="/gold/about">${_("view gold features/benefits")}</a>
         </div>

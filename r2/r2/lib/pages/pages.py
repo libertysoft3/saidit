@@ -2564,15 +2564,15 @@ class ProfileBar(Templated):
 
             if not self.viewing_self:
                 self.goldlink = "/gold?goldtype=gift&recipient=" + user.name
-                self.giftmsg = _("give reddit gold to %(user)s to show "
+                self.giftmsg = _("give gold to %(user)s to show "
                                  "your appreciation") % {'user': user.name}
             elif not user.gold:
                 self.goldlink = "/gold/about"
-                self.giftmsg = _("get extra features and help support reddit "
-                                 "with a reddit gold subscription")
+                self.giftmsg = _("get extra features and help support"
+                                 " with a gold subscription")
             elif gold_days_left < 7 and not user.gold_will_autorenew:
                 self.goldlink = "/gold/about"
-                self.giftmsg = _("renew your reddit gold")
+                self.giftmsg = _("renew your gold")
 
             if not self.viewing_self:
                 self.is_friend = user._id in c.user.friends

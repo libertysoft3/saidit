@@ -39,6 +39,8 @@
 <%inherit  file="printable.html"/>
 <%namespace file="utils.html" import="plain_link, thing_timestamp, edited, nsfw_stamp, quarantine_stamp, thumbnail_img" />
 <%namespace file="printablebuttons.html" import="toggle_button" />
+<%namespace file="utils.html" import="text_with_links" />
+
  
 <%def name="numcol()">
 </%def>
@@ -198,34 +200,55 @@
 </%def>
 
 <%def name="midcol(display=True, cls = '')">
+
+	
+
     <div class="midcol ${cls}"
        ${not display and "style='display:none'" or ''}>
-    ${self.arrow(thing, 1, thing.likes)}
-    ${self.arrow(thing, 0, thing.likes == False)}
+
+    ${self.arrowAndText(thing, 1, thing.likes)}
+
+      
+
+    <div class="midcol ${cls}"
+       ${not display and "style='display:none'" or ''}>
+
+## <span class="next-suggestions">
+	
+
+	## ${text_with_links(
+    ## _('%(random_subreddit)s'),
+    ## random_subreddit=dict(link_text=_(" "), path="/r/random", ## style="position: absolute; margin-top: -2px; margin-left: -5px")
+##  )}</span>
+
+    ${self.arrowAndText(thing, 0, thing.likes == False)}
+
+
     
   </div>
+</div>
 
-
-    <div class="midcol ${cls}"
-       ${not display and "style='display:none'" or ''}>
+   ## <div class="midcol ${cls}"
+   ##    ${not display and "style='display:none'" or ''}>
     
-    %if thing.pref_compress:
-      <div class="score-placeholder"></div>
-    %elif thing.hide_score:
-      <div class="score likes">&bull;</div> 
-      <div class="score unvoted">&bull;</div> 
-      <div class="score dislikes">&bull;</div> 
-    %else:
+  ##  %if thing.pref_compress:
+ ##     <div class="score-placeholder"></div>
+  ##  %elif thing.hide_score:
+   ##   <div class="score likes">&bull;</div> 
+   ##   <div class="score unvoted">&bull;</div> 
+   ##   <div class="score dislikes">&bull;</div> 
+   ## %else:
       ## ${self.score(thing, tag='div')}
-      <div class="whatever2" style="margin-top: 3px">${thing.num_votes_up}</div>
-      <div class="whatever" style="margin-top: 2px" >${thing.num_votes_down_limited}</div>
+      
 
-    %endif
+   ## %endif
     
-  </div>
+  ## </div>
+
+
+
  ${self.thumbnail()}
 </%def>
-
 
 <%def name="domain(link=True)">
   <span class="domain">
