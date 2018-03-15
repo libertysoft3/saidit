@@ -1114,6 +1114,9 @@ class Reddit(Templated):
             classes.update(self.extra_page_classes)
         if self.supplied_page_classes:
             classes.update(self.supplied_page_classes)
+        
+        # CUSTOM: site theme
+	classes.add(c.user.pref_site_theme.replace('_','-'))
 
         return classes
 

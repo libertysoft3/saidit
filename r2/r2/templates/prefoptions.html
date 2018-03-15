@@ -26,7 +26,7 @@
    from r2.lib.menus import CommentSortMenu
 
    ## CUSTOM
-   from r2.lib.menus import ChatSidebarSizeMenu, SubscriptionsSubscribeMenu
+   from r2.lib.menus import ChatSidebarSizeMenu, SubscriptionsSubscribeMenu, SiteThemeMenu
 
    from r2.lib.template_helpers import add_sr, _wsf, format_html, make_url_protocol_relative
    from r2.lib.utils import UrlParser
@@ -101,10 +101,23 @@
          name="${name}" value="${s if s is not None else ''}">
 </%def>
 
-## CUSTOM
+## CUSTOM: text_input with more params
 <%def name="text_input_all(s, name, size, disabled)">
   <input type="text" class="text" size="${size}" maxlength="${size}"
          name="${name}" value="${s if s is not None else ''}" ${"disabled='disabled'" if disabled else ""} ${"style='width:auto'" if size and size > 20 else ""}>
+</%def>
+
+## CUSTOM: site theme
+<%def name="site_theme_sort_options()">
+  <% menu = SiteThemeMenu() %>
+  <select name="site_theme">
+        %for sort in menu._options:
+        <option ${'selected="selected"' if sort == c.user.pref_site_theme else ""}
+                value="${sort}">
+          ${menu.make_title(sort)}&#32;${_('(default)') if sort == menu._default else ''}
+        </option>
+        %endfor
+  </select>
 </%def>
 
 %if c.user_is_loggedin:
@@ -318,6 +331,13 @@
   <tr>
     <th>${_("display options")}</th>
     <td class="prefright">
+      
+      ## CUSTOM: Site theme
+      <p>
+        ${_wsf("theme %(sort)s", sort=unsafe(capture(site_theme_sort_options)))}
+      </p>
+      <br/>
+
       ${checkbox(_("allow subreddits to show me custom themes"), "show_stylesheets")}
       %if feature.is_enabled('stylesheets_everywhere'):
         &#32;<span class="details reddit-gold">

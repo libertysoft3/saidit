@@ -24,10 +24,10 @@ from pylons import tmpl_context as c
 from pylons import app_globals as g
 
 from r2.config import feature
-from r2.lib.menus import CommentSortMenu, SubscriptionsSubscribeMenu
+from r2.lib.menus import CommentSortMenu
 
 # CUSTOM
-from r2.lib.menus import ChatSidebarSizeMenu
+from r2.lib.menus import ChatSidebarSizeMenu, SubscriptionsSubscribeMenu, SiteThemeMenu
 
 from r2.lib.validator.validator import (
     VBoolean,
@@ -114,6 +114,7 @@ PREFS_VALIDATORS = dict(
     # empty password defaults to prefixed random in this validator
     pref_chat_client_password=VChatClientAuthToken('chat_client_password'),
     pref_subscriptions_unsubscribe=VOneOf('subscriptions_unsubscribe', SubscriptionsSubscribeMenu._options),
+    pref_site_theme=VOneOf('site_theme', SiteThemeMenu._options),
 )
 
 

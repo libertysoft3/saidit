@@ -169,6 +169,7 @@ class Account(Thing):
                      pref_chat_client_user=g.live_config['chat_default_username'],
                      pref_chat_client_password='',
 		     pref_subscriptions_unsubscribe='subs_do_nothing',
+	             pref_site_theme=g.live_config['site_theme_default'],
                      )
     _preference_attrs = tuple(k for k in _defaults.keys()
                               if k.startswith("pref_"))

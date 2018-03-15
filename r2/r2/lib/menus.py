@@ -211,6 +211,8 @@ menu =   MenuHandler(hot          = _('hot'),
                      chat_size_60                   = _('60%'),
                      subs_do_nothing                = _('no'),
                      subs_reset_subscriptions       = _('yes, unsubscribe from all'),
+		     theme_nightmode                = _('Night mode'),
+		     theme_daymode = _('Day mode'),
                      )
 
 def menu_style(type):
@@ -744,4 +746,11 @@ class SubscriptionsSubscribeMenu(SortMenu):
     _options = (
         'subs_do_nothing',
         'subs_reset_subscriptions')
+
+# CUSTOM: site theme
+class SiteThemeMenu(SortMenu):
+    _default = 'theme_nightmode'
+    _options = (
+        'theme_nightmode',
+'theme_daymode')
 
