@@ -5,6 +5,9 @@
 @import "search.less";
 @import "interstitial.less";
 
+/* CUSTOM: See more custom imports at end of file */
+@import "feature-chat.less";
+
 .no-select {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -11542,8 +11545,7 @@ body:not(.loggedin) .report-button {
 
 
 /* SAIDIT CUSTOM */
-/* TODO: Non-spritesheet styles should be in theme-custom.less */
-
+/* TODO: transition all of these to theme-custom.less, test spritesheet generation if used there */
 .footer-banner {
 	position: absolute;
 	bottom: 0;
@@ -11598,3 +11600,6 @@ body:not(.loggedin) .report-button {
 	border-bottom: none;
 }
 
+/* CUSTOM: See more custom imports at top of file */
+@import "theme-custom.less";
+@import "themes/daymode.less";

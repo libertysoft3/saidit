@@ -55,12 +55,6 @@
   %if getattr(thing, "feature_new_expando_icons", False):
     ${less_stylesheet("expando.less")}
   %endif
-
-  ## CUSTOM
-  ${less_stylesheet("theme-custom.less")}
-  %if getattr(thing, "chat_include_css", False):
-    ${less_stylesheet("feature-chat.less")}
-  %endif
 </%def>
 
 <%def name="sr_stylesheets()">
