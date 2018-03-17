@@ -1,17 +1,18 @@
-/* components/colors.less overrides */
-@color-text-grey: #4F4F4F;
-@markdown-color-font-light: @color-text-grey;
-@markdown-color-wiki-header: @color-text-grey;
-@color-ui-blue: #336699;
-@color-off-white: #FCFCF7; /* replacement for color-off-white, markdown-color-code */
-@color-semi-black: #222222; /* replacement for markdown-color-font, color-semi-black */
-@color-stamp-text-dark: @color-semi-black;
-@color-archived-stamp: lighten(@color-text-grey, 15%);
-@infobar-legacy-color: #f6e69f;
-@infobar-legacy-color-border: orange;
-@infobar-color: #fff7d7;
-@infobar-color-border: darken(@infobar-color, 32%);
-@infobar-color-text: @color-semi-black;
+/* components/colors.less replacements */
+/* using original names will alter default theme's reddit.less */
+@theme-daymode-color-text-grey: #4F4F4F;
+@theme-daymode-markdown-color-font-light: @theme-daymode-color-text-grey;
+@theme-daymode-markdown-color-wiki-header: @theme-daymode-color-text-grey;
+@theme-daymode-color-ui-blue: #336699;
+@theme-daymode-color-off-white: #FCFCF7; /* replacement for color-off-white, markdown-color-code */
+@theme-daymode-color-semi-black: #222222; /* replacement for markdown-color-font, color-semi-black */
+@theme-daymode-color-stamp-text-dark: @theme-daymode-color-semi-black;
+@theme-daymode-color-archived-stamp: lighten(@theme-daymode-color-text-grey, 15%);
+@theme-daymode-infobar-legacy-color: #f6e69f;
+@theme-daymode-infobar-legacy-color-border: orange;
+@theme-daymode-infobar-color: #fff7d7;
+@theme-daymode-infobar-color-border: darken(@theme-daymode-infobar-color, 32%);
+@theme-daymode-infobar-color-text: @theme-daymode-color-semi-black;
 
 .theme-daymode {
 
@@ -72,62 +73,69 @@
           border-bottom-color: #ffffff;
     }
     .subreddit-report-form {
-        @bg-color: #FBFBFB;
-        @text-color: @color-semi-black;
-        background-color: @bg-color;
-        border: 1px solid darken(@bg-color, 10%);
-        color: @text-color;
+        @theme-daymode-bg-color: #FBFBFB;
+        @theme-daymode-text-color: @theme-daymode-color-semi-black;
+        background-color: @theme-daymode-bg-color;
+        border: 1px solid darken(@theme-daymode-bg-color, 10%);
+        color: @theme-daymode-text-color;
     }
-    .quarantine-stamp { color: @color-semi-black; }
-    .newsletter-box .result-message { color: @color-text-grey; }
-    .archived-stamp { color: @color-archived-stamp; }
-    .full-context-info td { color: @color-text-grey; }
-    .side .side-message { background-color: lighten(@infobar-legacy-color, 10%); border-color: darken(@infobar-legacy-color, 20%); }
-    .linkinfo { color: @color-semi-black; }
+    .quarantine-stamp { color: @theme-daymode-color-semi-black; }
+    .newsletter-box .result-message { color: @theme-daymode-color-text-grey; }
+    .archived-stamp { color: @theme-daymode-color-archived-stamp; }
+    .full-context-info td { color: @theme-daymode-color-text-grey; }
+    .side .side-message { background-color: lighten(@theme-daymode-infobar-legacy-color, 10%); border-color: darken(@theme-daymode-infobar-legacy-color, 20%); }
+    .linkinfo { color: @theme-daymode-color-semi-black; }
 
     /* markdown.less overrides */
-    .wiki-page-content .md h2 { color: @color-ui-blue; }
+    .wiki-page-content .md h2 { color: @theme-daymode-color-ui-blue; }
     .wiki-page-content .md {
-        h1, h6 { color: @markdown-color-wiki-header; }
+        h1, h6 { color: @theme-daymode-markdown-color-wiki-header; }
     }
     .md {
-        color: @color-semi-black; /* markdown-color-font: color-semi-black */
+        color: @theme-daymode-color-semi-black; /* markdown-color-font: color-semi-black */
         a { color: #0079D3; } /* this is color markdown-color-link, color-alien-blue */
         code, pre {  border-color: #e6e6de; background-color: #fcfcfb; }
-        blockquote, del { color: @markdown-color-font-light; }
+        blockquote, del { color: @theme-daymode-markdown-color-font-light; }
       }
-
+    .new-comment .md,
+    .link .md,
+    .usertext.border .md {
+        :not(pre) > code,
+        pre {
+    	    background-color: @theme-daymode-color-off-white; /* @markdown-color-code-alt */
+        }
+    }
 
       /* search.less overrides */
-      .search-result-body { color: @color-text-grey; }
+      .search-result-body { color: @theme-daymode-color-text-grey; }
 
 
       /* subreddit-rules.less overrides */
-      .subreddit-rules-page .md-container .md .subreddit-rule-description { color: @color-text-grey; }
+      .subreddit-rules-page .md-container .md .subreddit-rule-description { color: @theme-daymode-color-text-grey; }
 
 
     /* components/infobar.less overrides */
     .infobar {
-          background-color: @infobar-legacy-color;
-          border-color: @infobar-legacy-color-border;
+          background-color: @theme-daymode-infobar-legacy-color;
+          border-color: @theme-daymode-infobar-legacy-color-border;
       }
       .reddit-infobar {
-          background-color: @infobar-color;
-        border-color: @infobar-color-border;
+          background-color: @theme-daymode-infobar-color;
+        border-color: @theme-daymode-infobar-color-border;
         .md {
-            color: @infobar-color-text;
+            color: @theme-daymode-infobar-color-text;
           }
-          &.with-icon &:before { background-color: @infobar-color-border; }
+          &.with-icon &:before { background-color: @theme-daymode-infobar-color-border; }
       }
 
 
     /* components/read-next.less overrides */
     .read-next {
         .read-next-button {
-            background-color: lighten(@color-ui-blue, 5%);
+            background-color: lighten(@theme-daymode-color-ui-blue, 5%);
         }
         &:active {
-              background-color: @color-ui-blue;
+              background-color: @theme-daymode-color-ui-blue;
         }
     }
 
