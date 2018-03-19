@@ -64,6 +64,8 @@ import re, inspect
 from itertools import chain
 from functools import wraps
 
+# CUSTOM
+from r2.lib.menus import SiteThemeMenu
 
 def can_view_link_comments(article):
     return (article.subreddit_slow.can_view(c.user) and
