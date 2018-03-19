@@ -41,6 +41,7 @@ from r2.lib.validator.validator import (
     VChatUser,
     VChatClientUser,
     VChatClientAuthToken,
+    VSiteTheme,
 )
 from r2.lib.errors import errors
 
@@ -114,7 +115,7 @@ PREFS_VALIDATORS = dict(
     # empty password defaults to prefixed random in this validator
     pref_chat_client_password=VChatClientAuthToken('chat_client_password'),
     pref_subscriptions_unsubscribe=VOneOf('subscriptions_unsubscribe', SubscriptionsSubscribeMenu._options),
-    pref_site_theme=VOneOf('site_theme', SiteThemeMenu._options),
+    pref_site_theme=VSiteTheme('site_theme'),
 )
 
 

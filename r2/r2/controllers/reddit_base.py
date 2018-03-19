@@ -103,6 +103,9 @@ from r2.lib.validator import (
     VLength,
     VLimit,
     VTarget,
+
+    # CUSTOM
+    VSiteTheme,
 )
 from r2.models import (
     Account,
@@ -149,6 +152,10 @@ class UnloggedUser(FakeAccount):
         "pref_lang": VLang.validate_lang,
         "pref_hide_locationbar": bool,
         "pref_use_global_defaults": bool,
+
+	# CUSTOM: Site Theme
+	"pref_site_theme": VSiteTheme.validate_theme,
+	"pref_lightswitch": bool, 
     }
 
     def __init__(self, browser_langs, *a, **kw):

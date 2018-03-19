@@ -887,6 +887,20 @@ function big_mod_toggle(el, press_action, unpress_action) {
     return false
 }
 
+/* CUSTOM: Site Theme */
+function lightswitch() {
+    if ($('body').hasClass('theme-nightmode')) {
+        $('.pref-lightswitch').addClass('pref-lightswitch-on').removeClass('pref-lightswitch-off').text('lights off');
+        $('body').addClass('theme-daymode').removeClass('theme-nightmode');
+        $.request("lightswitch", {"lightswitch": true});
+    }  else if ($('body').hasClass('theme-daymode')) {
+        $('.pref-lightswitch').addClass('pref-lightswitch-off').removeClass('pref-lightswitch-on').text('lights on');
+        $('body').addClass('theme-nightmode').removeClass('theme-daymode');
+        $.request("lightswitch", {"lightswitch": false});
+    }
+    return false;
+};
+
 /* The ready method */
 $(function() {
         $("body").click(close_menus);

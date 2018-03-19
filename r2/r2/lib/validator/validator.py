@@ -3359,7 +3359,7 @@ class VSigned(Validator):
 def need_provider_captcha():
     return False
 
-# CUSTOM - detect user already having a ban
+# CUSTOM: Global Bans
 class VGlobalBanByUsername(Validator):
     def run(self, username, required_fullname=None):
         if not username:
@@ -3376,3 +3376,21 @@ class VGlobalBanByUsername(Validator):
         else:
             return a
 
+# CUSTOM: Site Theme
+class VSiteTheme(Validator):
+    @staticmethod
+    def validate_theme(theme, strict=False):
+        if theme in SiteThemeMenu._options:
+            return theme
+        else:
+            if not strict:
+                return g.live_config['site_theme_default']
+            else:
+                raise ValueError("invalid theme %r" % theme)
+    def run(self, theme):
+        return VSiteTheme.validate_theme(theme)
+
+    def param_docs(self):
+        return {
+            self.param: "a valid site theme (underscore separated)",
+}

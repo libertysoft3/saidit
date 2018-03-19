@@ -138,6 +138,8 @@ from r2.lib.merge import ConflictException
 from datetime import datetime, timedelta
 from urlparse import urlparse
 
+# CUSTOM: Site Theme
+from r2.lib.validator.preferences import set_prefs
 
 class ApiminimalController(MinimalController):
     """
@@ -5305,4 +5307,13 @@ class ApiController(RedditController):
         cache_clear = GlobalBan._all_banned_users_cache(_update=True)
 	form.set_html(".status", _('deleted, <a href="#" onclick="location.reload();">reload</a> to see it'))
 
-
+    # CUSTOM: Site Theme
+    @csrf_exempt
+    @validate(pref_lightswitch = VBoolean('lightswitch'))
+    def POST_lightswitch(self, pref_lightswitch):
+	theme = g.live_config['site_theme_lightswitch_off']
+        if pref_lightswitch:
+            theme = g.live_config['site_theme_lightswitch_on']
+        prefs = {"pref_lightswitch": pref_lightswitch, "pref_site_theme": theme}
+        set_prefs(c.user, prefs)
+        c.user._commit()
