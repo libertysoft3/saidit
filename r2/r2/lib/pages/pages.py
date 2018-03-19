@@ -2328,7 +2328,7 @@ class SubredditsPage(Reddit):
                                                 '/subreddits/mine/moderator']))
 
         return [PageNameNav('subreddits'),
-                NavMenu(buttons, base_path = '/subreddits', type="tabmenu")]
+                NavMenu(buttons, base_path = '/subs', type="tabmenu")]
 
     def content(self):
         return self.content_stack((self.interestbar, self.searchbar,
@@ -2387,10 +2387,11 @@ class ProfilePage(Reddit):
                    NamedButton('gilded')]
 
         if votes_visible(self.user):
-            main_buttons += [
+            """main_buttons += [
                 NamedButton('upvoted'),
-                NamedButton('downvoted'),
-            ]
+                NamedButton('downvoted')]
+			"""
+            
 
         if c.user_is_loggedin and (c.user._id == self.user._id or
                                    c.user_is_admin):
