@@ -674,7 +674,7 @@ class UrlParser(object):
         utility method for checking if the path starts with a
         subreddit specifier (namely /r/ or /subreddits/).
         """
-        return self.path.startswith(('/' + g.brander_community_abbr + '/', '/subreddits/', '/reddits/'))
+        return self.path.startswith(('/' + g.brander_community_abbr + '/', '/' + g.brander_community_abbr_redir + '/', '/subreddits/', '/reddits/'))
 
     def get_subreddit(self):
         """checks if the current url refers to a subreddit and returns
@@ -692,7 +692,7 @@ class UrlParser(object):
             if (not self.hostname or
                     is_subdomain(self.hostname, g.domain) or
                     self.hostname.startswith(g.domain)):
-                if self.path.startswith('/' + g.brander_community_abbr + '/'):
+                if self.path.startswith('/' + g.brander_community_abbr + '/') or self.path.startswith('/' + g.brander_community_abbr_redir + '/'):
                     return Subreddit._by_name(self.path.split('/')[2])
                 else:
                     return DefaultSR()
