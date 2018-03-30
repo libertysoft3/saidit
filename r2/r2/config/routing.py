@@ -103,7 +103,7 @@ def make_map(config):
        requirements=dict(where="popular|new|banned|employee|gold|default|"
                                "quarantine|featured"))
     # If no subreddit is specified, might as well show a list of 'em.
-    mc(mc('/' + config['pylons.app_globals'].brander_community_abbr, controller='redirect', action='redirect', dest='/subs')
+    mc('/' + config['pylons.app_globals'].brander_community_abbr, controller='redirect', action='redirect', dest='/subs')
     mc('/subs/mine/:where', controller='myreddits', action='listing',
        where='subscriber', conditions={'function':not_in_sr},
        requirements=dict(where='subscriber|contributor|moderator'))
@@ -116,11 +116,6 @@ def make_map(config):
     mc('/subreddits/:where', controller='reddits', action='listing',
        where='popular', conditions={'function':not_in_sr},
        requirements=dict(where="popular|new|banned"))
-
-    mc('/s/:where', controller='reddits', action='listing',
-       where='popular', conditions={'function':not_in_sr},
-       requirements=dict(where="popular|new|banned"))
-
 
     mc('/subreddits/mine/:where', controller='myreddits', action='listing',
        where='subscriber', conditions={'function':not_in_sr},
@@ -216,8 +211,8 @@ def make_map(config):
     mc('/u/:username/*rest', controller='redirect', action='user_redirect')
     
     # preserve timereddit URLs from 4/1/2012
-    mc('/s/:timereddit', controller='redirect', action='timereddit_redirect')
-    mc('/s/:timereddit/*rest', controller='redirect',
+    mc('/t/:timereddit', controller='redirect', action='timereddit_redirect')
+    mc('/t/:timereddit/*rest', controller='redirect',
        action='timereddit_redirect')
 
     # /prefs/friends is also aliased to /api/v1/me/friends
@@ -434,7 +429,7 @@ def make_map(config):
     mc("/api/multi/*multipath/" + config['pylons.app_globals'].brander_community_abbr + "/:srname", controller="multiapi", action="multi_subreddit")
     mc("/api/multi/*multipath/description", controller="multiapi", action="multi_description")
     mc("/api/multi/*multipath", controller="multiapi", action="multi")
-    mc(mc("/api/filter/*multipath/" + config['pylons.app_globals'].brander_community_abbr + "/:srname", controller="multiapi", action="multi_subreddit")
+    mc("/api/filter/*multipath/" + config['pylons.app_globals'].brander_community_abbr + "/:srname", controller="multiapi", action="multi_subreddit")
     mc("/api/filter/*multipath", controller="multiapi", action="multi")
 
     mc("/api/v1/:action", controller="oauth2frontend",
