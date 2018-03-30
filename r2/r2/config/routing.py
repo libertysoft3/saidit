@@ -70,6 +70,7 @@ def make_map(config):
     mc('/submit', controller='front', action='submit')
 
     # redirect old urls to the new
+    # ABOUT_BASE = "https://about.%s/" % config['pylons.app_globals'].domain
     ABOUT_BASE = "https://saidit.net/"
     mc('/about', controller='redirect', action='redirect', dest=ABOUT_BASE, 
        conditions={'function':not_in_sr})
@@ -102,7 +103,7 @@ def make_map(config):
        requirements=dict(where="popular|new|banned|employee|gold|default|"
                                "quarantine|featured"))
     # If no subreddit is specified, might as well show a list of 'em.
-    mc('/r', controller='redirect', action='redirect', dest='/subs')
+    mc(mc('/' + config['pylons.app_globals'].brander_community_abbr, controller='redirect', action='redirect', dest='/subs')
     mc('/subs/mine/:where', controller='myreddits', action='listing',
        where='subscriber', conditions={'function':not_in_sr},
        requirements=dict(where='subscriber|contributor|moderator'))
@@ -140,7 +141,7 @@ def make_map(config):
     mc('/awards/received', controller='front', action='received_award')
 
     mc('/i18n', controller='redirect', action='redirect',
-       dest='https://www.reddit.com/r/i18n')
+       dest=config['pylons.app_globals'].https_endpoint + '/' + config['pylons.app_globals'].brander_community_abbr + '/i18n')
     mc('/feedback', controller='redirect', action='redirect',
        dest='/contact')
     mc('/contact', controller='frontunstyled', action='contact_us')
@@ -430,10 +431,10 @@ def make_map(config):
     mc("/api/multi/user/:username", controller="multiapi", action="list_multis")
     mc("/api/multi/copy", controller="multiapi", action="multi_copy")
     mc("/api/multi/rename", controller="multiapi", action="multi_rename")
-    mc("/api/multi/*multipath/r/:srname", controller="multiapi", action="multi_subreddit")
+    mc("/api/multi/*multipath/" + config['pylons.app_globals'].brander_community_abbr + "/:srname", controller="multiapi", action="multi_subreddit")
     mc("/api/multi/*multipath/description", controller="multiapi", action="multi_description")
     mc("/api/multi/*multipath", controller="multiapi", action="multi")
-    mc("/api/filter/*multipath/r/:srname", controller="multiapi", action="multi_subreddit")
+    mc(mc("/api/filter/*multipath/" + config['pylons.app_globals'].brander_community_abbr + "/:srname", controller="multiapi", action="multi_subreddit")
     mc("/api/filter/*multipath", controller="multiapi", action="multi")
 
     mc("/api/v1/:action", controller="oauth2frontend",

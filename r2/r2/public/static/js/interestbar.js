@@ -55,8 +55,8 @@ r.ui.InterestBar.prototype = {
             last = this.$el.find('.results li:last')
 
         var item = _.template(
-            '<li><a href="/r/<%= name %>" target="_blank">'
-                +'/r/<%= name %>'
+            '<li><a href="/' + r.config.brander_community_abbr + '/<%= name %>" target="_blank">'
+                +'/' + r.config.brander_community_abbr + '/<%= name %>'
             +'</a></li>'
         )
 

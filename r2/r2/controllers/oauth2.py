@@ -253,7 +253,7 @@ class OAuth2FrontendController(RedditController):
                 "An ads-free experience in Reddit's mobile apps, and\n"
                 "Extra site features on desktop\n\n"
                 "Discuss and get help on the features and perks at "
-                "r/goldbenefits."
+                + g.brander_community_abbr + "/goldbenefits."
             ) % g.mobile_auth_gild_message
             message += '\n\n' + strings.gold_benefits_msg
             send_system_message(c.user, subject, message, add_to_sent=False)

@@ -35,7 +35,7 @@
   <ul class="subreddits">
   %for sr in c.site.exclude_srs:
     <li data-name="${sr.name}">
-      <a href="/r/${sr.name}" data-name="${sr.name}">/r/${sr.name}</a>
+      <a href="/${g.brander_community_abbr}/${sr.name}" data-name="${sr.name}">/${g.brander_community_abbr}/${sr.name}</a>
       <button class="remove-sr">${_('remove')}</button>
     </li>
   %endfor

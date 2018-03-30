@@ -45,9 +45,9 @@ Disallow: /*.rss
 Disallow: /*.i
 Disallow: /*.embed
 Disallow: /*/comments/*?*sort=
-Disallow: /r/*/comments/*/*/c*
+Disallow: /${g.brander_community_abbr}/*/comments/*/*/c*
 Disallow: /comments/*/*/c*
-Disallow: /r/*/submit
+Disallow: /${g.brander_community_abbr}/*/submit
 Disallow: /message/compose*
 Disallow: /api
 Disallow: /post
@@ -59,7 +59,7 @@ Disallow: /domain/*t=
 Disallow: /login
 Disallow: /reddits/search
 Disallow: /search
-Disallow: /r/*/search
+Disallow: /${g.brander_community_abbr}/*/search
 Allow: /
 
 Sitemap: ${thing.subreddit_sitemap}

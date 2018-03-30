@@ -342,7 +342,7 @@ class MessageButtons(PrintableButtons):
 
             if thing.sr_id:
                 sr = thing.subreddit_slow
-                is_admin_message = '/r/%s' % sr.name == g.admin_message_acct
+                is_admin_message = '/%s/%s' % (g.brander_community_abbr, sr.name) == g.admin_message_acct
 
                 if (sr.is_muted(first_message.author_slow) or
                         (first_message.to_id and

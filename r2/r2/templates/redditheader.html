@@ -84,14 +84,14 @@
     %else:
       %if feature.is_enabled('beta_opt_in') and c.user.pref_beta:
         <div class="beta-hint help help-hoverable">
-          <a class="beta-link" href="/r/${g.beta_sr}">beta</a>
+          <a class="beta-link" href="/${g.brander_community_abbr}/${g.beta_sr}">beta</a>
           <div id="beta-help" class="hover-bubble help-bubble anchor-top">
             <div class="help-section">
               <p>${_("You're in beta mode! Thanks for helping to test reddit.")}</p>
               <p>
               ${text_with_links(_("Please give feedback at %(beta_link)s, or %(learn_more_link)s."),
-                  beta_link = dict(link_text="/r/" + g.beta_sr, path="/r/" + g.beta_sr),
-                  learn_more_link = dict(link_text=_("learn more on the wiki"), path="/r/" + g.beta_sr + "/wiki")
+                  beta_link = dict(link_text="/" + g.brander_community_abbr + "/" + g.beta_sr, path="/" + g.brander_community_abbr + "/" + g.beta_sr),
+                  learn_more_link = dict(link_text=_("learn more on the wiki"), path="/" + g.brander_community_abbr + "/" + g.beta_sr + "/wiki")
                 )}
               </p>
             </div>

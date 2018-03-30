@@ -156,7 +156,7 @@
           ad auctions are launching monday 2/8
         </h1>
         <p>
-          for more details, see our&nbsp;<a href="https://www.reddit.com/r/selfserve/comments/434c0x/the_auction_is_coming/" target="_blank">announcement in /r/selfserve</a>
+          for more details, see our&nbsp;<a href="https://www.reddit.com/r/selfserve/comments/434c0x/the_auction_is_coming/" target="_blank">announcement in /${g.brander_community_abbr}/selfserve</a>
         </p>
       </div>
     </div>
@@ -177,7 +177,7 @@
   %if not c.user_is_loggedin and not g.read_only_mode:
     %if thing.enable_login_cover:
       <script>
-        var BETA_HOST = 'beta.reddit.com';
+        var BETA_HOST = 'beta.${g.domain}';
         if (location.host === BETA_HOST) {
           r.config.https_endpoint = 'https://' + BETA_HOST;
         }

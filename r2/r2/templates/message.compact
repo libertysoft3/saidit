@@ -37,7 +37,7 @@
        %if thing.sr_id:
          <span class="correspondent reddit rounded">
            <a href="${thing.subreddit.path}message/moderator/inbox.compact">
-             /r/${thing.subreddit.name}
+             /${g.brander_community_abbr}/${thing.subreddit.name}
            </a>
          </span>
        %else:

@@ -213,6 +213,8 @@ def js_config(extra_config=None):
         events_collector_key = g.secrets['events_collector_js_key']
         events_collector_secret = g.secrets['events_collector_js_secret']
 
+    brander_community_abbr = g.brander_community_abbr
+
     config = {
         # is the user logged in?
         "logged": logged,
@@ -286,6 +288,7 @@ def js_config(extra_config=None):
         "facebook_app_id": g.live_config["facebook_app_id"],
         "feature_new_report_dialog": feature.is_enabled('new_report_dialog'),
         "email_verified": logged and c.user.email and c.user.email_verified,
+        "brander_community_abbr": g.brander_community_abbr,
     }
 
     if g.tracker_url:
@@ -629,9 +632,9 @@ def add_admin_distinguish(distinguish_attribs_list):
 
 
 def add_moderator_distinguish(distinguish_attribs_list, subreddit):
-    link = '/r/%s/about/moderators' % subreddit.name
-    label = _('moderator of /r/%(reddit)s, speaking officially')
-    label %= {'reddit': subreddit.name}
+    link = '/%s/%s/about/moderators' % (g.brander_community_abbr, subreddit.name)
+    label = _('moderator of /%(brander_community_abbr)s/%(reddit)s, speaking officially')
+    label %= {'reddit': subreddit.name, 'brander_community_abbr': g.brander_community_abbr}
     add_attr(distinguish_attribs_list, 'M', label=label, link=link)
 
 
@@ -675,7 +678,7 @@ def search_url(query, subreddit, restrict_sr="off", sort=None, recent=None, ref=
         url_query["sort"] = sort
     if recent:
         url_query["t"] = recent
-    path = "/r/%s/search?" % subreddit if subreddit else "/search?"
+    path = "/%s/%s/search?" % (g.brander_community_abbr, subreddit) if subreddit else "/search?"
     path += urllib.urlencode(url_query)
     return path
 

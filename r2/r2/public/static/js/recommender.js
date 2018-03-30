@@ -81,7 +81,7 @@ r.recommend.RecommendationsView = Backbone.View.extend({
 
     tagName: 'div',
 
-    itemTemplate: _.template('<li class="rec-item"><a href="/r/<%- sr_name %>" title="<%- sr_name %>" target="_blank">/r/<%- sr_name %></a><button class="add add-rec" data-srname="<%- sr_name %>"></button></li>'),
+    itemTemplate: _.template('<li class="rec-item"><a href="/' + r.config.brander_community_abbr + '/<%- sr_name %>" title="<%- sr_name %>" target="_blank">/' + r.config.brander_community_abbr + '/<%- sr_name %></a><button class="add add-rec" data-srname="<%- sr_name %>"></button></li>'),
 
     initialize: function() {
         this.listenTo(this.collection, 'add remove reset', this.render)

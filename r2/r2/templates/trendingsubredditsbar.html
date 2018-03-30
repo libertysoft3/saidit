@@ -31,7 +31,7 @@
     <strong>${_('trending subreddits')}</strong>
     <ul>
     %for i, subreddit_name in enumerate(thing.subreddit_names):
-      <li><a href="${Link.tracking_link('/r/%s'%subreddit_name, context='trending_subreddits_bar', element_name='trending_sr_%s'%(i+1))}" target="_blank">/r/${subreddit_name}</a></li>
+      <li><a href="${Link.tracking_link('/%s/%s' % (g.brander_community_abbr, subreddit_name), context='trending_subreddits_bar', element_name='trending_sr_%s'%(i+1))}" target="_blank">/${g.brander_community_abbr}/${subreddit_name}</a></li>
     %endfor
     </ul>
     <a href="${thing.comment_url}" class="${thing.comment_label_cls}">${thing.comment_label}</a>

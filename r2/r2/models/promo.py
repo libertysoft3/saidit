@@ -342,7 +342,7 @@ class Target(object):
         elif self.subreddit_name == Frontpage.name:
             return _("frontpage")
         else:
-            return "/r/%s" % self.subreddit_name
+            return "/%s/%s" % (g.brander_community_abbr, self.subreddit_name)
 
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.pretty_name)

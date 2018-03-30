@@ -195,7 +195,7 @@
 </%def>
 
 <%def name="subreddit()" buffered="True">
-  ${plain_link('/r/' + thing.subreddit.name, thing.subreddit_path, _sr_path=False,
+  ${plain_link('/' + g.brander_community_abbr + '/' + thing.subreddit.name, thing.subreddit_path, _sr_path=False,
                _class="subreddit hover may-blank")}
 </%def>
 

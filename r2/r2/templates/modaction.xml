@@ -55,7 +55,7 @@
 
 <entry>
     <%utils:atom_author author="${thing.moderator}" />
-    <category term="${thing.subreddit.name}" label="/r/${thing.subreddit.name}" />
+    <category term="${thing.subreddit.name}" label="/${g.brander_community_abbr}/${thing.subreddit.name}" />
     <id>${thing._fullname}</id>
     %if permalink:
         <link href="${add_sr(permalink)}"/>

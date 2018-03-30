@@ -44,7 +44,7 @@
     ${ynbutton(op='accept_moderator_invite',
                title=_("accept"),
                executed=_("you are now a moderator. welcome to the team!"),
-               question=_("become a moderator of %s?" % ("/r/" + c.site.name)),
+               question=_("become a moderator of %s?" % ("/" + g.brander_community_abbr + "/" + c.site.name)),
                format=_('you are invited to become a moderator. %(action)s'),
                format_arg='action',
                _class=thing.type + ' accept-invite',

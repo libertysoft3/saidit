@@ -134,7 +134,7 @@ def view_live_url(link, campaign, srname):
     is_mobile_web = campaign.platform == "mobile_web"
     host = _base_host(is_mobile_web=is_mobile_web)
     if srname:
-        host += '/r/%s' % srname
+        host += '/%s/%s' % (g.brander_community_abbr, srname)
     return '%s/?ad=%s' % (host, link._fullname)
 
 def payment_url(action, link_id36, campaign_id36):
@@ -1107,7 +1107,7 @@ def keywords_from_context(
 
 
 # special handling for memcache ascii protocol
-SPECIAL_NAMES = {" reddit.com": "_reddit.com"}
+SPECIAL_NAMES = {" " + g.domain: "_" + g.domain}
 REVERSED_NAMES = {v: k for k, v in SPECIAL_NAMES.iteritems()}
 
 

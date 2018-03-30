@@ -38,14 +38,14 @@ from r2.lib.filters import unsafe, safemarkdown
 
   % if thing.sr_description:
   <div class="errorpage-message sr-description">
-      <h2>${_("a message from the moderators of /r/%s") % c.site.name}</h2>
+      <h2>${_("a message from the moderators of /%s/%s") % (g.brander_community_abbr, c.site.name)}</h2>
       ${unsafe(safemarkdown(thing.sr_description, wrap=False))}
   </div>
   % endif
 
   % if thing.include_message_mods_link:
   <div id="private-subreddit-message-link" class="errorpage-message">
-    <a href="/message/compose/?to=/r/${c.site.name}">${_("send a message to the moderators")}</a>
+    <a href="/message/compose/?to=/${g.brander_community_abbr}/${c.site.name}">${_("send a message to the moderators")}</a>
   </div>
   % endif
 </div>

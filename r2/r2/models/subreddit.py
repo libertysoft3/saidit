@@ -132,7 +132,7 @@ class BaseSite(object):
 
     @property
     def path(self):
-        return "/r/%s/" % self.name
+        return "/" + g.brander_community_abbr + "/%s/" % self.name
 
     @property
     def user_path(self):
@@ -398,7 +398,7 @@ class Subreddit(Thing, Printable, BaseSite):
         if not name:
             return False
 
-        if allow_reddit_dot_com and name.lower() == "reddit.com":
+        if allow_reddit_dot_com and name.lower() == g.domain:
             return True
 
         valid = bool(subreddit_rx.match(name))
@@ -623,7 +623,7 @@ class Subreddit(Thing, Printable, BaseSite):
 
     @property
     def _related_multipath(self):
-        return '/r/%s/m/related' % self.name.lower()
+        return '/%s/%s/m/related' % (g.brander_community_abbr, self.name.lower())
 
     @property
     def related_subreddits(self):
@@ -1708,7 +1708,7 @@ class FriendsSR(FakeSubreddit):
 class AllSR(FakeSubreddit):
     name = 'all'
     title = 'all subreddits'
-    path = '/r/all'
+    path = '/%s/all' % g.brander_community_abbr
 
     # CUSTOM: All On Front
     if feature.is_enabled('all_on_front'):
@@ -1783,7 +1783,7 @@ class AllMinus(AllSR):
 
     @property
     def path(self):
-        return '/r/all-' + '-'.join(sr.name for sr in self.exclude_srs)
+        return '/%s/all-' % g.brander_community_abbr + '-'.join(sr.name for sr in self.exclude_srs)
 
     def get_links(self, sort, time):
         from r2.models import Link
@@ -1823,7 +1823,7 @@ class Filtered(object):
 
 
 class AllFiltered(Filtered, AllMinus):
-    unfiltered_path = '/r/all'
+    unfiltered_path = '/%s/all' % g.brander_community_abbr
     filtername = 'all'
 
     def __init__(self):
@@ -1834,7 +1834,7 @@ class AllFiltered(Filtered, AllMinus):
 class _DefaultSR(FakeSubreddit):
     analytics_name = 'frontpage'
     #notice the space before reddit.com
-    name = ' reddit.com'
+    name = ' ' + g.domain
     path = '/'
     header = g.default_header_url
 
@@ -2352,10 +2352,11 @@ class LabeledMulti(tdb_cassandra.Thing, MultiReddit):
                 'multiname': self.name,
             }
         if isinstance(self.owner, Subreddit):
-            return '/r/%(srname)s/%(kind)s/%(multiname)s' % {
+            return '/%(brander_community_abbr)s/%(srname)s/%(kind)s/%(multiname)s' % {
                 'srname': self.owner.name,
                 'kind': self.kind,
                 'multiname': self.name,
+                'brander_community_abbr': g.brander_community_abbr,
             }
 
     @property
@@ -2492,7 +2493,7 @@ class LabeledMulti(tdb_cassandra.Thing, MultiReddit):
         """Generate user multi path from display name."""
         slug = unicode_title_to_ascii(display_name)
         if isinstance(owner, Subreddit):
-            prefix = "/r/" + owner.name + "/" + type_ + "/"
+            prefix = "/" + g.brander_community_abbr + "/" + owner.name + "/" + type_ + "/"
         else:
             prefix = "/user/" + owner.name + "/" + type_ + "/"
         new_path = prefix + slug
@@ -2638,7 +2639,7 @@ class ModSR(ModContribSR):
     name  = "subreddits you moderate"
     title = "subreddits you moderate"
     query_param = "moderator"
-    path = "/r/mod"
+    path = "/%s/mod" % g.brander_community_abbr
 
     def is_moderator(self, user):
         return FakeSRMember(ModeratorPermissionSet)
@@ -2668,11 +2669,11 @@ class ModMinus(ModSR):
 
     @property
     def path(self):
-        return '/r/mod-' + '-'.join(sr.name for sr in self.exclude_srs)
+        return '/' + g.brander_community_abbr + '/mod-' + '-'.join(sr.name for sr in self.exclude_srs)
 
 
 class ModFiltered(Filtered, ModMinus):
-    unfiltered_path = '/r/mod'
+    unfiltered_path = '/%s/mod' % g.brander_community_abbr
     filtername = 'mod'
 
     def __init__(self):
@@ -2683,7 +2684,7 @@ class ContribSR(ModContribSR):
     name  = "contrib"
     title = "communities you're approved on"
     query_param = "contributor"
-    path = "/r/contrib"
+    path = "/%s/contrib" % g.brander_community_abbr
 
 
 class DomainSR(FakeSubreddit):
@@ -2980,15 +2981,16 @@ class MutedAccountsBySubreddit(object):
 
         #if the user has interacted with the subreddit before, message them
         if user.has_interacted_with(sr):
-            subject = "You have been muted from r/%(subredditname)s"
-            subject %= dict(subredditname=sr.name)
+            subject = "You have been muted from %(brander_community_abbr)s/%(subredditname)s"
+            subject %= dict(brander_community_abbr=g.brander_community_abbr, subredditname=sr.name)
             message = ("You have been [temporarily muted](%(muting_link)s) "
-                "from r/%(subredditname)s. You will not be able to message "
-                "the moderators of r/%(subredditname)s for %(num_hours)s hours.")
+                "from %(brander_community_abbr)s/%(subredditname)s. You will not be able to message "
+                "the moderators of %(brander_community_abbr)s/%(subredditname)s for %(num_hours)s hours.")
             message %= dict(
                 muting_link="https://reddit.zendesk.com/hc/en-us/articles/205269739",
                 subredditname=sr.name,
                 num_hours=NUM_HOURS,
+                brander_community_abbr=g.brander_community_abbr,
             )
             if parent_message:
                 subject = parent_message.subject

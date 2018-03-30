@@ -54,7 +54,7 @@
                 ${text_with_links(
                     _("from discussion %(link)s on %(subreddit)s"),
                     link=dict(link_text=thing.link.title, path=thing.link.permalink, data=link_data),
-                    subreddit=dict(link_text=("/r/%s" % c.site.name), path=c.site.path, data=sr_data),
+                    subreddit=dict(link_text=("/%s/%s" % (g.brander_community_abbr, c.site.name)), path=c.site.path, data=sr_data),
                 )}
             </p>
             ${plain_link("reddit", "/", _sr_path=False, _class="reddit-embed-footer-img", data=reddit_data)}

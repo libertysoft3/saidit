@@ -88,7 +88,7 @@ def _stringify_xml(root_element):
 
 def _subreddit_links(subreddits):
     for subreddit in subreddits:
-        path = '/r/{0}/'.format(subreddit)
+        path = '/{0}/{1}/'.format(g.brander_community_abbr, subreddit)
         yield _absolute_url(path)
 
 

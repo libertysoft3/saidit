@@ -280,7 +280,7 @@ class SubredditListingController(ListingController):
     private_referrer = False
 
     def _build_og_title(self, max_length=256):
-        sr_fragment = "/r/" + c.site.name
+        sr_fragment = "/" + g.brander_community_abbr + "/" + c.site.name
         title = c.site.title.strip()
         if not title:
             return trunc_string(sr_fragment, max_length)
@@ -1809,9 +1809,10 @@ class UserListListingController(ListingController):
         # having this suffix, to make similar tabs on different subreddits
         # distinct.
         if self.where == 'moderators':
-            return '%(section)s - /r/%(subreddit)s' % {
+            return '%(section)s - /%(brander_community_abbr)s/%(subreddit)s' % {
                 'section': section_title,
                 'subreddit': c.site.name,
+                'brander_community_abbr': g.brander_community_abbr,
             }
 
         return section_title

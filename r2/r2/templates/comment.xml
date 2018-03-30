@@ -45,7 +45,7 @@
         <%utils:atom_author author="${thing.author}"/>
     %endif
 
-    <category term="${thing.subreddit.name}" label="/r/${thing.subreddit.name}" />
+    <category term="${thing.subreddit.name}" label="/${g.brander_community_abbr}/${thing.subreddit.name}" />
 
     <%utils:atom_content>
         ${unsafe(safemarkdown(comment_body))}

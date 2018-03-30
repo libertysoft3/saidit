@@ -62,7 +62,7 @@ ${captcha_field()}
       </%utils:round_field>
     %else:
       <%utils:round_field title="${_('to')}",
-          description="${_('(username, or /r/name for that subreddit\'s moderators)')}">
+          description="${_('(username, or /' + g.brander_community_abbr + '/name for that subreddit\'s moderators)')}">
         <input type="text" name="to" value="${thing.to or ''}"
                onchange="${'admincheck(this)' if thing.admin_check else ''}"/>
         ${error_field("NO_USER", "to")}

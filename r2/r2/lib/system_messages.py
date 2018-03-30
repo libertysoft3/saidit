@@ -22,6 +22,7 @@
 
 from pylons import request
 from pylons.i18n import _, N_
+from pylons import app_globals as g
 
 from r2.models import Account, Message
 from r2.lib.db import queries
@@ -111,7 +112,7 @@ def notify_user_added(rel_type, author, user, target):
 
 
 def send_mod_removal_message(subreddit, mod, user):
-    sr_name = "/r/" + subreddit.name
+    sr_name = "/" + g.brander_community_abbr + "/" + subreddit.name
     u_name = "/u/" + user.name
     subject = "%(user)s has been removed as a moderator from %(subreddit)s"
     message = (
@@ -133,7 +134,7 @@ def send_mod_removal_message(subreddit, mod, user):
 
 
 def send_ban_message(subreddit, mod, user, note=None, days=None, new=True):
-    sr_name = "/r/" + subreddit.name
+    sr_name = "/" + g.brander_community_abbr + "/" + subreddit.name
     if days:
         subject = "You've been temporarily banned from participating in %(subreddit)s"
         message = ("You have been temporarily banned from participating in "

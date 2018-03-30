@@ -875,7 +875,7 @@ class Reddit(Templated):
                 else:
                     more_text = _("about moderation team")
 
-                is_admin_sr = '/r/%s' % c.site.name == g.admin_message_acct
+                is_admin_sr = '/%s/%s' % (g.brander_community_abbr, c.site.name) == g.admin_message_acct
 
                 if is_admin_sr:
                     label = _('message the admins')
@@ -1845,7 +1845,7 @@ class LinkInfoPage(Reddit):
         Reddit.__init__(self, title = title, short_description=short_description, robots=robots, *a, **kw)
 
     def _build_og_data(self, link_title, meta_description):
-        sr_fragment = "/r/" + c.site.name if not c.default_sr else get_domain()
+        sr_fragment = "/" + g.brander_community_abbr + "/" + c.site.name if not c.default_sr else get_domain()
         data = {
             "site_name": "reddit",
             "title": u"%s • %s" % (link_title, sr_fragment),
@@ -1933,7 +1933,7 @@ class LinkInfoPage(Reddit):
         # at the end, we'd like to always show the whole subreddit name, so
         # let's truncate the title while still ensuring the entire thing is
         # under the limit.
-        sr_fragment = u" • /r/" + c.site.name if not c.default_sr else get_domain()
+        sr_fragment = u" • /" + g.brander_community_abbr + "/" + c.site.name if not c.default_sr else get_domain()
         max_link_title_length = 70 - len(sr_fragment)
 
         return {
@@ -3017,9 +3017,10 @@ class MultiInfoBar(Templated):
 
         explore_sr = g.live_config["listing_chooser_explore_sr"]
         if explore_sr:
-            self.share_url = "/r/%(sr)s/submit?url=%(url)s" % {
+            self.share_url = "/%(brander_community_abbr)s/%(sr)s/submit?url=%(url)s" % {
                 "sr": explore_sr,
                 "url": g.origin + self.multi.path,
+                "brander_community_abbr": g.brander_community_abbr,
             }
         else:
             self.share_url = None
@@ -3037,7 +3038,7 @@ class SubscriptionBox(Templated):
 
         # Construct MultiReddit path
         if multi_text:
-            self.multi_path = '/r/' + '+'.join([sr.name for sr in srs])
+            self.multi_path = '/' + g.brander_community_abbr + '/' + '+'.join([sr.name for sr in srs])
 
         # CUSTOM: configurable limits
         if len(srs) > g.sr_limit and c.user_is_loggedin:
@@ -3082,7 +3083,7 @@ class AllInfoBar(Templated):
         self.css_class = None
         if isinstance(site, AllMinus) and c.user.gold:
             self.description = (strings.r_all_minus_description + "\n\n" +
-                " ".join("/r/" + sr.name for sr in site.exclude_srs))
+                " ".join("/" + g.brander_community_abbr + "/" + sr.name for sr in site.exclude_srs))
             self.css_class = "gold-accent"
         else:
             self.description = strings.r_all_description
@@ -3090,7 +3091,7 @@ class AllInfoBar(Templated):
             srs = Subreddit._byID(
                 sr_ids, data=True, return_dict=False, stale=True)
             if srs:
-                self.allminus_url = '/r/all-' + '-'.join([sr.name for sr in srs])
+                self.allminus_url = '/' + g.brander_community_abbr + '/all-' + '-'.join([sr.name for sr in srs])
 
         self.gilding_listing = False
         if request.path.startswith("/comments/gilded"):
@@ -3479,7 +3480,7 @@ class ReportForm(CachedTemplate):
                 self.rules.append(rule["short_name"])
             if self.rules:
                 self.system_rules = SITEWIDE_RULES
-                self.rules_page_link = "/r/%s/about/rules" % subreddit.name
+                self.rules_page_link = "/%s/%s/about/rules" % (g.brander_community_abbr, subreddit.name)
         if not self.rules:
             self.rules = OLD_SITEWIDE_RULES
             self.rules_page_link = "/help/contentpolicy"
@@ -4656,10 +4657,11 @@ class PromoteLinkEdit(PromoteLinkBase):
         self.inventory = {}
         message = _("Create your ad on this page. Have questions? "
                     "Check out the [Help Center](%(help_center)s) "
-                    "or [/r/selfserve](%(selfserve)s).")
+                    "or [/%(brander_community_abbr)s/selfserve](%(selfserve)s).")
         message %= {
             'help_center': 'https://reddit.zendesk.com/hc/en-us/categories/200352595-Advertising',
-            'selfserve': 'https://www.reddit.com/r/selfserve'
+            'selfserve': 'https://www.reddit.com/r/selfserve',
+            'brander_community_abbr': g.brander_community_abbr,
         }
         self.infobar = RedditInfoBar(message=message)
         self.price_dict = PromotionPrices.get_price_dict(self.author)

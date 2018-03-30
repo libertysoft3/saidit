@@ -62,7 +62,7 @@ ${captcha_field()}
           <select name="from_sr">
             <option value="">${"/u/%s" % c.user.name}</option>
             %for sr in thing.mod_srs:
-              <option value="${sr.name}">${"/r/%s" % sr.name}</option>
+              <option value="${sr.name}">${"/%s/%s" % (g.brander_community_abbr, sr.name)}</option>
             %endfor
           </select>
         %endif

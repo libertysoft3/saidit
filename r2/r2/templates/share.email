@@ -30,4 +30,4 @@ ${thing.username} from ${g.default_scheme}://${get_domain(subreddit=False)}/ has
 ${unsafe(thing.body)}
 
 ___
-If you would not like to receive emails from reddit.com in the future, visit ${g.default_scheme}://${g.domain}/mail/optout?x=${thing.msg_hash}
+If you would not like to receive emails from ${g.domain} in the future, visit ${g.default_scheme}://${g.domain}/mail/optout?x=${thing.msg_hash}

@@ -23,6 +23,7 @@
 from pylons import request
 from pylons import tmpl_context as c
 from pylons.controllers.util import abort
+from pylons import app_globals as g
 
 from r2.lib.base import BaseController
 from r2.lib.validator import chkuser
@@ -56,4 +57,4 @@ class RedirectController(BaseController):
             rest = str(rest)
         else:
             rest = ''
-        return self.redirect("/r/%s/%s" % (sr_name, rest), code=301)
+        return self.redirect("/%s/%s/%s" % (g.brander_community_abbr, sr_name, rest), code=301)

@@ -30,7 +30,7 @@
 
 <%def name="api_method_id(uri, method)">${method}_${uri.replace('/', '_').strip('_')}</%def>
 <%def name="api_uri(uri)">${unsafe(re.sub(r'{(\w+)}', r'<em class="placeholder">\1</em>', uri))}</%def>
-<%def name="api_uri_with_sr_maybe(uri, in_sr)">${api_uri(("[/r/{subreddit}]" if in_sr else "") + uri)}</%def>
+<%def name="api_uri_with_sr_maybe(uri, in_sr)">${api_uri(("[/${g.brander_community_abbr}/{subreddit}]" if in_sr else "") + uri)}</%def>
 
 <%def name="mode_selector(current_mode)">
   <span class="mode-selector">

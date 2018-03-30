@@ -1009,7 +1009,7 @@ r.ui.SubredditSubmitText = Backbone.View.extend({
             this.req.abort()
         }
         this.req = this.cache.ajax(sr, {
-            url: '/r/' + sr + '/api/submit_text/.json',
+            url: '/' + r.config.brander_community_abbr + '/' + sr + '/api/submit_text/.json',
             dataType: 'json'
         }).done(_.bind(this.settext, this, sr))
           .fail(_.bind(this.error, this))

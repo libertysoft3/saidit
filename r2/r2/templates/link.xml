@@ -45,7 +45,7 @@
         <%utils:atom_author author="${thing.author}"/>
     %endif
 
-    <category term="${thing.subreddit.name}" label="/r/${thing.subreddit.name}"/>
+    <category term="${thing.subreddit.name}" label="/${g.brander_community_abbr}/${thing.subreddit.name}"/>
 
     <%utils:atom_content>
         %if use_thumbs:
@@ -81,7 +81,7 @@
                               sr_path=False,
                               retain_extension=False,
                               force_hostname=True)}">
-                /r/${thing.subreddit.name}
+                /${g.brander_community_abbr}/${thing.subreddit.name}
             </a>
         %endif
 

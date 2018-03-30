@@ -55,7 +55,7 @@
 ## c.site's info
 
 <%def name="Category()">
-    <category term="${c.site.name}" label="/r/${c.site.name}"/>
+    <category term="${c.site.name}" label="/${g.brander_community_abbr}/${c.site.name}"/>
 </%def>
 
 <%def name="Updated()">

@@ -1858,7 +1858,7 @@ class VMessageRecipient(VExistingUname):
         if not name:
             return self.error()
         is_subreddit = False
-        if name.startswith('/r/'):
+        if name.startswith('/%s/' % g.brander_community_abbr):
             name = name[3:]
             is_subreddit = True
         elif name.startswith('#'):
@@ -1868,7 +1868,7 @@ class VMessageRecipient(VExistingUname):
         # A user in timeout should only be able to message us, the admins.
         if (c.user.in_timeout and
                 not (is_subreddit and
-                     '/r/%s' % name == g.admin_message_acct)):
+                     '/%s/%s' % (g.brander_community_abbr, name) == g.admin_message_acct)):
             abort(403, 'forbidden')
 
         if is_subreddit:
@@ -3246,7 +3246,7 @@ class VMultiByPath(Validator):
         }
 
 
-sr_path_rx = re.compile(r"\A(/?r/)?(?P<name>.*?)/?\Z")
+sr_path_rx = re.compile(r"\A(/?" + g.brander_community_abbr + "/)?(?P<name>.*?)/?\Z")
 class VSubredditList(Validator):
 
     def __init__(self, param, limit=20, allow_language_srs=True):

@@ -102,8 +102,8 @@
       subreddit_link_fmt = format_html('<span>%s</span>', _('to %s')).replace(' ', '&#32;')
     %>
     ${plain_link(
-        '/r/%s' % thing.subreddit.name,
-        '/r/%s' % thing.subreddit.name,
+        '/%s/%s' % (g.brander_community_abbr, thing.subreddit.name),
+        '/%s/%s' % (g.brander_community_abbr, thing.subreddit.name),
         _sr_path=False,
         fmt=subreddit_link_fmt,
         _class='search-subreddit-link may-blank',

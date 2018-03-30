@@ -199,7 +199,7 @@ class BannedListing(UserListing):
     @property
     def title(self):
         return _("users banned from"
-                 " /r/%(subreddit)s") % dict(subreddit=c.site.name)
+                 " /%(brander_community_abbr)s/%(subreddit)s") % dict(subreddit=c.site.name, brander_community_abbr=g.brander_community_abbr)
 
     def get_items(self, *a, **kw):
         items = UserListing.get_items(self, *a, **kw)
@@ -230,7 +230,7 @@ class MutedListing(UserListing):
     @property
     def title(self):
         return _("users muted from"
-                 " /r/%(subreddit)s") % dict(subreddit=c.site.name)
+                 " /%(brander_community_abbr)s/%(subreddit)s") % dict(brander_community_abbr=g.brander_community_abbr, subreddit=c.site.name)
 
     def get_items(self, *a, **kw):
         items = UserListing.get_items(self, *a, **kw)
@@ -252,7 +252,7 @@ class WikiBannedListing(BannedListing):
     @property
     def title(self):
         return _("wiki contibutors banned from"
-                 " /r/%(subreddit)s") % dict(subreddit=c.site.name)
+                 " /%(brander_community_abbr)s/%(subreddit)s") % dict(brander_community_abbr=g.brander_community_abbr, subreddit=c.site.name)
 
 class ContributorListing(UserListing):
     type = 'contributor'
@@ -260,7 +260,7 @@ class ContributorListing(UserListing):
     @property
     def title(self):
         return _("approved submitters for"
-                 " /r/%(subreddit)s") % dict(subreddit=c.site.name)
+                 " /%(brander_community_abbr)s/%(subreddit)s") % dict(brander_community_abbr=g.brander_community_abbr, subreddit=c.site.name)
 
     @property
     def form_title(self):
@@ -272,7 +272,7 @@ class WikiMayContributeListing(ContributorListing):
     @property
     def title(self):
         return _("approved wiki contributors"
-                 " for /r/%(subreddit)s") % dict(subreddit=c.site.name)
+                 " for /%(brander_community_abbr)s/%(subreddit)s") % dict(brander_community_abbr=g.brander_community_abbr, subreddit=c.site.name)
 
     @property
     def form_title(self):
@@ -318,7 +318,7 @@ class ModListing(InvitedModListing):
 
     @property
     def title(self):
-        return _("moderators of /r/%(subreddit)s") % dict(subreddit=c.site.name)
+        return _("moderators of /%(brander_community_abbr)s/%(subreddit)s") % dict(brander_community_abbr=g.brander_community_abbr, subreddit=c.site.name)
 
 class LinkListing(Listing):
     def __init__(self, *a, **kw):

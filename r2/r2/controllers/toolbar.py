@@ -35,7 +35,7 @@ from r2.models import *
 from r2.models.admintools import is_shamed_domain
 
 # strips /r/foo/, /s/, or both
-strip_sr          = re.compile('\A/r/[a-zA-Z0-9_-]+')
+strip_sr          = re.compile('\A/' + g.brander_community_abbr + '/[a-zA-Z0-9_-]+')
 strip_s_path      = re.compile('\A/s/')
 leading_slash     = re.compile('\A/+')
 has_protocol      = re.compile('\A[a-zA-Z_-]+:')

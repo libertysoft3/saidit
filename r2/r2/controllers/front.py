@@ -111,7 +111,7 @@ class FrontController(RedditController):
                       (dest, article._id36,
                        quote_plus(title_to_url(article.title).encode('utf-8')))
             if not c.default_sr:
-                new_url = "/r/%s%s" % (c.site.name, new_url)
+                new_url = "/%s/%s%s" % (g.brander_community_abbr, c.site.name, new_url)
             if comment:
                 new_url = new_url + "/%s" % comment._id36
             if c.extension:
@@ -912,7 +912,7 @@ class FrontController(RedditController):
     @validate(location=nop('location'),
               created=VOneOf('created', ('true','false'),
                              default='false'))
-    @api_doc(api_section.subreddits, uri="/r/{subreddit}/about/edit")
+    @api_doc(api_section.subreddits, uri="/" + g.brander_community_abbr + "/{subreddit}/about/edit")
     def GET_editreddit(self, location, created):
         """Get the current settings of a subreddit.
 
@@ -930,7 +930,7 @@ class FrontController(RedditController):
             return self._edit_normal_reddit(location, created)
 
     @require_oauth2_scope("read")
-    @api_doc(api_section.subreddits, uri='/r/{subreddit}/about')
+    @api_doc(api_section.subreddits, uri='/' + g.brander_community_abbr + '/{subreddit}/about')
     def GET_about(self):
         """Return information about the subreddit.
 
@@ -958,7 +958,7 @@ class FrontController(RedditController):
         return Reddit(content=usertext).render()
 
     @require_oauth2_scope("read")
-    @api_doc(api_section.subreddits, uri='/r/{subreddit}/about/rules')
+    @api_doc(api_section.subreddits, uri='/' + g.brander_community_abbr + '/{subreddit}/about/rules')
     def GET_rules(self):
         """Get the rules for the current subreddit"""
         if not feature.is_enabled("subreddit_rules", subreddit=c.site.name):
@@ -971,7 +971,7 @@ class FrontController(RedditController):
             "link": _("Posts only"),
             "comment": _("Comments only"),
         }
-        title_string = _("Rules for r/%(subreddit)s") % { "subreddit" : c.site.name }
+        title_string = _("Rules for " + g.brander_community_abbr + "/%(subreddit)s") % { "subreddit" : c.site.name }
         content = Rules(
             title=title_string,
             kind_labels=kind_labels,

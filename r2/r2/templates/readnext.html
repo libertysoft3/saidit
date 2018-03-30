@@ -28,7 +28,7 @@
       <div class="read-next-header-title">
         ${_("discussions in")}&#32;
         ${plain_link(
-          '/r/%s' % thing.sr.name,
+          '/%s/%s' % (g.brander_community_abbr, thing.sr.name),
           '%s?ref=readnext' % thing.sr.path,
           _sr_path=False,
           )}

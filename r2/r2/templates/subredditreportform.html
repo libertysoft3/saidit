@@ -52,7 +52,7 @@
 
 <%def name="subreddit_report_form(fullname, system_rules, rules, sr_name)">
     <%
-        rules_page_link = "/r/%s/about/rules" % sr_name
+        rules_page_link = "/%s/%s/about/rules" % (g.brander_community_abbr, sr_name)
     %>
     <%self:report_form_base
             fullname="${fullname}"

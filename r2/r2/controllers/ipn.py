@@ -343,9 +343,9 @@ def send_gold_code(buyer, months, days,
     subject = _('Your gold gift code has been generated!')
     message = _('Here is your gift code for %(amount)s of reddit gold:\n\n'
                 '%(code)s\n\nThe recipient (or you!) can enter it at '
-                'https://www.reddit.com/gold or go directly to '
-                'https://www.reddit.com/thanks/%(code)s to claim it.'
-              ) % {'amount': amount, 'code': code}
+                '%(https_endpoint)s/gold or go directly to '
+                '%(https_endpoint)s/thanks/%(code)s to claim it.'
+              ) % {'amount': amount, 'code': code, 'https_endpoint': g.https_endpoint}
 
     if buyer:
         # bought by a logged-in user, send a reddit PM
@@ -1422,7 +1422,7 @@ def subscr_pm(pennies, months, new_subscr=True):
 
     message %= {
         "price": price,
-        "subscr_url": "https://www.reddit.com/gold/subscription",
+        "subscr_url": g.https_endpoint + "/gold/subscription",
         "gold_email": g.goldsupport_email,
     }
     return subject, message

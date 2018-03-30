@@ -106,8 +106,8 @@
           <td><b>${_( "bold")}</b></td>
         </tr>
         <tr>
-          <td>[reddit!](https://reddit.com)</td>
-          <td><a href="https://reddit.com">reddit!</a></td>
+          <td>[${g.brander_site}](${g.https_endpoint})</td>
+          <td><a href="${g.https_endpoint}">${g.brander_site}</a></td>
         </tr>
         <tr>
           <td>

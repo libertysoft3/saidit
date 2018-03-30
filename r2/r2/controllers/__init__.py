@@ -58,7 +58,7 @@ def load_controllers():
 
     from admin import AdminToolController
     from front import FormsController
-    from front import FrontController
+    from front import FrontController, FrontUnstyledController
     from health import HealthController
     from buttons import ButtonsController
     from captcha import CaptchaController

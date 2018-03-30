@@ -411,11 +411,11 @@
       &#32;
       <span class="details">
         <%
-          beta_sr_link = format_html('&#32;<a href="/r/%s">/r/%s</a>&#32;', g.beta_sr, g.beta_sr)
+          beta_sr_link = format_html('&#32;<a href="/%s/%s">/%s/%s</a>&#32;', g.brander_community_abbr, g.beta_sr, g.brander_community_abbr, g.beta_sr)
         %>
         (${_wsf("by enabling you'll be subscribed to %(beta_sr_link)s automatically.", beta_sr_link=beta_sr_link)}
           &#32;
-          <a href="/r/${g.beta_sr}/wiki">${_("details on the /r/{beta_sr} wiki").format(beta_sr=g.beta_sr)}</a>)
+          <a href="/${g.brander_community_abbr}/${g.beta_sr}/wiki">${_("details on the /" + g.brander_community_abbr + "/{beta_sr} wiki").format(beta_sr=g.beta_sr)}</a>)
       </span>
     </td>
   </tr>
@@ -508,8 +508,8 @@
       <br>
       <p>${_("creating chat widgets")}</p>
       <% chat_enabler = g.live_config['chat_enabling_post_content'] %>
-      <p>&#8226; ${_("post chat:")} submit a text post with any title and set the optional text to "${chat_enabler}". the title of the post will be the chat channel/topic &#32;<span class="details">(if ${_(g.live_config['name_community'])} allows)</span></p>
-      <p>&#8226; ${_("comment chat:")} comment "${chat_enabler}" followed by your desired chat channel/topic &#32;<span class="details">(if ${_(g.live_config['name_community'])} allows)</span></p>
+      <p>&#8226; ${_("post chat:")} submit a text post with any title and set the optional text to "${chat_enabler}". the title of the post will be the chat channel/topic &#32;<span class="details">(if ${_(g.config['brander_community'])} allows)</span></p>
+      <p>&#8226; ${_("comment chat:")} comment "${chat_enabler}" followed by your desired chat channel/topic &#32;<span class="details">(if ${_(g.config['brander_community'])} allows)</span></p>
       
       <br>
       <p>${_("bring your own IRC client")}</p>
@@ -598,7 +598,7 @@
           % endif
 
           <div class="theme select-custom-theme">
-            <label><input type="radio" name="theme_selector" id="other_theme_selector" value="" ${"checked" if thing.use_other_theme else ""}>use theme from /r/</label>
+            <label><input type="radio" name="theme_selector" id="other_theme_selector" value="" ${"checked" if thing.use_other_theme else ""}>use theme from /${g.brander_community_abbr}/</label>
               <input type="text" class="text" size="21" maxlength="21" name="other_theme" placeholder="subreddit" ${"value=" + c.user.pref_default_theme_sr if thing.use_other_theme and c.user.pref_default_theme_sr else ""}>
               <span class="details">
                   (${_("warning: use non-featured themes at your own risk")})

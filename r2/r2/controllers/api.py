@@ -401,7 +401,7 @@ class ApiController(RedditController):
         else:
             # Only let users in timeout message the admins
             if (to and not (isinstance(to, Subreddit) and
-                    '/r/%s' % to.name == g.admin_message_acct)):
+                    '/%s/%s' % (g.brander_community_abbr, to.name) == g.admin_message_acct)):
                 VNotInTimeout().run(target=to)
             m, inbox_rel = Message._new(c.user, to, subject, body, request.ip)
 
@@ -2145,7 +2145,7 @@ class ApiController(RedditController):
                     sr = Subreddit._byID(parent.sr_id, data=True)
                     if sr:
                         sr_name = sr.name
-                is_messaging_admins = ('/r/%s' % sr_name) == g.admin_message_acct
+                is_messaging_admins = ('/%s/%s' % (g.brander_community_abbr, sr_name)) == g.admin_message_acct
 
                 # Users in timeout can only message the admins.
                 if not (sr_name and is_messaging_admins):
@@ -3881,7 +3881,7 @@ class ApiController(RedditController):
             g.events.quarantine_event('quarantine_opt_in', sr,
                 request=request, context=c)
             QuarantinedSubredditOptInsByAccount.opt_in(c.user, sr)
-        return self.redirect('/r/%s' % sr.name)
+        return self.redirect('/%s/%s' % (g.brander_community_abbr, sr.name))
 
     @validatedForm(VAdmin(),
                    VModhash(),

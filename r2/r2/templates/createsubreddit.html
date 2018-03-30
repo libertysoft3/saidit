@@ -37,7 +37,7 @@
 <div class="infobar">${_md("""
 # can't create sub, your account is too new or you have created too many recently
 
-try participating in other communities on reddit for a little while first before creating your own. please post to /r/help if you need more information about this restriction, or if you require a specific exemption you can [contact the admins](/contact) to request one.
+try participating in other communities on reddit for a little while first before creating your own. please post to /${g.brander_community_abbr}/help if you need more information about this restriction, or if you require a specific exemption you can [contact the admins](/contact) to request one.
 """)}</div>
 %else:
 
@@ -318,7 +318,7 @@ try participating in other communities on reddit for a little while first before
                  %endif
           >
           <label for="allow_top">
-            ${_("allow this subreddit to be included /r/all as well as the default and trending lists")}
+            ${_("allow this subreddit to be included /${g.brander_community_abbr}/all as well as the default and trending lists")}
           </label>
         </li>
         <li>
@@ -494,7 +494,7 @@ try participating in other communities on reddit for a little while first before
         %for sr in thing.site.related_subreddits:
           %if sr:
             <li data-name="${sr.lower()}">
-              <a href="/r/${sr}">/r/${sr}</a>
+              <a href="/${g.brander_community_abbr}/${sr}">/${g.brander_community_abbr}/${sr}</a>
               <button class="remove-sr" onclick="remove_related_sr(this.parentNode)">${_('remove')}</button>
             </li>
           %endif
@@ -520,7 +520,7 @@ try participating in other communities on reddit for a little while first before
             $.post('/api/search_reddit_names.json', { query: sr_name, exact: true }, 'json')
             .done(function(r) {
               var sr_name = r.names[0];
-              var sr_path = '/r/' + sr_name;
+              var sr_path = '/' + g.brander_community_abbr + '/' + sr_name;
 
               var $sr_list = $('#related-srs');
               var $sr_item = $sr_list.find('[data-name=' + sr_name.toLowerCase() + ']');

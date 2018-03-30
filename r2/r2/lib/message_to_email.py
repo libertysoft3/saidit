@@ -68,8 +68,8 @@ def get_reply_to_address(message):
         email_id=email_id, email_mac=email_mac)
 
     sr = Subreddit._byID(message.sr_id, data=True)
-    return "r/{subreddit} mail <{reply_id}@{domain}>".format(
-        subreddit=sr.name, reply_id=reply_id, domain=g.modmail_email_domain)
+    return "{brander_community_abbr}/{subreddit} mail <{reply_id}@{domain}>".format(
+        subreddit=sr.name, reply_id=reply_id, domain=g.modmail_email_domain, brander_community_abbr = g.brander_community_abbr)
 
 
 def parse_and_validate_reply_to_address(address):
@@ -111,8 +111,8 @@ def get_message_subject(message):
     else:
         conversation_subject = message.subject
 
-    return u"[r/{subreddit} mail]: {subject}".format(
-        subreddit=sr.name, subject=_force_unicode(conversation_subject))
+    return u"[{brander_community_abbr}/{subreddit} mail]: {subject}".format(
+        subreddit=sr.name, subject=_force_unicode(conversation_subject, brander_community_abbr=g.brander_community_abbr))
 
 
 def get_email_ids(message):
@@ -133,8 +133,8 @@ def get_email_ids(message):
 
 
 def get_system_from_address(sr):
-    return "r/{subreddit} mail <{sender_email}>".format(
-        subreddit=sr.name, sender_email=g.modmail_system_email)
+    return "{brander_community_abbr}/{subreddit} mail <{sender_email}>".format(
+        subreddit=sr.name, sender_email=g.modmail_system_email, brander_community_abbr=g.brander_community_abbr)
 
 
 def send_modmail_email(message):
@@ -172,8 +172,8 @@ def send_modmail_email(message):
         # this is a message from the subreddit to a user. add some text that
         # shows the recipient
         recipient = Account._byID(message.to_id, data=True)
-        sender_text = ("This message was sent from r/{subreddit} to "
-            "u/{user}").format(subreddit=sr.name, user=recipient.name)
+        sender_text = ("This message was sent from {brander_community_abbr}/{subreddit} to "
+            "u/{user}").format(subreddit=sr.name, user=recipient.name, brander_community_abbr=g.brander_community_abbr)
     else:
         userlink = add_sr("/u/{name}".format(name=sender.name), sr_path=False)
         sender_text = "This message was sent by {userlink}".format(

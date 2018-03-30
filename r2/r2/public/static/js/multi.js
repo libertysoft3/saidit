@@ -74,7 +74,7 @@ r.multi.MultiReddit = Backbone.Model.extend({
     initialize: function(attributes, options) {
         this.uncreated = options && !!options.isNew
         this.subreddits = new r.multi.MultiRedditList(this.get('subreddits'), {
-            url: this.url() + '/r/',
+            url: this.url() + '/' + r.config.brander_community_abbr + '/',
             parse: true
         })
         this.on('change:subreddits', function(model, value) {
@@ -219,7 +219,7 @@ r.multi.GlobalMultiCache = Backbone.Collection.extend({
 r.multi.MultiSubredditItem = Backbone.View.extend({
     tagName: 'li',
 
-    template: _.template('<a href="/r/<%- sr_name %>">/r/<%- sr_name %></a><button class="remove-sr">x</button>'),
+    template: _.template('<a href="/' + r.config.brander_community_abbr + '/<%- sr_name %>">/' + r.config.brander_community_abbr + '/<%- sr_name %></a><button class="remove-sr">x</button>'),
 
     events: {
         'click .remove-sr': 'removeSubreddit'
@@ -307,7 +307,7 @@ r.multi.SubredditList = Backbone.View.extend({
             srNames = nameEl.val()
         srNames = srNames.split(/[+,\-\s]+/)
         // Strip any /r/ or r/ prefixes.
-        srNames = srNames.map(function(sr) { return sr.replace(/^\/?r\//, '') })
+        srNames = srNames.map(function(sr) { return sr.replace("/^\/?" + r.config.brander_community_abbr + "\//", '') })
         srNames = _.compact(srNames)
         if (!srNames.length) {
             return
@@ -531,7 +531,7 @@ r.multi.SubscribeButton = Backbone.View.extend({
 
 r.multi.MultiSubscribeBubble = r.ui.Bubble.extend({
     className: 'multi-selector hover-bubble anchor-right',
-    template: _.template('<div class="title"><strong><%- title %></strong><a class="sr" href="/r/<%- sr_name %>">/r/<%- sr_name %></a></div><div class="throbber"></div>'),
+    template: _.template('<div class="title"><strong><%- title %></strong><a class="sr" href="/' + r.config.brander_community_abbr + '/<%- sr_name %>">/' + r.config.brander_community_abbr + '/<%- sr_name %></a></div><div class="throbber"></div>'),
     itemTemplate: _.template('<label><input class="add-to-multi" type="checkbox" data-path="<%- path %>" <%- checked %>><%- name %><a href="<%- path %>" target="_blank" title="<%- open_multi %>">&rsaquo;</a></label>'),
     itemCreateTemplate: _.template('<label><form class="create-multi"><input type="text" class="multi-name" placeholder="<%- create_msg %>"><div class="error create-multi-error"></div></form></label>'),
 

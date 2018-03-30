@@ -220,7 +220,7 @@ $.request = function(op, parameters, worker_in, block, type,
 
     /* set the subreddit name if there is one */
     if (r.config.post_site) 
-        parameters.r = r.config.post_site;
+        parameters[r.config.brander_community_abbr] = r.config.post_site;
 
     /* add the modhash if the user is logged in */
     if (r.config.logged) 

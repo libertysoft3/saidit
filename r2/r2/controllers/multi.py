@@ -376,8 +376,8 @@ class MultiApiController(RedditController):
     )
     @api_doc(
         api_section.multis,
-        uri="/api/multi/{multipath}/r/{srname}",
-        uri_variants=['/api/filter/{filterpath}/r/{srname}'],
+        uri="/api/multi/{multipath}/" + g.brander_community_abbr + "/{srname}",
+        uri_variants=['/api/filter/{filterpath}/' + g.brander_community_abbr + '/{srname}'],
     )
     def GET_multi_subreddit(self, multi, sr):
         """Get data about a subreddit in a multi."""

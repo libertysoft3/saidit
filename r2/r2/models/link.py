@@ -452,11 +452,11 @@ class Link(Thing, Printable):
             else:
                 res = "/%s" % p
         elif not force_domain:
-            res = "/r/%s/%s" % (sr.name, p)
+            res = "/%s/%s/%s" % (g.brander_community_abbr, sr.name, p)
         elif sr != c.site or force_domain:
             permalink_domain = get_domain(subreddit=False)
-            res = "%s://%s/r/%s/%s" % (g.default_scheme, permalink_domain,
-                                       sr.name, p)
+            res = "%s://%s/%s/%s/%s" % (g.default_scheme, permalink_domain,
+                                       g.brander_community_abbr, sr.name, p)
         else:
             res = "/%s" % p
 
@@ -469,7 +469,7 @@ class Link(Thing, Printable):
     def make_canonical_link(self, sr, subdomain='www'):
         domain = '%s.%s' % (subdomain, g.domain)
         path = 'comments/%s/%s/' % (self._id36, title_to_url(self.title))
-        return '%s://%s/r/%s/%s' % (g.default_scheme, domain, sr.name, path)
+        return '%s://%s/%s/%s/%s' % (g.default_scheme, domain, g.brander_community_abbr, sr.name, path)
 
     def make_permalink_slow(self, force_domain=False):
         return self.make_permalink(self.subreddit_slow,
@@ -796,9 +796,10 @@ class Link(Thing, Printable):
                     url_subreddit = urlparser.get_subreddit()
                     if (url_subreddit and
                             not isinstance(url_subreddit, DefaultSR)):
-                        item.domain_str = ('{0}/r/{1}'
+                        item.domain_str = ('{0}/{1}/{2}'
                                            .format(item.domain,
-                                                   url_subreddit.name))
+                                                    g.brander_community_abbr,
+                                                    url_subreddit.name))
                 elif isinstance(item.media_object, dict):
                     try:
                         author_url = item.media_object['oembed']['author_url']
@@ -2201,7 +2202,7 @@ class Message(Thing, Printable):
                 ):
                     from r2.lib.template_helpers import get_domain
                     if from_sr:
-                        sender_name = '/r/%s' % sr.name
+                        sender_name = '/%s/%s' % (g.brander_community_abbr, sr.name)
                     else:
                         sender_name = '/u/%s' % author.name
                     permalink = 'http://%(domain)s%(path)s' % {
@@ -2433,7 +2434,7 @@ class Message(Thing, Printable):
                     # distinguish, but we only want to use the admin distinguish
                     # on messages sent from /r/reddit.com
                     if (item.distinguished == "admin" and
-                            "/r/%s" % item.subreddit.name == g.admin_message_acct):
+                            "/%s/%s" % (g.brander_community_abbr, item.subreddit.name) == g.admin_message_acct):
                         subreddit_distinguish = "admin"
                     elif (item.distinguished == "moderator" or
                             item.distinguished == "admin"):
