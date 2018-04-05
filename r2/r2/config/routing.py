@@ -482,6 +482,9 @@ def make_map(config):
 
     mc("/web/poisoning", controller="weblog", action="report_cache_poisoning")
 
+    mc('/' + config['pylons.app_globals'].brander_community_abbr_redir + '/:srname', controller='redirect', action='brander_redirect')
+    mc('/' + config['pylons.app_globals'].brander_community_abbr_redir + '/:srname/*rest', controller='redirect', action='brander_redirect')
+
     # This route handles displaying the error page and
     # graphics used in the 404/500
     # error pages. It should likely stay at the top

@@ -50,8 +50,17 @@ class RedirectController(BaseController):
         return self.redirect(str(url), code=301)
 
     def GET_timereddit_redirect(self, timereddit, rest=None):
-        sr_name = timereddit
+        sr_name = "t:" + timereddit
         if not Subreddit.is_valid_name(sr_name, allow_time_srs=True):
+            abort(400)
+        if rest:
+            rest = str(rest)
+        else:
+            rest = ''
+        return self.redirect("/%s/%s/%s" % (g.brander_community_abbr, sr_name, rest), code=301)
+
+    def GET_brander_redirect(self, sr_name, rest=None):
+        if not Subreddit.is_valid_name(sr_name):
             abort(400)
         if rest:
             rest = str(rest)
