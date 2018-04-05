@@ -950,29 +950,29 @@ class Reddit(Templated):
                         target = "_self",
                     )]
             
-	    # CUSTOM: Site Theme
+            # CUSTOM: Site Theme
             if c.user.pref_lightswitch:
                 buttons += [JsButton('lights off',
-                    onclick = "return lightswitch();",
+                    onclick = "lightswitch(); return false;",
                     css_class = "pref-lightswitch pref-lightswitch-on")]
             else:
                 buttons += [JsButton('lights on',
-                    onclick = "return lightswitch();",
-		    css_class = "pref-lightswitch pref-lightswitch-off")]
+                    onclick = "lightswitch(); return false;",
+                    css_class = "pref-lightswitch pref-lightswitch-off")]
 
-	    buttons += [NamedButton("prefs", False,
+        buttons += [NamedButton("prefs", False,
                                   css_class = "pref-lang")]
         else:
 
-	    # CUSTOM: Site Theme
+            # CUSTOM: Site Theme
             if c.user.pref_lightswitch:
                buttons += [JsButton('lights off',
-                    onclick = "return lightswitch('off', false);",
+                    onclick = "lightswitch(); return false;",
                     css_class = "pref-lightswitch pref-lightswitch-on")]
             else:
                 buttons += [JsButton('lights on',
-                    onclick = "return lightswitch('on', false);",
-		    css_class = "pref-lightswitch pref-lightswitch-off")]
+                    onclick = "lightswitch(); return false;",
+		            css_class = "pref-lightswitch pref-lightswitch-off")]
 
             lang = c.lang.split('-')[0] if c.lang else ''
             lang_name = g.lang_name.get(lang) or [lang, '']

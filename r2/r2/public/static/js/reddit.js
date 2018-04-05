@@ -898,7 +898,6 @@ function lightswitch() {
         $('body').addClass('theme-nightmode').removeClass('theme-daymode');
         $.request("lightswitch", {"lightswitch": false});
     }
-    return false;
 };
 
 /* The ready method */
