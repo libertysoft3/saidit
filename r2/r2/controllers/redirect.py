@@ -59,7 +59,8 @@ class RedirectController(BaseController):
             rest = ''
         return self.redirect("/%s/%s/%s" % (g.brander_community_abbr, sr_name, rest), code=301)
 
-    def GET_brander_redirect(self, sr_name, rest=None):
+    def GET_brander_redirect(self, srname, rest=None):
+        sr_name = srname
         if not Subreddit.is_valid_name(sr_name):
             abort(400)
         if rest:
