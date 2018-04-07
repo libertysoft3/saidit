@@ -2921,7 +2921,7 @@ class SubredditTopBar(CachedTemplate):
         drop_down_buttons.append(NavButton(menu.edit_subscriptions,
                                            sr_path = False,
                                            css_class = 'bottom-option',
-                                           dest = '/subreddits/'))
+                                           dest = '/subs/mine/'))
         return SubredditMenu(drop_down_buttons,
                              title = _('my subs'),
                              type = 'srdrop')

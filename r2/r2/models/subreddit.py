@@ -2636,8 +2636,8 @@ class ModContribSR(MultiReddit):
 
 
 class ModSR(ModContribSR):
-    name  = "subreddits you moderate"
-    title = "subreddits you moderate"
+    name  = "subs you moderate"
+    title = "subs you moderate"
     query_param = "moderator"
     path = "/%s/mod" % g.brander_community_abbr
 
