@@ -1166,42 +1166,33 @@ class RedditFooter(CachedTemplate):
     def __init__(self):
         self.nav = [
             NavMenu([
-                   OffsiteButton("blog", "https://saidit.net/r/saidit"),
-				OffsiteButton("about", "https://saidit.net/r/AntiExtremes/comments/3a/welcome_to_antiextremescom/"),
-				
+                    OffsiteButton("blog", "https://saidit.net/s/SaidIt"),
+				    OffsiteButton("about", "https://saidit.net/s/AntiExtremes/comments/3a/welcome_to_antiextremescom/"),
                     ],
                 title = _("about"),
                 type = "flat_vert",
                 separator = ""),
 
             NavMenu([
-                  OffsiteButton(_("contact"), "https://saidit.net/r/help"),
-OffsiteButton(_("list all subs"),
-                        "https://saidit.net/subs"),
-OffsiteButton("terms & content policy", "https://saidit.net/r/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/"),
+                    OffsiteButton(_("contact"), "https://saidit.net/s/help"),
+                    OffsiteButton(_("list all subs"), "https://saidit.net/subs"),
+                    OffsiteButton("terms & content policy", "https://saidit.net/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/"),
                 ],
                 title = _("help"),
                 type = "flat_vert",
                 separator = ""),
 
             NavMenu([
-                    OffsiteButton(_("RES for saidit"),
-                        "https://saidit.net/r/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
-
-                    
-
-				OffsiteButton(_("open source code"),
-                        "https://github.com/libertysoft3/reddit-ae"),
-
-                
+                    OffsiteButton(_("RES for saidit"), "https://saidit.net/s/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
+				    OffsiteButton(_("open source code"), "https://github.com/libertysoft3/reddit-ae"),
                 ],
                 title = _("apps & tools"),
                 type = "flat_vert",
                 separator = ""),
 
             NavMenu([
-                                      OffsiteButton(_("patreon"), "https://www.patreon.com/SaidIt"),
-OffsiteButton(_("cryptocurrency"), "https://saidit.net/r/SaidIt/comments/jf/cryptocurrency_support_for_saiditnet/"),
+                    OffsiteButton(_("patreon"), "https://www.patreon.com/SaidIt"),
+                    OffsiteButton(_("cryptocurrency"), "https://saidit.net/s/SaidIt/comments/jf/cryptocurrency_support_for_saiditnet/"),
                 ],
                 title = _("donate"),
                 type = "flat_vert",

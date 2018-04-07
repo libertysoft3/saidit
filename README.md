@@ -1,6 +1,12 @@
-# reddit
+# saidit
 
-<img src="https://secure.gravatar.com/avatar/c638493729c2f009988c9e5bd9b5e116?s=200" align="right">
+[saidit.net](https://saidit.net) is also using:
+
+* forked [TheLounge web IRC client](https://github.com/libertysoft3/lounge-autoconnect)
+* forked [snudown](https://github.com/libertysoft3/snudown)
+* optional [browser extensions](https://github.com/libertysoft3/Reddit-Enhancement-Suite)
+
+## reddit
 
 Greetings!
 
