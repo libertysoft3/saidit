@@ -354,14 +354,14 @@ def set_subreddit():
             else:
                 c.site = Mod
         else:
-            path = "/subreddits/search?q=%s" % sr_name
+            path = "/subs/search?q=%s" % sr_name
             abort(302, location=BaseController.format_output_url(path))
     else:
         try:
             c.site = Subreddit._by_name(sr_name, stale=can_stale)
         except NotFound:
             if Subreddit.is_valid_name(sr_name):
-                path = "/subreddits/search?q=%s" % sr_name
+                path = "/subs/search?q=%s" % sr_name
                 abort(302, location=BaseController.format_output_url(path))
             elif not c.error_page and not request.path.startswith("/api/login/") :
                 abort(404)

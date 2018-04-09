@@ -848,7 +848,7 @@ class Reddit(Templated):
                 subtitles = get_funny_translated_string("create_subreddit", 2)
                 data_attrs = {'event-action': 'createsubreddit'}
                 ps.append(SideBox(_('Create your own sub'),
-                           '/subreddits/create', 'create',
+                           '/subs/create', 'create',
                            subtitles=subtitles,
                            data_attrs=data_attrs,
                            show_cover = True))
@@ -2336,9 +2336,9 @@ class SubredditsPage(Reddit):
         if c.user_is_loggedin:
             #add the aliases to "my reddits" stays highlighted
             buttons.append(NamedButton("mine",
-                                       aliases=['/subreddits/mine/subscriber',
-                                                '/subreddits/mine/contributor',
-                                                '/subreddits/mine/moderator']))
+                                       aliases=['/subs/mine/subscriber',
+                                                '/subs/mine/contributor',
+                                                '/subs/mine/moderator']))
 
         return [PageNameNav('subreddits'),
                 NavMenu(buttons, base_path = '/subs', type="tabmenu")]
