@@ -215,7 +215,7 @@ class Builder(object):
 
             w.is_controversial = self._is_controversial(w)
 
-            w.score = w.upvotes - w.downvotes
+            w.score = w.upvotes + w.upvotes + w.downvotes
 
             if user_vote_dir == Vote.DIRECTIONS.up:
                 base_score = w.score - 1
