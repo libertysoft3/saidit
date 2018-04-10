@@ -1,7 +1,7 @@
 ;(function(App, window, undefined) {
 
   var RE_ABS = /^https?:\/\//i;
-  var RE_COMMENT = /\/?r\/[\w_]+\/comments\/(?:\S+\/){2,}[\w_]+\/?/i;
+  var RE_COMMENT = new RegExp('\\/?' + r.config.brander_community_abbr + '\/[\\w_]+\/comments\/(?:\\S+\/){2,}[\\w_]+\/?', 'i');
   var PROTOCOL = location.protocol === 'file:' ? 'https:' : '';
 
   function isComment(anchor) {

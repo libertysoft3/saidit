@@ -885,7 +885,7 @@ class Reddit(Templated):
                 wrapped_moderators = [WrappedUser(mod) for mod in moderators
                     if not mod._deleted]
                 helplink = HelpLink(
-                    "/message/compose?to=%%2Fr%%2F%s" % c.site.name,
+                    "/message/compose?to=%%2F%s%%2F%s" % (g.brander_community_abbr, c.site.name),
                     label,
                     access_required=not is_admin_sr,
                     data_attrs={

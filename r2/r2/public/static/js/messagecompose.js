@@ -15,8 +15,7 @@
 
 
   /** This looks like a subreddit name. @const */
-  var SUBREDDIT = /^(?:#|\/?r\/)(.*)/;
-
+  var SUBREDDIT = new RegExp('^(?:#|\/?' + r.config.brander_community_abbr + '\/)(.*)');
 
   var mc = r.messagecompose = {
 
