@@ -320,22 +320,56 @@ $.fn.updateThing = function(update) {
         var $up = $midcol.find('.arrow.'+up_cls+', .arrow.'+upmod_cls);
         var $down = $midcol.find('.arrow.'+down_cls+', .arrow.'+downmod_cls);
         var $elems = $($midcol).add($entry);
+        // CUSTOM: voting model
+        var $upvotes = $up.find('.score');
+        var $downvotes = $down.find('.score');
 
+        // On main page, runs for every item i've voted on, and when voting
+        // On a comment's permalink page, it only runs on voting
         switch (update.voted) {
-            case 1:
-                $elems.addClass('likes').removeClass('dislikes unvoted');
-                $up.removeClass(up_cls).addClass(upmod_cls);
-                $down.removeClass(downmod_cls).addClass(down_cls);
+            case 1: // upvote
+                $up.addClass(upmod_cls).removeClass(up_cls);
+                $upvotes.html(parseInt($upvotes.html()) + 1);
+                $elems.addClass('likes').removeClass('unvoted');
             break;
-            case -1:
-                $elems.addClass('dislikes').removeClass('likes unvoted');
-                $up.removeClass(upmod_cls).addClass(up_cls);
-                $down.removeClass(down_cls).addClass(downmod_cls);
+            case 11: // unupvote
+                $up.addClass(up_cls).removeClass(upmod_cls);
+                $upvotes.html(parseInt($upvotes.html()) - 1);
+                $elems.removeClass('likes');
             break;
-            default:
-                $elems.addClass('unvoted').removeClass('likes dislikes');
-                $up.removeClass(upmod_cls).addClass(up_cls);
-                $down.removeClass(downmod_cls).addClass(down_cls);
+            case -1: // downvote
+                $down.addClass(downmod_cls).removeClass(down_cls);
+                $downvotes.html(parseInt($downvotes.html()) + 1);
+                $elems.addClass('dislikes').removeClass('unvoted');
+            break;
+            case -11: // undownvote
+                $down.addClass(down_cls).removeClass(downmod_cls);
+                $downvotes.html(parseInt($downvotes.html()) - 1);
+                $elems.removeClass('dislikes');
+            break;
+        }
+    // CUSTOM: voting model
+    // Used by CommentPane for comments (non-permalink pages)
+    } else if ('vote_state' in update) {
+        var $midcol = $thing.children('.midcol');
+        var $up = $midcol.find('.arrow.'+up_cls+', .arrow.'+upmod_cls);
+        var $down = $midcol.find('.arrow.'+down_cls+', .arrow.'+downmod_cls);
+        var $elems = $($midcol).add($entry);
+
+        switch (update.vote_state) {
+            case 3: // onon
+                $up.addClass(upmod_cls).removeClass(up_cls);
+                $down.addClass(downmod_cls).removeClass(down_cls);
+                $elems.addClass('likes').addClass('dislikes').removeClass('unvoted');
+            break;
+            case 4: // onoff
+                $up.addClass(upmod_cls).removeClass(up_cls);
+                $elems.addClass('likes').removeClass('unvoted');
+            break;
+            case 5: // offon
+                $down.addClass(downmod_cls).removeClass(down_cls);
+                $elems.addClass('dislikes').removeClass('unvoted');
+            break;
         }
     }
 

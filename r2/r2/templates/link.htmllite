@@ -99,10 +99,11 @@
       %endif
       %if not expanded:
       <%
+       ## CUSTOM: voting model
        if thing.hide_score:
-           score_dislikes = score_unvoted = score_likes = unsafe('&bull; points')
+           score_dislikes = score_unvoted = score_likes = score_likesdislikes = unsafe('&bull; points')
        else:
-           score_dislikes, score_unvoted, score_likes = thing.display_score
+           score_dislikes, score_unvoted, score_likes, score_likesdislikes = thing.display_score
        %>
       <span class="score dislikes" ${hide_if_appropriate('dislikes')}>
          ${score_dislikes}
@@ -112,6 +113,9 @@
       </span>
       <span class="score likes" ${hide_if_appropriate('likes')}>
          ${score_likes}
+      </span>
+      <span class="score likesdislikes" ${hide_if_appropriate('likes')}>
+         ${score_likesdislikes}
       </span>
       &#32;|&#32;
       %endif

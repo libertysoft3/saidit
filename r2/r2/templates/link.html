@@ -199,54 +199,13 @@
                _class="subreddit hover may-blank")}
 </%def>
 
+## CUSTOM: voting model
 <%def name="midcol(display=True, cls = '')">
-
-	
-
     <div class="midcol ${cls}"
        ${not display and "style='display:none'" or ''}>
-
-    ${self.arrowAndText(thing, 1, thing.likes)}
-
-      
-
-    <div class="midcol ${cls}"
-       ${not display and "style='display:none'" or ''}>
-
-## <span class="next-suggestions">
-	
-
-	## ${text_with_links(
-    ## _('%(random_subreddit)s'),
-    ## random_subreddit=dict(link_text=_(" "), path="/r/random", ## style="position: absolute; margin-top: -2px; margin-left: -5px")
-##  )}</span>
-
-    ${self.arrowAndText(thing, 0, thing.likes == False)}
-
-
-    
+    ${self.arrow_intfun_links(thing, 1, thing.likes, thing.hide_score, thing.pref_compress)}
+    ${self.arrow_intfun_links(thing, 0, thing.dislikes, thing.hide_score, thing.pref_compress)}
   </div>
-</div>
-
-   ## <div class="midcol ${cls}"
-   ##    ${not display and "style='display:none'" or ''}>
-    
-  ##  %if thing.pref_compress:
- ##     <div class="score-placeholder"></div>
-  ##  %elif thing.hide_score:
-   ##   <div class="score likes">&bull;</div> 
-   ##   <div class="score unvoted">&bull;</div> 
-   ##   <div class="score dislikes">&bull;</div> 
-   ## %else:
-      ## ${self.score(thing, tag='div')}
-      
-
-   ## %endif
-    
-  ## </div>
-
-
-
  ${self.thumbnail()}
 </%def>
 

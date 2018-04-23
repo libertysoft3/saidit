@@ -1866,7 +1866,8 @@ class Comment(Thing, Printable):
                 item.upvotes = 1
                 item.downvotes = 0
                 item.score = 1
-                item.voting_score = [1, 1, 1]
+                # CUSTOM: voting model
+                item.voting_score = [1, 1, 1, 1]
                 item.render_css_class += " score-hidden"
 
             # in contest mode, use only upvotes for the score if the subreddit
@@ -1874,9 +1875,10 @@ class Comment(Thing, Printable):
             if (item.link.contest_mode and
                     item.subreddit.contest_mode_upvotes_only and
                     not item.score_hidden):
-                item.score = item._ups
+                # CUSTOM: voting model, upvotes/interesting only
+                item.score = item._ups + item._ups
                 item.voting_score = [
-                    item.score - 1, item.score, item.score + 1]
+                    item.score + 1, item.score, item.score + 2, item.score + 3]
                 item.collapsed = False
 
             if item.is_author:

@@ -1,6 +1,9 @@
 !function(r) {
   var UP_CLS = "up";
   var DOWN_CLS = "down";
+  // CUSTOM: voting model
+  var UPMOD_CLS = "upmod";
+  var DOWNMOD_CLS = "downmod";
   var theFakeClick;
   var MouseEvent = window.MouseEvent;
   var createEvent = document.createEvent;
@@ -61,7 +64,19 @@
 
       var $thing = $el.thing();
       var id = $thing.thing_id();
-      var dir = $el.hasClass(UP_CLS) ? 1 : $el.hasClass(DOWN_CLS) ? -1 : 0;
+
+      // CUSTOM: voting model
+      var dir = 0;
+      if ($el.hasClass(UP_CLS)) {
+        dir = 1;
+      } else if ($el.hasClass(UPMOD_CLS)) {
+        dir = 11;
+      } else if ($el.hasClass(DOWN_CLS)) {
+        dir = -1;
+      } else if ($el.hasClass(DOWNMOD_CLS)) {
+        dir = -11;
+      }
+
       var isTrusted;
 
       if (!e || !e.originalEvent) {

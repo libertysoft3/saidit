@@ -77,7 +77,7 @@ class Printable(object):
                 item.render_score  = item.display_score
                 item.display_score = map(CachedVariable,
                                          ["scoredislikes", "scoreunvoted",
-                                          "scorelikes"])
+                                          "scorelikes", "scorelikesdislikes"])
 
         hooks.get_hook("add_props").call(items=wrapped)
 

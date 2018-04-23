@@ -42,17 +42,26 @@ from r2.models import Account
 
 
 class Vote(object):
-    DIRECTIONS = Enum("up", "down", "unvote")
+    # CUSTOM: voting model
+    DIRECTIONS = Enum("up", "down", "unup", "undown", "onon", "onoff", "offon", "offoff", "unvote")
     SERIALIZED_DIRECTIONS = {
+        # user vote directions
         DIRECTIONS.up: 1,
         DIRECTIONS.down: -1,
         DIRECTIONS.unvote: 0,
+        DIRECTIONS.unup: 11,
+        DIRECTIONS.undown: -11,
+        # state
+        DIRECTIONS.onon: 3,
+        DIRECTIONS.onoff: 4,
+        DIRECTIONS.offon: 5,
+        DIRECTIONS.offoff: 6,
     }
     DESERIALIZED_DIRECTIONS = {
         v: k for k, v in SERIALIZED_DIRECTIONS.iteritems()}
 
     def __init__(self, user, thing, direction, date, data=None, effects=None,
-            get_previous_vote=True, event_data=None):
+            get_previous_vote=True, event_data=None, vote_direction=None):
         if not thing.is_votable:
             raise TypeError("Can't create vote on unvotable thing %s" % thing)
 
@@ -62,6 +71,8 @@ class Vote(object):
         self.user = user
         self.thing = thing
         self.direction = direction
+        # CUSTOM: voting model
+        self.vote_direction = vote_direction
         self.date = date.replace(tzinfo=g.tz)
         self.data = data
         self.event_data = event_data
@@ -118,13 +129,33 @@ class Vote(object):
         elif self.is_downvote:
             return "_downs"
 
+    # CUSTOM: voting model
     @property
     def is_upvote(self):
-        return self.direction == self.DIRECTIONS.up
-
+        return self.vote_direction == self.DIRECTIONS.up
     @property
     def is_downvote(self):
-        return self.direction == self.DIRECTIONS.down
+        return self.vote_direction == self.DIRECTIONS.down
+    @property
+    def is_unupvote(self):
+        return self.vote_direction == self.DIRECTIONS.unup
+    @property
+    def is_undownvote(self):
+        return self.vote_direction == self.DIRECTIONS.undown
+
+    # vote directions as state
+    @property
+    def is_ononvote(self):
+        return self.direction == self.DIRECTIONS.onon
+    @property
+    def is_onoffvote(self):
+        return self.direction == self.DIRECTIONS.onoff
+    @property
+    def is_offonvote(self):
+        return self.direction == self.DIRECTIONS.offon
+    @property
+    def is_offoffvote(self):
+        return self.direction == self.DIRECTIONS.offoff
 
     @property
     def is_self_vote(self):
@@ -145,10 +176,13 @@ class Vote(object):
         return self.date - self.thing._date
 
     def apply_effects(self):
+        # CUSTOM: voting model
         """Apply the effects of the vote to the thing that was voted on."""
         # remove the old vote
-        if self.previous_vote and self.previous_vote.affected_thing_attr:
-            self.thing._incr(self.previous_vote.affected_thing_attr, -1)
+        if self.previous_vote and self.is_unupvote:
+            self.thing._incr("_ups", -1)
+        elif self.previous_vote and self.is_undownvote:
+            self.thing._incr("_downs", -1)
 
         # add the new vote
         if self.affected_thing_attr:
@@ -156,9 +190,9 @@ class Vote(object):
 
         if self.effects.affects_karma:
             change = self.effects.karma_change
-            if self.previous_vote:
-                change -= self.previous_vote.effects.karma_change
-
+            # CUSTOM: voting model, previous_vote accounted for in affects_karma
+            # if self.previous_vote:
+            #     change -= self.previous_vote.effects.karma_change
             if change:
                 self.thing.author_slow.incr_karma(
                     kind=self.thing.affects_karma_type,
@@ -210,11 +244,16 @@ class VoteEffects(object):
             self.affects_karma = self.determine_affects_karma(vote)
             self.other_effects = self.determine_other_effects(vote)
 
+        # CUSTOM: voting model
         self.karma_change = 0
         if self.affects_karma:
             if vote.is_upvote:
-                self.karma_change = 1
+                self.karma_change = 2
             elif vote.is_downvote:
+                self.karma_change = 1
+            elif vote.is_unupvote:
+                self.karma_change = -2
+            elif vote.is_undownvote:
                 self.karma_change = -1
 
     def add_note(self, code, message=None):

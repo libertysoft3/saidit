@@ -176,13 +176,16 @@ ${self.RenderPrintable()}
     ${self.ParentDiv()}
   </p>
   ${self.numcol()}
+  ## CUSTOM: voting model
   <%
-     like_cls = "unvoted"
-     if getattr(thing, "likes", None):
-         like_cls = "likes"
-     elif getattr(thing, "likes", None) is False:
-         like_cls = "dislikes"
-   %>
+    like_cls = "unvoted"
+    if getattr(thing, "likes", None) or getattr(thing, "dislikes", None):
+      like_cls = ""
+      if getattr(thing, "likes", None):
+        like_cls = like_cls + "likes"
+      if getattr(thing, "dislikes", None):
+        like_cls = like_cls + " dislikes"
+  %>
   ${self.midcol(cls = like_cls)}
   <div class="entry ${like_cls}">
     ${self.entry()}
@@ -273,9 +276,9 @@ ${thing.num_votes_down_limited}
   </div>
 </%def>
 
-
+## CUSTOM: voting model
 <%def name="score(thing, tag='span')" >
-  %for cls, score in zip(["dislikes", "unvoted", "likes"], thing.display_score):
+  %for cls, score in zip(["dislikes", "unvoted", "likes", "likesdislikes"], thing.display_score):
     <${tag} class="score ${cls}">
       ${score}
     </${tag}>
@@ -291,4 +294,47 @@ ${thing.num_votes_down_limited}
     ${self.arrow(thing, 1, thing.likes)}
     ${self.arrow(thing, 0, thing.likes == False)}
   </div>
+</%def>
+
+<%def name="arrow_intfun_links(this, dir, mod, hide_score, pref_compress)">
+<%
+   arrow_type = "up" if dir > 0 else "down"
+   arrow_class = arrow_type + ("mod" if mod else "")
+   login_class = "login-required" if not g.read_only_mode else ""
+   archived_class = "archived" if not getattr(thing, 'votable', True) else ""
+   access_class = "access-required"
+%>
+  <div ${classes("arrow", arrow_class, login_class, archived_class, access_class)}
+    data-event-action="${arrow_type}vote"
+    %if not g.read_only_mode:
+       role="button"
+       % if dir > 0:
+       aria-label="${_("upvote")}"
+       % else:
+       aria-label="${_("downvote")}"
+       % endif
+       tabindex="0"
+    %endif
+    >
+    %if arrow_type is "up" and not hide_score:
+      ${self.score_upvotes(thing, mod=mod)}
+    %elif arrow_type is "down" and not hide_score:
+      ${self.score_downvotes(thing, mod=mod)}
+    %elif hide_score:
+      <span class="score">&bull;</span>
+    %endif
+  </div>
+</%def>
+
+## use ups and downs directly, not display_score
+<%def name="score_upvotes(thing, tag='span', mod=False)" >
+  <${tag} class="score">
+      ${thing.upvotes}
+  </${tag}>
+</%def>
+
+<%def name="score_downvotes(thing, tag='span', mod=False)" >
+  <${tag} class="score">
+      ${thing.downvotes}
+  </${tag}>
 </%def>

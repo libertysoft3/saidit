@@ -2294,8 +2294,9 @@ class ApiController(RedditController):
     @require_oauth2_scope("vote")
     @noresponse(VUser(),
                 VModhash(),
-                direction=VInt("dir", min=-1, max=1,
-                    docs={"dir": "vote direction. one of (1, 0, -1)"}
+                # CUSTOM: voting model
+                direction=VInt("dir", min=-11, max=11,
+                    docs={"dir": "vote direction. one of (1, -1, 11, -11)"}
                 ),
                 thing=VByName('id'),
                 rank=VInt("rank", min=1))
@@ -2342,10 +2343,14 @@ class ApiController(RedditController):
         # convert vote direction to enum value
         if direction == 1:
             direction = Vote.DIRECTIONS.up
+        elif direction == 11:
+            direction = Vote.DIRECTIONS.unup
         elif direction == -1:
             direction = Vote.DIRECTIONS.down
-        elif direction == 0:
-            direction = Vote.DIRECTIONS.unvote
+        elif direction == -11:
+            direction = Vote.DIRECTIONS.undown
+        else:
+            return abort(400, "Bad Request")
 
         cast_vote(c.user, thing, direction, rank=rank)
 

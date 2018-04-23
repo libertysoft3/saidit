@@ -32,7 +32,7 @@ from r2.lib.utils import epoch_timestamp, is_subdomain, UrlParser
 from r2.models import Account, Comment, Link, Subreddit
 from r2.models.last_modified import LastModified
 from r2.models.query_cache import CachedQueryMutator
-from r2.models.vote import Vote, VotesByAccount
+from r2.models.vote import Vote, VotesByAccount, VoteDetailsByThing
 
 from r2.lib.geoip import organization_by_ips
 
@@ -58,6 +58,52 @@ def cast_vote(user, thing, direction, **data):
     if not isinstance(thing, (Link, Comment)):
         return
 
+    # CUSTOM: voting model, validate direction
+    if direction not in (Vote.DIRECTIONS.up, Vote.DIRECTIONS.down, Vote.DIRECTIONS.unup, Vote.DIRECTIONS.undown):
+        return
+
+    # CUSTOM: voting model, use direction as state
+    # NOTE: vote_direction is tracked in addition to direction for easy updating of _likes, _dislikes, and karma in Vote._commit()
+    vote_direction = direction
+    previous_vote = VoteDetailsByThing.get_vote(user, thing)
+    if previous_vote:
+        if direction == Vote.DIRECTIONS.up: # interesting/liked
+            if previous_vote.is_offonvote:
+                direction = Vote.DIRECTIONS.onon
+            elif previous_vote.is_offoffvote:
+                direction = Vote.DIRECTIONS.onoff
+            else:
+                return
+        elif direction == Vote.DIRECTIONS.down: # funny/disliked
+            if previous_vote.is_onoffvote:
+                direction = Vote.DIRECTIONS.onon
+            elif previous_vote.is_offoffvote:
+                direction = Vote.DIRECTIONS.offon
+            else:
+                return
+        elif direction == Vote.DIRECTIONS.unup: # un-interesting / unliked
+            if previous_vote.is_ononvote:
+                direction = Vote.DIRECTIONS.offon
+            elif previous_vote.is_onoffvote:
+                direction = Vote.DIRECTIONS.offoff
+            else:
+                return
+        elif direction == Vote.DIRECTIONS.undown: # un-funny / undisliked
+            if previous_vote.is_ononvote:
+                direction = Vote.DIRECTIONS.onoff
+            elif previous_vote.is_offonvote:
+                direction = Vote.DIRECTIONS.offoff
+            else:
+                return
+    # first vote
+    else:
+        if direction == Vote.DIRECTIONS.up:
+            direction = Vote.DIRECTIONS.onoff
+        elif direction == Vote.DIRECTIONS.down:
+            direction = Vote.DIRECTIONS.offon
+        else:
+            return
+
     update_vote_lookups(user, thing, direction)
 
     vote_data = {
@@ -65,6 +111,8 @@ def cast_vote(user, thing, direction, **data):
         "thing_fullname": thing._fullname,
         "direction": direction,
         "date": int(epoch_timestamp(datetime.now(g.tz))),
+        # CUSTOM: voting model
+        "vote_direction": vote_direction,
     }
 
     data['ip'] = getattr(request, "ip", None)
@@ -106,13 +154,13 @@ def update_user_liked(vote):
     from r2.lib.db.queries import get_disliked, get_liked
 
     with CachedQueryMutator() as m:
+        # CUSTOM: voting model
         # if this is a changed vote, remove from the previous cached
         # query
-        if vote.previous_vote:
-            if vote.previous_vote.is_upvote:
-                m.delete(get_liked(vote.user), [vote.previous_vote])
-            elif vote.previous_vote.is_downvote:
-                m.delete(get_disliked(vote.user), [vote.previous_vote])
+        if vote.previous_vote and vote.is_unupvote:
+            m.delete(get_liked(vote.user), [vote.previous_vote])
+        elif vote.previous_vote and vote.is_undownvote:
+            m.delete(get_disliked(vote.user), [vote.previous_vote])
 
         # and then add to the new cached query
         if vote.is_upvote:
@@ -154,6 +202,8 @@ def consume_link_vote_queue(qname="vote_link_q"):
                     date=datetime.utcfromtimestamp(vote_data["date"]),
                     data=vote_data["data"],
                     event_data=vote_data.get("event_data"),
+                    # CUSTOM: voting model
+                    vote_direction=vote_data["vote_direction"],
                 )
             except TypeError as e:
                 # a vote on an invalid type got in the queue, just skip it
@@ -364,6 +414,8 @@ def consume_comment_vote_queue(qname="vote_comment_q"):
                 date=datetime.utcfromtimestamp(vote_data["date"]),
                 data=vote_data["data"],
                 event_data=vote_data.get("event_data"),
+                # CUSTOM: voting model
+                vote_direction=vote_data["vote_direction"],
             )
         except TypeError as e:
             # a vote on an invalid type got in the queue, just skip it

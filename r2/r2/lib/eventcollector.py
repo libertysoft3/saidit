@@ -106,12 +106,25 @@ class EventQueue(object):
         vote: An r2.models.vote Vote object
         """
 
+        # CUSTOM: voting model
         # For mapping vote directions to readable names used by data team
         def get_vote_direction_name(vote):
             if vote.is_upvote:
                 return "up"
             elif vote.is_downvote:
                 return "down"
+            elif vote.is_unupvote:
+                return "unup"
+            elif vote.is_undownvote:
+                return "undown"
+            elif vote.is_ononvote:
+                return "onon"
+            elif vote.is_onoffvote:
+                return "onoff"
+            elif vote.is_offonvote:
+                return "offon"
+            elif vote.is_offoffvote:
+                return "offoff"
             else:
                 return "clear"
 

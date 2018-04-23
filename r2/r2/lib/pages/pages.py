@@ -2229,10 +2229,17 @@ class CommentPane(Templated):
                         update['friend'] = True
                     if is_enemy:
                         update['enemy'] = True
-                    if t.likes:
-                        update['voted'] = 1
-                    if t.likes is False:
-                        update['voted'] = -1
+
+                    # CUSTOM: voting model, pass vote_state instead of voted
+                    if t.likes and t.dislikes:
+                        update['vote_state'] = 3
+                    elif t.likes and not t.dislikes:
+                        update['vote_state'] = 4
+                    elif not t.likes and t.dislikes:
+                        update['vote_state'] = 5
+                    else:
+                        update['vote_state'] = 0
+
                     if t.saved:
                         update['saved'] = True
                     if t.user_gilded:

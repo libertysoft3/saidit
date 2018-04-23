@@ -403,7 +403,8 @@ def replace_render(listing, item, render_func):
             # replace the score stub
             (replacements['scoredislikes'],
              replacements['scoreunvoted'],
-             replacements['scorelikes'])  = item.render_score
+             replacements['scorelikes'],
+             replacements['scorelikesdislikes'])  = item.render_score
 
         # compute the timesince here so we don't end up caching it
         if hasattr(item, "_date"):

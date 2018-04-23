@@ -200,12 +200,16 @@ class Builder(object):
 
             user_vote_dir = likes.get((user, item))
 
-            if user_vote_dir == Vote.DIRECTIONS.up:
+            # CUSTOM: voting model, assign arrow states
+            w.likes = None
+            w.dislikes = None
+            if user_vote_dir == Vote.DIRECTIONS.onon:
                 w.likes = True
-            elif user_vote_dir == Vote.DIRECTIONS.down:
-                w.likes = False
-            else:
-                w.likes = None
+                w.dislikes = True
+            elif user_vote_dir == Vote.DIRECTIONS.onoff:
+                w.likes = True
+            elif user_vote_dir == Vote.DIRECTIONS.offon:
+                w.dislikes = True
 
             w.upvotes = item._ups
             w.downvotes = item._downs
@@ -215,18 +219,25 @@ class Builder(object):
 
             w.is_controversial = self._is_controversial(w)
 
+            # CUSTOM: voting model, Link and Comment scores
             w.score = w.upvotes + w.upvotes + w.downvotes
 
-            if user_vote_dir == Vote.DIRECTIONS.up:
+            # CUSTOM: voting model
+            # this undoes your last vote so voting_score can re-apply it below
+            if user_vote_dir == Vote.DIRECTIONS.onon:
+                base_score = w.score - 3
+            elif user_vote_dir == Vote.DIRECTIONS.onoff:
+                base_score = w.score - 2
+            elif user_vote_dir == Vote.DIRECTIONS.offon:
                 base_score = w.score - 1
-            elif user_vote_dir == Vote.DIRECTIONS.down:
-                base_score = w.score + 1
             else:
                 base_score = w.score
 
+            # CUSTOM: voting model, add likesdislikes score
             # store the set of available scores based on the vote
             # for ease of i18n when there is a label
-            w.voting_score = [(base_score + x - 1) for x in range(3)]
+            # w.voting_score = [(base_score + x - 1) for x in range(3)]
+            w.voting_score = [base_score + 1, base_score, base_score + 2, base_score + 3]
 
             w.deleted = item._deleted
 
