@@ -62,14 +62,18 @@
   %endif
   <Div class="midcol">
     ${arrow(thing, 1, thing.likes)}
-    ${arrow(thing, 0, thing.likes == False)}
+    ## CUSTOM: voting model
+    ${arrow(thing, 0, thing.dislikes)}
   </div>
   <% 
      like_cls = "unvoted"
-     if getattr(thing, "likes", None):
-         like_cls = "likes"
-     elif getattr(thing, "likes", None) is False:
-         like_cls = "dislikes"
+     ## CUSTOM: voting model
+     if getattr(thing, "likes", None) or getattr(thing, "dislikes", None):
+       like_cls = ""
+       if getattr(thing, "likes", None):
+           like_cls += "likes "
+       if getattr(thing, "likes", None) is False:
+           like_cls += "dislikes"
    %>
   <div class="entry ${like_cls}">
     <div class="tagline">

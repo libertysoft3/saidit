@@ -206,9 +206,10 @@ class Builder(object):
             if user_vote_dir == Vote.DIRECTIONS.onon:
                 w.likes = True
                 w.dislikes = True
-            elif user_vote_dir == Vote.DIRECTIONS.onoff:
+            # 'or's for backward compatibility
+            elif user_vote_dir == Vote.DIRECTIONS.onoff or user_vote_dir == Vote.DIRECTIONS.up:
                 w.likes = True
-            elif user_vote_dir == Vote.DIRECTIONS.offon:
+            elif user_vote_dir == Vote.DIRECTIONS.offon or user_vote_dir == Vote.DIRECTIONS.down:
                 w.dislikes = True
 
             w.upvotes = item._ups

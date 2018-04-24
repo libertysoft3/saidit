@@ -60,6 +60,7 @@ def cast_vote(user, thing, direction, **data):
 
     # CUSTOM: voting model, validate direction
     if direction not in (Vote.DIRECTIONS.up, Vote.DIRECTIONS.down, Vote.DIRECTIONS.unup, Vote.DIRECTIONS.undown):
+        g.log.warning("!!! cast_vote() discarding vote with dir: %s" % direction)
         return
 
     # CUSTOM: voting model, use direction as state
@@ -73,6 +74,7 @@ def cast_vote(user, thing, direction, **data):
             elif previous_vote.is_offoffvote:
                 direction = Vote.DIRECTIONS.onoff
             else:
+                g.log.warning("!!! cast_vote() A discarding vote with dir: %s" % direction)
                 return
         elif direction == Vote.DIRECTIONS.down: # funny/disliked
             if previous_vote.is_onoffvote:
@@ -80,6 +82,7 @@ def cast_vote(user, thing, direction, **data):
             elif previous_vote.is_offoffvote:
                 direction = Vote.DIRECTIONS.offon
             else:
+                g.log.warning("!!! cast_vote() B discarding vote with dir: %s prev dir: %s" % (direction, previous_vote.direction))
                 return
         elif direction == Vote.DIRECTIONS.unup: # un-interesting / unliked
             if previous_vote.is_ononvote:
@@ -87,6 +90,7 @@ def cast_vote(user, thing, direction, **data):
             elif previous_vote.is_onoffvote:
                 direction = Vote.DIRECTIONS.offoff
             else:
+                g.log.warning("!!! cast_vote() C discarding vote with dir: %s" % direction)
                 return
         elif direction == Vote.DIRECTIONS.undown: # un-funny / undisliked
             if previous_vote.is_ononvote:
@@ -94,6 +98,7 @@ def cast_vote(user, thing, direction, **data):
             elif previous_vote.is_offonvote:
                 direction = Vote.DIRECTIONS.offoff
             else:
+                g.log.warning("!!! cast_vote() D discarding vote with dir: %s" % direction)
                 return
     # first vote
     else:
@@ -103,6 +108,8 @@ def cast_vote(user, thing, direction, **data):
             direction = Vote.DIRECTIONS.offon
         else:
             return
+
+    # g.log.warning("!!! cast_vote() new Vote with dir: %s vote_dir: %s" % (direction, vote_direction))
 
     update_vote_lookups(user, thing, direction)
 

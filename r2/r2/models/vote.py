@@ -132,10 +132,12 @@ class Vote(object):
     # CUSTOM: voting model
     @property
     def is_upvote(self):
-        return self.vote_direction == self.DIRECTIONS.up
+        # backward compatibility
+        return self.vote_direction == self.DIRECTIONS.up or self.direction == self.DIRECTIONS.up
     @property
     def is_downvote(self):
-        return self.vote_direction == self.DIRECTIONS.down
+        # backward compatibility
+        return self.vote_direction == self.DIRECTIONS.down or self.direction == self.DIRECTIONS.down
     @property
     def is_unupvote(self):
         return self.vote_direction == self.DIRECTIONS.unup
@@ -180,12 +182,15 @@ class Vote(object):
         """Apply the effects of the vote to the thing that was voted on."""
         # remove the old vote
         if self.previous_vote and self.is_unupvote:
+            g.log.warning("!!! apply_effects() decrementing _ups")
             self.thing._incr("_ups", -1)
         elif self.previous_vote and self.is_undownvote:
+            g.log.warning("!!! apply_effects() decrementing _downs")
             self.thing._incr("_downs", -1)
 
         # add the new vote
         if self.affected_thing_attr:
+            g.log.warning("!!! apply_effects() incrementing %s" % self.affected_thing_attr)
             self.thing._incr(self.affected_thing_attr, 1)
 
         if self.effects.affects_karma:

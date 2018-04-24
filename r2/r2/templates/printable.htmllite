@@ -24,13 +24,16 @@
 <%namespace file="printable.html" import="arrow"/>
 
 <%
+    ## CUSTOM: voting model
     like_cls = "unvoted"
-    if getattr(thing, "likes", None):
-        like_cls = "likes"
-    elif getattr(thing, "likes", None) is False:
-        like_cls = "dislikes"
+    if getattr(thing, "likes", None) or getattr(thing, "dislikes", None):
+      like_cls = ""
+      if getattr(thing, "likes", None):
+          like_cls += "likes "
+      if getattr(thing, "dislikes", None):
+          like_cls += "dislikes"
     thing.like_cls = like_cls
- %>
+%>
 ${self.parent()}
 ${self.entry()}
 ${self.Child()}
@@ -52,7 +55,7 @@ ${self.Child()}
    from r2.lib.template_helpers import get_domain
    domain = get_domain(subreddit=False)
    permalink = "%s://%s%s" % (g.default_scheme, domain, thing.permalink)
-   if thing.likes == False:
+   if thing.dislikes:
       arrow = "%s://%s/static/widget_arrows_down.gif"
    elif thing.likes:
       arrow = "%s://%s/static/widget_arrows_up.gif"
@@ -95,7 +98,7 @@ ${self.Child()}
 <%def name="real_arrows(thing)">
   <div class="midcol ${thing.like_cls}" ${optionalstyle("width: 15px")}>
     ${arrow(thing, 1, thing.likes)}
-    ${arrow(thing, 0, thing.likes == False)}
+    ${arrow(thing, 0, thing.dislikes)}
  </div>
 </%def>
 

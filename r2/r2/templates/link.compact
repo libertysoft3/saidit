@@ -58,7 +58,8 @@
    %>
   <div class="midcol ${like_cls}">
     ${arrow(thing, 1, thing.likes)}
-    ${arrow(thing, 0, thing.likes == False)}
+    ## CUSTOM: voting model
+    ${arrow(thing, 0, thing.dislikes)}
   </div>
     %if not c.permalink_page:
       <div class="commentcount">

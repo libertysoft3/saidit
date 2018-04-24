@@ -237,42 +237,6 @@ ${self.RenderPrintable()}
        tabindex="0"
     %endif
     >
-
-  </div>
-</%def>
-
-<%def name="arrowAndText(this, dir, mod)">
-<% 
-   arrow_type = "up" if dir > 0 else "down"
-   arrow_class = arrow_type + ("mod" if mod else "")
-   login_class = "login-required" if not g.read_only_mode else ""
-   archived_class = "archived" if not getattr(thing, 'votable', True) else ""
-   access_class = "access-required"
-%>
-  <div ${classes("arrow", arrow_class, login_class, archived_class, access_class)}
-    data-event-action="${arrow_type}vote"
-    %if not g.read_only_mode:
-       role="button"
-       % if dir > 0:
-       aria-label="${_("upvote")}"
-       % else:
-       aria-label="${_("downvote")}"
-       % endif
-       tabindex="0"
-    %endif
-    >
-
-<div class="whatever" style="margin-top: 5px; margin-left: 40px; position: absolute; cursor:pointer; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -o-user-select: none;">
-
-% if dir > 0:
-${thing._ups}
-% else:
-${thing.num_votes_down_limited}
-% endif
-
-</div>
-
-
   </div>
 </%def>
 
@@ -285,14 +249,11 @@ ${thing.num_votes_down_limited}
   %endfor
 </%def>
 
-
-
-
 <%def name="midcol(display=True, cls = '')">
   <div class="midcol ${cls}" 
        ${not display and "style='display:none'" or ''}>
     ${self.arrow(thing, 1, thing.likes)}
-    ${self.arrow(thing, 0, thing.likes == False)}
+    ${self.arrow(thing, 0, thing.dislikes)}
   </div>
 </%def>
 
@@ -329,12 +290,12 @@ ${thing.num_votes_down_limited}
 ## use ups and downs directly, not display_score
 <%def name="score_upvotes(thing, tag='span', mod=False)" >
   <${tag} class="score">
-      ${'-' if thing.upvotes == 0 else thing.upvotes}
+      ${'-' if thing.upvotes <= 0 else thing.upvotes}
   </${tag}>
 </%def>
 
 <%def name="score_downvotes(thing, tag='span', mod=False)" >
   <${tag} class="score">
-      ${'-' if thing.downvotes == 0 else thing.downvotes}
+      ${'-' if thing.downvotes <= 0 else thing.downvotes}
   </${tag}>
 </%def>
