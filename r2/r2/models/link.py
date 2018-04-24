@@ -830,12 +830,10 @@ class Link(Thing, Printable):
             elif user_is_loggedin and item.user_is_moderator:
                 item.hide_score = False
             elif item.promoted and item.score <= 0:
-                g.log.warning("!!! link add_props() hiding score, promoted content score < 0")
                 item.hide_score = True
             elif user == item.author:
                 item.hide_score = False
             elif item._date > timeago("2 hours"):
-                g.log.warning("!!! link add_props() hiding score, item date: %s 2hrs ago: %s" % (item._date, timeago("2 hours")))
                 item.hide_score = True
             else:
                 item.hide_score = False
