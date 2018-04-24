@@ -73,32 +73,46 @@ def cast_vote(user, thing, direction, **data):
                 direction = Vote.DIRECTIONS.onon
             elif previous_vote.is_offoffvote:
                 direction = Vote.DIRECTIONS.onoff
+            # backward compatibility
+            elif previous_vote.is_downvote:
+                direction = Vote.DIRECTIONS.onon
             else:
-                g.log.warning("!!! cast_vote() A discarding vote with dir: %s" % direction)
+                g.log.warning("!!! cast_vote() up, discarding vote with dir: %s prev dir: %s" % (direction, previous_vote.direction))
                 return
         elif direction == Vote.DIRECTIONS.down: # funny/disliked
             if previous_vote.is_onoffvote:
                 direction = Vote.DIRECTIONS.onon
             elif previous_vote.is_offoffvote:
                 direction = Vote.DIRECTIONS.offon
+            elif previous_vote.is_offoffvote:
+                direction = Vote.DIRECTIONS.offon
+            # backward compatibility
+            elif previous_vote.is_upvote:
+                direction = Vote.DIRECTIONS.onon
             else:
-                g.log.warning("!!! cast_vote() B discarding vote with dir: %s prev dir: %s" % (direction, previous_vote.direction))
+                g.log.warning("!!! cast_vote() down, discarding vote with dir: %s prev dir: %s" % (direction, previous_vote.direction))
                 return
         elif direction == Vote.DIRECTIONS.unup: # un-interesting / unliked
             if previous_vote.is_ononvote:
                 direction = Vote.DIRECTIONS.offon
             elif previous_vote.is_onoffvote:
                 direction = Vote.DIRECTIONS.offoff
+            # backward compatibility
+            elif previous_vote.is_upvote:
+                direction = Vote.DIRECTIONS.offoff
             else:
-                g.log.warning("!!! cast_vote() C discarding vote with dir: %s" % direction)
+                g.log.warning("!!! cast_vote() unup, discarding vote with dir: %s prev dir: %s" % (direction, previous_vote.direction))
                 return
         elif direction == Vote.DIRECTIONS.undown: # un-funny / undisliked
             if previous_vote.is_ononvote:
                 direction = Vote.DIRECTIONS.onoff
             elif previous_vote.is_offonvote:
                 direction = Vote.DIRECTIONS.offoff
+            # backward compatibility
+            elif previous_vote.is_downvote:
+                direction = Vote.DIRECTIONS.offoff
             else:
-                g.log.warning("!!! cast_vote() D discarding vote with dir: %s" % direction)
+                g.log.warning("!!! cast_vote() undown, discarding vote with dir: %s prev dir: %s" % (direction, previous_vote.direction))
                 return
     # first vote
     else:
