@@ -1063,14 +1063,14 @@ class Subreddit(Thing, Printable, BaseSite):
                 item.hide_num_users_info
             )
 
-            # CUSTOM: voting model
-            item.score = item._ups + item._ups + item._downs
+	    item.score = item._ups
 
             # override "voting" score behavior (it will override the use of
             # item.score in builder.py to be ups-downs)
             item.likes = item.subscriber or None
-            base_score = item.score - (2 if item.likes else 0)
-            item.voting_score = [base_score + 1, base_score, base_score + 2, base_score + 3]
+	    base_score = item.score - (1 if item.likes else 0)
+ 	    # CUSTOM: voting model
+	    item.voting_score = [(base_score + x - 1) for x in range(4)]
             item.score_fmt = Score.subscribers
 
             #will seem less horrible when add_props is in pages.py

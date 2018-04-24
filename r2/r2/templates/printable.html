@@ -329,12 +329,12 @@ ${thing.num_votes_down_limited}
 ## use ups and downs directly, not display_score
 <%def name="score_upvotes(thing, tag='span', mod=False)" >
   <${tag} class="score">
-      ${thing.upvotes}
+      ${'-' if thing.upvotes == 0 else thing.upvotes}
   </${tag}>
 </%def>
 
 <%def name="score_downvotes(thing, tag='span', mod=False)" >
   <${tag} class="score">
-      ${thing.downvotes}
+      ${'-' if thing.downvotes == 0 else thing.downvotes}
   </${tag}>
 </%def>

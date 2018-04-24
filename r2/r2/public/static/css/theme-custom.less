@@ -25,3 +25,23 @@
 .pref-lightswitch-off {
 	background-image: url(../lightswitch-dark.png); /* SPRITE */
 }
+
+/* Voting model */
+.arrow .score {
+	display: inline;
+	padding-left: 15px;
+	position: relative;
+	top: 5px;
+}
+.score.likesdislikes {
+	display: none;
+}
+.likes.dislikes {
+    .score.likesdislikes {
+    	display: inline;
+    }
+    .score.likes, .score.dislikes {
+    	display: none;
+    }
+}
+
