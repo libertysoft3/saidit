@@ -43,6 +43,7 @@ def load_controllers():
     from listingcontroller import HotController
     from listingcontroller import NewController
     from listingcontroller import RisingController
+    from listingcontroller import NewCommentsController
     from listingcontroller import BrowseController
     from listingcontroller import AdsController
     from listingcontroller import UserListListingController

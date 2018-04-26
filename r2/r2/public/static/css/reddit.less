@@ -274,7 +274,7 @@ ul.flat-vert {text-align: left;}
 #header-img.default-header {
     text-indent: -9999px;
     background-image: url(../reddit.com.header.png); /* NOT-SPRITE */
-    height: 40px;
+    height: 45px;
     width: 100%;
     display: inline-block;
     vertical-align: bottom;
@@ -474,9 +474,14 @@ ul.flat-vert {text-align: left;}
 .tabmenu li a {
     padding: 2px 6px 0 6px;
     background-color: #2f2f2f;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+
  }
 
 .tabmenu li.selected a{
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
     color: orangered;
     background-color: #2f2f2f;
     border: 1px solid #000;
@@ -8394,7 +8399,7 @@ form#banned textarea {
 }
 
 .gold-expiration-info div:last-of-type {
-    margin-top: -10px;
+    margin-top: 0px;
 }
 
 .gold-expiration-info .karma {
@@ -11565,7 +11570,7 @@ body:not(.loggedin) .report-button {
 }
 #header-img.default-header {
 	display: block;
-	margin: 3px 0 3px 0; /* can fine tune vertical posittion */
+	margin: 0px 0 0px 0; /* can fine tune vertical posittion */
  	
 	/* NOTE: you can only set these styles because the logo has been removed from the sprite image */
 	background-position: 391px 0;

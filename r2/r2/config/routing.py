@@ -171,7 +171,7 @@ def make_map(config):
        connect('/:sort', controller='browse', sort='top',
           action='listing', requirements=dict(sort='top|controversial'))
        connect('/:controller', action='listing',
-          requirements=dict(controller="hot|new|rising|randomrising|ads"))
+          requirements=dict(controller="hot|new|rising|randomrising|ads|newcomments"))
 
     mc('/user/:username/:where/:show', controller='user', action='listing')
     
@@ -286,7 +286,7 @@ def make_map(config):
     mc('/', controller='hot', action='listing')
 
     mc('/:controller', action='listing',
-       requirements=dict(controller="hot|new|rising|randomrising|ads"))
+       requirements=dict(controller="hot|new|rising|randomrising|ads|newcomments"))
     mc('/saved', controller='user', action='saved_redirect')
 
     mc('/by_id/:names', controller='byId', action='listing')

@@ -630,6 +630,9 @@ class RisingController(NewController):
 
         return get_rising(c.site)
 
+
+
+
 class BrowseController(ListingWithPromos):
     where = 'browse'
     show_chooser = True
@@ -1748,6 +1751,23 @@ class CommentsController(SubredditListingController):
         c.profilepage = True
         self.suppress_reply_buttons = True
         return ListingController.GET_listing(self, **env)
+
+
+class NewCommentsController(SubredditListingController):
+    where = 'newcomments'
+    title_text = _('new comments on posts')
+    extra_page_classes = ListingController.extra_page_classes + ['new-page']
+
+    def query(self):
+        return c.site.get_all_comments()
+
+    @require_oauth2_scope("read")
+    def GET_listing(self, **env):
+        c.profilepage = True
+        self.suppress_reply_buttons = False
+        return ListingController.GET_listing(self, **env)
+
+
 
 
 class UserListListingController(ListingController):
