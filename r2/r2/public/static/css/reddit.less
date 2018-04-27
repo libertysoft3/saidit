@@ -772,17 +772,26 @@ ul.flat-vert {text-align: left;}
 /* thing rendering */
 
 .arrow {
-    margin: 0px 0px 0px 0px;
-    width: 100%;
-    height: 28px;
+    margin: 1px 0px 1px 0px;
+    width: 96%;
+    height: 26px;
     display: block;
     cursor: pointer;
-    background-position: center center;
-    background-repeat: no-repeat; 
     margin-left: 0px;
     margin-right: 15px; 
     outline: none;
     float: left;
+    border: 1.5px solid #2f2f2f;
+}
+
+.arrow:hover {
+    float:left;
+    border: 1.5px solid #5bdae3;
+    height: 26px;
+    margin-bottom: 1px;
+    margin-top: 1px;
+    width: 96%;
+    border-radius: 5px;
 }
 
 .arrow.upmod { 
