@@ -767,7 +767,6 @@ def generate_image_links(preview_object, file_type=None, censor_nsfw=False):
         url = g.image_resizing_provider.resize_image(
             preview_object,
             w,
-            file_type=file_type,
             censor_nsfw=censor_nsfw,
             max_ratio=PREVIEW_MAX_RATIO,
         )
@@ -780,7 +779,6 @@ def generate_image_links(preview_object, file_type=None, censor_nsfw=False):
 
     url = g.image_resizing_provider.resize_image(
         preview_object,
-        file_type=file_type,
         censor_nsfw=censor_nsfw,
     )
 
