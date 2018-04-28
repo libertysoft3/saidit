@@ -907,8 +907,9 @@ class Reddit(Templated):
                 ps.append(Goldvertisement())
 
         if c.user.pref_clickgadget and c.recent_clicks:
-            ps.append(SideContentBox(_("Recently viewed links"),
-                                     [ClickGadget(c.recent_clicks)]))
+            pass
+	    # ps.append(SideContentBox(_("Recently viewed links"),
+            #                         [ClickGadget(c.recent_clicks)]))
 
         if c.user_is_loggedin:
             activity_link = AccountActivityBox()
