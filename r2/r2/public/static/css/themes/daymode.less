@@ -17,17 +17,16 @@
 .theme-daymode {
 
     /* reddit.less overrides */
-    background-color: #FDFEFE;
+    background-color: #F8F8F8;
     textarea { color: black; background-color: white; }
     h2, a, .tagline a { color: #369; }
     .flat-vert.title { color: #777; }
 
 .arrow {   background-position: left;
-		    margin-bottom: 0px;
+		    margin-bottom: 2px;
     margin-top: 0px;
     margin-left: 0px;
-    margin-right: 0px;
-    width: 89%;
+    width: 85%;
     height: 26px;
     display: block;
     cursor: pointer;
@@ -35,49 +34,57 @@
     margin-right: 15px; 
     outline: none;
     float: left;
-    border: 2px solid white;
+    border: 2px solid #dadada;
+    border-radius: 5px;
     background-position-y: center;
-
+    
     }
 
 .arrow:hover {
     float: left;
-    border: 2px solid #5bdae3;
+    border: 2px solid #34bea4;
     height: 26px;
-    margin-bottom: 0px;
+    margin-bottom: 2px;
     margin-top: 0px;
     margin-left: 0px;
-    margin-right: 0px;
-    width: 89%;
+    
+    width: 85%;
     
     border-radius: 5px;
 }
 
 
 .arrow.upmod { 
-    background-image: url(../aupmod_light.png);  /* SPRITE */
+    background-image: url(../aupmod_icon.png);  /* SPRITE */
+    background-color: #f3f3f3;
+    background-position: 2px;
+
 }
 .arrow.downmod { 
-    background-image: url(../adownmod_light.png);  /* SPRITE */
+    background-image: url(../adownmod_icon.png);  /* SPRITE */
+    background-color: #f3f3f3;
 }
 .arrow.up { 
-    background-image: url(../aupgray_light.png);  /* SPRITE */
+    background-image: url(../aupgray_icon.png);  /* SPRITE */
+    background-color: #2f2f2f;
+    background-position: 2px;
 }
 .arrow.down { 
-    background-image: url(../adowngray_light.png);  /* SPRITE */
+    background-image: url(../adowngray_icon.png);  /* SPRITE */
+    background-color: #2f2f2f;
 }
 
 .link .midcol {font-size: small; text-align: center; width: 80px;}
 
-    .tabmenu li a { background-color: #eff7ff; }
-    .tabmenu li.selected a { background-color: white; border-color:  #5f99cf; border-bottom-color: white; }
+    .tabmenu li a { background-color: #F8F8F8; }
+    .tabmenu li.selected a { border-color:  #5f99cf; border-bottom-color: white; }
     .content, .sitetable, .menuarea, .comment, .content .details,
     .message.message-parent.recipient > .entry .head,
     .message .subject, .login-form-side #remember-me *,
     .instructions, .formtabs-content .infobar, .titlebox,
     .titlebox h1 a, .titlebox h1 { color: black; }
     .titlebox .karma { color: black; }
-    .side, .morelink .nub, .sidebox .spacer, .titlebox form.toggle, .leavemoderator, .icon-menu a { background-color: white; }
+    .side, .morelink .nub, .sidebox .spacer, .titlebox form.toggle, .leavemoderator, .icon-menu a { background-color: #F8F8F8; }
     .sidebox .subtitle { color: dimgray; }
     .tagline .submitter { color: #0055df; }
     .thing .title, .subscription-box .title { color: blue; }
@@ -108,7 +115,7 @@
     .usertext.border .usertext-body { background-color: #ffc; }
     .roundfield, .linefield { background-color: #fffefe; }
     .trophy-area .content { background-color: #f5f5f5; }
-    .linkinfo { border-color: #5f99cf; background-color: #EFF7FF; }
+    .linkinfo { border-color: #5f99cf; background-color: #F8F8F8; }
     .new-comment .usertext-body { background-color: #e5efff; border-color: #cddaf3; }
     .gold-wrap {
         input[type=text], input[type=email], textarea {

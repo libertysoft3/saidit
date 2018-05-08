@@ -680,18 +680,6 @@ class Reddit(Templated):
             notebar = AdminNotesSidebar('domain', c.site.domain)
             ps.append(notebar)
 
-        # CUSTOM: add Sidebar Chat to Subreddits, /r/all, / (front)
-        if feature.is_enabled('chat') and c.user.pref_chat_enabled:
-            from r2.lib.pages.chat import SidebarChat
-            if isinstance(c.site, Subreddit) and c.site.chat_enabled:
-                notebar = SidebarChat('subreddit', c.site.name)
-                ps.append(notebar)
-            elif isinstance(c.site, AllSR) and g.live_config['chat_all'] == 'on':
-                notebar = SidebarChat('subreddit', g.live_config['chat_all_channel'])
-                ps.append(notebar)
-            elif isinstance(c.site, DefaultSR) and g.live_config['chat_front'] == 'on':
-                notebar = SidebarChat('subreddit', g.live_config['chat_front_channel'])
-                ps.append(notebar)
 
         if isinstance(c.site, Subreddit) and c.user_is_admin:
             from r2.lib.pages.admin_pages import AdminNotesSidebar
@@ -823,6 +811,33 @@ class Reddit(Templated):
         user_disabled_ads = c.user.gold and c.user.pref_hide_ads
         show_adbox = c.site.allow_ads and not (user_disabled_ads or g.disable_ads)
 
+
+        if self.create_reddit_box and c.user_is_loggedin:
+            if (c.user._age.days >= g.min_membership_create_community and
+                    c.user.can_create_subreddit):
+                subtitles = get_funny_translated_string("create_subreddit", 2)
+                data_attrs = {'event-action': 'createsubreddit'}
+                ps.append(SideBox(_('Create your own sub'),
+                           '/subs/create', 'create',
+                           subtitles=subtitles,
+                           data_attrs=data_attrs,
+                           show_cover = True))
+
+        # CUSTOM: add Sidebar Chat to Subreddits, /r/all, / (front)
+        if feature.is_enabled('chat') and c.user.pref_chat_enabled:
+            from r2.lib.pages.chat import SidebarChat
+            if isinstance(c.site, Subreddit) and c.site.chat_enabled:
+                notebar = SidebarChat('subreddit', c.site.name)
+                ps.append(notebar)
+            elif isinstance(c.site, AllSR) and g.live_config['chat_all'] == 'on':
+                notebar = SidebarChat('subreddit', g.live_config['chat_all_channel'])
+                ps.append(notebar)
+            elif isinstance(c.site, DefaultSR) and g.live_config['chat_front'] == 'on':
+                notebar = SidebarChat('subreddit', g.live_config['chat_front_channel'])
+                ps.append(notebar)
+
+
+
         # don't show the subreddit info bar on cnames unless the option is set
         if not isinstance(c.site, FakeSubreddit):
             ps.append(SubredditInfoBar())
@@ -842,16 +857,6 @@ class Reddit(Templated):
         elif self.show_wiki_actions:
             ps.append(self.wiki_actions_menu())
 
-        if self.create_reddit_box and c.user_is_loggedin:
-            if (c.user._age.days >= g.min_membership_create_community and
-                    c.user.can_create_subreddit):
-                subtitles = get_funny_translated_string("create_subreddit", 2)
-                data_attrs = {'event-action': 'createsubreddit'}
-                ps.append(SideBox(_('Create your own sub'),
-                           '/subs/create', 'create',
-                           subtitles=subtitles,
-                           data_attrs=data_attrs,
-                           show_cover = True))
 
         if c.default_sr:
             hook = hooks.get_hook('home.add_sidebox')
@@ -912,8 +917,9 @@ class Reddit(Templated):
             #                         [ClickGadget(c.recent_clicks)]))
 
         if c.user_is_loggedin:
-            activity_link = AccountActivityBox()
-            ps.append(activity_link)
+            pass
+            # activity_link = AccountActivityBox()
+            # ps.append(activity_link)
 
         return ps
 
@@ -2451,13 +2457,13 @@ class ProfilePage(Reddit):
     def rightbox(self):
         rb = Reddit.rightbox(self)
 
-        tc = TrophyCase(self.user)
-        helplink = HelpLink("/wiki/awards", _("what's this?"))
-        scb = SideContentBox(title=_("trophy case"),
-                 helplink=helplink, content=[tc],
-                 extra_class="trophy-area")
+        # tc = TrophyCase(self.user)
+        # helplink = HelpLink("/wiki/awards", _("what's this?"))
+        # scb = SideContentBox(title=_("trophy case"),
+        #         helplink=helplink, content=[tc],
+        #         extra_class="trophy-area")
 
-        rb.push(scb)
+        # rb.push(scb)
 
         multis = LabeledMulti.by_owner(self.user, load_subreddits=False)
 
@@ -2607,14 +2613,14 @@ class ProfileBar(Templated):
 
 
 class ServerSecondsBar(Templated):
-    my_message = _("you have helped pay for *%(time)s* of reddit server time.")
-    their_message = _("/u/%(user)s has helped pay for *%%(time)s* of reddit server "
+    my_message = _("you have helped pay for *%(time)s* of saidit server time.")
+    their_message = _("/u/%(user)s has helped pay for *%%(time)s* of saidit server "
                       "time.")
 
     my_gift_message = _("gifts on your behalf have helped pay for *%(time)s* of "
-                        "reddit server time.")
+                        "saidit server time.")
     their_gift_message = _("gifts on behalf of /u/%(user)s have helped pay for "
-                           "*%%(time)s* of reddit server time.")
+                           "*%%(time)s* of saidit server time.")
 
     def make_message(self, seconds, my_message, their_message):
         if not seconds:
@@ -2693,7 +2699,7 @@ class WelcomeBar(InfoBar):
         if messages:
             message = random.choice(messages).split(" / ")
         else:
-            message = (_("reddit is a platform for internet communities"),
+            message = (_("saidit is a platform for internet communities"),
                        _("where your votes shape what the world is talking about."))
         InfoBar.__init__(self, message=message)
 

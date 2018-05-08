@@ -771,9 +771,11 @@ ul.flat-vert {text-align: left;}
 
 /* thing rendering */
 
-.arrow {
-    margin: 1px 0px 1px 0px;
-    width: 96%;
+.arrow {   background-position: left;
+		    margin-bottom: 2px;
+    margin-top: 0px;
+    margin-left: 0px;
+    width: 85%;
     height: 26px;
     display: block;
     cursor: pointer;
@@ -781,30 +783,48 @@ ul.flat-vert {text-align: left;}
     margin-right: 15px; 
     outline: none;
     float: left;
-    border: 1.5px solid #2f2f2f;
-}
+    border: 2px solid #8e8e8e;
+    border-radius: 5px;
+    background-position-y: center;
+    
+    }
 
 .arrow:hover {
-    float:left;
-    border: 1.5px solid #5bdae3;
+    float: left;
+    border: 2px solid #34bea4;
     height: 26px;
-    margin-bottom: 1px;
-    margin-top: 1px;
-    width: 96%;
+    margin-bottom: 2px;
+    margin-top: 0px;
+    margin-left: 0px;
+    
+    width: 85%;
+    
     border-radius: 5px;
 }
 
+
 .arrow.upmod { 
-    background-image: url(../aupmod.png);  /* SPRITE */
+    background-image: url(../aupmod_icon.png);  
+    background-color: #f3f3f3;
+    background-position: 2px;
+    background-repeat: no-repeat;
+
 }
 .arrow.downmod { 
-    background-image: url(../adownmod.png);  /* SPRITE */
+    background-image: url(../adownmod_icon.png);  
+    background-color: #f3f3f3;
+    background-repeat: no-repeat;
 }
 .arrow.up { 
-    background-image: url(../aupgray.png);  /* SPRITE */
+    background-image: url(../aupgray_icon.png);  
+    background-color: #2f2f2f;
+    background-position: 2px;
+    background-repeat: no-repeat;
 }
 .arrow.down { 
-    background-image: url(../adowngray.png);  /* SPRITE */
+    background-image: url(../adowngray_icon.png);  
+    background-color: #2f2f2f;
+    background-repeat: no-repeat;
 }
 
 .midcol {
@@ -8635,7 +8655,7 @@ form#banned textarea {
 }
 
 .server-seconds {
-    background-color: #EFF7FF;
+    background-color: #586572;
     border: 1px solid #5F99CF;
     text-align: center;
 
