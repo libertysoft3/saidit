@@ -198,15 +198,13 @@ class ListingController(RedditController):
         def keep(item):
             wouldkeep = item.keep_item(item)
 
-            if isinstance(c.site, AllSR):
-                
-		# CUSTOM: All On Front
-                # support c.site being AllSR on the /subreddits path, if feature_all_on_front=on
-                # distinguish subs vs. links when checking sub.discoverable
-		if hasattr(item, 'subreddit') and not item.subreddit.discoverable:
-                	return False
-		elif hasattr(item, 'discoverable') and not item.discoverable:
-                	return False
+            # CUSTOM support alternate home pages for the /subs path
+            # distinguish subs vs. links when checking sub.discoverable
+            if isinstance(c.site, (HomeSR, AllSR)):
+                if hasattr(item, 'subreddit') and not item.subreddit.discoverable:
+                    return False
+                elif hasattr(item, 'discoverable') and not item.discoverable:
+                    return False
 
             elif isinstance(c.site, FriendsSR):
                 if item.author._deleted or item.author._spam:
@@ -328,10 +326,7 @@ class SubredditListingController(ListingController):
     def render_params(self):
         render_params = {}
 
-	# CUSTOM: All On Front
-        if feature.is_enabled('all_on_front') and isinstance(c.site, AllSR):
-            render_params.update({'show_locationbar': True})
-        elif not feature.is_enabled('all_on_front') and isinstance(c.site, DefaultSR):
+        if isinstance(c.site, HomeSR):
             render_params.update({'show_locationbar': True})
 
         else:
@@ -468,13 +463,11 @@ class ListingWithPromos(SubredditListingController):
             spotlight = None
             show_sponsors = not c.user.pref_hide_ads or not c.user.gold
             show_organic = self.show_organic and c.user.pref_organic
-            on_frontpage = isinstance(c.site, DefaultSR)
-            
-            # CUSTOM: All On Front
-            if feature.is_enabled('all_on_front'):
-                on_frontpage = isinstance(c.site, AllSR)
 
-	    requested_ad = request.GET.get('ad')
+            # CUSTOM
+            on_frontpage = isinstance(c.site, HomeSR)
+
+            requested_ad = request.GET.get('ad')
 
             if on_frontpage:
                 self.extra_page_classes = \
@@ -644,7 +637,7 @@ class BrowseController(ListingWithPromos):
         if self.time != 'all' and c.default_sr:
             oldest = timeago('1 %s' % (str(self.time),))
             def keep(item):
-                if isinstance(c.site, AllSR):
+                if isinstance(c.site, (HomeSR, AllSR)):
                     if not item.subreddit.discoverable:
                         return False
                 return item._date > oldest and item.keep_item(item)

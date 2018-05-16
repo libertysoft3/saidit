@@ -33,7 +33,7 @@ from r2.lib.utils import  class_property, query_string, timeago
 from r2.lib.wrapped import Styled
 
 # CUSTOM: All On Front
-from r2.models.subreddit import DefaultSR, AllSR
+from r2.models.subreddit import DefaultSR, AllSR, HomeSR
 
 class MenuHandler(StringHandler):
     """Bastard child of StringHandler and plurals.  Menus are
@@ -441,7 +441,7 @@ class OffsiteButton(NavButton):
 
 
 class SubredditButton(NavButton):
-    from r2.models.subreddit import Frontpage, Mod, All, Random, RandomSubscription
+    from r2.models.subreddit import Frontpage, Mod, All, Random, RandomSubscription, HomeSR, DefaultSR, AllSR
     # TRANSLATORS: This refers to /r/mod
     name_overrides = {Mod: N_("mod"),
     # TRANSLATORS: This refers to the user's front page
@@ -455,13 +455,15 @@ class SubredditButton(NavButton):
         self.path = sr.path
         name = self.name_overrides.get(sr)
         
-	# CUSTOM: All On Front
-        if isinstance(sr, DefaultSR) and feature.is_enabled('all_on_front'):
+        # CUSTOM: warning HomeSR extends AllSR, must be first
+        if isinstance(sr, DefaultSR):
             name = g.live_config['all_on_front_front_name']
-        elif isinstance(sr, AllSR) and feature.is_enabled('all_on_front'):
+        elif isinstance(sr, HomeSR):
+            name = g.home_name
+        elif isinstance(sr, AllSR):
             name = g.live_config['all_on_front_all_name']
 
-	name = _(name) if name else sr.name
+        name = _(name) if name else sr.name
         self.isselected = (c.site == sr)
         NavButton.__init__(self, name, sr.path, sr_path=False,
                            css_class=css_class, data=data)
