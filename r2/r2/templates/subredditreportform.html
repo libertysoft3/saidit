@@ -74,7 +74,7 @@
                         <select name="site_reason">
                             %for rule in system_rules:
                                 <option value="${rule}">
-                                    ${_("Reddit rule: %(rule_name)s" % dict(rule_name=rule))}
+                                    ${g.brander_site + _(" rule: %(rule_name)s" % dict(rule_name=rule))}
                                 </option>
                             %endfor
                         </select>

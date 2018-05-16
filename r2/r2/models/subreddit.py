@@ -1760,10 +1760,7 @@ class AllSR(FakeSubreddit):
     # CUSTOM: All On Front
     @property
     def title(self):
-        if feature.is_enabled('all_on_front'):
-            return _(g.short_description)
-        else:
-            return 'all subreddits'
+        return _(g.live_config['all_on_front_all_page_title'])
 
 class AllMinus(AllSR):
     analytics_name = "all"
@@ -1889,10 +1886,7 @@ class _DefaultSR(FakeSubreddit):
     # CUSTOM: All On Front
     @property
     def title(self):
-        if feature.is_enabled('all_on_front'):
-            return _(g.live_config['all_on_front_front_page_title'])
-        else:
-            return _(g.short_description)
+        return _(g.live_config['all_on_front_front_page_title'])
 
 # This is the base class for the instantiated front page reddit
 class DefaultSR(_DefaultSR):

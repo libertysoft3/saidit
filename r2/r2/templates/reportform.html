@@ -48,7 +48,7 @@
             <input type="radio" name="reason" value="site_reason_selected">
             <select name="site_reason">
               %for rule in thing.system_rules:
-                <option value="${rule}">${_("reddit rule: %(rule_name)s" % dict(rule_name=rule))}</option>
+                <option value="${rule}">${g.brander_site + _(" rule: %(rule_name)s" % dict(rule_name=rule))}</option>
               %endfor
             </select>
           </label>
