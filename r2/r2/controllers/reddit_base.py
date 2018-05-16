@@ -138,6 +138,8 @@ from r2.models import (
 
     # CUSTOM
     AllSR,
+    HomeSR,
+    Home,
 )
 from r2.lib.db import tdb_cassandra
 
@@ -299,16 +301,13 @@ def set_subreddit():
 
     can_stale = request.method.upper() in ('GET', 'HEAD')
 
-    c.site = Frontpage
-    
-    if feature.is_enabled('all_on_front'):
-	c.site = All
+    c.site = Home
 
     if not sr_name:
         #check for cnames
         cname = request.environ.get('legacy-cname')
         if cname:
-            sr = Subreddit._by_domain(cname) or Frontpage
+            sr = Subreddit._by_domain(cname) or Home
             domain = g.domain
             if g.domain_prefix:
                 domain = ".".join((g.domain_prefix, domain))
@@ -368,7 +367,7 @@ def set_subreddit():
 
     # CUSTOM: All On Front
     #if we didn't find a subreddit, check for a domain listing
-    if not sr_name and (isinstance(c.site, DefaultSR) or (feature.is_enabled('all_on_front') and isinstance(c.site, AllSR))) and domain:
+    if not sr_name and isinstance(c.site, HomeSR) and domain:
         # Redirect IDN to their IDNA name if necessary
         try:
             idna = _force_unicode(domain).encode("idna")

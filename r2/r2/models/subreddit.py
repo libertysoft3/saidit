@@ -1276,7 +1276,7 @@ class Subreddit(Thing, Printable, BaseSite):
             # CUSTOM: Auto Subscribe All
             if feature.is_enabled('auto_subscribe_all'):
                 sr_ids = NamedGlobals.get("popular_sr_ids")
-                if g.live_config['auto_subscribe_all_include_over_18'] == 'on':
+                if g.live_config['auto_subscribe_all_include_over_18'] == 'true':
                     sr_ids = sr_ids + NamedGlobals.get("popular_over_18_sr_ids")
                 if len(sr_ids) > int(g.live_config['auto_subscribe_all_limit']) and int(g.live_config['auto_subscribe_all_limit']) > 0:
                     sr_ids = sr_ids[:int(g.live_config['auto_subscribe_all_limit'])]
@@ -1483,8 +1483,8 @@ class Subreddit(Thing, Printable, BaseSite):
 
     # CUSTOM: Global Bans
     def is_global_banned(self, user):
-	from r2.models import GlobalBan
-	return GlobalBan._user_banned(user._id)
+        from r2.models import GlobalBan
+        return GlobalBan._user_banned(user._id)
 
 class SubscribedSubredditsByAccount(tdb_cassandra.DenormalizedRelation):
     _use_db = True
@@ -1794,6 +1794,31 @@ class AllMinus(AllSR):
             q._filter(not_(Link.c.sr_id.in_(self.exclude_sr_ids)))
         return q
 
+# CUSTOM: similar to AllMinus
+class HomeSR(AllSR):
+    analytics_name = g.home_name
+    name = g.home_name
+    path = g.home_path
+    title = g.home_page_title
+    header_title = g.home_name
+
+    def __init__(self):
+        AllSR.__init__(self)
+        name_filter = lambda name: Subreddit.is_valid_name(name, allow_language_srs=True)
+        sr_names = filter(name_filter, g.live_config['home_exclude_sr_names'].split(','))
+        exclude_srs = Subreddit._by_name(sr_names, stale=True)
+        self.exclude_sr_ids = [sr._id for sr in exclude_srs.itervalues() if not isinstance(sr, FakeSubreddit)]
+
+    def keep_for_rising(self, sr_id):
+        return sr_id not in self.exclude_sr_ids
+
+    def get_links(self, sort, time):
+        from r2.models import Link
+        from r2.lib.db.operators import not_
+        q = AllSR.get_links(self, sort, time)
+        if self.exclude_sr_ids:
+            q._filter(not_(Link.c.sr_id.in_(self.exclude_sr_ids)))
+        return q
 
 class Filtered(object):
     unfiltered_path = None
@@ -1834,7 +1859,7 @@ class AllFiltered(Filtered, AllMinus):
 
 class _DefaultSR(FakeSubreddit):
     analytics_name = 'frontpage'
-    #notice the space before reddit.com
+    # notice the space before site.com
     name = ' ' + g.domain
     path = '/'
     header = g.default_header_url
@@ -2753,6 +2778,7 @@ All = AllSR()
 Random = RandomReddit()
 RandomNSFW = RandomNSFWReddit()
 RandomSubscription = RandomSubscriptionReddit()
+Home = HomeSR()
 
 # add to _specials so they can be retrieved with Subreddit._by_name, e.g.
 # Subreddit._by_name("all")
@@ -2765,6 +2791,8 @@ Subreddit._specials.update({
         Contrib,
         All,
         Frontpage,
+        # CUSTOM: lets you use route /s/home in addition to /
+        Home,
     )
 })
 
