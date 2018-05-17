@@ -363,9 +363,10 @@ class Reddit(Templated):
                     extra_class=infotext_class,
                     show_icon=infotext_show_icon,
                 )
-            elif isinstance(c.site, AllMinus) and not c.user.gold:
-                self.infobar = RedditInfoBar(message=strings.all_minus_gold_only,
-                                       extra_class="gold")
+            # CUSTOM: degolding
+            # elif isinstance(c.site, AllMinus) and not c.user.gold:
+            #    self.infobar = RedditInfoBar(message=strings.all_minus_gold_only,
+            #                           extra_class="gold")
 
             if 0:
                 if getattr(self, "show_welcomebar", True):
@@ -3090,10 +3091,11 @@ class AllInfoBar(Templated):
         self.sr = site
         self.allminus_url = None
         self.css_class = None
-        if isinstance(site, AllMinus) and c.user.gold:
+        # CUSTOM: degolding
+        if isinstance(site, AllMinus):
             self.description = (strings.r_all_minus_description + "\n\n" +
                 " ".join("/" + g.brander_community_abbr + "/" + sr.name for sr in site.exclude_srs))
-            self.css_class = "gold-accent"
+            # self.css_class = "gold-accent"
         else:
             self.description = strings.r_all_description
             sr_ids = Subreddit.user_subreddits(user)

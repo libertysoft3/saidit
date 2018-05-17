@@ -1787,7 +1787,8 @@ class AllMinus(AllSR):
         from r2.models import Link
         from r2.lib.db.operators import not_
         q = AllSR.get_links(self, sort, time)
-        if c.user.gold and self.exclude_sr_ids:
+        # CUSTOM: degolding
+        if self.exclude_sr_ids:
             q._filter(not_(Link.c.sr_id.in_(self.exclude_sr_ids)))
         return q
 
@@ -1808,6 +1809,41 @@ class HomeSR(AllSR):
 
     def keep_for_rising(self, sr_id):
         return sr_id not in self.exclude_sr_ids
+
+    def get_links(self, sort, time):
+        from r2.models import Link
+        from r2.lib.db.operators import not_
+        q = AllSR.get_links(self, sort, time)
+        if self.exclude_sr_ids:
+            q._filter(not_(Link.c.sr_id.in_(self.exclude_sr_ids)))
+        return q
+
+class HomeMinus(HomeSR):
+    analytics_name = g.home_name
+    name = _("%s (filtered)") % g.home_name
+
+    def __init__(self, srs):
+        HomeSR.__init__(self)
+
+        # not including HomeSR's excluded subs in name or path
+        self.exclude_srs = srs
+        self.exclude_sr_ids = [sr._id for sr in srs]
+
+        # but do exclude HomeSR's excluded subs in addition to url supplied subs
+        name_filter = lambda name: Subreddit.is_valid_name(name, allow_language_srs=True)
+        sr_names = filter(name_filter, g.live_config['home_exclude_sr_names'].split(','))
+        home_excluded_srs = Subreddit._by_name(sr_names, stale=True)
+        self.exclude_sr_ids.extend(sr._id for sr in home_excluded_srs.itervalues() if not isinstance(sr, FakeSubreddit))
+        self.exclude_sr_ids = list(set(self.exclude_sr_ids))
+
+    @property
+    def title(self):
+        sr_names = ', '.join(sr.name for sr in self.exclude_srs)
+        return g.home_minus_page_title + ' ' + sr_names
+
+    @property
+    def path(self):
+        return '/%s/%s-' % (g.brander_community_abbr, g.home_name) + '-'.join(sr.name for sr in self.exclude_srs)
 
     def get_links(self, sort, time):
         from r2.models import Link

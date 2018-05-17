@@ -140,6 +140,7 @@ from r2.models import (
     AllSR,
     HomeSR,
     Home,
+    HomeMinus,
 )
 from r2.lib.db import tdb_cassandra
 
@@ -352,6 +353,11 @@ def set_subreddit():
                 c.site = ModMinus(exclude_srs)
             else:
                 c.site = Mod
+        elif base_sr == Home:
+            if exclude_srs:
+                c.site = HomeMinus(exclude_srs)
+            else:
+                c.site = Home
         else:
             path = "/subs/search?q=%s" % sr_name
             abort(302, location=BaseController.format_output_url(path))
