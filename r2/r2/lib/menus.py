@@ -56,7 +56,8 @@ menu =   MenuHandler(hot          = _('hot'),
                      top          = _('top'),
                      more         = _('more'),
                      relevance    = _('relevance'),
-                     controversial  = _('controversial'),
+                     # CUSTOM: set key to g.voting_controversial_path
+                     funny        = _(g.voting_controversial_name),
                      gilded       = _('gilded'),
                      confidence   = _('best'),
                      random       = _('random'),
@@ -197,7 +198,7 @@ menu =   MenuHandler(hot          = _('hot'),
 
                      whitelist = _("whitelist"),
 
-		     # CUSTOM
+                     # CUSTOM
                      global_user_bans               = _('global bans'),
                      chat_size_default              = _('default (300px)'),
                      chat_size_s                    = _('small (380px)'),
@@ -211,8 +212,8 @@ menu =   MenuHandler(hot          = _('hot'),
                      chat_size_60                   = _('60%'),
                      subs_do_nothing                = _('no'),
                      subs_reset_subscriptions       = _('yes, unsubscribe from all'),
-		     theme_nightmode                = _('Night mode'),
-		     theme_daymode = _('Day mode'),
+                     theme_nightmode                = _('Night mode'),
+                     theme_daymode                  = _('Day mode'),
                      )
 
 def menu_style(type):
@@ -552,7 +553,7 @@ class SortMenu(NavMenu):
 
     # these are _ prefixed to avoid colliding with NavMenu attributes
     _default = 'hot'
-    _options = ('hot', 'new', 'top', 'old', 'controversial')
+    _options = ('hot', 'new', 'top', 'old', g.voting_controversial_path)
     _type = 'lightdrop'
     _title = N_("sorted by")
 
@@ -583,7 +584,7 @@ class SortMenu(NavMenu):
         "new": operators.desc('_date'),
         "old": operators.asc('_date'),
         "top": operators.desc('_score'),
-        "controversial": operators.desc('_controversy'),
+        g.voting_controversial_path: operators.desc('_controversy'),
         "confidence": operators.desc('_confidence'),
         "random": operators.shuffled('_confidence'),
         "qa": operators.desc('_qa'),
@@ -601,13 +602,13 @@ class SortMenu(NavMenu):
 
 class ProfileSortMenu(SortMenu):
     _default = 'new'
-    _options = ('hot', 'new', 'top', 'controversial')
+    _options = ('hot', 'new', 'top', g.voting_controversial_path)
 
 
 class CommentSortMenu(SortMenu):
     """Sort menu for comments pages"""
     _default = 'confidence'
-    _options = ('confidence', 'top', 'new', 'controversial', 'old', 'random',
+    _options = ('confidence', 'top', 'new', g.voting_controversial_path, 'old', 'random',
                 'qa',)
     hidden_options = ['random']
 
@@ -673,7 +674,7 @@ class SubredditSearchSortMenu(SortMenu):
 class RecSortMenu(SortMenu):
     """Sort menu for recommendation page"""
     _default = 'new'
-    _options = ('hot', 'new', 'top', 'controversial', 'relevance')
+    _options = ('hot', 'new', 'top', g.voting_controversial_path, 'relevance')
 
 
 class KindMenu(SortMenu):

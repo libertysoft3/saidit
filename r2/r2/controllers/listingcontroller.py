@@ -662,7 +662,7 @@ class BrowseController(ListingWithPromos):
 
     @require_oauth2_scope("read")
     @validate(t = VMenu('sort', ControversyTimeMenu))
-    @listing_api_doc(uri='/{sort}', uri_variants=['/top', '/controversial'],
+    @listing_api_doc(uri='/{sort}', uri_variants=['/top', '/' + g.voting_controversial_path],
                      uses_site=True)
     def GET_listing(self, sort, t, **env):
         self.sort = sort
@@ -670,10 +670,10 @@ class BrowseController(ListingWithPromos):
             self.title_text = _('top scoring links')
             self.extra_page_classes = \
                 self.extra_page_classes + ['top-page']
-        elif sort == 'controversial':
-            self.title_text = _('most controversial links')
+        elif sort == g.voting_controversial_path:
+            self.title_text = _('most ' + g.voting_controversial_name + ' links')
             self.extra_page_classes = \
-                self.extra_page_classes + ['controversial-page']
+                self.extra_page_classes + [g.voting_controversial_path + '-page']
         else:
             # 'sort' is forced to top/controversial by routing.py,
             # but in case something has gone wrong...

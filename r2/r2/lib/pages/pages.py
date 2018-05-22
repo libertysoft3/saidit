@@ -1014,7 +1014,7 @@ class Reddit(Templated):
             main_buttons = [NamedButton('hot', dest='', aliases=['/hot']),
                             NamedButton('new'),
                             NamedButton('rising'),
-                            NamedButton('controversial'),
+                            NamedButton(g.voting_controversial_path),
                             NamedButton('top'),
                             ]
 

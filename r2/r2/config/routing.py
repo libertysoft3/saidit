@@ -169,7 +169,7 @@ def make_map(config):
        connect('/', controller='hot', action='listing')
        connect('/submit', controller='front', action='submit')
        connect('/:sort', controller='browse', sort='top',
-          action='listing', requirements=dict(sort='top|controversial'))
+          action='listing', requirements=dict(sort='top|' + config['pylons.app_globals'].voting_controversial_path))
        connect('/:controller', action='listing',
           requirements=dict(controller="hot|new|rising|randomrising|ads|newcomments"))
 
@@ -292,7 +292,7 @@ def make_map(config):
     mc('/by_id/:names', controller='byId', action='listing')
 
     mc('/:sort', controller='browse', sort='top', action='listing',
-       requirements=dict(sort='top|controversial'))
+       requirements=dict(sort='top|' + config['pylons.app_globals'].voting_controversial_path))
 
     mc('/message/compose', controller='message', action='compose')
     mc('/message/messages/:mid', controller='message', action='listing',

@@ -86,6 +86,7 @@ db_sorts = dict(hot = (desc, '_hot'),
                 controversial = (desc, '_controversy'))
 
 def db_sort(sort):
+    db_sorts[g.voting_controversial_path] = (desc, '_controversy')
     cls, col = db_sorts[sort]
     return cls(col)
 

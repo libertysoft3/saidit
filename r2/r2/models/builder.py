@@ -965,6 +965,7 @@ SORT_OPERATOR_BY_NAME = {
     "top": operators.desc('_score'),
     "random": operators.shuffled('_confidence'),
 }
+SORT_OPERATOR_BY_NAME[g.voting_controversial_path] = operators.desc('_controversy')
 
 
 class CommentOrderer(CommentOrdererBase):

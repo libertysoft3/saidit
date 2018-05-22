@@ -166,7 +166,7 @@ def pushup_permacache(verbosity=1000):
             yield queries.get_links(sr, 'hot', 'all').iden
             yield queries.get_links(sr, 'new', 'all').iden
 
-            for sort in 'top', 'controversial':
+            for sort in 'top', 'controversial', g.voting_controversial_path:
                 for time in 'hour', 'day', 'week', 'month', 'year', 'all':
                     yield queries.get_links(sr, sort, time,
                                             merge_batched=False).iden

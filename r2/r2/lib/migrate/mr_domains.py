@@ -89,7 +89,7 @@ def time_listings(times = ('all',)):
                     for domain in domains:
                         yield ('domain/top/%s/%s' % (tkey, domain),
                                sc, timestamp, fname)
-                        yield ('domain/controversial/%s/%s' % (tkey, domain),
+                        yield ('domain/%s/%s/%s' % (g.voting_controversial_path, tkey, domain),
                                contr, timestamp, fname)
                         if tkey == "all":
                             yield ('domain/hot/%s/%s' % (tkey, domain),
