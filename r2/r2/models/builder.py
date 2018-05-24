@@ -224,7 +224,16 @@ class Builder(object):
             w.score = w.upvotes + w.upvotes + w.downvotes
 
             # CUSTOM: voting model
-            # this undoes your last vote so voting_score can re-apply it below
+            # this stuff undoes your last vote so voting_score can re-apply it below,
+            # to cover the vote with js on page, as well as after page reload
+            # Comments dual points model
+            base_ups_score = item._ups
+            base_downs_score = item._downs
+            if w.likes:
+                base_ups_score -= 1
+            if w.dislikes:
+                base_downs_score -= 1
+            # Subreddit, etc. points model
             if user_vote_dir == Vote.DIRECTIONS.onon:
                 base_score = w.score - 3
             elif user_vote_dir == Vote.DIRECTIONS.onoff:
@@ -243,9 +252,9 @@ class Builder(object):
 
             # Comments: dual points display
             # insightful total across 4 different vote states
-            w.voting_score_ups = [item._ups, item._ups, item._ups + 1, item._ups + 1]
+            w.voting_score_ups = [base_ups_score, base_ups_score, base_ups_score + 1, base_ups_score + 1]
             # funny total across 4 different vote states
-            w.voting_score_downs = [item._downs + 1, item._downs, item._downs, item._downs + 1]
+            w.voting_score_downs = [base_downs_score + 1, base_downs_score, base_downs_score, base_downs_score + 1]
 
             w.deleted = item._deleted
 
