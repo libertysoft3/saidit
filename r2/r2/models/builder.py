@@ -234,11 +234,18 @@ class Builder(object):
             else:
                 base_score = w.score
 
-            # CUSTOM: voting model, add likesdislikes score
+            # CUSTOM: voting model, add fourth 'likesdislikes' score state
             # store the set of available scores based on the vote
             # for ease of i18n when there is a label
+            # maps to "scoredislikes", "scoreunvoted", "scorelikes", "scorelikesdislikes"
             # w.voting_score = [(base_score + x - 1) for x in range(3)]
             w.voting_score = [base_score + 1, base_score, base_score + 2, base_score + 3]
+
+            # Comments: dual points display
+            # insightful total across 4 different vote states
+            w.voting_score_ups = [item._ups, item._ups, item._ups + 1, item._ups + 1]
+            # funny total across 4 different vote states
+            w.voting_score_downs = [item._downs + 1, item._downs, item._downs, item._downs + 1]
 
             w.deleted = item._deleted
 

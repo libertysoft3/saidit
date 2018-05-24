@@ -240,7 +240,7 @@ ${self.RenderPrintable()}
   </div>
 </%def>
 
-## CUSTOM: voting model
+## CUSTOM: voting model, add fourth value
 <%def name="score(thing, tag='span')" >
   %for cls, score in zip(["dislikes", "unvoted", "likes", "likesdislikes"], thing.display_score):
     <${tag} class="score ${cls}">
@@ -287,7 +287,8 @@ ${self.RenderPrintable()}
   </div>
 </%def>
 
-## use ups and downs directly, not display_score
+## CUSTOM: voting model
+## Links: use ups and downs directly, not display_score, js updates score directly
 <%def name="score_upvotes(thing, tag='span', mod=False)" >
   <${tag} class="score">
       ${'-' if thing.upvotes <= 0 else thing.upvotes}

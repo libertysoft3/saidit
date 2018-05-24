@@ -71,7 +71,12 @@ class Printable(object):
             item.childlisting = CachedVariable("childlisting")
 
             score_fmt = getattr(item, "score_fmt", Score.number_only)
-            item.display_score = map(score_fmt, item.voting_score)
+
+            # CUSTOM: voting model
+            if score_fmt == Score.points_dual:
+                item.display_score = map(score_fmt, item.voting_score_ups, item.voting_score_downs)
+            else:
+                item.display_score = map(score_fmt, item.voting_score)
 
             if item.cachable:
                 item.render_score  = item.display_score

@@ -62,6 +62,9 @@ string_dict = dict(
     points_label = _("%(num)d %(point)s"),
 
     # this accomodates asian languages which don't use spaces
+    points_dual = _("%(ups)d %(pointups)s %(downs)d %(pointdowns)s"),
+
+    # this accomodates asian languages which don't use spaces
     time_label = _("%(num)d %(time)s"),
 
     # this accomodates asian languages which don't use spaces
@@ -275,6 +278,10 @@ plurals = PluralManager([P_("comment",     "comments"),
                          P_("day",         "days"),
                          P_("month",       "months"),
                          P_("year",        "years"),
+
+                         # CUSTOM
+                         P_("insightful", "insightful"),
+                         P_("funny", "funny"),
 ])
 
 
@@ -295,6 +302,10 @@ class Score(object):
     def points(x):
         return strings.points_label % dict(num=x,
                                            point=plurals.N_points(x))
+    # CUSTOM: voting model
+    @staticmethod
+    def points_dual(x, y):
+        return strings.points_dual % dict(ups=x, downs=y, pointups=plurals.N_insightful(x), pointdowns=plurals.N_funny(y))
 
     @staticmethod
     def safepoints(x):

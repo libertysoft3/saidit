@@ -1837,7 +1837,10 @@ class Comment(Thing, Printable):
             #will get updated in builder
             item.num_children = 0
             item.numchildren_text = CachedVariable("numchildren_text")
-            item.score_fmt = Score.points
+
+            # CUSTOM: voting model, set the Comments score display style
+            item.score_fmt = Score.points_dual
+
             item.permalink = item.make_permalink(item.link, item.subreddit)
 
             item.is_author = (user == item.author)
@@ -1886,7 +1889,7 @@ class Comment(Thing, Printable):
             #will seem less horrible when add_props is in pages.py
             from r2.lib.pages import UserText
 
-	    # CUSTOM - Chat widgets in comments
+            # CUSTOM - Chat widgets in comments
             is_chat_post = False
             chat_popout_url = ''
             chat_enabling_post_content = g.live_config['chat_enabling_post_content']
