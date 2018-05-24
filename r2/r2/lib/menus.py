@@ -211,7 +211,7 @@ menu =   MenuHandler(hot          = _('hot'),
                      chat_size_50                   = _('50%'),
                      chat_size_60                   = _('60%'),
                      subs_do_nothing                = _('no'),
-                     subs_reset_subscriptions       = _('yes, unsubscribe from all'),
+                     subs_reset_subscriptions       = _('yes (danger)'),
                      theme_nightmode                = _('Night mode'),
                      theme_daymode                  = _('Day mode'),
                      )

@@ -62,7 +62,7 @@ string_dict = dict(
     points_label = _("%(num)d %(point)s"),
 
     # this accomodates asian languages which don't use spaces
-    points_dual = _("%(ups)d %(pointups)s %(downs)d %(pointdowns)s"),
+    points_dual = _("%(ups)d %(pointups)s - %(downs)d %(pointdowns)s"),
 
     # this accomodates asian languages which don't use spaces
     time_label = _("%(num)d %(time)s"),
