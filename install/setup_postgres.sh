@@ -44,7 +44,7 @@ create or replace function hot(ups integer, downs integer, date timestamp with t
 \$\$ language sql immutable;
 
 create or replace function score(ups integer, downs integer) returns integer as \$\$
-    select \$1 - \$2
+    select (\$1 * 2) + \$2
 \$\$ language sql immutable;
 
 create or replace function controversy(ups integer, downs integer) returns float as \$\$
