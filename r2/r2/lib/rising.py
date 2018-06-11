@@ -42,7 +42,8 @@ def calc_rising():
     # build the rising list, excluding items having 1 or less upvotes
     rising = []
     for link in links.values():
-        if link._ups > 1:
+        # CUSTOM: self voting, allow 0 upvotes
+        if link._ups > 1 or link._downs > 1:
             rising.append((link._fullname, score(link), link.sr_id))
 
     # return rising sorted by score

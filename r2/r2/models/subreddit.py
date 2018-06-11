@@ -1889,9 +1889,9 @@ class AllFiltered(Filtered, AllMinus):
         filters = self._get_filtered_subreddits() if c.user.gold else []
         AllMinus.__init__(self, filters)
 
-
+# Subscribed
 class _DefaultSR(FakeSubreddit):
-    analytics_name = 'frontpage'
+    analytics_name = 'subscribed'
     # notice the space before site.com
     name = ' ' + g.domain
     path = '/'

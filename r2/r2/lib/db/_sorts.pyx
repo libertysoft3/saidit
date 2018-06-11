@@ -28,6 +28,8 @@ from pylons import app_globals as g
 cdef extern from "math.h":
     double log10(double)
     double sqrt(double)
+    # CUSTOM
+    double log2(double)
 
 epoch = datetime(1970, 1, 1, tzinfo = g.tz)
 
@@ -38,17 +40,22 @@ cpdef double epoch_seconds(date):
     td = date - epoch
     return td.days * 86400 + td.seconds + (float(td.microseconds) / 1000000)
 
-# CUSTOM: ups are interestings, downs are funnys
+# CUSTOM: ups are insightfuls worth 2, downs are funnys worth 1
 cpdef long score(long ups, long downs):
     return (ups * 2) + downs
 
 cpdef double hot(long ups, long downs, date):
     return _hot(ups, downs, epoch_seconds(date))
 
+# CUSTOM: more score sensitive, less time sensitive
+# 45000 changed to 180000
 cpdef double _hot(long ups, long downs, double date):
     """The hot formula. Should match the equivalent function in postgres."""
     s = score(ups, downs)
     order = log10(max(abs(s), 1))
+    # CUSTOM: potential alternatives
+    # order = log2(max(abs(s), 1))
+    # order = max(abs(s), 1)
     if s > 0:
         sign = 1
     elif s < 0:
@@ -56,7 +63,9 @@ cpdef double _hot(long ups, long downs, double date):
     else:
         sign = 0
     seconds = date - 1134028003
-    return round(sign * order + seconds / 45000, 7)
+    # CUSTOM: divide into 50h periods, not 12.5h, increase by 4x
+    # return round(sign * order + seconds / 45000, 7)
+    return round(sign * order + seconds / 180000, 7)
 
 cpdef double controversy(long ups, long downs):
     """The controversy sort."""

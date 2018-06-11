@@ -1704,6 +1704,23 @@ def add_all_srs():
         get_reported_links(sr).update()
         get_reported_comments(sr).update()
 
+# CUSTOM: call in paster/reddit shell if postgres link sorts have changed
+def add_all_srs_incomplete():
+    """Recalculates every listing query for every subreddit. Very,
+       very slow."""
+    q = Subreddit._query(sort = asc('_date'))
+    for sr in fetch_things2(q):
+        for q in all_queries(get_links, sr, ('hot', 'new'), ['all']):
+            q.update()
+        for q in all_queries(get_links, sr, time_filtered_sorts, db_times.keys()):
+            q.update()
+        # TODO: figure out how to update these, errors out with wrong type error.
+        # TODO: similarly can't call add_all_users().
+        # get_spam_links(sr).update()
+        # get_spam_comments(sr).update()
+        # get_reported_links(sr).update()
+        # get_reported_comments(sr).update()
+
 def update_user(user):
     if isinstance(user, str):
         user = Account._by_name(user)
