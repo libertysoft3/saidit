@@ -68,14 +68,19 @@ cpdef double _hot(long ups, long downs, double date):
     return round(sign * order + seconds / 180000, 7)
 
 cpdef double controversy(long ups, long downs):
-    """The controversy sort."""
-    if downs <= 0 or ups <= 0:
+    """The controversy sort, now called funny."""
+    # CUSTOM: self-voting allows 0 ups, prevent divide by zero
+    if downs <= 0 or ups < 0:
         return 0
 
-    magnitude = ups + downs
-    balance = float(downs) / ups if ups > downs else float(ups) / downs
+    # magnitude = ups + downs
+    # balance = float(downs) / ups if ups > downs else float(ups) / downs
+    # return magnitude ** balance
 
-    return magnitude ** balance
+    """New algorithm sorts by downs, plus an added fraction less than 1 for ups to break ties"""
+    magnitude = downs + ups / (ups + downs)
+    return magnitude
+
 
 cpdef double _confidence(int ups, int downs):
     """The confidence sort.
