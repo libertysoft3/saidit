@@ -165,6 +165,7 @@ def rel_listings(names, thing2_cls = Link):
                    make_fullname(thing2_cls, rel.thing2_id))
     mr_tools.mr_map(process)
 
+# CUSTOM: TODO: there are 4 vote directions now
 def linkvote_listings():
     rel_listings({'1': 'liked',
                   '-1': 'disliked'})
