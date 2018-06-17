@@ -1759,7 +1759,7 @@ def add_all_srs():
         get_reported_links_results(sr).update()
         get_reported_comments_results(sr).update()
 
-# CUSTOM: use *_results functions
+# CUSTOM: use *_results functions, more get_submitted() and get_comments()
 def update_user(user):
     if isinstance(user, str):
         user = Account._by_name(user)
@@ -1777,8 +1777,16 @@ def update_user(user):
                # could try the mr_permacache.py linkvote_listings() approch, needs a voting model update for vote directions
                # get_liked(user),
                # get_disliked(user),
+               get_submitted(user, 'hot', 'all'),
                get_submitted(user, 'new', 'all'),
+               get_comments(user, 'hot', 'all'),
                get_comments(user, 'new', 'all')]
+
+    for sort in time_filtered_sorts:
+        for time in db_times.keys():
+            results.append(get_submitted(user, sort, time))
+            results.append(get_comments(user, sort, time))
+
     for q in results:
         q.update()
 
