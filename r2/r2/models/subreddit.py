@@ -250,7 +250,7 @@ class Subreddit(Thing, Printable, BaseSite):
         description="",
         public_description="",
         submit_text="",
-        public_traffic=False,
+        public_traffic=True,
         spam_links='high',
         spam_selfposts='high',
         spam_comments='low',
