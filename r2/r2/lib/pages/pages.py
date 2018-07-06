@@ -3507,7 +3507,7 @@ class SubredditReportForm(CachedTemplate):
         self.kind = None
         subreddit = None
 
-        if isinstance(thing, Comment, Link):
+        if isinstance(thing, (Comment, Link)):
             subreddit = thing.subreddit_slow
             self.sr_name = subreddit.name
             if filter_by_kind:
