@@ -5133,6 +5133,7 @@ ul.tabmenu.formtab {
     }
 
     &.expando-nsfw-overlay {
+        background: @expando-nsfw-gate-color;
         height: 100%;
         left: 0;
         position: absolute;
@@ -9130,27 +9131,6 @@ form#banned textarea {
 .api-help .contents .introduction strong {
     color: #222;
     font-weight: bold;
-}
-
-.api-help .introduction:before,
-.api-help .introduction:after {
-    position: absolute;
-    display: block;
-    content: '';
-    border: 15px solid;
-    border-style: solid solid outset; /* mitigates firefox drawing a thicker arrow */
-}
-
-.api-help .introduction:before {
-    border-color: transparent #ccc transparent transparent;
-    left: -31px;
-    top: 58px;
-}
-
-.api-help .introduction:after {
-    border-color: transparent white transparent transparent;
-    left: -28px;
-    top: 58px;
 }
 
 .api-help .contents .overview {

@@ -324,7 +324,7 @@ There is a 2 week delay to create a sub after creating an account. Also there is
         <li>
           <input class="nomargin" type="checkbox"
                  name="show_media" id="show_media"
-                 %if thing.site and thing.site.show_media:
+                 %if not thing.site or thing.site.show_media:
                    checked="checked"
                  %endif
           >
@@ -336,7 +336,7 @@ There is a 2 week delay to create a sub after creating an account. Also there is
           <li>
             <input class="nomargin" type="checkbox"
                    name="show_media_preview" id="show_media_preview"
-                   %if thing.site and thing.site.show_media_preview:
+                   %if not thing.site or thing.site.show_media_preview:
                      checked="checked"
                    %endif
             >
@@ -360,7 +360,10 @@ There is a 2 week delay to create a sub after creating an account. Also there is
         <li>
           <input class="nomargin" type="checkbox"
                  name="public_traffic" id="public_traffic"
-                 ${thing.site and thing.site.public_traffic and "checked='checked'" or ""}>
+                 %if not thing.site or thing.site.public_traffic:
+                   checked="checked"
+                 %endif
+          >
           <label for="public_traffic">
             ${_("make the traffic stats page available to everyone")}
           </label>
@@ -520,7 +523,7 @@ There is a 2 week delay to create a sub after creating an account. Also there is
             $.post('/api/search_reddit_names.json', { query: sr_name, exact: true }, 'json')
             .done(function(r) {
               var sr_name = r.names[0];
-              var sr_path = '/' + g.brander_community_abbr + '/' + sr_name;
+              var sr_path = '/${g.brander_community_abbr}/' + sr_name;
 
               var $sr_list = $('#related-srs');
               var $sr_item = $sr_list.find('[data-name=' + sr_name.toLowerCase() + ']');
