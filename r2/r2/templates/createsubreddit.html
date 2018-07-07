@@ -35,9 +35,9 @@
 
 %if not thing.site and not c.user.can_create_subreddit:
 <div class="infobar">${_md("""
-# can't create sub, your account is too new or you have created too many recently
+# Can't create sub, your account is too new or you created a sub too recently. 
 
-try participating in other subs for a little while first before creating your own. please post to /${g.brander_community_abbr}/help if you need more information about this restriction, or if you require a specific exemption you can [contact the admins](/contact) to request one.
+There is a 2 week delay to create a sub after creating an account. Also there is an additional 1 week delay after each new sub created. Post to /s/help if you need more information regarding this restriction.
 """)}</div>
 %else:
 
