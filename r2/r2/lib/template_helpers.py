@@ -596,7 +596,7 @@ def add_attr(attrs, kind, label=None, link=None, cssclass=None, symbol=None):
         priority = 4
         cssclass = 'admin'
         if not label:
-            label = _('reddit admin, speaking officially')
+            label = _('saidit admin, speaking officially')
     elif kind in ('X', '@'):
         priority = 5
         cssclass = 'gray'
