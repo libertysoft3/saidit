@@ -640,6 +640,8 @@ module["reddit"] = LocalizedModule("reddit.js",
     "embed.js",
     "post-sharing.js",
     "expando.js",
+    # CUSTOM
+    "expando-md.js",
     # inline expando-nsfw-flow.js module here when unflagged
     "saved.js",
     "cache-poisoning-detection.js",

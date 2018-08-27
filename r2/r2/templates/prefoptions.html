@@ -447,6 +447,9 @@
   </tr>
 
   ## CUSTOM: chat
+  ## TODO: can't hide and not post chat_sidebar_size_options because VoneOf will set a validation error if it's null
+  ## Fix is custom validator or adding VoneOfOrNone?
+  ## Should hide all/most fields if feature_chat is off or if user does not have 'enable chat' checked
   <%def name="chat_sidebar_size_options()">
     <% menu = ChatSidebarSizeMenu() %>
     <select name="chat_sidebar_size">
@@ -458,7 +461,6 @@
           %endfor
     </select>
   </%def>
-  % if feature.is_enabled('chat'):
   <tr>
     <th>${_("chat")}</th>
     <td class="prefright">
@@ -528,7 +530,6 @@
       <p>&#8226; "authentication failed": refresh the page. ensure other browser tabs with chat are closed. try clearing your cache and cookies and login to this site again. if you still get this error, set a new IRC nickname above and click "save options".</p>
     </td>
   </tr>
-  % endif
 
   ## end if logged in
   %endif

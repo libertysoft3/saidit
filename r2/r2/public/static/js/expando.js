@@ -156,6 +156,10 @@
         this.$expando.html(this.cachedHTML);
       }
 
+      // CUSTOM - for expando-md.js
+      var $e2 = $.Event('expando:hashtml', { expando: this });
+      this.$el.trigger($e2);
+
       if (!this._expandoEventData.provider) {
         // this needs to be deferred until the actual embed markup is available.
         var $media = this.$expando.children();
