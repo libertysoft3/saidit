@@ -68,8 +68,8 @@
       if (!href || href.indexOf('#') != -1 || href.indexOf('?') != -1) {
         return false;
       }
-      var allowed = ['jpg', 'gif', 'png'];
-      var extIndex = allowed.indexOf(href.split('.').pop());
+      var allowed = ['jpg', 'jpeg', 'gif', 'png'];
+      var extIndex = allowed.indexOf(href.split('.').pop().toLowerCase());
       if (extIndex == -1) {
         return false;
       }
@@ -77,7 +77,7 @@
     }
 
     function getYouTubeId(href) {
-      if (!href || href.indexOf('http') == -1 || (href.indexOf('youtube') == -1 && href.indexOf('youtu.be/') != -1)) {
+      if (!href) {
         return false;
       }
       var match = reYouTube.exec(href);
