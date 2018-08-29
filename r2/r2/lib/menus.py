@@ -607,10 +607,10 @@ class ProfileSortMenu(SortMenu):
 
 class CommentSortMenu(SortMenu):
     """Sort menu for comments pages"""
-    _default = 'confidence'
+    _default = 'new'
     _options = ('confidence', 'top', 'new', g.voting_controversial_path, 'old', 'random',
                 'qa',)
-    hidden_options = ['random']
+    hidden_options = ['random', 'confidence', 'qa', 'old']
 
     # Links may have a suggested sort of 'blank', which is an explicit None -
     # that is, do not check the subreddit for a suggested sort, either.
