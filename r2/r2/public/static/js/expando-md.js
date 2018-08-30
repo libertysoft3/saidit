@@ -11,13 +11,15 @@
     var buttonClass = 'md-expando-button';
     var buttonOpenClass = 'md-expando-open';
     var buttonClosedClass = 'md-expando-closed';
-    var reYouTube = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig; // src https://stackoverflow.com/a/5831191
+    var reYouTube = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/i; // src https://stackoverflow.com/a/5831191 without 'g'
+    var reYouTubeTimestamp = /t=([^&#]*)/; // t=1h6m30s
+    var reYouTubeTimestampParts = /^(\d+h)?(\d+m)?(\d+s)$/i; // 1h6m30s
 
     function initMdExpandosByThingId(thingId) {
-      $('#' + thingId).find('.md a').each(function() {
+      $('#' + thingId + ' > .entry .md a').each(function() {
         initMdExpando($(this));
       });
-      $('#' + thingId).find('.md a.' + buttonClass).on('click', function(){
+      $('#' + thingId + ' > .entry .md a.' + buttonClass).on('click', function() {
         toggleMdExpando($(this));
       });
     }
@@ -28,18 +30,23 @@
         $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="image" data-expando-exists="false" href="javascript:void(0);">' + check + '</a> ');
         return;
       }
-      check = getYouTubeId($thing.attr('href'));
+      check = getYouTubeEmbedUrl($thing.attr('href'));
       if (check) {
-        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-video-id="' + check  + '" data-type="youtube" data-expando-exists="false" href="javascript:void(0);">YouTube</a> ');
+        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="youtube" data-video-url="' + check  + '" data-expando-exists="false" href="javascript:void(0);">YouTube</a> ');
         return;
       }
     }
 
     function toggleMdExpando($button) {
-      // hide expando
+      // close expando
       if ($button.hasClass(buttonOpenClass)) {
         $button.addClass(buttonClosedClass).removeClass(buttonOpenClass);
         $button.next().hide();
+
+        // remove video iframes on close to make them stop playing
+        if ($button.data('video-url')) {
+          $button.data('expando-exists', false).next().remove();
+        }
         return;
       }
 
@@ -55,11 +62,11 @@
       switch ($button.data('type')) {
         case 'image':
               var sourceHref = $button.prev().attr('href');
-              $button.after('<div class="md-expando"><a href="' + sourceHref + '" draggable="false"><img src="' + sourceHref + '" draggable="false"/></a></div>');
+              $button.after('<div class="md-expando"><a href="' + sourceHref + '" draggable="false" style="outline: none;"><img src="' + sourceHref + '" draggable="false"/></a></div>');
               initMdExpandoImageResize($button.next().find('a'), $button.next().find('img'));
           break;
         case 'youtube':
-              $button.after('<div class="md-expando"><iframe width="560" height="315" style="max-width: 100%;" src="https://www.youtube-nocookie.com/embed/' + $button.data('video-id') + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>');
+              $button.after('<div class="md-expando"><iframe width="560" height="315" style="max-width: 100%;" src="https://www.youtube-nocookie.com/embed/' + $button.data('video-url') + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>');
           break;
       }
     }
@@ -76,12 +83,30 @@
       return allowed[extIndex].toUpperCase();
     }
 
-    function getYouTubeId(href) {
+    function getYouTubeEmbedUrl(href) {
       if (!href) {
         return false;
       }
       var match = reYouTube.exec(href);
       if (match) {
+        match[1] += '?rel=0';
+        var ts = reYouTubeTimestamp.exec(href);
+        if (ts) {
+          var parts = reYouTubeTimestampParts.exec(ts[1]);
+          if (parts) {
+            var secs = 0;
+            if (parts[3]) {
+              secs += parseInt(parts[3].substring(0, parts[3].length - 1));
+            }
+            if (parts[2]) {
+              secs += 60 * parseInt(parts[2].substring(0, parts[2].length - 1));
+            }
+            if (parts[1]) {
+              secs += 60 * 60 * parseInt(parts[1].substring(0, parts[1].length - 1));
+            }
+            match[1] += '&start=' + secs;
+          }
+        }
         return match[1];
       }
       return false;
@@ -98,6 +123,7 @@
         event.preventDefault();
       })
       .mousedown(function(event) {
+        event.preventDefault(); // prevents FF from overlaying the image with blue
         $link.data('dragging', true).data('startX', event.pageX).data('startY', event.pageY);
         $img.data('original-width', $img.width()).css('width', $img.width() + 'px');
       })
