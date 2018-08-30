@@ -146,7 +146,7 @@
       ${language_tool(allow_blank = False, show_regions = True,
                       default_lang = c.user.pref_lang)}
       &#32;<span class="details hover">(*) ${_("incomplete")}
-      &#32;<a href="https://www.reddit.com/r/i18n/wiki/getting_started">${_("volunteer to translate")}</a></span>
+    </span>
     </td>
   </tr>
 
@@ -212,7 +212,7 @@
   <tr>
     <th>${_("link options")}</th>
     <td class="prefright">
-      <p>
+ <!--      <p>
         ${checkbox(_("show the spotlight box on the front page"), "organic")}
         &#32;
         <span class="details">
@@ -234,12 +234,12 @@
         <span class="details">
           ${_("(such as the source subreddit or the content author's url/name)")}
         </span>
-      </p>
-      <p>${checkbox(_("don't show me submissions after I've upvoted them"), "hide_ups")}
+      </p> -->
+      <p>${checkbox(_("don't show me submissions after I've voted them insightful"), "hide_ups")}
          &#32;
          <span class="details">${_("(except my own)")}</span>
       </p>
-      <p>${checkbox(_("don't show me submissions after I've downvoted them"), "hide_downs")}
+      <p>${checkbox(_("don't show me submissions after I've downvoted them funny"), "hide_downs")}
          &#32;
          <span class="details">${_("(except my own)")}</span>
       </p>
@@ -250,10 +250,10 @@
          input = unsafe(capture(num_input, c.user.pref_min_link_score,
          'min_link_score'))
          %>
-      <p>
+<!--       <p>
       ${_wsf("don't show me submissions with a score less than %(num)s", num=input)}
       &#32;<span class="details">${_("(leave blank to show all submissions)")}</span>
-      </p>
+      </p> -->
     </td>
   </tr>
   <tr>
@@ -278,10 +278,10 @@
        input = unsafe(capture(num_input, c.user.pref_min_comment_score,
                               'min_comment_score'))
        %>
-    <p>
+   <!--  <p>
       ${_wsf("don't show me comments with a score less than %(num)s", num=input)}
       &#32;<span class="details">${_("(leave blank to show all comments)")}</span>
-    </p>
+    </p> -->
     <p>
       <%
        input = unsafe(capture(num_input, c.user.pref_num_comments,
@@ -323,7 +323,7 @@
         ${_("(otherwise, they will be marked as read when you click them)")}
       </span>
       <br>
-      ${checkbox(_("notify me when people say my username"), "monitor_mentions")}
+      ${checkbox(_("notify me when people say my username in comments"), "monitor_mentions")}
       %if feature.is_enabled('orangereds_as_emails'):
         <br>
         ${checkbox(_("send messages as emails"), "email_messages", disabled=(not c.user.email_verified), disabled_text=_("requires a verified email"))}
@@ -371,9 +371,9 @@
       <br/>
         ${checkbox(_("label posts that are not safe for work (NSFW)"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(requires not 'safer for work' mode)")}
       <br/>
-        ${checkbox(_("enable private RSS feeds"), "private_feeds")}
+ <!--        ${checkbox(_("enable private RSS feeds"), "private_feeds")}
        &#32;<span class="details">
-        ${_("(available from the 'RSS feed' tab in prefs)")}</span>
+        ${_("(available from the 'RSS feed' tab in prefs)")}</span> -->
     </td>
   <tr>
     <th>${_("privacy options")}</th>
@@ -387,7 +387,7 @@
            %>
         (${_wsf("let everyone see %(link1)s and %(link2)s", link1=link1, link2=link2)})
       </span>
-      <br/>
+<!--       <br/>
       ${checkbox(_("allow my data to be used for research purposes"), "research")}
       &#32;
       <span class="details">
@@ -396,7 +396,7 @@
            ${_("details")}
          </a>
        )
-      </span>
+      </span> -->
       <br />
       ${checkbox(_("don't allow search engines to index my user profile"), "hide_from_robots")}
       &#32;
@@ -562,9 +562,9 @@
     <th>${_("gold options")}</th>
     <td class="prefright">
       ${checkbox(_("highlight new comments"), "highlight_new_comments")}
-      <% gold_link = unsafe('&#32;<a href="/gold/about">' + _("reddit gold") + '</a>') %>
+      <% gold_link = unsafe('&#32;<a href="/gold/about">' + _("gold system") + '</a>') %>
       &#32;<span class="details">
-        (${_wsf("since you don't have %(gold_link)s, this will only apply in subreddits you moderate", gold_link=gold_link)})
+        (${_wsf("This a test feature, this will only apply in subs you moderate")})
       </span>
     </td>
   </tr>
