@@ -98,6 +98,11 @@ class BaseController(WSGIController):
                 forwarded_for and
                 is_local_address(remote_addr)):
             request.ip = forwarded_for.split(',')[-1]
+            # CUSTOM: add Cloudflare support, where forwarded_for is a Cloudflare private ip
+            # rather than the requesters.
+            cf_forwarded_for = request.environ.get('HTTP_CF_CONNECTING_IP', ())
+            if cf_forwarded_for:
+                request.ip = cf_forwarded_for.split(',')[-1]
         else:
             request.ip = request.environ['REMOTE_ADDR']
 
