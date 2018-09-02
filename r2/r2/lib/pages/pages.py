@@ -1004,7 +1004,8 @@ class Reddit(Templated):
     def build_toolbars(self):
         """Sets the layout of the navigation topbar on a Reddit.  The result
         is a list of menus which will be rendered in order and
-        displayed at the top of the Reddit."""
+        displayed at the top of the Reddit.
+        SAIDIT CUSTOM: Removed NamedButton('rising'), from list"""
         if c.site == Friends:
             main_buttons = [NamedButton('new', dest='', aliases=['/hot']),
                             NamedButton('comments'),
@@ -1013,14 +1014,13 @@ class Reddit(Templated):
         else:
             main_buttons = [NamedButton('hot', dest='', aliases=['/hot']),
                             NamedButton('new'),
-                            NamedButton('rising'),
                             NamedButton(g.voting_controversial_path),
                             NamedButton('top'),
                             ]
 
             if c.site.allow_gilding:
-                main_buttons.append(NamedButton('gilded',
-                                                aliases=['/comments/gilded']))
+                """main_buttons.append(NamedButton('gilded',
+                                                aliases=['/comments/gilded']))"""
 
             mod = False
             if c.user_is_loggedin:
@@ -1032,7 +1032,7 @@ class Reddit(Templated):
 
             if (isinstance(c.site, (Subreddit, DefaultSR, MultiReddit)) and
                     c.site.allow_ads):
-                main_buttons.append(NavButton(menu.promoted, 'ads'))
+                """main_buttons.append(NavButton(menu.promoted, 'ads'))"""
 
         more_buttons = []
 
@@ -2400,7 +2400,8 @@ class ProfilePage(Reddit):
     """Container for a user's profile page.  As such, the Account
     object of the user must be passed in as the first argument, along
     with the current sub-page (to determine the title to be rendered
-    on the page)"""
+    on the page) CUSTOM SAIDIT: ,
+                   NamedButton('gilded') removed"""
 
     searchbox         = False
     create_reddit_box = False
@@ -2415,8 +2416,7 @@ class ProfilePage(Reddit):
         path = "/user/%s/" % self.user.name
         main_buttons = [NavButton(menu.overview, '/', aliases = ['/overview']),
                    NamedButton('comments'),
-                   NamedButton('submitted'),
-                   NamedButton('gilded')]
+                   NamedButton('submitted')]
 
         if votes_visible(self.user):
             """main_buttons += [
@@ -2509,9 +2509,9 @@ class ProfilePage(Reddit):
 
         if (c.user == self.user or c.user.employee or
             self.user.pref_public_server_seconds):
-            seconds_bar = ServerSecondsBar(self.user)
+            """seconds_bar = ServerSecondsBar(self.user)
             if seconds_bar.message or seconds_bar.gift_message:
-                rb.push(seconds_bar)
+                rb.push(seconds_bar)"""
 
         rb.push(ProfileBar(self.user))
 
