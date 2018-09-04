@@ -41,9 +41,8 @@ def admin_menu(**kwargs):
         OffsiteButton("traffic", "/traffic"),
         NavButton(menu.awards, "awards"),
         NavButton(menu.errors, "error log"),
-	
-	# CUSTOM
-	NavButton(menu.global_user_bans, "globaluserbans"),
+        # CUSTOM
+        NavButton(menu.global_user_bans, "globaluserbans"),
     ]
 
     admin_menu = NavMenu(buttons, title='admin tools', base_path='/admin',
@@ -79,14 +78,11 @@ class AdminPage(Reddit):
 
 class AdminProfileMenu(NavMenu):
     def __init__(self, path):
-
-	# CUSTOM
-	buttons = [
-		# OffsiteButton("Sample Link", "https://imgur.com/a/L54L0"),
-		NavButton(menu.awards, "awards"),
-		NavButton(menu.global_user_bans, "globaluserbans"),
-	]
-
+        # CUSTOM
+        buttons = [
+            OffsiteButton(menu.awards, '/admin/awards'),
+            OffsiteButton(menu.global_user_bans, "/admin/globaluserbans"),
+        ]
         NavMenu.__init__(self, buttons, base_path = path,
                          title = 'admin', type="tabdrop")
 
@@ -120,10 +116,10 @@ class AdminNotesSidebar(Templated):
         self.author = c.user.name
         self.notes = AdminNotesBySystem.in_display_order(system, subject)
         
-	# CUSTOM: Global Bans
-	self.global_ban = 'yes' if subject_user and subject_user.is_global_banned else 'no'
+        # CUSTOM: Global Bans
+        self.global_ban = 'yes' if subject_user and subject_user.is_global_banned else 'no'
 
-	# Convert timestamps for easier reading/translation
+        # Convert timestamps for easier reading/translation
         for note in self.notes:
             note["timesince"] = timesince(note["when"])
         Templated.__init__(self)
