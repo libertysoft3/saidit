@@ -32,7 +32,7 @@ RUNDIR=$(dirname $0)
 SCRIPTDIR="$RUNDIR/install"
 
 # the canonical source of all installers
-GITREPO="https://raw.github.com/reddit/reddit/master/install"
+GITREPO="https://raw.github.com/libertysoft3/reddit-ae/master/install"
 NEEDED=(
     "done.sh"
     "install_apt.sh"
