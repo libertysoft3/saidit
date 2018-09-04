@@ -94,7 +94,7 @@ setup(
     tests_require=['mock', 'nose', 'coverage'],
     test_suite="nose.collector",
     dependency_links=[
-        "https://github.com/reddit/snudown/archive/v1.1.3.tar.gz#egg=snudown-1.1.3",
+        "https://github.com/libertysoft3/snudown/archive/1.5.1.tar.gz#egg=snudown-1.5.0",
         "https://s3.amazonaws.com/code.reddit.com/pycaptcha-0.4.tar.gz#egg=pycaptcha-0.4",
     ],
     packages=find_packages(exclude=["ez_setup"]),
