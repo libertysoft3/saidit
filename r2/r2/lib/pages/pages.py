@@ -725,8 +725,8 @@ class Reddit(Templated):
                     box = SubscriptionBox(srs)
                 ps.append(SideContentBox(_('these subreddits'), [box]))
 
-	# CUSTOM: Global Bans
-	user_banned = c.user_is_loggedin and (c.site.is_banned(c.user) or c.user.is_global_banned)
+        # CUSTOM: Global Bans
+        user_banned = c.user_is_loggedin and (c.site.is_banned(c.user) or c.user.is_global_banned)
 
         if (self.submit_box
                 and (c.user_is_loggedin or not g.read_only_mode)
@@ -925,7 +925,7 @@ class Reddit(Templated):
 
         if c.user.pref_clickgadget and c.recent_clicks:
             pass
-	    # ps.append(SideContentBox(_("Recently viewed links"),
+            # ps.append(SideContentBox(_("Recently viewed links"),
             #                         [ClickGadget(c.recent_clicks)]))
 
         if c.user_is_loggedin:
@@ -969,7 +969,7 @@ class Reddit(Templated):
                         target = "_self",
                     )]
             
-	    # CUSTOM: Site Theme
+            # CUSTOM: Site Theme
             if c.user.pref_lightswitch:
                 buttons += [JsButton('lights off',
                     onclick = "lightswitch(); return false;",
@@ -977,13 +977,13 @@ class Reddit(Templated):
             else:
                 buttons += [JsButton('lights on',
                     onclick = "lightswitch(); return false;",
-		    css_class = "pref-lightswitch pref-lightswitch-off")]
+                    css_class = "pref-lightswitch pref-lightswitch-off")]
 
-	    buttons += [NamedButton("prefs", False,
+            buttons += [NamedButton("prefs", False,
                                   css_class = "pref-lang")]
         else:
 
-	    # CUSTOM: Site Theme
+            # CUSTOM: Site Theme
             if c.user.pref_lightswitch:
                buttons += [JsButton('lights off',
                     onclick = "lightswitch(); return false;",
@@ -991,7 +991,7 @@ class Reddit(Templated):
             else:
                 buttons += [JsButton('lights on',
                     onclick = "lightswitch(); return false;",
-		    css_class = "pref-lightswitch pref-lightswitch-off")]
+                    css_class = "pref-lightswitch pref-lightswitch-off")]
 
             lang = c.lang.split('-')[0] if c.lang else ''
             lang_name = g.lang_name.get(lang) or [lang, '']
@@ -1066,7 +1066,7 @@ class Reddit(Templated):
         elif isinstance(c.site, DefaultSR):
             toolbar.insert(0, PageNameNav('subredditheadertitle'))
 
-	return toolbar
+        return toolbar
 
     def __repr__(self):
         return "<Reddit>"
@@ -1152,7 +1152,7 @@ class Reddit(Templated):
             classes.update(self.supplied_page_classes)
         
         # CUSTOM: site theme
-	classes.add(c.user.pref_site_theme.replace('_','-'))
+        classes.add(c.user.pref_site_theme.replace('_','-'))
 
         return classes
 
@@ -1181,8 +1181,8 @@ class RedditFooter(CachedTemplate):
         self.nav = [
             NavMenu([
                     OffsiteButton("official sub", "https://saidit.net/s/SaidIt"),
-				    OffsiteButton("welcome to saidit", "https://saidit.net/s/SaidIt/comments/37r/welcome_to_saiditnet/"),
-                    ],
+                    OffsiteButton("welcome to saidit", "https://saidit.net/s/SaidIt/comments/37r/welcome_to_saiditnet/"),
+                ],
                 title = _("about"),
                 type = "flat_vert",
                 separator = ""),
@@ -1198,7 +1198,7 @@ class RedditFooter(CachedTemplate):
 
             NavMenu([
                     OffsiteButton(_("RES for saidit"), "https://saidit.net/s/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
-				    OffsiteButton(_("open source code"), "https://github.com/libertysoft3/reddit-ae"),
+                    OffsiteButton(_("open source code"), "https://github.com/libertysoft3/reddit-ae"),
                 ],
                 title = _("apps & tools"),
                 type = "flat_vert",
@@ -2422,7 +2422,7 @@ class ProfilePage(Reddit):
             """main_buttons += [
                 NamedButton('upvoted'),
                 NamedButton('downvoted')]
-			"""
+            """
             
 
         if c.user_is_loggedin and (c.user._id == self.user._id or
@@ -2492,9 +2492,9 @@ class ProfilePage(Reddit):
 
             rb.push(AdminSidebar(self.user))
             
-	    # CUSTOM - Global Bans
-	    # passing in full user object to display user ban status
-	    rb.push(AdminNotesSidebar('user', self.user.name, self.user))
+            # CUSTOM - Global Bans
+            # passing in full user object to display user ban status
+            rb.push(AdminNotesSidebar('user', self.user.name, self.user))
         elif c.user_is_sponsor:
             from admin_pages import SponsorSidebar
             rb.push(SponsorSidebar(self.user))

@@ -26,8 +26,10 @@
 
 <div class="raisedbox spacer">
     ${_(thing.SYSTEMS[thing.system])}: ${thing.subject}
-    <br/>
-    ${_('global ban')}: ${thing.global_ban}
+    %if thing.system == 'user':
+        <br/>
+        ${_('global ban')}: ${thing.global_ban}
+    %endif
     <form id="adminnotes-form" method="post" action="/api/add_admin_note"
         onsubmit="return post_form(this, 'add_admin_note')">
         <input type="hidden" name="system" value="${thing.system}">
