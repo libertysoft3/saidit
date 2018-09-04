@@ -191,12 +191,16 @@ if [ ! -f development.update ]; then
     cat > development.update <<DEVELOPMENT
 # after editing this file, run "make ini" to
 # generate a new development.ini
+[secrets]
+# the tokens in this section are base64 encoded
 
 [DEFAULT]
 # global debug flag -- displays pylons stacktrace rather than 500 page on error when true
 # WARNING: a pylons stacktrace allows remote code execution. Make sure this is false
 # if your server is publicly accessible.
 debug = true
+uncompressedJS = true
+sqlprinting = false
 
 disable_ads = true
 disable_captcha = true
@@ -205,6 +209,8 @@ disable_require_admin_otp = true
 
 domain = $REDDIT_DOMAIN
 oauth_domain = $REDDIT_DOMAIN
+https_endpoint = https://%(domain)s
+default_scheme = https
 
 plugins = $plugin_str
 
@@ -212,8 +218,20 @@ media_provider = filesystem
 media_fs_root = /srv/www/media
 media_fs_base_url_http = http://%(domain)s/media/
 
+min_membership_create_community = 0
+
 [server:main]
 port = 8001
+
+[live_config]
+# Specify global admins and permissions, each user should have one of admin, sponsor, or employee as their permission level
+# employees = reddit:admin
+feature_force_https = on
+
+create_sr_account_age_days = 0
+create_sr_link_karma = 0
+create_sr_comment_karma = 0
+create_sr_ratelimit_once_per_days = 0
 DEVELOPMENT
     chown $REDDIT_USER development.update
 else
