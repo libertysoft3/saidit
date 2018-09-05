@@ -199,7 +199,9 @@ menu =   MenuHandler(hot          = _('hot'),
                      whitelist = _("whitelist"),
 
                      # CUSTOM
-                     global_user_bans               = _('global bans'),
+                     global_user_bans               = _('global user bans'),
+                     ip_bans                        = _('ip bans'),
+                     ip_history                     = _('ip history'),
                      chat_size_default              = _('default (300px)'),
                      chat_size_s                    = _('small (380px)'),
                      chat_size_m                    = _('medium (480px)'),

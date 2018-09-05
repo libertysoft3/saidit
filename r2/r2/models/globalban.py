@@ -38,10 +38,10 @@ class GlobalBan(Thing):
     def _by_user_id(cls, user_id):
         q = cls._query(GlobalBan.c.user_id == user_id)
         q._limit = 1
-        globalban = list(q)
+        globalbans = list(q)
 
-        if globalban:
-            return cls._byID(globalban[0]._id, True)
+        if globalbans:
+            return cls._byID(globalbans[0]._id, True)
         else:
             raise NotFound, 'GlobalBan for user %s' % user_id
 

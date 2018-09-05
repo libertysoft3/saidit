@@ -104,5 +104,7 @@ def load_controllers():
 
     # CUSTOM
     from globaluserbans import GlobalUserBansController
+    from iphistory import IpHistoryController
+    from ipbans import IpBansController
 
     _reddit_controllers.update((name.lower(), obj) for name, obj in locals().iteritems())

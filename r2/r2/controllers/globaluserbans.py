@@ -1,4 +1,3 @@
-
 from pylons import request
 from pylons import app_globals as g
 from reddit_base import RedditController
@@ -9,6 +8,6 @@ class GlobalUserBansController(RedditController):
 
     @validate(VAdmin())
     def GET_index(self):
-        res = AdminPage(content = AdminGlobalUserBans(), title = '[ADMIN] Global Bans').render()
+        res = AdminPage(content = AdminGlobalUserBans(), title = '[ADMIN] Global User Bans').render()
         return res
 

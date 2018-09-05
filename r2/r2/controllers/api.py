@@ -5308,15 +5308,62 @@ class ApiController(RedditController):
         thing._commit()
 
         # _new() handles this for creation
-        cache_clear = GlobalBan._all_global_bans(True)
+        cache_clear = GlobalBan._all_global_bans(_update=True)
         cache_clear = GlobalBan._all_banned_users_cache(_update=True)
-	form.set_html(".status", _('deleted, <a href="#" onclick="location.reload();">reload</a> to see it'))
+        form.set_html(".status", _('deleted, <a href="#" onclick="location.reload();">reload</a> to see it'))
+
+    # CUSTOM: IP Bans
+    # TODO validate is ip
+    @validatedForm(VAdmin(),
+                   VModhash(),
+                   ipban=VByName("fullname"), # all things have a fullname
+                   colliding_ipban=VIpBanByIp(("ip", "fullname")),
+                   ip=VLength("ip", max_length = 1000),
+                   notes=VLength("notes", max_length = 1000, empty_error=None))
+    def POST_editipban(self, form, jquery, ipban, colliding_ipban, ip, notes):
+        if form.has_errors("ip", errors.INVALID_OPTION):
+            form.set_text(".status", "ip already banned")
+            return
+
+        if form.has_error():
+            return
+
+        if ip is None:
+            form.set_text(".status", "ip does not exist")
+            return
+
+        if ipban is None:
+            IpBan._new(ip, notes)
+            form.set_html(".status", "saved, <a href='#' onclick='location.reload();'>reload</a> to see changes")
+            return
+
+        ipban.notes = notes
+        ipban._commit()
+        form.set_html(".status", _('saved, <a href="#" onclick="location.reload();">reload</a> to see changes'))
+
+
+    # CUSTOM: IP Bans
+    @validatedForm(VAdmin(),
+                VModhash(),
+                thing = VByName('ipban_id'))
+    def POST_deleteipban(self, form, jquery, thing):
+        if not thing or thing._deleted: return
+        if not isinstance(thing, IpBan): return
+        if form.has_error():
+            return
+
+        thing._deleted = True
+        thing._commit()
+
+        # _new() handles this for creation
+        cache_clear = IpBan._all_bans(_update=True)
+        form.set_html(".status", _('deleted, <a href="#" onclick="location.reload();">reload</a> to see it'))
 
     # CUSTOM: Site Theme
     @csrf_exempt
     @validate(pref_lightswitch = VBoolean('lightswitch'))
     def POST_lightswitch(self, pref_lightswitch):
-	theme = g.live_config['site_theme_lightswitch_off']
+        theme = g.live_config['site_theme_lightswitch_off']
         if pref_lightswitch:
             theme = g.live_config['site_theme_lightswitch_on']
         prefs = {"pref_lightswitch": pref_lightswitch, "pref_site_theme": theme}

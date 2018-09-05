@@ -3378,6 +3378,22 @@ class VGlobalBanByUsername(Validator):
         else:
             return a
 
+# CUSTOM: IP Bans
+class VIpBanByIp(Validator):
+    def run(self, ip, required_fullname=None):
+        if not ip:
+            return self.set_error(errors.NO_TEXT)
+
+        try:
+            a = IpBan._by_ip(ip)
+        except NotFound:
+            a = None
+
+        if a and required_fullname and a._fullname != required_fullname:
+            return self.set_error(errors.INVALID_OPTION)
+        else:
+            return a
+
 # CUSTOM: Site Theme
 class VSiteTheme(Validator):
     @staticmethod

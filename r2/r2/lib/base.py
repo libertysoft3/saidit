@@ -30,6 +30,8 @@ from r2.lib.filters import spaceCompress, _force_unicode
 from r2.lib.template_helpers import get_domain
 from r2.lib.utils import Agent
 from utils import string2js, read_http_date
+# CUSTOM
+from r2.models.ipban import IpBan
 
 import re, hashlib
 from Cookie import CookieError
@@ -129,6 +131,10 @@ class BaseController(WSGIController):
             request.if_modified_since = read_http_date(if_modified_since)
         else:
             request.if_modified_since = None
+
+        # CUSTOM: ip bans
+        if request.ip in IpBan._all_banned_ips():
+            abort(403)
 
         self.fix_cookie_header()
         self.pre()

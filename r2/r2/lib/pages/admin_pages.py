@@ -19,6 +19,8 @@
 # All portions of the code written by reddit are Copyright (c) 2006-2015 reddit
 # Inc. All Rights Reserved.
 ###############################################################################
+# CUSTOM
+import urllib
 
 from pylons import config
 from pylons import tmpl_context as c
@@ -43,6 +45,7 @@ def admin_menu(**kwargs):
         NavButton(menu.errors, "error log"),
         # CUSTOM
         NavButton(menu.global_user_bans, "globaluserbans"),
+        NavButton(menu.ip_bans, "ipbans"),
     ]
 
     admin_menu = NavMenu(buttons, title='admin tools', base_path='/admin',
@@ -77,11 +80,10 @@ class AdminPage(Reddit):
         Reddit.__init__(self, nav_menus = nav_menus, *a, **kw)
 
 class AdminProfileMenu(NavMenu):
-    def __init__(self, path):
+    def __init__(self, path, user):
         # CUSTOM
         buttons = [
-            OffsiteButton(menu.awards, '/admin/awards'),
-            OffsiteButton(menu.global_user_bans, "/admin/globaluserbans"),
+            OffsiteButton(menu.ip_history, '/admin/iphistory?username=' + urllib.quote_plus(user.name)),
         ]
         NavMenu.__init__(self, buttons, base_path = path,
                          title = 'admin', type="tabdrop")

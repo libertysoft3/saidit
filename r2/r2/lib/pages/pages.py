@@ -2437,7 +2437,7 @@ class ProfilePage(Reddit):
 
         if c.user_is_admin:
             from admin_pages import AdminProfileMenu
-            toolbar.append(AdminProfileMenu(path))
+            toolbar.append(AdminProfileMenu(path, self.user))
 
         return toolbar
 
@@ -2492,7 +2492,7 @@ class ProfilePage(Reddit):
 
             rb.push(AdminSidebar(self.user))
             
-            # CUSTOM - Global Bans
+            # CUSTOM: Global Bans
             # passing in full user object to display user ban status
             rb.push(AdminNotesSidebar('user', self.user.name, self.user))
         elif c.user_is_sponsor:
@@ -6010,3 +6010,17 @@ class AdminGlobalUserBans(Templated):
             except NotFound:
                 pass
 
+class AdminIpBans(Templated):
+    def __init__(self):
+        from r2.models import IpBan
+        Templated.__init__(self)
+        self.bans = IpBan._all_bans()
+
+class AdminIpHistory(Templated):
+    def __init__(self, user):
+        from r2.models import IpHistory
+        Templated.__init__(self)
+        self.user = user
+        self.iphistory = []
+        if user:
+            self.iphistory = IpHistory._ips_by_user(user);
