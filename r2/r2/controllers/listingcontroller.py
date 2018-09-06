@@ -635,7 +635,7 @@ class BrowseController(ListingWithPromos):
         """For merged time-listings, don't show items that are too old
            (this can happen when mr_top hasn't run in a while)"""
         if self.time != 'all' and c.default_sr:
-            oldest = timeago('1 %s' % (str(self.time),))
+            oldest = utils.timeago('1 %s' % (str(self.time),))
             def keep(item):
                 if isinstance(c.site, (HomeSR, AllSR)):
                     if not item.subreddit.discoverable:
