@@ -470,7 +470,7 @@ There is a 2 week delay to create a sub after creating an account. Also there is
               </button>
               <div class="clearleft"></div>
               <input type="hidden" name="uh" value="${c.modhash}" />
-              <input type="hidden" name="r"  value="${c.site.name}" />
+              <input type="hidden" name="${g.brander_community_abbr}"  value="${c.site.name}" />
               <input type="hidden" name="header" value="1" />
 
               <script type="text/javascript">
@@ -581,7 +581,7 @@ There is a 2 week delay to create a sub after creating an account. Also there is
           </button>
           <div class="clearleft"></div>
           <input type="hidden" name="uh" value="${c.modhash}">
-          <input type="hidden" name="r"  value="${c.site.name}">
+          <input type="hidden" name="${g.brander_community_abbr}"  value="${c.site.name}">
           <input type="hidden" name="upload_type" value="icon">
         </%utils:image_upload>
       </li>
@@ -600,7 +600,7 @@ There is a 2 week delay to create a sub after creating an account. Also there is
           </button>
           <div class="clearleft"></div>
           <input type="hidden" name="uh" value="${c.modhash}">
-          <input type="hidden" name="r"  value="${c.site.name}">
+          <input type="hidden" name="${g.brander_community_abbr}"  value="${c.site.name}">
           <input type="hidden" name="upload_type" value="banner">
         </%utils:image_upload>
       </li>
