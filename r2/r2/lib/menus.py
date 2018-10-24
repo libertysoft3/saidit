@@ -716,7 +716,7 @@ class ProfileOverviewTimeMenu(TimeMenu):
 
 class ControversyTimeMenu(TimeMenu):
     """time interval for controversial sort.  Make default time 'day' rather than 'all'"""
-    _default = 'day'
+    _default = 'all'
     button_cls = PostButton
 
 
