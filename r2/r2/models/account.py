@@ -161,16 +161,17 @@ class Account(Thing):
                      in_timeout=False,
                      has_used_mobile_app=False,
                      disable_karma=False,
-			
-		     # CUSTOM
+
+                     # CUSTOM
                      pref_chat_enabled=True,
                      pref_chat_sidebar_size=g.live_config['chat_default_sidebar_size'],
                      pref_chat_user=g.live_config['chat_default_username'],
                      pref_chat_client_user=g.live_config['chat_default_username'],
                      pref_chat_client_password='',
-		     pref_subscriptions_unsubscribe='subs_do_nothing',
-	             pref_site_theme=g.live_config['site_theme_default'],
-		     pref_lightswitch=False if g.live_config['site_theme_lightswitch_default'] == 'off' else True,
+                     pref_subscriptions_unsubscribe='subs_do_nothing',
+                     pref_site_theme=g.live_config['site_theme_default'],
+                     pref_lightswitch=False if g.live_config['site_theme_lightswitch_default'] == 'off' else True,
+                     pref_sendreplies=True,
                      )
     _preference_attrs = tuple(k for k in _defaults.keys()
                               if k.startswith("pref_"))

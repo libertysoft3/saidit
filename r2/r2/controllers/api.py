@@ -569,6 +569,12 @@ class ApiController(RedditController):
             VRatelimit.ratelimit(rate_user=True, rate_ip = True,
                                  prefix = "rate_submit_")
 
+        # CUSTOM: sendreplies is sticky, sets a preference
+        if c.user.pref_sendreplies is not sendreplies:
+            prefs = {"pref_sendreplies": sendreplies}
+            set_prefs(c.user, prefs)
+            c.user._commit()
+
         queries.new_link(l)
         l.update_search_index()
         g.events.submit_event(l, request=request, context=c)
