@@ -59,9 +59,17 @@ ${thing.formtabs_menu}
     %endif
 </div>
 
+
+<script type="text/javascript">
+function countChars(countfrom,displayto) {
+  var len = document.getElementById(countfrom).value.length;
+  document.getElementById(displayto).innerHTML = len;
+}
+</script>
+
 <div class="spacer">
   <%utils:round_field title="${_('title')}" id="title-field">
-    <textarea name="title" rows="2" required>${thing.title}</textarea>
+    <textarea name="title" id="title_text" rows="2" required onkeyup="countChars('title_text','charcount');" onkeydown="countChars('title_text','charcount');" onmouseout="countChars('title_text','charcount');">${thing.title}</textarea><p align="right"><span align="right" id="charcount">0</span>/300 characters used</p>
     ${error_field("NO_TEXT", "title", "div")}
     ${error_field("TOO_LONG", "title", "div")}
   </%utils:round_field>
