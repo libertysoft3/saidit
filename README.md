@@ -118,6 +118,8 @@ watch reddit run and debug errors
 
     sudo tail -f /var/log/syslog
 
+additional configuration changes you may wish to make are shown in `r2/development.update.saidit` 
+
 ### optional: accessing VM files from your host
 
 You can mount the VM's reddit files as a folder on your host machine for easy editing and searching. sshfs is a quick and easy approach. On your host install sshfs and run `sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm`. Unmount it later with `fusermount -u ~/vm` to avoid crashing your editor when your VM shuts down.
