@@ -1,0 +1,209 @@
+# after editing this file, run "make ini" to
+# generate a new development.ini
+[secrets]
+# the tokens in this section are base64 encoded
+# general purpose secret
+
+[DEFAULT]
+# global debug flag -- displays pylons stacktrace rather than 500 page on error when true
+# WARNING: a pylons stacktrace allows remote code execution. Make sure this is false
+# if your server is publicly accessible.
+debug = false
+uncompressedJS = false
+
+## POSTGRES
+
+db_user = REDACTED
+# WARNING: password also hardcoded in /etc/cron.d/reddit
+db_pass = REDACTED
+db_table_globalban = thing
+db_servers_globalban = main
+
+short_description = Saidit.net - Speak your truth.
+
+disable_ads = true
+disable_captcha = true
+disable_require_admin_otp = true
+
+domain = saidit.net
+oauth_domain = saidit.net
+https_endpoint = https://saidit.net
+trust_local_proxies = true
+
+# the default subreddit for submissions
+default_sr = whatever
+
+plugins = gold
+# plugins = about adzerk gold liveupdate private
+media_provider = filesystem
+media_fs_root = /srv/www/media
+media_fs_base_url_http = http://saidit.net/media/
+useragent = Mozilla/5.0 (compatible; redditbot/1.0; +http://saidit.net/feedback)
+known_image_domains = i.imgur.com, giant.gfycat.com, pbs.twimg.com, upload.wikimedia.org
+
+# account name that AutoModerator actions will be done by
+automoderator_account = automoderator
+# Which scheme to use for URLs when the current protocol isn't known
+default_scheme = https
+
+
+# Brander
+# See also: short_description, useragent, all_on_front_front_page_title, all_on_front_front
+brander_site = saidit
+brander_community_abbr = s
+brander_community_abbr_redir = r
+brander_community = sub
+brander_community_plural = subs
+
+# minimum user karma total values to show to non-admins
+link_karma_display_floor = 1
+comment_karma_display_floor = -100
+
+ARCHIVE_AGE = 9999 days
+min_membership_create_community = 13
+
+# domains that we consider URLs case sensitive for repost detection purposes
+case_sensitive_domains = i.imgur.com, youtube.com
+# Domains that we know are friendly and host raw image files
+known_image_domains = i.imgur.com, giant.gfycat.com, pbs.twimg.com, upload.wikimedia.org
+
+## THRESHOLDS
+# SaidIt CUSTOM: set for low traffic, the default is 12 hours
+# how long to consider links eligible for the rising page
+rising_period = 5 days
+
+# for generating front/DefaultSR, default 50 and 100, is performance intensive
+sr_limit = 250
+gold_limit = 251
+
+# how deep do we go into the top listing when fetching /random, default 250
+num_serendipity = 450
+
+## RATE LIMIT
+disable_ratelimit = false
+RL_RESET_MINUTES = 3
+RL_AVG_REQ_PER_SEC = 1.5
+MIN_RATE_LIMIT_KARMA = 1
+MIN_RATE_LIMIT_COMMENT_KARMA = 1
+
+# Voting and score model
+voting_disable_dagger = true
+voting_controversial_name = funny
+voting_controversial_path = funny
+
+# Home page
+home_name = home
+home_path = /
+home_page_title = Saidit.net - speak your truth
+home_minus_page_title = saidit except
+menu_show_home = true
+
+
+[server:main]
+port = 8001
+
+
+
+[live_config]
+# Force the use of HTTPS (tell apps we want HTTPS connections only, use `Secure` cookies).
+feature_force_https = on
+feature_mobile_settings = off
+feature_media_previews = on
+feature_youtube_scraper = on
+feature_autoexpand_media_previews = on
+feature_hidpi_thumbnails = on
+feature_new_report_dialog = on
+feature_expando_nsfw_flow = on
+
+# Specify global admins and permissions, each user should have one of admin, sponsor, or employee as their permission level
+employees = REDACTED
+
+# sample multireddits (displayed when a user has no multis)
+listing_chooser_sample_multis = /user/reddit/m/hello, /user/reddit/m/world
+
+# a message placed in the infobar (all pages)
+# announcement_message = The site is undergoing maintenance and may not be fully operational. Thanks for your patience.
+
+# an info message placed in the sidebar (front page, profile page)
+# sidebar_message = ["sidebar_message 1", "sidebar message 2"]
+
+# Changes the probability of the spotlight box appearing as a first post
+spotlight_interest_sub_p = 0
+spotlight_interest_nosub_p = 0
+
+# Gets rid of the ad box at the top of the listings
+ad_probability = 0
+
+create_sr_account_age_days = 13
+create_sr_link_karma = 0
+create_sr_comment_karma = 0
+
+# Criteria for an item to meet to be determined as controversial, adds a css class
+cflag_min_votes = 3
+cflag_lower_bound = 0.0
+cflag_upper_bound = 0.6
+
+
+
+
+# Misc reddit features
+feature_subreddit_rules = on
+feature_sticky_comments = on
+
+# Misc custom features
+create_sr_ratelimit_once_per_days = 7
+feature_random_includes_subscriptions = on
+feature_listing_chooser = off
+feature_force_show_media_front = on
+feature_force_show_media_all = on
+
+# Site Theme
+# TODO - Conflicts with gold's Reddit Themes feature
+site_theme_default = theme_daymode
+site_theme_lightswitch_default = off
+site_theme_lightswitch_on = theme_daymode
+site_theme_lightswitch_off = theme_nightmode
+
+# Chat
+feature_chat = on
+chat_home = true
+chat_all = true
+chat_front = false
+chat_home_channel = home
+chat_all_channel = all
+chat_front_channel = home
+chat_client = thelounge
+chat_client_url = https://saidit.net:2053
+chat_external_url = REDACTED
+chat_external_url_href = REDACTED
+chat_default_sidebar_size = chat_size_s
+chat_enabling_post_content = !!chat_widget
+chat_channel_name_prefix = #
+chat_channel_name_suffix = 
+chat_channel_topic_separator = /
+# must be "guest" for thelounge autologin feature
+chat_default_username = guest
+
+# Auto Subscribe All
+feature_auto_subscribe_all = on
+auto_subscribe_all_limit = 5000
+auto_subscribe_all_include_over_18 = false
+
+# All On Front
+feature_all_on_front = on
+all_on_front_show_all_in_menu = true
+all_on_front_show_front_in_menu = true
+all_on_front_show_random_in_menu = true
+all_on_front_show_all_info_bar = false
+all_on_front_front_page_title = saidit: subscribed
+all_on_front_front_name = subscribed
+all_on_front_front_path = /s/subscribed
+all_on_front_front_header_title = subscribed
+all_on_front_all_page_title = saidit: all
+all_on_front_all_name = all
+all_on_front_all_path = /s/all
+all_on_front_all_header_title = all
+
+# Home page
+# comma separated with no spaces like sub1,sub2
+home_exclude_sr_names = GreyMarket,ads,KratomVendors
