@@ -1199,6 +1199,7 @@ class RedditFooter(CachedTemplate):
             NavMenu([
                     OffsiteButton(_("RES for saidit"), "https://saidit.net/s/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
                     OffsiteButton(_("open source code"), "https://github.com/libertysoft3/reddit-ae"),
+                    OffsiteButton(_("Canary"), "https://saidit.net/s/SaiditCanary"),
                 ],
                 title = _("apps & tools"),
                 type = "flat_vert",

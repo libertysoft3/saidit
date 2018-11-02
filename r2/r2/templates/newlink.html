@@ -48,6 +48,8 @@
 ${thing.formtabs_menu}
 %endif
 
+
+
 <div class="formtabs-content">
 
 <div class="spacer">
@@ -69,7 +71,7 @@ function countChars(countfrom,displayto) {
 
 <div class="spacer">
   <%utils:round_field title="${_('title')}" id="title-field">
-    <textarea name="title" id="title_text" rows="2" required onkeyup="countChars('title_text','charcount');" onkeydown="countChars('title_text','charcount');" onmouseout="countChars('title_text','charcount');">${thing.title}</textarea><p align="right"><span align="right" id="charcount">0</span>/300 characters used</p>
+    <textarea name="title" id="title_text" rows="2" required onkeyup="countChars('title_text','charcount');" onkeydown="countChars('title_text','charcount');" onmousemove="countChars('title_text','charcount');">${thing.title}</textarea><p align="right"><span align="right" id="charcount">0</span>/300</p>
     ${error_field("NO_TEXT", "title", "div")}
     ${error_field("TOO_LONG", "title", "div")}
   </%utils:round_field>
@@ -89,7 +91,7 @@ function countChars(countfrom,displayto) {
 
     <div id="suggest-title">
       <span class="title-status"></span>
-      <button type="button" tabindex="100" onclick="fetch_title()">${_("suggest title")}</button>
+      <button type="button" tabindex="100" onclick="fetch_title()" onmouseup="countChars('title_text','charcount');" onmousemove="countChars('title_text','charcount');">${_("suggest title")}</button>
     </div>
   </%utils:round_field>
 </div>
@@ -152,7 +154,7 @@ ${thing.captcha}
 
 <input name="resubmit" value="${thing.resubmit}" type="hidden"/>
 <div class="spacer">
-  <button class="btn" name="submit" value="form" type="submit">${_("submit")}</button>
+  <button class="btn" name="submit" value="form" type="submit" onmousemove="countChars('title_text','charcount');">${_("submit")}</button>
   <span class="status"></span>
   ${error_field("RATELIMIT", "ratelimit")}
   ${error_field("INVALID_OPTION", "sr")}

@@ -97,6 +97,34 @@
           <td>super^script</td>
           <td>super<sup>script</sup></td>
       </tr>
+      <tr>
+        <td>
+          1.  <br/>
+          7. <br/>
+          4. 
+        </td>
+        <td>
+          <ul>
+            1. <br/>
+            2. <br/>
+            3.
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          1\. <br/>
+          7\. <br/>
+          4\.
+        </td>
+        <td>
+          <ul>
+            1. <br/>
+            7. <br/>
+            4.
+          </ul>
+        </td>
+      </tr>
       % if show_embed_help:
       <tr>
           <td>${_md('Links on their own line will be embedded:\n\nhttps://example.com')}</td>
@@ -178,7 +206,7 @@
                         "helpon", "helpoff",
                          style = "" if thing.creating else "display: none")}
 
-        <a href="/help/contentpolicy" class="reddiquette" target="_blank" tabindex="100">${_('content policy')}</a>
+        <a href="/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/" class="reddiquette" target="_blank" tabindex="100">${_('content policy')}</a>
 
         %if thing.include_errors:
           ${error_field("TOO_LONG", thing.name, "span")}
