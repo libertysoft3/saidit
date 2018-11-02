@@ -123,8 +123,8 @@
   </div>
   <div class="clear options_expando hidden">
     <% 
-       subject = "[%(brander_site)s] I wanted to share this link with you"
-       body = """%(user)s shared a link with you from %(brander_site)s (%(https_endpoint)s/):
+       subject = "[%s] I wanted to share this link with you" % g.brander_site
+       body = """%(user)s shared a link with you from %(site)s (%(site_url)s):
 
 %(link)s
 
@@ -137,11 +137,11 @@ there's also a discussion going on here:
        link = _force_unicode(thing.url),
        title = _force_unicode(thing.title),
        permalink = add_sr(thing.permalink, sr_path = False, force_hostname = True, retain_extension=False),
-       url = "%s/%s" % (g.https_endpoint, thing._id36)
-       https_endpoint = g.https_endpoint,
-       brander_site = g.brander_site)
-       title = _force_unicode(thing.title)
-       tweet = "%s %s" % (title[0:(139-len(url))], url)
+       site = g.brander_site,
+       site_url = g.https_endpoint,
+       ## url = "https://reddit.com/%s" % thing._id36,
+       ## tweet = "%s %s" % (title[0:(139-len(url))], url),
+       )
        %>
 
         ${icon_button("Share", "email-icon", "mailto:?subject=" + urllib.quote(_force_utf8(subject)) + "&body=" + urllib.quote(_force_utf8(body)))}
