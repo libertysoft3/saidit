@@ -648,6 +648,9 @@ if [ ! -f /etc/cron.d/reddit ]; then
 */2  * * * * root /sbin/start --quiet reddit-job-broken_things
 */2  * * * * root /sbin/start --quiet reddit-job-rising
 0    * * * * root /sbin/start --quiet reddit-job-trylater
+*/15 * * * * root /sbin/start --quiet reddit-job-update_popular_subreddits
+0    * * * * root /sbin/start --quiet reddit-job-hourly_traffic
+0    * * * * root /sbin/start --quiet reddit-job-subscribers
 
 # liveupdate
 *    * * * * root /sbin/start --quiet reddit-job-liveupdate_activity
@@ -660,6 +663,11 @@ PGPASSWORD=password
 # disabled by default, uncomment if you need these jobs
 #*    * * * * root /sbin/start --quiet reddit-job-email
 #0    0 * * * root /sbin/start --quiet reddit-job-update_gold_users
+#*/15  * * * * root /sbin/start reddit-job-update_trending_subreddits
+
+# Solr search
+*/15  * * * * root /sbin/start --quiet reddit-job-solr_subreddits
+*/5 * * * * root /sbin/start --quiet reddit-job-solr_links
 CRON
 fi
 
