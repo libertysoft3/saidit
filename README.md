@@ -423,7 +423,7 @@ configure TheLounge, SSL cert paths may need to be adjusted:
     #   prefetchMaxImageSize: 2048,
     #   lockNetwork: true,
     #   defaults { name: "saiditDEV", host: "127.0.0.1", nick: "guest", username: "guest", realname: "Guest", join: "#home" }
-    #   https: { key: "/home/reddit/unrealircd/conf/ssl/server.key.pem", certificate: "/etc/ssl/certs/ssl-cert-snakeoil.pem" }
+    #   https: { enable: true, key: "/home/reddit/unrealircd/conf/ssl/server.key.pem", certificate: "/etc/ssl/certs/ssl-cert-snakeoil.pem" }
 
 add an intial user so the server will start:
 
