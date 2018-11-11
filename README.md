@@ -21,14 +21,14 @@ additional documentation:
 
 ---
 
-## installation
+## Install reddit
 
 This guide will walk you through installing reddit on a [VirtualBox](https://www.virtualbox.org/wiki/Downloads) virtual machine. This can be done on Linux, Mac, or Windows. 
 
 If you prefer you can install directly on a VPS running [Ubuntu 14](http://releases.ubuntu.com/14.04/) (create user "reddit" with sudo privileges and skip to "install reddit"). Also an ip address can be used in place of "reddit.local".
 
 
-### create a Ubuntu 14.04 VM with VirtualBox
+### Create a Ubuntu 14.04 VM with VirtualBox
 
 1. Download Ubuntu 14.04 server edition
 1. In VirtualBox, after creating a new VM with 4gb RAM and 30gb disk space, 
@@ -43,11 +43,11 @@ If you prefer you can install directly on a VPS running [Ubuntu 14](http://relea
 1. If you forgot to install the openssh server, run `sudo apt-get install openssh-server`
 1. You can now detach your VM or shut it down and restart in headless mode. You should only interact with it via SSH from your host for easy copy and paste, etc. Don't forget to shut down your VM before shutting down the host OS or you may corrupt your reddit installation.
 
-### update your (host's) hosts file to resolve https://reddit.local in your browser
+### Update your (host's) hosts file to resolve https://reddit.local in your browser
 
 Add the ip you noted earlier to your hosts file as "reddit.local". This procedure [varies by OS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/). Once this is setup you can ssh into your VM easily with `ssh reddit@reddit.local`
 
-### install reddit
+### Install reddit
 
 login to your VM as user reddit with `ssh reddit@reddit.local`. first we will update the OS.
 
@@ -74,7 +74,7 @@ optional: install sample data (recommended for demo/development enviroments)
     # NOTE: an admin user "reddit" with password "password" is created
 
 
-### additional configuration
+### Additional configuration
 
 make reddit user "cloner" a reddit admin
 
@@ -96,13 +96,6 @@ increase PostgreSQL max_connections for greater stability (87/100 in use at redd
     sudo service postgresql restart
     sudo reddit-restart
 
-add some missing cron jobs to `/etc/cron.d/reddit`
-
-    15 * * * * root /sbin/start reddit-job-update_popular_subreddits
-    20 * * * * root /sbin/start reddit-job-hourly_traffic
-    15 3 * * * root /sbin/start reddit-job-subscribers
-    */5  * * * * root /sbin/start reddit-job-update_trending_subreddits
-
 optional: change the default subreddits that guests see
 
     cd ~/src/reddit/r2
@@ -120,21 +113,21 @@ watch reddit run and debug errors
 
 additional configuration changes you may wish to make are shown in `r2/development.update.saidit` 
 
-### optional: accessing VM files from your host
+### Optional: accessing VM files from your host
 
 You can mount the VM's reddit files as a folder on your host machine for easy editing and searching. sshfs is a quick and easy approach. On your host install sshfs and run `sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm`. Unmount it later with `fusermount -u ~/vm` to avoid crashing your editor when your VM shuts down.
 
 ---
 
-## Ubuntu 14 updates
+## Misc upgrades
  
-### update OS
+### Upgrade ubuntu 14
  
     $ sudo apt-get update
     $ sudo apt-get upgrade
 
 
-### upgrade curl
+### Upgrade curl
 
 this will improve reddit's 'fetch title' functionality and potentially more.
  
@@ -150,9 +143,7 @@ this will improve reddit's 'fetch title' functionality and potentially more.
     $ curl --version
  
  
-### upgrade python from 2.7.6 to 2.7.14
-
-[source](https://askubuntu.com/a/725173)
+### Upgrade python from 2.7.6 to 2.7.14
  
     $ sudo add-apt-repository ppa:jonathonf/python-2.7
     $ sudo apt-get update
@@ -160,7 +151,7 @@ this will improve reddit's 'fetch title' functionality and potentially more.
     $ python --version
 
 
-### rebuild reddit from source
+### Rebuild reddit from source
  
     $ sudo reddit-stop
     $ sudo-reddit-flush
@@ -174,9 +165,9 @@ this will improve reddit's 'fetch title' functionality and potentially more.
 
 ---
 
-## solr search
+## Install search
  
-### install Solr
+### Install Solr
 
 As user "reddit" run:
 
@@ -231,7 +222,7 @@ As user "reddit" run:
     wget 127.0.0.1:8983
     wget 127.0.0.1:8983/solr
  
-### configure reddit to use Solr for search:
+### Configure reddit to use Solr for search:
  
     # as non-root user
     nano ~/src/reddit/r2/development.update
@@ -252,14 +243,14 @@ As user "reddit" run:
     make ini
     sudo reddit-restart
  
-### add reddit content to Solr, verify working:
+### Add reddit content to Solr, verify working:
 
     cd ~/src/reddit/r2
     paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs.rebuild_subreddit_index()'
     paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()'
  
  
-### setup Solr cron jobs:
+### Setup Solr cron jobs:
  
     sudo nano /etc/init/reddit-job-solr_subreddits.conf
     # paste lines, save:
@@ -287,8 +278,163 @@ and then...
         wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()'
     end script
  
-and then...
- 
-    echo '# Solr search:' | sudo tee --append /etc/cron.d/reddit
-    echo '*/3  * * * * root /sbin/start --quiet reddit-job-solr_subreddits' | sudo tee --append /etc/cron.d/reddit
-    echo '* * * * * root /sbin/start --quiet reddit-job-solr_links' | sudo tee --append /etc/cron.d/reddit
+ TODO: assume Solr will be installed, add these two jobs to the codebase
+
+---
+
+## Install Chat
+
+In a production environments, irc and related services should be run by a dedicated unix user for security.
+
+### Install unreal irc server
+
+    $ sudo apt-get install make gcc build-essential openssl libssl-dev libcurl4-openssl-dev zlib1g zlib1g-dev zlibc libgcrypt11 libgcrypt11-dev
+    # UPDATE to the latest stable release
+    $ wget https://www.unrealircd.org/unrealircd4/unrealircd-4.2.0.tar.gz
+    $ tar xzvf unrealircd-4.2.0.tar.gz
+    $ cd unrealircd-4.2.0/
+    $ ./Config
+    # space to read the license, press [Enter] a bunch of times to install, for "Do you want to generate an SSL certificate for the IRCd?" respond "No"
+    $ make
+    $ make install
+
+use the reddit.local SSL cert with unreal:
+
+    $ sudo cp /etc/ssl/certs/ssl-cert-snakeoil.pem ~/unrealircd/conf/ssl/server.cert.pem
+    $ sudo cp /etc/ssl/private/ssl-cert-snakeoil.key ~/unrealircd/conf/ssl/server.key.pem
+    # assuming you are installing as user 'reddit':
+    $ sudo chown reddit:reddit ~/unrealircd/conf/ssl/*
+
+configure unreal:
+
+    $ cd ~/unrealircd
+    $ cp conf/examples/example.conf conf/unrealircd.conf
+    # edit conf/unrealircd.conf and change:
+    #   change 'oper bobsmith' to `oper ircoperator`
+    #   change 'password "test";' to a unique password
+    #   section 'cloak-keys' needs 2 keys added
+    #   set 'kline-address' to an email address
+
+configure unreal for anope services. add the following to `~/unrealircd/conf/unrealircd.conf`, before `ulines`:
+
+    link services.reddit.local
+    {
+        incoming {
+                mask *@127.0.0.1;
+        };
+        outgoing {
+                bind-ip *; /* or explicitly an IP */
+                hostname services.reddit.local;
+                port 6900;
+                options { ssl; };
+        };
+        password "my-services-password-1234";
+        class servers;
+    };
+
+change `ulines` to:
+
+    ulines {
+      services.reddit.local;
+    };
+
+start unreal:
+
+    $ ./unrealircd start
+
+cleanup, substitute your version number where appropriate:
+
+    $ cd ~
+    $ rm -rf unrealircd-4.2.0
+    $ rm unrealircd-4.2.0.tar.gz
+
+### Install anope IRC services
+
+This provides ListServ, ChanServ, etc.
+
+    $ cd ~
+    $ sudo apt-get install cmake build-essential
+    # update version number to the latest stable release:
+    $ wget https://github.com/anope/anope/releases/download/2.0.6/anope-2.0.6-source.tar.gz
+    $ tar xzvf anope-2.0.6-source.tar.gz
+    $ cd anope-2.0.6-source
+    $ ./Config
+    # press [Enter] a bunch, accept defaults
+    $ cd build/
+    $ make
+    $ make install
+
+Configure anope:
+
+    $ cd ~/services/conf/
+    $ cp nickserv.example.conf nickserv.conf
+    # edit nickserv.conf, set guestnickprefix = "guest" (for The Lounge autconnect feature)
+    $ cp operserv.example.conf operserv.conf
+    # edit operserv.conf, set maxsessionlimit = 100000 (since everyone connects from localhost)
+    $ cp example.conf services.conf
+    # edit services.conf and set:
+    # set uplink::ssl to 'yes'
+    # set uplink::port to 6667
+    # set uplink::password to 'my-services-password-1234'
+    # set serverinfo::name to services.reddit.local
+    # comment out the botserv include, search for `botserv.example.conf`
+    # change `nickserv.example.conf` to `nickserv.conf`
+    # change `operserv.example.conf` to `operserv.conf`
+    # change `inspircd20` (in `module`) to `unreal4`
+
+add this oper section near the existing disabled ones:
+
+    oper
+    {
+        name = "ircoperator"
+        type = "Services Root"
+        require_oper = yes
+    }
+
+start anope:
+
+    $ cd ~/services/bin
+    $ ./services
+
+cleanup, substitute your version number where appropriate:
+
+    $ cd ~
+    $ rm -rf anope-2.0.6-source
+    $ rm anope-2.0.6-source.tar.gz
+
+### Install TheLounge web IRC client
+
+    $ cd ~
+    $ git clone https://github.com/libertysoft3/lounge-autoconnect.git
+    $ cd lounge-autoconnect
+    # update to the latest autoconnect branch
+    $ git checkout v2.4.0-autoconnect
+    $ npm install
+    $ NODE_ENV=production npm run build
+    # create the config file, `[ESC]:q` to exit
+
+configure TheLounge, SSL cert paths may need to be adjusted:
+
+    $ nano ~/.lounge/config.js
+    # edit to match:
+    #   public: false,
+    #   port: 2053,
+    #   theme: "themes/zenburn.css",
+    #   prefetch: true,
+    #   prefetchStorage: true,
+    #   prefetchMaxImageSize: 2048,
+    #   lockNetwork: true,
+    #   defaults { name: "saiditDEV", host: "127.0.0.1", nick: "guest", username: "guest", realname: "Guest", join: "#home" }
+    #   https: { key: "/home/reddit/unrealircd/conf/ssl/server.key.pem", certificate: "/etc/ssl/certs/ssl-cert-snakeoil.pem" }
+
+add an intial user so the server will start:
+
+    $ cd ~/lounge-autoconnect
+    $ node index add firstuser
+    # use a throwaway password, don't log to disk
+
+start TheLounge:
+
+    $ cd ~/lounge-autoconnect
+    $ nohup npm start ./ > thelounge.log 2>&1 &
+
