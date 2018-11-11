@@ -311,6 +311,9 @@ configure unreal:
     #   change 'password "test";' to a unique password
     #   section 'cloak-keys' needs 2 keys added
     #   set 'kline-address' to an email address
+    #   set 'maxchannelsperuser' t0 50
+    #   in 'allow' block for ip '*@*' change 'maxperip' to 10
+    #   add a new allow block: allow { ip *@127.0.0.1; class clients; maxperip 50000; };
 
 configure unreal for anope services. add the following to `~/unrealircd/conf/unrealircd.conf`, before `ulines`:
 
@@ -367,7 +370,9 @@ Configure anope:
     $ cp nickserv.example.conf nickserv.conf
     # edit nickserv.conf, set guestnickprefix = "guest" (for The Lounge autconnect feature)
     $ cp operserv.example.conf operserv.conf
-    # edit operserv.conf, set maxsessionlimit = 100000 (since everyone connects from localhost)
+    # NOTE: insecure if you allow outside access to IRC/6667, instead just change maxsessionlimit only and later run:
+    #    /msg OperServ exception add +0 127.0.0.1 50000 Allow many localhost TheLounge clients
+    # edit operserv.conf, set defaultsessionlimit = 50000, maxsessionlimit = 50000 (since everyone connects from localhost)
     $ cp example.conf services.conf
     # edit services.conf and set:
     # set uplink::ssl to 'yes'
