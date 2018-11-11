@@ -169,31 +169,28 @@ this will improve reddit's 'fetch title' functionality and potentially more.
  
 ### Install Solr
 
-As user "reddit" run:
+    $ cd ~
+    $ sudo apt-get install tomcat7 tomcat7-admin software-properties-common
+    $ wget http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz
+    $ tar -xvzf solr-4.10.4.tgz
+    $ sudo mv solr-4.10.4 /usr/share/solr
+    $ sudo chown -R tomcat7:tomcat7 /usr/share/solr/example
+ 
+Setup Solr, install Reddit schema
 
-    cd ~
-    sudo apt-get install tomcat7 tomcat7-admin software-properties-common
-    # installs java, openjdk-7-jre-headless
-    wget http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz
-    tar -xvzf solr-4.10.4.tgz
-    sudo mv solr-4.10.4 /usr/share/solr
-    sudo chown -R tomcat7:tomcat7 /usr/share/solr/example
+    $ sudo cp /usr/share/solr/example/webapps/solr.war /usr/share/solr/example/solr/
+    $ sudo cp /usr/share/solr/example/lib/ext/* /usr/share/tomcat7/lib/
+    $ sudo cp /usr/share/solr/example/resources/log4j.properties /usr/share/tomcat7/lib/
+    $ sudo cp src/reddit/solr/schema4.xml /usr/share/solr/example/solr/collection1/conf/schema.xml
+    $ sudo chown tomcat7:tomcat7 /usr/share/solr/example/solr/collection1/conf/schema.xml
  
-    # Setup Solr, install Reddit schema
-    sudo cp /usr/share/solr/example/webapps/solr.war /usr/share/solr/example/solr/
-    sudo cp /usr/share/solr/example/lib/ext/* /usr/share/tomcat7/lib/
-    sudo cp /usr/share/solr/example/resources/log4j.properties /usr/share/tomcat7/lib/
- 
-    sudo mv /usr/share/solr/example/solr/collection1/conf/schema.xml /usr/share/solr/example/solr/collection1/conf/schema.xml.bak
-    sudo cp src/reddit/solr/schema4.xml /usr/share/solr/example/solr/collection1/conf/schema.xml
-    sudo chown tomcat7:tomcat7 /usr/share/solr/example/solr/collection1/conf/schema.xml
- 
-    # Setup Tomcat for Solr
-    sudo nano /usr/share/tomcat7/lib/log4j.properties
+Setup Tomcat for Solr
+
+    $ sudo nano /usr/share/tomcat7/lib/log4j.properties
     # edit to set:
     solr.log=/usr/share/solr
  
-    sudo nano /etc/tomcat7/Catalina/localhost/solr.xml
+    $ sudo nano /etc/tomcat7/Catalina/localhost/solr.xml
     # add content:
     <Context docBase="/usr/share/solr/example/solr/solr.war" debug="0" crossContext="true">
       <Environment name="solr/home" type="java.lang.String" value="/usr/share/solr/example/solr" override="true" />
@@ -205,28 +202,27 @@ As user "reddit" run:
     <Connector port="8983" protocol="HTTP/1.1"
  
     # Solr is missing some required stuff:
-    sudo touch /usr/share/solr/solr.log
-    sudo mkdir /usr/share/tomcat7/temp
-    sudo chown tomcat7:tomcat7 /usr/share/solr/solr.log
-    sudo chown tomcat7:tomcat7 /usr/share/tomcat7/temp
+    $ sudo touch /usr/share/solr/solr.log
+    $ sudo mkdir /usr/share/tomcat7/temp
+    $ sudo chown tomcat7:tomcat7 /usr/share/solr/solr.log
+    $ sudo chown tomcat7:tomcat7 /usr/share/tomcat7/temp
  
     # verify tomcat all good (ignore warnings):
-    /usr/share/tomcat7/bin/configtest.sh
- 
-    sudo service tomcat7 restart
- 
+    $ /usr/share/tomcat7/bin/configtest.sh
+
+Start solr:
+
+    $ sudo service tomcat7 restart
     # any errors in here must be fixed
-    sudo cat /var/log/tomcat7/catalina.out
- 
+    $ sudo cat /var/log/tomcat7/catalina.out
     # verify working, these should return html pages:
-    wget 127.0.0.1:8983
-    wget 127.0.0.1:8983/solr
+    $ wget 127.0.0.1:8983
+    $ wget 127.0.0.1:8983/solr
  
 ### Configure reddit to use Solr for search:
- 
-    # as non-root user
-    nano ~/src/reddit/r2/development.update
-    # NOTE: solr port changed from default 8080 to 8983
+
+Add the following to `~/src/reddit/r2/development.update` to the default section. NOTE: solr port changed from default 8080 to 8983.
+
     search_provider = solr
     solr_version = 4
     solr_search_host = 127.0.0.1
@@ -238,10 +234,11 @@ As user "reddit" run:
     solr_min_batch = 500
     solr_query_parser =
  
-    # since config has changed:
-    cd ~/src/reddit/r2
-    make ini
-    sudo reddit-restart
+Since reddit config has changed:
+
+    $ cd ~/src/reddit/r2
+    $ make ini
+    $ sudo reddit-restart
  
 ### Add reddit content to Solr, verify working:
 
@@ -278,7 +275,7 @@ and then...
         wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()'
     end script
  
- TODO: assume Solr will be installed, add these two jobs to the codebase
+ TODO: assume Solr will be installed, add these two jobs to the codebase, configure solr in example.ini.
 
 ---
 
@@ -411,7 +408,8 @@ cleanup, substitute your version number where appropriate:
     $ git checkout v2.4.0-autoconnect
     $ npm install
     $ NODE_ENV=production npm run build
-    # create the config file, `[ESC]:q` to exit
+    $ node index config
+    # [ESC] : q to quit
 
 configure TheLounge, SSL cert paths may need to be adjusted:
 
