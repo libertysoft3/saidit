@@ -141,6 +141,7 @@ clone_reddit_repo reddit libertysoft3/reddit-ae
 clone_reddit_repo i18n reddit/reddit-i18n
 clone_reddit_service_repo websockets
 clone_reddit_service_repo activity
+clone_reddit_repo snudown libertysoft3/snudown
 
 ###############################################################################
 # Configure Services
@@ -176,6 +177,7 @@ for plugin in $REDDIT_AVAILABLE_PLUGINS; do
 done
 install_reddit_repo websockets
 install_reddit_repo activity
+install_reddit_repo snudown
 
 # generate binary translation files from source
 sudo -u $REDDIT_USER make -C $REDDIT_SRC/i18n clean all
@@ -648,6 +650,9 @@ if [ ! -f /etc/cron.d/reddit ]; then
 */2  * * * * root /sbin/start --quiet reddit-job-broken_things
 */2  * * * * root /sbin/start --quiet reddit-job-rising
 0    * * * * root /sbin/start --quiet reddit-job-trylater
+*/15 * * * * root /sbin/start --quiet reddit-job-update_popular_subreddits
+0    * * * * root /sbin/start --quiet reddit-job-hourly_traffic
+0    * * * * root /sbin/start --quiet reddit-job-subscribers
 
 # liveupdate
 *    * * * * root /sbin/start --quiet reddit-job-liveupdate_activity
@@ -660,6 +665,11 @@ PGPASSWORD=password
 # disabled by default, uncomment if you need these jobs
 #*    * * * * root /sbin/start --quiet reddit-job-email
 #0    0 * * * root /sbin/start --quiet reddit-job-update_gold_users
+#*/15  * * * * root /sbin/start reddit-job-update_trending_subreddits
+
+# Solr search
+*/15  * * * * root /sbin/start --quiet reddit-job-solr_subreddits
+*/5 * * * * root /sbin/start --quiet reddit-job-solr_links
 CRON
 fi
 

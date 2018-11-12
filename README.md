@@ -13,22 +13,14 @@ saidit changes:
 * custom voting/score model: insightful is +2, funny is +1
 * custom admin tools
 
-additional documentation:
-
-* [https://github.com/reddit-archive/reddit/wiki](https://github.com/reddit-archive/reddit/wiki)
-* [https://www.reddit.com/r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
-* [https://www.reddit.com/r/redditdev](https://www.reddit.com/r/redditdev)
-
 ---
 
-## installation
+## Installing
 
-This guide will walk you through installing reddit on a [VirtualBox](https://www.virtualbox.org/wiki/Downloads) virtual machine. This can be done on Linux, Mac, or Windows. 
-
-If you prefer you can install directly on a VPS running [Ubuntu 14](http://releases.ubuntu.com/14.04/) (create user "reddit" with sudo privileges and skip to "install reddit"). Also an ip address can be used in place of "reddit.local".
+This guide will walk you through installing saidit/reddit open source on a [VirtualBox](https://www.virtualbox.org/wiki/Downloads) virtual machine. This can be done on Linux, Mac, or Windows. Or get [Ubuntu 14](http://releases.ubuntu.com/14.04/) running somewhere and skip ahead to "Install reddit".
 
 
-### create a Ubuntu 14.04 VM with VirtualBox
+### Create a Ubuntu 14.04 VM with VirtualBox
 
 1. Download Ubuntu 14.04 server edition
 1. In VirtualBox, after creating a new VM with 4gb RAM and 30gb disk space, 
@@ -41,40 +33,42 @@ If you prefer you can install directly on a VPS running [Ubuntu 14](http://relea
   1. Complete Ubuntu installation. 
 1. Login and run `ifconfig` and note your ip address
 1. If you forgot to install the openssh server, run `sudo apt-get install openssh-server`
-1. You can now detach your VM or shut it down and restart in headless mode. You should only interact with it via SSH from your host for easy copy and paste, etc. Don't forget to shut down your VM before shutting down the host OS or you may corrupt your reddit installation.
+1. You can now detach your VM or shut it down and restart in headless mode. Don't forget to shut down your VM before shutting down your host OS or you may corrupt your reddit installation.
 
-### update your (host's) hosts file to resolve https://reddit.local in your browser
+### Update your hosts file to resolve https://reddit.local in your browser
 
-Add the ip you noted earlier to your hosts file as "reddit.local". This procedure [varies by OS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/). Once this is setup you can ssh into your VM easily with `ssh reddit@reddit.local`
+Add the ip you noted earlier to your hosts file as "reddit.local". This procedure [varies by OS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/). On linux edit `/etc/hosts` and add, e.g. `192.168.1.20 reddit.local`. Once this is setup you can ssh into your VM easily with `ssh reddit@reddit.local`.
 
-### install reddit
+### Install reddit
 
-login to your VM as user reddit with `ssh reddit@reddit.local`. first we will update the OS.
+SSH into your VM as user `reddit` and update the OS.
 
-    # WARNING: Never run an apt-get "do-release-upgrade" or you will upgrade Ubuntu and break reddit
-    sudo apt-get update
-    sudo apt-get upgrade
-    sudo apt-get install git
+    # host OS
+    $ ssh reddit@reddit.local
+    # VM
+    $ sudo apt-get update
+    $ sudo apt-get upgrade
+    $ sudo apt-get install git
 
-reddit installation
+Then install the saidit reddit open source fork
 
-    cd ~/
-    git clone https://github.com/libertysoft3/reddit-ae.git
-    chmod +x reddit/install-reddit.sh
-    sudo ./reddit/install/reddit.sh
+    $ cd ~/
+    $ git clone https://github.com/libertysoft3/reddit-ae.git
+    $ chmod +x reddit/install-reddit.sh
+    $ sudo ./reddit/install/reddit.sh
     # if you get an error about "less" restart the server and try again
-    # reddit has been installed at ~/src/reddit.
-    rm -rf reddit
+    # reddit has been installed at ~/src/reddit. to cleanup, run:
+    $ rm -rf reddit
 
-optional: install sample data (recommended for demo/development enviroments)
+Optional: install sample data (recommended for demo/development enviroments)
 
-    cd ~/src/reddit
-    reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
-    sudo start reddit-job-update_popular_subreddits
+    $ cd ~/src/reddit
+    $ reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
+    $ sudo start reddit-job-update_popular_subreddits
     # NOTE: an admin user "reddit" with password "password" is created
 
 
-### additional configuration
+### Additional configuration
 
 make reddit user "cloner" a reddit admin
 
@@ -96,13 +90,6 @@ increase PostgreSQL max_connections for greater stability (87/100 in use at redd
     sudo service postgresql restart
     sudo reddit-restart
 
-add some missing cron jobs to `/etc/cron.d/reddit`
-
-    15 * * * * root /sbin/start reddit-job-update_popular_subreddits
-    20 * * * * root /sbin/start reddit-job-hourly_traffic
-    15 3 * * * root /sbin/start reddit-job-subscribers
-    */5  * * * * root /sbin/start reddit-job-update_trending_subreddits
-
 optional: change the default subreddits that guests see
 
     cd ~/src/reddit/r2
@@ -120,21 +107,15 @@ watch reddit run and debug errors
 
 additional configuration changes you may wish to make are shown in `r2/development.update.saidit` 
 
-### optional: accessing VM files from your host
+### Optional: accessing VM files from your host
 
 You can mount the VM's reddit files as a folder on your host machine for easy editing and searching. sshfs is a quick and easy approach. On your host install sshfs and run `sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm`. Unmount it later with `fusermount -u ~/vm` to avoid crashing your editor when your VM shuts down.
 
 ---
 
-## Ubuntu 14 updates
+## Misc upgrades
  
-### update OS
- 
-    $ sudo apt-get update
-    $ sudo apt-get upgrade
-
-
-### upgrade curl
+### Upgrade curl
 
 this will improve reddit's 'fetch title' functionality and potentially more.
  
@@ -150,9 +131,7 @@ this will improve reddit's 'fetch title' functionality and potentially more.
     $ curl --version
  
  
-### upgrade python from 2.7.6 to 2.7.14
-
-[source](https://askubuntu.com/a/725173)
+### Upgrade to python 2.7.14
  
     $ sudo add-apt-repository ppa:jonathonf/python-2.7
     $ sudo apt-get update
@@ -160,7 +139,7 @@ this will improve reddit's 'fetch title' functionality and potentially more.
     $ python --version
 
 
-### rebuild reddit from source
+### Rebuild reddit from source
  
     $ sudo reddit-stop
     $ sudo-reddit-flush
@@ -174,35 +153,32 @@ this will improve reddit's 'fetch title' functionality and potentially more.
 
 ---
 
-## solr search
+## Install search
  
-### install Solr
+### Install Solr
 
-As user "reddit" run:
+    $ cd ~
+    $ sudo apt-get install tomcat7 tomcat7-admin software-properties-common
+    $ wget http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz
+    $ tar -xvzf solr-4.10.4.tgz
+    $ sudo mv solr-4.10.4 /usr/share/solr
+    $ sudo chown -R tomcat7:tomcat7 /usr/share/solr/example
+ 
+Setup Solr, install Reddit schema
 
-    cd ~
-    sudo apt-get install tomcat7 tomcat7-admin software-properties-common
-    # installs java, openjdk-7-jre-headless
-    wget http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz
-    tar -xvzf solr-4.10.4.tgz
-    sudo mv solr-4.10.4 /usr/share/solr
-    sudo chown -R tomcat7:tomcat7 /usr/share/solr/example
+    $ sudo cp /usr/share/solr/example/webapps/solr.war /usr/share/solr/example/solr/
+    $ sudo cp /usr/share/solr/example/lib/ext/* /usr/share/tomcat7/lib/
+    $ sudo cp /usr/share/solr/example/resources/log4j.properties /usr/share/tomcat7/lib/
+    $ sudo cp src/reddit/solr/schema4.xml /usr/share/solr/example/solr/collection1/conf/schema.xml
+    $ sudo chown tomcat7:tomcat7 /usr/share/solr/example/solr/collection1/conf/schema.xml
  
-    # Setup Solr, install Reddit schema
-    sudo cp /usr/share/solr/example/webapps/solr.war /usr/share/solr/example/solr/
-    sudo cp /usr/share/solr/example/lib/ext/* /usr/share/tomcat7/lib/
-    sudo cp /usr/share/solr/example/resources/log4j.properties /usr/share/tomcat7/lib/
- 
-    sudo mv /usr/share/solr/example/solr/collection1/conf/schema.xml /usr/share/solr/example/solr/collection1/conf/schema.xml.bak
-    sudo cp src/reddit/solr/schema4.xml /usr/share/solr/example/solr/collection1/conf/schema.xml
-    sudo chown tomcat7:tomcat7 /usr/share/solr/example/solr/collection1/conf/schema.xml
- 
-    # Setup Tomcat for Solr
-    sudo nano /usr/share/tomcat7/lib/log4j.properties
+Setup Tomcat for Solr
+
+    $ sudo nano /usr/share/tomcat7/lib/log4j.properties
     # edit to set:
     solr.log=/usr/share/solr
  
-    sudo nano /etc/tomcat7/Catalina/localhost/solr.xml
+    $ sudo nano /etc/tomcat7/Catalina/localhost/solr.xml
     # add content:
     <Context docBase="/usr/share/solr/example/solr/solr.war" debug="0" crossContext="true">
       <Environment name="solr/home" type="java.lang.String" value="/usr/share/solr/example/solr" override="true" />
@@ -214,28 +190,27 @@ As user "reddit" run:
     <Connector port="8983" protocol="HTTP/1.1"
  
     # Solr is missing some required stuff:
-    sudo touch /usr/share/solr/solr.log
-    sudo mkdir /usr/share/tomcat7/temp
-    sudo chown tomcat7:tomcat7 /usr/share/solr/solr.log
-    sudo chown tomcat7:tomcat7 /usr/share/tomcat7/temp
+    $ sudo touch /usr/share/solr/solr.log
+    $ sudo mkdir /usr/share/tomcat7/temp
+    $ sudo chown tomcat7:tomcat7 /usr/share/solr/solr.log
+    $ sudo chown tomcat7:tomcat7 /usr/share/tomcat7/temp
  
     # verify tomcat all good (ignore warnings):
-    /usr/share/tomcat7/bin/configtest.sh
- 
-    sudo service tomcat7 restart
- 
+    $ /usr/share/tomcat7/bin/configtest.sh
+
+Start solr:
+
+    $ sudo service tomcat7 restart
     # any errors in here must be fixed
-    sudo cat /var/log/tomcat7/catalina.out
- 
+    $ sudo cat /var/log/tomcat7/catalina.out
     # verify working, these should return html pages:
-    wget 127.0.0.1:8983
-    wget 127.0.0.1:8983/solr
+    $ wget 127.0.0.1:8983
+    $ wget 127.0.0.1:8983/solr
  
-### configure reddit to use Solr for search:
- 
-    # as non-root user
-    nano ~/src/reddit/r2/development.update
-    # NOTE: solr port changed from default 8080 to 8983
+### Configure reddit to use Solr for search:
+
+Add the following to `~/src/reddit/r2/development.update` to the default section. NOTE: solr port changed from default 8080 to 8983.
+
     search_provider = solr
     solr_version = 4
     solr_search_host = 127.0.0.1
@@ -247,19 +222,20 @@ As user "reddit" run:
     solr_min_batch = 500
     solr_query_parser =
  
-    # since config has changed:
-    cd ~/src/reddit/r2
-    make ini
-    sudo reddit-restart
+Since reddit config has changed:
+
+    $ cd ~/src/reddit/r2
+    $ make ini
+    $ sudo reddit-restart
  
-### add reddit content to Solr, verify working:
+### Add reddit content to Solr, verify working:
 
     cd ~/src/reddit/r2
     paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs.rebuild_subreddit_index()'
     paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()'
  
  
-### setup Solr cron jobs:
+### Setup Solr cron jobs:
  
     sudo nano /etc/init/reddit-job-solr_subreddits.conf
     # paste lines, save:
@@ -287,8 +263,180 @@ and then...
         wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()'
     end script
  
-and then...
- 
-    echo '# Solr search:' | sudo tee --append /etc/cron.d/reddit
-    echo '*/3  * * * * root /sbin/start --quiet reddit-job-solr_subreddits' | sudo tee --append /etc/cron.d/reddit
-    echo '* * * * * root /sbin/start --quiet reddit-job-solr_links' | sudo tee --append /etc/cron.d/reddit
+ TODO: assume Solr will be installed, add these two jobs to the codebase, configure solr in example.ini.
+
+---
+
+## Install Chat
+
+In a production environments, irc and related services should be run by a dedicated unix user for security.
+
+### Install unreal irc server
+
+    $ sudo apt-get install make gcc build-essential openssl libssl-dev libcurl4-openssl-dev zlib1g zlib1g-dev zlibc libgcrypt11 libgcrypt11-dev
+    # UPDATE to the latest stable release
+    $ wget https://www.unrealircd.org/unrealircd4/unrealircd-4.2.0.tar.gz
+    $ tar xzvf unrealircd-4.2.0.tar.gz
+    $ cd unrealircd-4.2.0/
+    $ ./Config
+    # space to read the license, press [Enter] a bunch of times to install, for "Do you want to generate an SSL certificate for the IRCd?" respond "No"
+    $ make
+    $ make install
+
+use the reddit.local SSL cert with unreal:
+
+    $ sudo cp /etc/ssl/certs/ssl-cert-snakeoil.pem ~/unrealircd/conf/ssl/server.cert.pem
+    $ sudo cp /etc/ssl/private/ssl-cert-snakeoil.key ~/unrealircd/conf/ssl/server.key.pem
+    # assuming you are installing as user 'reddit':
+    $ sudo chown reddit:reddit ~/unrealircd/conf/ssl/*
+
+configure unreal:
+
+    $ cd ~/unrealircd
+    $ cp conf/examples/example.conf conf/unrealircd.conf
+    # edit conf/unrealircd.conf and change:
+    #   change 'oper bobsmith' to `oper ircoperator`
+    #   change 'password "test";' to a unique password
+    #   section 'cloak-keys' needs 2 keys added
+    #   set 'kline-address' to an email address
+    #   set 'maxchannelsperuser' t0 50
+    #   in 'allow' block for ip '*@*' change 'maxperip' to 10
+    #   add a new allow block: allow { ip *@127.0.0.1; class clients; maxperip 50000; };
+
+configure unreal for anope services. add the following to `~/unrealircd/conf/unrealircd.conf`, before `ulines`:
+
+    link services.reddit.local
+    {
+        incoming {
+                mask *@127.0.0.1;
+        };
+        outgoing {
+                bind-ip *; /* or explicitly an IP */
+                hostname services.reddit.local;
+                port 6900;
+                options { ssl; };
+        };
+        password "my-services-password-1234";
+        class servers;
+    };
+
+change `ulines` to:
+
+    ulines {
+      services.reddit.local;
+    };
+
+start unreal:
+
+    $ ./unrealircd start
+
+cleanup, substitute your version number where appropriate:
+
+    $ cd ~
+    $ rm -rf unrealircd-4.2.0
+    $ rm unrealircd-4.2.0.tar.gz
+
+### Install anope IRC services
+
+This provides ListServ, ChanServ, etc.
+
+    $ cd ~
+    $ sudo apt-get install cmake build-essential
+    # update version number to the latest stable release:
+    $ wget https://github.com/anope/anope/releases/download/2.0.6/anope-2.0.6-source.tar.gz
+    $ tar xzvf anope-2.0.6-source.tar.gz
+    $ cd anope-2.0.6-source
+    $ ./Config
+    # press [Enter] a bunch, accept defaults
+    $ cd build/
+    $ make
+    $ make install
+
+Configure anope:
+
+    $ cd ~/services/conf/
+    $ cp nickserv.example.conf nickserv.conf
+    # edit nickserv.conf, set guestnickprefix = "guest" (for The Lounge autconnect feature)
+    $ cp operserv.example.conf operserv.conf
+    # NOTE: insecure if you allow outside access to IRC/6667, instead just change maxsessionlimit only and later run:
+    #    /msg OperServ exception add +0 127.0.0.1 50000 Allow many localhost TheLounge clients
+    # edit operserv.conf, set defaultsessionlimit = 50000, maxsessionlimit = 50000 (since everyone connects from localhost)
+    $ cp example.conf services.conf
+    # edit services.conf and set:
+    # set uplink::ssl to 'yes'
+    # set uplink::port to 6667
+    # set uplink::password to 'my-services-password-1234'
+    # set serverinfo::name to services.reddit.local
+    # comment out the botserv include, search for `botserv.example.conf`
+    # change `nickserv.example.conf` to `nickserv.conf`
+    # change `operserv.example.conf` to `operserv.conf`
+    # change `inspircd20` (in `module`) to `unreal4`
+
+add this oper section near the existing disabled ones:
+
+    oper
+    {
+        name = "ircoperator"
+        type = "Services Root"
+        require_oper = yes
+    }
+
+start anope:
+
+    $ cd ~/services/bin
+    $ ./services
+
+cleanup, substitute your version number where appropriate:
+
+    $ cd ~
+    $ rm -rf anope-2.0.6-source
+    $ rm anope-2.0.6-source.tar.gz
+
+### Install TheLounge web IRC client
+
+    $ cd ~
+    $ git clone https://github.com/libertysoft3/lounge-autoconnect.git
+    $ cd lounge-autoconnect
+    # update to the latest autoconnect branch
+    $ git checkout v2.4.0-autoconnect
+    $ npm install
+    $ NODE_ENV=production npm run build
+    $ node index config
+    # [ESC] : q to quit
+
+configure TheLounge, SSL cert paths may need to be adjusted:
+
+    $ nano ~/.lounge/config.js
+    # edit to match:
+    #   public: false,
+    #   port: 2053,
+    #   theme: "themes/zenburn.css",
+    #   prefetch: true,
+    #   prefetchStorage: true,
+    #   prefetchMaxImageSize: 2048,
+    #   lockNetwork: true,
+    #   defaults { name: "saiditDEV", host: "127.0.0.1", nick: "guest", username: "guest", realname: "Guest", join: "#home" }
+    #   https: { enable: true, key: "/home/reddit/unrealircd/conf/ssl/server.key.pem", certificate: "/etc/ssl/certs/ssl-cert-snakeoil.pem" }
+
+add an intial user so the server will start:
+
+    $ cd ~/lounge-autoconnect
+    $ node index add firstuser
+    # use a throwaway password, don't log to disk
+
+start TheLounge:
+
+    $ cd ~/lounge-autoconnect
+    $ nohup npm start ./ > thelounge.log 2>&1 &
+
+# Additional documentation
+
+* [https://github.com/reddit-archive/reddit/wiki](https://github.com/reddit-archive/reddit/wiki)
+* [https://www.reddit.com/r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
+* [https://www.reddit.com/r/redditdev](https://www.reddit.com/r/redditdev)
+
+# See also
+
+* https://www.reddit.com/r/RedditAlternatives
+
+
