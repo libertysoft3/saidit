@@ -13,19 +13,11 @@ saidit changes:
 * custom voting/score model: insightful is +2, funny is +1
 * custom admin tools
 
-additional documentation:
-
-* [https://github.com/reddit-archive/reddit/wiki](https://github.com/reddit-archive/reddit/wiki)
-* [https://www.reddit.com/r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
-* [https://www.reddit.com/r/redditdev](https://www.reddit.com/r/redditdev)
-
 ---
 
-## Install reddit
+## Installing
 
-This guide will walk you through installing reddit on a [VirtualBox](https://www.virtualbox.org/wiki/Downloads) virtual machine. This can be done on Linux, Mac, or Windows. 
-
-If you prefer you can install directly on a VPS running [Ubuntu 14](http://releases.ubuntu.com/14.04/) (create user "reddit" with sudo privileges and skip to "install reddit"). Also an ip address can be used in place of "reddit.local".
+This guide will walk you through installing saidit/reddit open source on a [VirtualBox](https://www.virtualbox.org/wiki/Downloads) virtual machine. This can be done on Linux, Mac, or Windows. Or get [Ubuntu 14](http://releases.ubuntu.com/14.04/) running somewhere and skip ahead to "Install reddit".
 
 
 ### Create a Ubuntu 14.04 VM with VirtualBox
@@ -41,36 +33,38 @@ If you prefer you can install directly on a VPS running [Ubuntu 14](http://relea
   1. Complete Ubuntu installation. 
 1. Login and run `ifconfig` and note your ip address
 1. If you forgot to install the openssh server, run `sudo apt-get install openssh-server`
-1. You can now detach your VM or shut it down and restart in headless mode. You should only interact with it via SSH from your host for easy copy and paste, etc. Don't forget to shut down your VM before shutting down the host OS or you may corrupt your reddit installation.
+1. You can now detach your VM or shut it down and restart in headless mode. Don't forget to shut down your VM before shutting down your host OS or you may corrupt your reddit installation.
 
-### Update your (host's) hosts file to resolve https://reddit.local in your browser
+### Update your hosts file to resolve https://reddit.local in your browser
 
-Add the ip you noted earlier to your hosts file as "reddit.local". This procedure [varies by OS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/). Once this is setup you can ssh into your VM easily with `ssh reddit@reddit.local`
+Add the ip you noted earlier to your hosts file as "reddit.local". This procedure [varies by OS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/). On linux edit `/etc/hosts` and add, e.g. `192.168.1.20 reddit.local`. Once this is setup you can ssh into your VM easily with `ssh reddit@reddit.local`.
 
 ### Install reddit
 
-login to your VM as user reddit with `ssh reddit@reddit.local`. first we will update the OS.
+SSH into your VM as user `reddit` and update the OS.
 
-    # WARNING: Never run an apt-get "do-release-upgrade" or you will upgrade Ubuntu and break reddit
-    sudo apt-get update
-    sudo apt-get upgrade
-    sudo apt-get install git
+    # host OS
+    $ ssh reddit@reddit.local
+    # VM
+    $ sudo apt-get update
+    $ sudo apt-get upgrade
+    $ sudo apt-get install git
 
-reddit installation
+Then install the saidit reddit open source fork
 
-    cd ~/
-    git clone https://github.com/libertysoft3/reddit-ae.git
-    chmod +x reddit/install-reddit.sh
-    sudo ./reddit/install/reddit.sh
+    $ cd ~/
+    $ git clone https://github.com/libertysoft3/reddit-ae.git
+    $ chmod +x reddit/install-reddit.sh
+    $ sudo ./reddit/install/reddit.sh
     # if you get an error about "less" restart the server and try again
-    # reddit has been installed at ~/src/reddit.
-    rm -rf reddit
+    # reddit has been installed at ~/src/reddit. to cleanup, run:
+    $ rm -rf reddit
 
-optional: install sample data (recommended for demo/development enviroments)
+Optional: install sample data (recommended for demo/development enviroments)
 
-    cd ~/src/reddit
-    reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
-    sudo start reddit-job-update_popular_subreddits
+    $ cd ~/src/reddit
+    $ reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
+    $ sudo start reddit-job-update_popular_subreddits
     # NOTE: an admin user "reddit" with password "password" is created
 
 
@@ -121,12 +115,6 @@ You can mount the VM's reddit files as a folder on your host machine for easy ed
 
 ## Misc upgrades
  
-### Upgrade ubuntu 14
- 
-    $ sudo apt-get update
-    $ sudo apt-get upgrade
-
-
 ### Upgrade curl
 
 this will improve reddit's 'fetch title' functionality and potentially more.
@@ -143,7 +131,7 @@ this will improve reddit's 'fetch title' functionality and potentially more.
     $ curl --version
  
  
-### Upgrade python from 2.7.6 to 2.7.14
+### Upgrade to python 2.7.14
  
     $ sudo add-apt-repository ppa:jonathonf/python-2.7
     $ sudo apt-get update
@@ -440,4 +428,15 @@ start TheLounge:
 
     $ cd ~/lounge-autoconnect
     $ nohup npm start ./ > thelounge.log 2>&1 &
+
+# Additional documentation
+
+* [https://github.com/reddit-archive/reddit/wiki](https://github.com/reddit-archive/reddit/wiki)
+* [https://www.reddit.com/r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
+* [https://www.reddit.com/r/redditdev](https://www.reddit.com/r/redditdev)
+
+# See also
+
+* https://www.reddit.com/r/RedditAlternatives
+
 

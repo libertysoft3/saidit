@@ -141,6 +141,7 @@ clone_reddit_repo reddit libertysoft3/reddit-ae
 clone_reddit_repo i18n reddit/reddit-i18n
 clone_reddit_service_repo websockets
 clone_reddit_service_repo activity
+clone_reddit_repo snudown libertysoft3/snudown
 
 ###############################################################################
 # Configure Services
@@ -176,6 +177,7 @@ for plugin in $REDDIT_AVAILABLE_PLUGINS; do
 done
 install_reddit_repo websockets
 install_reddit_repo activity
+install_reddit_repo snudown
 
 # generate binary translation files from source
 sudo -u $REDDIT_USER make -C $REDDIT_SRC/i18n clean all
