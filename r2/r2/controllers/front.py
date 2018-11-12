@@ -1237,7 +1237,7 @@ class FrontController(RedditController):
                                                  include_over18=include_over18)
             subreddits = self._search(sr_q, num=sr_num, reverse=reverse,
                                       after=after, count=count, type='sr',
-                                      skip_deleted_authors=False, heading=_('subreddits'),
+                                      skip_deleted_authors=False, heading=_('subs'),
                                       legacy_render_class=legacy_render_class)
 
             # backfill with facets if no subreddit search results

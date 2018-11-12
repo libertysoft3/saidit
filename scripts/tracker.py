@@ -150,7 +150,7 @@ def event_click():
     relying on log files for event tracking and have a proper events endpoint.
     """
     try:
-        session_str = urllib.unquote(request.cookies.get('reddit_session', ''))
+        session_str = urllib.unquote(request.cookies.get('saidit_session', ''))
         user_id = int(session_str.split(',')[0])
     except ValueError:
         user_id = None

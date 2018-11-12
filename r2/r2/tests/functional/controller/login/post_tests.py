@@ -49,7 +49,7 @@ class PostLoginRegTests(LoginRegBase, RedditControllerTestCase):
         self.assert_headers(
             res,
             "Set-Cookie",
-            lambda value: value.startswith("reddit_session=")
+            lambda value: value.startswith("saidit_session=")
         )
 
     def assert_failure(self, res, code=None):
