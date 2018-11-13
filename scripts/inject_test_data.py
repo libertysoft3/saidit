@@ -112,11 +112,11 @@ class TextGenerator(object):
 
 
 def fetch_listing(path, limit=1000, batch_size=100):
-    """Fetch a reddit listing from reddit.com."""
+    """Fetch a listing from reddit.com."""
 
     session = requests.Session()
     session.headers.update({
-        "User-Agent": "reddit-test-data-generator/1.0",
+        "User-Agent": "saidit-test-data-generator/1.0",
     })
 
     base_url = "https://api.reddit.com" + path
@@ -142,7 +142,7 @@ def fetch_listing(path, limit=1000, batch_size=100):
             break
 
         # obey reddit.com's ratelimits
-        # see: https://github.com/reddit/reddit/wiki/API#rules
+        # see: https://github.com/reddit-archive/reddit/wiki/API#rules
         time.sleep(2)
 
 
@@ -241,13 +241,13 @@ def ensure_subreddit(name, author):
     """Look up or create a subreddit and return it."""
     try:
         sr = Subreddit._by_name(name)
-        print ">> found /r/{}".format(name)
+        print ">> found /s/{}".format(name)
         return sr
     except NotFound:
-        print ">> creating /r/{}".format(name)
+        print ">> creating /s/{}".format(name)
         sr = Subreddit._new(
             name=name,
-            title="/r/{}".format(name),
+            title="/s/{}".format(name),
             author_id=author._id,
             lang="en",
             ip="127.0.0.1",
