@@ -161,7 +161,7 @@ def send_ban_message(subreddit, mod, user, note=None, days=None, new=True):
         "message.") % {"subreddit": sr_name}
 
     message += "\n\n" + ("**Reminder from the Reddit staff**: If you use "
-        "another account to circumvent this subreddit ban, that will be "
+        "another account to circumvent this sub ban, that will be "
         "considered a violation of [the Content Policy](/help/contentpolicy#section_prohibited_behavior) "
         "and can result in your account being [suspended](https://reddit.zendesk.com/hc/en-us/articles/205687686) "
         "from the site as a whole.")

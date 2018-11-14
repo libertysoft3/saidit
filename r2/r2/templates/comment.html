@@ -109,7 +109,7 @@ ${parent.midcol(cls = cls)}
   %endif
 
   %if show and thing.score_hidden:
-    <span title="${_('this subreddit hides comment scores for %d minutes') % thing.subreddit.comment_score_hide_mins}">
+    <span title="${_('this sub hides comment scores for %d minutes') % thing.subreddit.comment_score_hide_mins}">
       [${_("score hidden")}]
     </span>&#32;
   %elif show and not thing.score_hidden:
@@ -122,7 +122,7 @@ ${parent.midcol(cls = cls)}
 
   %if thing.is_sticky:
   &#32;
-  <span class="stickied-tagline" title="${_("selected by this subreddit's moderators")}">${_("stickied comment")}</span>
+  <span class="stickied-tagline" title="${_("selected by this sub's moderators")}">${_("stickied comment")}</span>
   %endif
 
   &nbsp;

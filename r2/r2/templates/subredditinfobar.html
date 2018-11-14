@@ -58,7 +58,7 @@
   <span class="subscribers">${unsafe(Score.readers(thing.subscribers))}</span>
 
     %if thing.active_visitors and thing.active_visitors.logged_in:
-  <p class="users-online ${'fuzzed' if thing.active_visitors.logged_in.is_fuzzed else ''}" title="${_('logged-in users viewing this subreddit in the past 15 minutes')}">
+  <p class="users-online ${'fuzzed' if thing.active_visitors.logged_in.is_fuzzed else ''}" title="${_('logged-in users viewing this sub in the past 15 minutes')}">
     ${unsafe(Score.users_here_now(thing.active_visitors.logged_in.count, prepend='~' if thing.active_visitors.logged_in.is_fuzzed else ''))}
   </p>
     %endif
@@ -80,7 +80,7 @@
                title=_('leave'),
                executed=_('you are no longer an approved submitter'),
                question=_('stop being an approved submitter?'),
-               format=_('you are an approved submitter on this subreddit. (%(leave)s)'),
+               format=_('you are an approved submitter on this sub. (%(leave)s)'),
                format_arg='leave',
                hidden_data=dict(
                  id=thing.sr._fullname),
@@ -94,7 +94,7 @@
         ${'checked="checked"' if thing.use_subreddit_style else ""}
       >
       <label for="sr_style_enabled">
-        ${_("Show this subreddit's theme")}
+        ${_("Show this sub's theme")}
       </label>
       <div id="sr_style_throbber" class="throbber"></div>
     </form>
@@ -128,7 +128,7 @@
       
       %if thing.sr._spam:
         ${ynbutton(op='approve',
-                   title=_('approve this subreddit'), 
+                   title=_('approve this sub'), 
                    executed=_('approved'),
                    hidden_data = dict(id = thing.sr._fullname),
         )}
@@ -158,7 +158,7 @@
 
       %else:
         ${ynbutton(op='remove',
-                   title=_('ban this subreddit'), 
+                   title=_('ban this sub'), 
                    executed=_('banned'),
                    hidden_data = dict(id = thing.sr._fullname),
         )}

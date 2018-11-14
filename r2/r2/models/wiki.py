@@ -86,8 +86,8 @@ special_length_restrictions_bytes = {
 
 modactions = {
     "config/automoderator": "Updated AutoModerator configuration",
-    "config/description": "Updated subreddit description",
-    "config/sidebar": "Updated subreddit sidebar",
+    "config/description": "Updated sub description",
+    "config/sidebar": "Updated sub sidebar",
     "config/submit_text": "Updated submission text",
 }
 

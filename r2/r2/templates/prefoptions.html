@@ -155,7 +155,7 @@
     <tr>
       <th>${_("location options")}</th>
       <td class="prefright">
-        ${checkbox(_("use the global default subreddits for my front page"), "use_global_defaults")}
+        ${checkbox(_("use the global default subs for my front page"), "use_global_defaults")}
         <br/>
         ${checkbox(_("hide the location information bar"), "hide_locationbar")}
       </td>
@@ -181,7 +181,7 @@
       %if not c.user.pref_compress:
         ${media_radio("on", _("show thumbnails next to links"))}
         ${media_radio("off", _("don't show thumbnails next to links"))}
-        ${media_radio("subreddit", _("show thumbnails based on that subreddit's media preferences"))}
+        ${media_radio("subreddit", _("show thumbnails based on that sub's media preferences"))}
       %else:
         <p class="error">${_("to enable thumbnails, disable compressed link display")}</p>
         <input type="hidden" name="media" value="${c.user.pref_media}"/>
@@ -192,7 +192,7 @@
         <h6>${_("media previews")}</h6>
         ${media_preview_radio("on", _("auto-expand media previews"))}
         ${media_preview_radio("off", _("don't auto-expand media previews on comments pages"))}
-        ${media_preview_radio("subreddit", _("expand media previews based on that subreddit's media preferences"))}
+        ${media_preview_radio("subreddit", _("expand media previews based on that sub's media preferences"))}
         <br>
 
         <h6>${_("NSFW content")}</h6>
@@ -264,7 +264,7 @@
     </p>
     <p>
     ${checkbox(_(u"ignore suggested sorts"), "ignore_suggested_sort")}
-    &#32;<span class="details">${_("(suggested sorts may be set by community moderators for specific threads or subreddits, like Q&As)")}</span>
+    &#32;<span class="details">${_("(suggested sorts may be set by community moderators for specific threads or subs, like Q&As)")}</span>
     </p>
 
     % if g.voting_disable_dagger == 'false':
@@ -342,10 +342,10 @@
       </p>
       <br/>
 
-      ${checkbox(_("allow subreddits to show me custom themes"), "show_stylesheets")}
+      ${checkbox(_("allow subs to show me custom themes"), "show_stylesheets")}
       %if feature.is_enabled('stylesheets_everywhere'):
         &#32;<span class="details reddit-gold">
-          ${_("(you can also choose which subreddit themes to disable on an individual level)")}
+          ${_("(you can also choose which sub themes to disable on an individual level)")}
         </span>
       %endif
       <br/>
@@ -367,7 +367,7 @@
     <th>${_("content options")}</th>
     <td class="prefright">
       ${checkbox(_("I am over eighteen years old and willing to view adult content"), "over_18")}
-      &#32;<span class="details">(${_("required to view some subreddits")})</span>
+      &#32;<span class="details">(${_("required to view some subs")})</span>
       <br/>
         ${checkbox(_("label posts that are not safe for work (NSFW)"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(requires not 'safer for work' mode)")}
       <br/>
