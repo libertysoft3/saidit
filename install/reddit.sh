@@ -195,6 +195,17 @@ if [ ! -f development.update ]; then
 # generate a new development.ini
 [secrets]
 # the tokens in this section are base64 encoded
+# SECRET = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
+# FEEDSECRET = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
+# ADMINSECRET = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
+# websocket = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
+# media_embed = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
+# action_name = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
+# email_notifications = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
+# cache_poisoning = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
+# adserver_click_url_secret = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
+# modmail_email_secret = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
+# request_signature_secret = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
 
 [DEFAULT]
 # global debug flag -- displays pylons stacktrace rather than 500 page on error when true
@@ -227,7 +238,7 @@ port = 8001
 
 [live_config]
 # Specify global admins and permissions, each user should have one of admin, sponsor, or employee as their permission level
-# employees = reddit:admin
+# employees = saidit:admin
 feature_force_https = on
 
 create_sr_account_age_days = 0

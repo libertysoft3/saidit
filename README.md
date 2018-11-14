@@ -55,12 +55,12 @@ Then install the saidit reddit open source fork
     $ cd ~/
     $ git clone https://github.com/libertysoft3/reddit-ae.git
     $ chmod +x reddit/install-reddit.sh
-    $ sudo ./reddit/install/reddit.sh
+    $ sudo ./reddit/install-reddit.sh
     # if you get an error about "less" restart the server and try again
-    # reddit has been installed at ~/src/reddit. to cleanup, run:
-    $ rm -rf reddit
+    # reddit has been installed at ~/src/reddit. to cleanup run:
+    $ rm -rf ~/reddit
 
-Optional: install sample data (recommended for demo/development enviroments)
+Install sample data, optional but recommended
 
     $ cd ~/src/reddit
     $ reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
@@ -70,30 +70,25 @@ Optional: install sample data (recommended for demo/development enviroments)
 
 ### Additional configuration
 
-make reddit user "cloner" a reddit admin
+Grant your reddit user 'reddituser' the admin role
 
-    # Create reddit account "cloner" in your host's browser at https://reddit.local before or after this config change
-    cd ~/src/reddit/r2
-    nano development.update
-    # edit: employees = reddit:admin
-    # to: employees = reddit:admin, cloner:admin
-    # because configuration has changed run
-    make ini
-    sudo reddit-flush
-    # Logged in as "cloner" you should now see the "turn admin on" link
+    $ cd ~/src/reddit/r2
+    $ sed -i '/# employees = saidit:admin/c\employees = saidit:admin, reddituser:admin' development.update
+    $ make ini
+    $ sudo reddit-flush
 
 increase PostgreSQL max_connections for greater stability (87/100 in use at reddit idle without Solr running?)
 
-    sudo nano /etc/postgresql/9.3/main/postgresql.conf
+    $ sudo nano /etc/postgresql/9.3/main/postgresql.conf
     # edit: max_connections = 100
     # to: max_connections = 150
-    sudo service postgresql restart
-    sudo reddit-restart
+    $ sudo service postgresql restart
+    $ sudo reddit-restart
 
 optional: change the default subreddits that guests see
 
-    cd ~/src/reddit/r2
-    paster shell run.ini
+    $ cd ~/src/reddit/r2
+    $ paster shell run.ini
     # paste the following, hit enter:
     from r2.models import *
     srs = [Subreddit._by_name(n) for n in ("pics", "videos", "science", "technology")]
@@ -103,7 +98,7 @@ optional: change the default subreddits that guests see
 
 watch reddit run and debug errors
 
-    sudo tail -f /var/log/syslog
+    $ sudo tail -f /var/log/syslog
 
 additional configuration changes you may wish to make are shown in `r2/development.update.saidit` 
 
@@ -117,10 +112,10 @@ You can mount the VM's reddit files as a folder on your host machine for easy ed
  
 ### Upgrade curl
 
-this will improve reddit's 'fetch title' functionality and potentially more.
- 
-    replace version with latest stable from https://curl.haxx.se/download.html:
+this will improve the new link 'fetch title' capability and potentially more
+
     $ sudo apt-get build-dep curl
+    # use latest version from https://curl.haxx.se/download.html:
     $ wget http://curl.haxx.se/download/curl-7.58.0.tar.bz2
     $ tar -xvjf curl-7.58.0.tar.bz2
     $ cd curl-7.58.0
@@ -139,10 +134,10 @@ this will improve reddit's 'fetch title' functionality and potentially more.
     $ python --version
 
 
-### Rebuild reddit from source
+### Rebuild and recompile reddit
  
     $ sudo reddit-stop
-    $ sudo-reddit-flush
+    $ sudo reddit-flush
     $ sudo apt-get install libxml2-dev libxslt1-dev python-dev
     $ cd ~/src/reddit/r2
     $ python setup.py build
@@ -230,14 +225,14 @@ Since reddit config has changed:
  
 ### Add reddit content to Solr, verify working:
 
-    cd ~/src/reddit/r2
-    paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs.rebuild_subreddit_index()'
-    paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()'
+    $ cd ~/src/reddit/r2
+    $ paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs.rebuild_subreddit_index()'
+    $ paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()'
  
  
 ### Setup Solr cron jobs:
  
-    sudo nano /etc/init/reddit-job-solr_subreddits.conf
+    $ sudo nano /etc/init/reddit-job-solr_subreddits.conf
     # paste lines, save:
     description "Add new subreddits to Solr."
     manual
@@ -251,7 +246,7 @@ Since reddit config has changed:
  
 and then...
  
-    sudo nano /etc/init/reddit-job-solr_links.conf
+    $ sudo nano /etc/init/reddit-job-solr_links.conf
     # paste lines, save:
     description "Add new posts to Solr."
     manual
