@@ -56,3 +56,36 @@
 .tabmenu {
 	margin-top: 6px;
 }
+
+/* Mobile Styles */
+@media only screen and (max-width: 600px) {
+    .side {
+        float: none;
+        width: auto;
+    }
+    .morelink .nub {
+        display: none;
+    }
+    .c-close {
+        width: 24px;
+        height: 24px;
+    }
+    .panestack-title {
+        margin-right: 0;
+    }
+    #header-img.default-header {
+        background-position: bottom center;
+        height: 55px;
+    }
+    #header-bottom-right, .theme-daymode #header-bottom-right {
+        top: 15px;
+        bottom: auto;
+        border-top-left-radius: 0;
+    }
+    .login-form-side .submit {
+        float: left;
+    }
+    .chat-iframe {
+        display: none;
+    }
+}
