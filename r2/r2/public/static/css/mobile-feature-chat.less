@@ -1,0 +1,81 @@
+iframe.chat-iframe {
+  border:0;
+  width:100%;
+  height:350px;
+}
+.comments-page iframe.chat-iframe {
+  height: 550px;
+}
+
+.side-chat {
+	/* affect all sizes */
+}
+.side-chat .chat-link {
+	float: right;
+}
+.side-chat #search input[type=text] {
+	width: 100%;
+}
+
+.side.chat_size_default {
+	/* width: 300px; */
+}
+.side.chat_size_s {
+	width: 380px;
+}
+.side.chat_size_m {
+	width: 480px;
+}
+.side.chat_size_l {
+	width: 600px;
+}
+.side.chat_size_xl {
+	width: 780px;
+}
+.side.chat_size_25 {
+	width: 25%;
+}
+.side.chat_size_33 {
+	width: 33%;
+}
+.side.chat_size_40 {
+	width: 40%;
+}
+.side.chat_size_50 {
+	width: 50%;
+}
+.side.chat_size_60 {
+	width: 60%;
+}
+
+/* alternate login style for wide sidebars */
+.login-form-side #remember-me {
+	float: none;
+}
+.login-form-side .submit {
+	float: left;
+}
+/*
+.login-form-side #remember-me {
+	float: none;
+	display: inline-block;
+}
+*/
+/*
+.login-form-side .status {
+	float: right;
+}
+*/
+
+/* Mobile Styles */
+@media only screen and (max-width: 600px) {
+    .chat-iframe {
+        display: none;
+    }
+    .side.chat_size_default, .side.chat_size_s, .side.chat_size_m,
+    .side.chat_size_l, .side.chat_size_xl, .side.chat_size_25,
+    .side.chat_size_33, .side.chat_size_40, .side.chat_size_50,
+    .side.chat_size_60 {
+        width: auto;
+    }
+}

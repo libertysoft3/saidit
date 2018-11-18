@@ -1,0 +1,209 @@
+/* components/colors.less replacements */
+/* using original names will alter default theme's reddit.less */
+@theme-daymode-color-text-grey: #4F4F4F;
+@theme-daymode-markdown-color-font-light: @theme-daymode-color-text-grey;
+@theme-daymode-markdown-color-wiki-header: @theme-daymode-color-text-grey;
+@theme-daymode-color-ui-blue: #336699;
+@theme-daymode-color-off-white: #FCFCF7; /* replacement for color-off-white, markdown-color-code */
+@theme-daymode-color-semi-black: #222222; /* replacement for markdown-color-font, color-semi-black */
+@theme-daymode-color-stamp-text-dark: @theme-daymode-color-semi-black;
+@theme-daymode-color-archived-stamp: lighten(@theme-daymode-color-text-grey, 15%);
+@theme-daymode-infobar-legacy-color: #f6e69f;
+@theme-daymode-infobar-legacy-color-border: orange;
+@theme-daymode-infobar-color: #fff7d7;
+@theme-daymode-infobar-color-border: darken(@theme-daymode-infobar-color, 32%);
+@theme-daymode-infobar-color-text: @theme-daymode-color-semi-black;
+
+.theme-daymode {
+
+    /* reddit.less overrides */
+    background-color: #F8F8F8;
+    textarea { color: black; background-color: white; }
+    h2, a, .tagline a { color: #369; }
+    .flat-vert.title { color: #777; }
+
+.arrow {   background-position: left;
+		    margin-bottom: 2px;
+    margin-top: 0px;
+    margin-left: 0px;
+    width: 100%;
+    height: 26px;
+    display: block;
+    cursor: pointer;
+    margin-left: 0px;
+    margin-right: 15px; 
+    outline: none;
+    float: left;
+    background-position-y: center;
+    
+    }
+
+
+
+.arrow.upmod { 
+    background-image: url(../daymode_insightful_voted.png);  /* SPRITE */
+
+}
+.arrow.downmod { 
+    background-image: url(../daymode_funny_voted.png);  /* SPRITE */
+ }
+.arrow.up { 
+    background-image: url(../daymode_insightful_unvoted.png);  /* SPRITE */
+    background-color: #f8f8f8;
+}
+.arrow.down { 
+    background-image: url(../daymode_funny_unvoted.png);  /* SPRITE */
+    background-color: #f8f8f8;
+}
+
+.link .midcol {font-size: small; text-align: center; width: 62px;}
+
+    .tabmenu li a { background-color: #F8F8F8; }
+    .tabmenu li.selected a { border-color:  #5f99cf; border-bottom-color: white; }
+    .content, .sitetable, .menuarea, .comment, .content .details,
+    .message.message-parent.recipient > .entry .head,
+    .message .subject, .login-form-side #remember-me *,
+    .instructions, .formtabs-content .infobar, .titlebox,
+    .titlebox h1 a, .titlebox h1 { color: black; }
+    .titlebox .karma { color: black; }
+    .side, .morelink .nub, .sidebox .spacer, .titlebox form.toggle, .leavemoderator, .icon-menu a { background-color: #F8F8F8; color: black;}
+    .sidebox .subtitle { color: dimgray; }
+    .tagline .submitter { color: #0055df; }
+    .thing .title, .subscription-box .title { color: blue; }
+    .thing .title:visited, .thing.visited .title { color: #551a8b; }
+    .nextprev, .next-suggestions {
+        a {
+
+
+            background: #eee;
+            border-color: #ddd;
+        }
+    }
+    .message.message-parent > .entry, .message.message-reply  > .entry {
+        .md, blockquote, del { color: inherit; }
+    }
+    .link.promotedlink.unpaid   { background-color: #FFC; }
+    .panestack-title .title { color: #ccc; }
+    .message.new > .entry { background-color: #F7F7F7; border-color: #E9E9E9; }
+    .message.threaded .child, .message.message-reply,
+    .message.message-parent { border-left-color: #E7E7E7; }
+    .commentbody.border { background-color: #ffc; }
+    .footer { border-color: #F0F0F0; }
+    .footer .col { border-left-color: #E0E0E0; }
+    .searchpane { background-color: #E0E0E0; }
+    #search input[type=text] { color: black; background-color: white; }
+    .contact-us-page .details li, .subreddit .usertext .md { background-color: #fafafa; }
+    .content.submit .info-notice { background-color: #E4F2FB; border-color: #5F99CF; }
+    .expando-button { background-color: white; }
+    .link .usertext-body .md { background-color: #fafafa; border-color: #369; }
+    .usertext.border .usertext-body { background-color: #ffc; }
+    .roundfield, .linefield { background-color: #f8f8f8; }
+    .trophy-area .content { background-color: #f5f5f5; }
+    .linkinfo { border-color: #5f99cf; background-color: #F8F8F8; }
+    .new-comment .usertext-body { background-color: #e5efff; border-color: #cddaf3; }
+    .gold-wrap {
+        input[type=text], input[type=email], textarea {
+            color: #686868;
+            background-color: #fff;
+        }
+    }
+    .gold-only #header .tabmenu li.selected a {
+        background-color: #ffffff;
+          border-color: #9a7d2e;;
+          border-bottom-color: #ffffff;
+    }
+    .subreddit-report-form {
+        @theme-daymode-bg-color: #FBFBFB;
+        @theme-daymode-text-color: @theme-daymode-color-semi-black;
+        background-color: @theme-daymode-bg-color;
+        border: 1px solid darken(@theme-daymode-bg-color, 10%);
+        color: @theme-daymode-text-color;
+    }
+    .quarantine-stamp { color: @theme-daymode-color-semi-black; }
+    .newsletter-box .result-message { color: @theme-daymode-color-text-grey; }
+    .archived-stamp { color: @theme-daymode-color-archived-stamp; }
+    .full-context-info td { color: @theme-daymode-color-text-grey; }
+    .side .side-message { background-color: lighten(@theme-daymode-infobar-legacy-color, 10%); border-color: darken(@theme-daymode-infobar-legacy-color, 20%); }
+    .linkinfo { color: @theme-daymode-color-semi-black; }
+    #sr-header-area { background-color: #f0f0f0; border-bottom: 1px solid gray; }
+    .dropdown.srdrop .selected { color: black; }
+    #sr-more-link { background-color: #f0f0f0; color: black; }
+    .sr-bar a { color: black; }
+    #header-bottom-right { background-color: #EFF7FF; }
+    #header-bottom-right a { color: #369; }
+    #header-bottom-right .separator, #header-bottom-right .user { color: gray; }
+
+    /* markdown.less overrides */
+    .wiki-page-content .md h2 { color: @theme-daymode-color-ui-blue; }
+    .wiki-page-content .md {
+        h1, h6 { color: @theme-daymode-markdown-color-wiki-header; }
+    }
+    .md {
+        color: @theme-daymode-color-semi-black; /* markdown-color-font: color-semi-black */
+        a { color: #0079D3; } /* this is color markdown-color-link, color-alien-blue */
+        code, pre {  border-color: #e6e6de; background-color: #fcfcfb; }
+        blockquote, del { color: @theme-daymode-markdown-color-font-light; }
+      }
+    .new-comment .md,
+    .link .md,
+    .usertext.border .md {
+        :not(pre) > code,
+        pre {
+    	    background-color: @theme-daymode-color-off-white; /* @markdown-color-code-alt */
+        }
+    }
+
+      /* search.less overrides */
+      .search-result-body { color: @theme-daymode-color-text-grey; }
+
+
+      /* subreddit-rules.less overrides */
+      .subreddit-rules-page .md-container .md .subreddit-rule-description { color: @theme-daymode-color-text-grey; }
+
+
+    /* components/infobar.less overrides */
+    .infobar {
+          background-color: @theme-daymode-infobar-legacy-color;
+          border-color: @theme-daymode-infobar-legacy-color-border;
+      }
+      .reddit-infobar {
+          background-color: @theme-daymode-infobar-color;
+        border-color: @theme-daymode-infobar-color-border;
+        .md {
+            color: @theme-daymode-infobar-color-text;
+          }
+          &.with-icon &:before { background-color: @theme-daymode-infobar-color-border; }
+      }
+
+
+    /* components/read-next.less overrides */
+    .read-next {
+        .read-next-button {
+            background-color: lighten(@theme-daymode-color-ui-blue, 5%);
+        }
+        &:active {
+              background-color: @theme-daymode-color-ui-blue;
+        }
+    }
+
+    .drop-choices {
+	background-color: #ffffff;
+	a.choice {
+		color: #369;
+	}
+	a.choice:hover {
+		background-color: #EFF7FF;
+	}
+    }
+
+
+    /* saidit custom dark header styles */
+    .pagename, .pagename a {
+        color: white;
+    }
+}
+
+/* TEMP */
+.theme-daymode .thing .title, .theme-daymode .subscription-box .title {
+    color: red;
+}

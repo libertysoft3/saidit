@@ -29,8 +29,8 @@
    from r2.config import feature
 %>
 
-<%namespace file="printablebuttons.html" import="toggle_button" />
-<%namespace file="utils.html" import="data, error_field, md, _md"/>
+<%namespace file="printablebuttons.m" import="toggle_button" />
+<%namespace file="utils.m" import="data, error_field, md, _md"/>
 
 <%def name="markhelp(show_embed_help=False)">
   <div class="markhelp" style="display:none">
@@ -49,8 +49,8 @@
         <td><b>${_( "bold")}</b></td>
       </tr>
       <tr>
-        <td>[reddit!](https://reddit.com)</td>
-        <td><a href="https://reddit.com">reddit!</a></td>
+        <td>[${g.brander_site}](${g.https_endpoint})</td>
+        <td><a href="${g.https_endpoint}">${g.brander_site}</a></td>
       </tr>
       <tr>
         <td>
@@ -97,6 +97,34 @@
           <td>super^script</td>
           <td>super<sup>script</sup></td>
       </tr>
+      <tr>
+        <td>
+          1.  <br/>
+          7. <br/>
+          4. 
+        </td>
+        <td>
+          <ul>
+            1. <br/>
+            2. <br/>
+            3.
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          1\. <br/>
+          7\. <br/>
+          4\.
+        </td>
+        <td>
+          <ul>
+            1. <br/>
+            7. <br/>
+            4.
+          </ul>
+        </td>
+      </tr>
       % if show_embed_help:
       <tr>
           <td>${_md('Links on their own line will be embedded:\n\nhttps://example.com')}</td>
@@ -136,13 +164,21 @@
     <div class="usertext-body may-blank-within md-container ${'admin_takedown' if thing.admin_takedown else ''}">
       % if not thing.expunged:
 
-        ### CUSTOM
-        % if feature.is_enabled('chat_kiwiirc') and thing.is_chat_post:
-          % if thing.suggest_username:
-            <iframe src="https://kiwiirc.com/client/irc.foonetic.net/?nick=${thing.chat_username}|?#${thing.chat_channel}" style="border:0; width:100%; height:450px;"></iframe>
+        ## CUSTOM
+        % if thing.is_chat_post and thing.user_chat_enabled and thing.chat_client == 'kiwiirc':
+          % if thing.chat_user_is_guest:
+            <iframe class="chat-iframe kiwiirc" src="${thing.chat_client_url}/?nick=${thing.chat_user}|?#${thing.chat_channel}"></iframe>
           % else:
-            <iframe src="https://kiwiirc.com/client/irc.foonetic.net/?nick=${thing.chat_username}#${thing.chat_channel}" style="border:0; width:100%; height:450px;"></iframe>
+            <iframe class="chat-iframe kiwiirc" src="${thing.chat_client_url}/?nick=${thing.chat_user}#${thing.chat_channel}"></iframe>
           % endif
+
+        % elif thing.is_chat_post and thing.user_chat_enabled and thing.chat_client == 'thelounge':
+          % if thing.chat_user_is_guest:
+            <iframe class="chat-iframe thelounge" src="${thing.chat_client_url}/?tls=true&nofocus&lockchannel&autologin&user=${thing.chat_client_user}&autoconnect&nick=${thing.chat_user}&username=${thing.chat_user}&realname=${thing.chat_user}&join=${thing.chat_channel}"></iframe>
+          % else:
+            <iframe class="chat-iframe thelounge" src="${thing.chat_client_url}/?tls=true&nofocus&lockchannel&autologin&user=${thing.chat_client_user}&al-password=${thing.chat_client_password}&autoconnect&nick=${thing.chat_user}&username=${thing.chat_user}&realname=${thing.chat_user}&join=${thing.chat_channel}"></iframe>
+          % endif
+
         % else:
           ${unsafe(safemarkdown(thing.text, nofollow = thing.nofollow,
                                         target = thing.target))}
@@ -170,7 +206,7 @@
                         "helpon", "helpoff",
                          style = "" if thing.creating else "display: none")}
 
-        <a href="/help/contentpolicy" class="reddiquette" target="_blank" tabindex="100">${_('content policy')}</a>
+        <a href="/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/" class="reddiquette" target="_blank" tabindex="100">${_('content policy')}</a>
 
         %if thing.include_errors:
           ${error_field("TOO_LONG", thing.name, "span")}
@@ -202,3 +238,4 @@
 %else:
   </div>
 %endif
+
