@@ -141,7 +141,8 @@ def get_srpath():
     """
     name = get_site()
     action = None
-    if c.render_style in ("mobile", "compact"):
+    # SaidIt CUSTOM
+    if c.render_style in ("mobile", "compact", g.extension_subdomain_mobile_v2_render_style):
         action = c.render_style
     else:
         action = request.environ['pylons.routes_dict'].get('action')

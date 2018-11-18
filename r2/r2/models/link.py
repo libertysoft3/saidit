@@ -424,7 +424,9 @@ class Link(Thing, Printable):
             ])
         elif style == "xml":
             s.append(request.GET.has_key("nothumbs"))
-        elif style == "compact":
+
+        # SaidIt CUSTOM
+        elif style == "compact" or style == g.extension_subdomain_mobile_v2_render_style:
             s.append(c.permalink_page)
 
         # add link flair to the key if the user and site have enabled it and it

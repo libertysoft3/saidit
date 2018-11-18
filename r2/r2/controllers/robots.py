@@ -49,9 +49,10 @@ class RobotsController(MinimalController):
         # Note: in development, DomainMiddleware needs to be temporarily
         # modified to not skip assignment of reddit-domain-extension on
         # localhost for this to work properly.
+        # SaidIt CUSTOM
         return (requested_domain == g.domain or
                 request.environ.get('reddit-domain-extension') in
-                    ('mobile', 'compact'))
+                    ('mobile', 'compact', g.extension_subdomain_mobile_v2_render_style))
 
     def GET_robots(self):
         response.content_type = "text/plain"

@@ -526,6 +526,10 @@ def add_sr(
         elif c.render_style == 'compact':
             u.set_extension('compact')
 
+        # SaidIt CUSTOM
+        elif c.render_style == g.extension_subdomain_mobile_v2_render_style:
+            u.set_extension(g.extension_subdomain_mobile_v2_render_style)
+
     return u.unparse()
 
 def join_urls(*urls):

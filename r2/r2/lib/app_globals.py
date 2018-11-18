@@ -532,6 +532,8 @@ class Globals(object):
             xml="xml",
             json="json",
         )
+        # SaidIt CUSTOM
+        self.extension_subdomains[self.config['extension_subdomain_mobile_v2']] = self.config['extension_subdomain_mobile_v2_render_style']
 
         ################# PROVIDERS
         self.auth_provider = select_provider(

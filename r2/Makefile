@@ -89,6 +89,8 @@ clean_ini:
 SPRITED_STYLESHEETS += reddit.less compact.css modtools.less expando.less
 
 # CUSTOM
+SPRITED_STYLESHEETS += mobile-reddit.less mobile-modtools.less mobile-expando.less
+
 LESS_STYLESHEETS := wiki.less adminbar.less policies.less reddit-embed.less
 
 OTHER_STYLESHEETS := mobile.css highlight.css 

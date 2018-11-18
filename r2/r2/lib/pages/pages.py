@@ -1062,6 +1062,7 @@ class Reddit(Templated):
                 func = 'subredditnositelink'
             elif isinstance(c.site, AllSR) and not isinstance(c.site, HomeSR):
                 func = 'subredditheadertitle'
+            # NOTE: fails for url https://www.reddit.local/try.compact?dest=/.mobile your redirect when appending 'mobile' or when visiting simple.reddit.local, comment out to see page
             toolbar.insert(0, PageNameNav(func))
         elif isinstance(c.site, DefaultSR):
             toolbar.insert(0, PageNameNav('subredditheadertitle'))

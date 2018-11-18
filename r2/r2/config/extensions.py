@@ -47,6 +47,7 @@ extension_mapping = {
     "compact": ("compact", "text/html; charset=UTF-8"),
     "json": (api_type(), "application/json; charset=UTF-8"),
     "i": ("compact", "text/html; charset=UTF-8"),
+    "m": ("m", "text/html; charset=UTF-8"), # SaidIt CUSTOM templates, not the nodejs react app
 }
 
 API_TYPES = ('api', 'json')

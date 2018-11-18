@@ -487,16 +487,24 @@ def set_content_type():
             if user and not g.read_only_mode:
                 c.user = user
                 c.user_is_loggedin = True
-        if ext in ("mobile", "m") and not request.GET.get("keep_extension"):
+        # SaidIt CUSTOM: remove 'm', was never a valid extension just a subdomain, see https://github.com/reddit-archive/reddit/commit/43c91ea4798cb4f4f576c6b7b5ae460ce1f16aa4
+        if ext in ("mobile") and not request.GET.get("keep_extension"):
             try:
                 if request.cookies['reddit_mobility'] == "compact":
                     c.extension = "compact"
                     c.render_style = "compact"
             except (ValueError, KeyError):
                 c.suggest_compact = True
-        if ext in ("mobile", "m", "compact"):
+        # SaidIt CUSTOM: remove 'm', was never a valid extension just a subdomain, see https://github.com/reddit-archive/reddit/commit/43c91ea4798cb4f4f576c6b7b5ae460ce1f16aa4
+        if ext in ("mobile", "compact"):
             if request.GET.get("keep_extension"):
                 c.cookies['reddit_mobility'] = Cookie(ext, expires=NEVER)
+
+        # SaidIt CUSTOM
+        if ext in (g.extension_subdomain_mobile_v2):
+            c.cookies['reddit_mobility'] = Cookie(ext, expires=NEVER) # TODO need this?
+            c.extension = g.extension_subdomain_mobile_v2_render_style
+            c.render_style = g.extension_subdomain_mobile_v2_render_style
 
     # allow content and api calls to set an loid
     if is_api() or c.render_style in ("html", "mobile", "compact"):
@@ -756,7 +764,8 @@ def enforce_https():
             redirect_url = make_url_https(request.fullurl)
 
     # These are all safe to redirect to HTTPS
-    if c.render_style in {"html", "compact", "mobile"} and not is_api_request:
+    # SaidIt CUSTOM
+    if c.render_style in {"html", "compact", "mobile", g.extension_subdomain_mobile_v2_render_style} and not is_api_request:
         want_redirect = (feature.is_enabled("force_https") or
                          feature.is_enabled("https_redirect"))
         if not c.secure and want_redirect:
