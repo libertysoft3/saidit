@@ -8,10 +8,10 @@
 
 saidit changes:
 
+* voting uses two upvotes, insightful is worth 2 points and funny is worth 1
+* site rebranding feature
+* admin tools: sitewide user ban, ip ban
 * bug fixes
-* rebranding system
-* custom voting/score model: insightful is +2, funny is +1
-* custom admin tools
 
 ---
 

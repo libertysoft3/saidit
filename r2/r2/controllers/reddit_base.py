@@ -502,7 +502,7 @@ def set_content_type():
 
         # SaidIt CUSTOM
         if ext in (g.extension_subdomain_mobile_v2):
-            c.cookies['reddit_mobility'] = Cookie(ext, expires=NEVER) # TODO need this?
+            c.cookies['reddit_mobility'] = Cookie(ext, expires=NEVER)
             c.extension = g.extension_subdomain_mobile_v2_render_style
             c.render_style = g.extension_subdomain_mobile_v2_render_style
 
