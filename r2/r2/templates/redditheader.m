@@ -68,6 +68,8 @@
     %endfor
   </div>
 
+  </div>
+
   <div id="header-bottom-right">
     %if not c.user_is_loggedin:
       %if thing.enable_login_cover and not g.read_only_mode:
@@ -141,4 +143,4 @@
       ${logout(dest=request.fullpath)}
     %endif
   </div>
-</div>
+

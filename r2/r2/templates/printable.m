@@ -254,6 +254,7 @@ ${self.RenderPrintable()}
        ${not display and "style='display:none'" or ''}>
     ${self.arrow(thing, 1, thing.likes)}
     ${self.arrow(thing, 0, thing.dislikes)}
+
   </div>
 </%def>
 
@@ -277,6 +278,8 @@ ${self.RenderPrintable()}
        tabindex="0"
     %endif
     >
+   
+
     %if arrow_type is "up" and not hide_score:
       ${self.score_upvotes(thing, mod=mod)}
     %elif arrow_type is "down" and not hide_score:
@@ -284,7 +287,10 @@ ${self.RenderPrintable()}
     %elif hide_score:
       <span class="score">&bull;</span>
     %endif
+
   </div>
+
+    
 </%def>
 
 ## CUSTOM: voting model

@@ -98,6 +98,22 @@
 </%def>
 
 <%def name="entry()">
+
+
+ ##the expando button
+  <% selftext_hide = thing.is_self and not thing.selftext %>
+  %if thing.link_child:
+    %if not thing.link_child.expand and not selftext_hide:
+      <div class="expando-button collapsed
+                  ${thing.link_child.css_style}"></div>
+    %elif thing.link_child.expand and not thing.link_child.position_inline:
+      <div class="expando-button expanded
+                  ${thing.link_child.css_style}"></div>
+    %endif
+  %endif
+
+
+
   <p class="title">
     %if c.site.link_flair_position == 'left':
       <%call expr="flair()" />
@@ -120,17 +136,7 @@
     %endif
   </p>
 
-  ##the expando button
-  <% selftext_hide = thing.is_self and not thing.selftext %>
-  %if thing.link_child:
-    %if not thing.link_child.expand and not selftext_hide:
-      <div class="expando-button collapsed
-                  ${thing.link_child.css_style}"></div>
-    %elif thing.link_child.expand and not thing.link_child.position_inline:
-      <div class="expando-button expanded
-                  ${thing.link_child.css_style}"></div>
-    %endif
-  %endif
+ 
 
   <p class="tagline">
     ${self.tagline()}
@@ -161,7 +167,7 @@
     %endif
   </div>
 
-  ##if we are on a permalink page, we'll render the buttons below
+  ## if we are on a permalink page, we'll render the buttons below
   %if position_inline:
     ${bottom_buttons()}
   %endif

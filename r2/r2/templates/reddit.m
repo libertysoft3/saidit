@@ -139,11 +139,6 @@
     <%include file="redditheader.m"/>
   %endif
 
-  %if thing.show_sidebar:
-    <div class="side${" side-chat" if thing.show_sidebar_chat else ""} ${c.user.pref_chat_sidebar_size if thing.show_sidebar_chat else ""}">
-      ${sidebar(content = thing.rightbox())}
-    </div>
-  %endif
 
   %if thing.show_chooser:
     ${ListingChooser()}
@@ -169,6 +164,14 @@
     <a name="content"></a>
     <div ${tags(id=thing.content_id)} ${classes("content", thing.css_class)} role="main">
       ${content()}
+    </div>
+  %endif
+
+  <br><br>
+  
+  %if thing.show_sidebar:
+    <div class="side${" side-chat" if thing.show_sidebar_chat else ""} ${c.user.pref_chat_sidebar_size if thing.show_sidebar_chat else ""}">
+      ${sidebar(content = thing.rightbox())}
     </div>
   %endif
 

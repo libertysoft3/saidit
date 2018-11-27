@@ -27,7 +27,7 @@
 <%namespace file="utils.m" import="text_with_links"/>
 
 <div class="footer-parent">
-  <div by-zero class="footer rounded">
+  <div by-zero class="footer rounded" style="display: block;">
       %for toolbar in thing.nav:
       <div class="col">
         ${toolbar}

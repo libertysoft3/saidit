@@ -132,7 +132,7 @@ h2 a:visited { color: #5a90c5 }
 h2 a:hover { text-decoration: underline }
 h3 { font-size:110%; /*text-transform:uppercase;*/ }
 
-a img { border: 0 none; }
+a img { border: 0 none; width: 100%; height: 100%; }
 a { text-decoration: none; color: #5a90c5; }
 
 /* Polyfill for HTML5 hidden attribute: http://caniuse.com/#feat=hidden */
@@ -233,8 +233,8 @@ label.disabled { color: gray; }
 
 .selected, .choice.primary { font-weight: bold; }
 
-.flat-list {list-style-type: none; display: inline;}
-.flat-list li, .flat-list form {display: inline; white-space: nowrap; }
+.flat-list {list-style-type: none; display: inline-block;}
+.flat-list li, .flat-list form {display: inline-block; white-space: nowrap; }
 
 .flat-list li a.gold { color: #9a7d2e; font-weight: bold; }
 .flat-list li.selected a { color: orangered; }
@@ -291,12 +291,13 @@ ul.flat-vert {text-align: left;}
 }
 
 #header-bottom-right {
-    position: absolute;
+	font-size: large;
+	width: 96%;
     right: 0px;
     bottom: 0px;
     background-color: #EFF7FF;
-    padding: 4px;
-    line-height: 12px;
+    padding: 8px;
+    line-height: 30px;
     border-top-left-radius: 7px;
  }
 
@@ -375,6 +376,7 @@ ul.flat-vert {text-align: left;}
     font-variant: small-caps;
     font-size: 1.2em;
     vertical-align: bottom;
+    font-size: x-large;
 }
 .pagename a {color: black; }
 .redditname { }
@@ -465,6 +467,7 @@ ul.flat-vert {text-align: left;}
     display: inline-block;
     margin-top: 5px;
     vertical-align: bottom;
+    font-size: large;
 }
 
 .tabmenu li {
@@ -784,15 +787,16 @@ ul.flat-vert {text-align: left;}
     margin-top: 0px;
     margin-left: 0px;
     width: 100%;
-    height: 26px;
+    
     display: block;
     cursor: pointer;
     margin-left: 0px;
-    margin-right: 15px; 
+    margin-right: 0px; 
     outline: none;
     float: left;
     background-position-y: center;
-    
+    padding-top: 102%;
+    padding-bottom: 21%;
     }
 
 
@@ -800,21 +804,25 @@ ul.flat-vert {text-align: left;}
 .arrow.upmod { 
     background-image: url(../nightmode_insightful_voted.png);  
     background-repeat: no-repeat;
+    background-size: 90%;
 
 }
 .arrow.downmod { 
     background-image: url(../nightmode_funny_voted.png); 
     background-repeat: no-repeat;
+    background-size: 90%;
 }
 .arrow.up { 
     background-image: url(../nightmode_insightful_unvoted.png);  
     background-color: #2f2f2f;
     background-repeat: no-repeat;
+    background-size: 90%;
 }
 .arrow.down { 
     background-image: url(../nightmode_funny_unvoted.png);  
     background-color: #2f2f2f;
     background-repeat: no-repeat;
+    background-size: 90%;
 }
 
 .midcol {
@@ -823,6 +831,7 @@ ul.flat-vert {text-align: left;}
     margin-left: 0px; 
     background: transparent; 
     overflow: hidden;
+    width: 20%;
 }
 
 body > .content .link.compressed .midcol {
@@ -834,8 +843,10 @@ body > .content .link.compressed .midcol {
     overflow: hidden; 
     margin-left: 3px;
     opacity: 1;
+    float: left;
+    width: 100%;
 }
-.domain { color: #888; font-size:x-small; white-space: nowrap; }
+.domain { color: #888; font-size:large; white-space: nowrap; }
 .domain a {
     color: #888;
     display: inline-block;
@@ -872,7 +883,7 @@ body > .content .link.compressed .midcol {
   font-weight: bold;
 }
 
-.tagline { color:#888; font-size:x-small; }
+.tagline { color:#888; font-size:large; }
 .tagline a {color: #78bbec; text-decoration: none; }
 .tagline .friend    { color: orangered }
 .tagline .submitter { color: #4a8fff }
@@ -1294,7 +1305,7 @@ body.with-listing-chooser.explore-page #header .pagename {
 
 .nextprev, .next-suggestions {
     color: gray;
-    font-size: larger;
+    font-size: x-large;
     margin-top: 10px;
 
     a {
@@ -1597,6 +1608,7 @@ body.with-listing-chooser.explore-page #header .pagename {
         padding-bottom: 5px;
         // subtract padding from min heights
         min-height: @min-uncompressed-height - 10px;
+
     }
 
     body.compressed-display & .link {
@@ -2052,6 +2064,7 @@ a.star { text-decoration: none; color: #ff8b60 }
     border: none;
     padding-right: 4px;
     line-height: 1.6em;
+    font-size: large;
 }
 .entry .buttons li + li {
     padding-left: 4px;
@@ -2088,9 +2101,9 @@ a.star { text-decoration: none; color: #ff8b60 }
 .thing .stub { display: none; }
 .link.last-clicked { border: 1px dashed gray; overflow: hidden; }
 
-.link { margin: 0; margin-bottom: 18px; padding-left: 9px; margin-top: 18px;}
-.link .score {text-align: center; }
-.link .title {font-size:medium; font-weight: normal; margin-bottom: 1px;}
+.link { margin: 0; margin-bottom: 31px; padding-left: 9px; margin-top: 18px;}
+.link .score {text-align: center; display: block; margin-right: 11%; font-size: 6.5vw;}
+.link .title {font-size:x-large; font-weight: normal; margin-bottom: 1px;}
 
 .link .child h3 {
     margin: 15px; 
@@ -2102,7 +2115,7 @@ a.star { text-decoration: none; color: #ff8b60 }
 
 .profile-page .link .rank, .single-page .link .rank { display: none; }
 
-.link .midcol {font-size: small; text-align: center; width: 62px;}
+.link .midcol {font-size: x-large; text-align: center; width: 20%;}
 
 .link .score.likes   { color: #FF8B60; }
 .link .score.dislikes { color: #9494FF; }
@@ -4609,16 +4622,22 @@ form input[type=radio] {margin: 2px .5em 0 0; }
 .stats td.ri { padding-left: 20px; text-align: right}
 
 .thumbnail {
-    float: left; 
     font-size: 0;
     margin: 0;
     margin-left: 0px;
-    margin-right: 6px;
-    margin-top: 4px;
+    margin-right: 0px;
+    margin-top: 0px;
     margin-bottom: 0px;
     overflow: hidden;
-    width: 70px; 
+
+	/* width: calc(100% - 70px); */
+
+	width: 77%;
+    float: left;
 }
+
+
+
 
 .thumbnail.nsfw {
     height: 70px;
@@ -4628,6 +4647,7 @@ form input[type=radio] {margin: 2px .5em 0 0; }
 .thumbnail.self {
     height: 50px;
     background-image: url(../self_default2.png); /* SPRITE */
+    margin: 10px;
 }
 
 .thumbnail.default {
@@ -11098,10 +11118,13 @@ body.with-listing-chooser {
 
   .arrow.upmod { 
     background-image: url(../gold/gold-only-upvote-mod.png); /* SPRITE */
+    background-size: 90%;
+
   }
 
   .arrow.downmod { 
     background-image: url(../gold/gold-only-downvote-mod.png); /* SPRITE */
+    background-size: 90%;
   }
 
   .link .score.dislikes {
@@ -11568,7 +11591,7 @@ body:not(.loggedin) .report-button {
 	margin: 0px 0 0px 0; /* can fine tune vertical posittion */
  	
 	/* NOTE: you can only set these styles because the logo has been removed from the sprite image */
-	background-position: 391px 0;
+	background-position: 109px 0;
 	background-repeat: no-repeat;
 }
 .pagename, .pagename a {
