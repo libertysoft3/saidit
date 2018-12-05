@@ -464,7 +464,7 @@ ul.flat-vert {text-align: left;}
 .tabmenu {
     list-style-type: none;
     white-space: nowrap;
-    display: inline-block;
+    display: inline-grid;
     margin-top: 5px;
     vertical-align: bottom;
     font-size: large;
@@ -479,13 +479,13 @@ ul.flat-vert {text-align: left;}
 .tabmenu li a {
     padding: 2px 6px 0 6px;
     background-color: #2f2f2f;
-    border-top-left-radius: 8px;
+    border-bottom-right-radius: 8px;
     border-top-right-radius: 8px;
 
  }
 
 .tabmenu li.selected a{
-    border-top-left-radius: 8px;
+    border-bottom-right-radius: 8px;
     border-top-right-radius: 8px;
     color: orangered;
     background-color: #2f2f2f;
@@ -495,7 +495,7 @@ ul.flat-vert {text-align: left;}
 }
 
 #header-bottom-left .tabdrop span {
-    border-top-left-radius: 8px;
+    border-bottom-right-radius: 8px;
     border-top-right-radius: 8px;
 }
 
@@ -505,6 +505,7 @@ ul.flat-vert {text-align: left;}
     z-index: 1;
     margin: 7px 5px 0px 5px;
 	color: wheat;
+    font-size: large;
 }
 
 .content .spacer { margin-bottom: 5px }
@@ -519,6 +520,7 @@ ul.flat-vert {text-align: left;}
     margin: 0px 5px 0 5px;
     width: 300px;
     color: wheat;
+    font-size: large;
 }
 
 .side .spacer {
@@ -829,6 +831,7 @@ ul.flat-vert {text-align: left;}
     float: left; 
     margin-top: 4px;
     margin-left: 0px; 
+    margin-bottom: 4%;
     background: transparent; 
     overflow: hidden;
     width: 20%;
@@ -1786,14 +1789,14 @@ body.with-listing-chooser.explore-page #header .pagename {
     padding: 5px 10px;
     margin: 5px;
     overflow: hidden; 
-    font-size: larger;
+    font-size: x-large;
     color: white;
 }
 
 .menuarea .spacer {display: inline; margin-right: 15px}
 
 .panestack-title {
-    margin: 10px 310px 0px 10px;
+    margin: 10px 10% 0px 10px;
     padding-bottom: 3px;
     border-bottom: 1px dotted gray;
 }
@@ -1820,7 +1823,7 @@ body.with-listing-chooser.explore-page #header .pagename {
 
 .commentarea .menuarea {
     border: none;
-    margin: 0 310px 10px 10px;
+    margin: 0 10% 10px 10px;
     padding: 0;
     color: gray;
 
@@ -2216,6 +2219,7 @@ a.star { text-decoration: none; color: #ff8b60 }
 	margin-left: 10px;
 	margin-top: 18px;
 	color: #888;
+    font-size: large;
  }
 
 .comment.noncollapsed {
@@ -2288,11 +2292,10 @@ body.show-controversial .comment.controversial > .entry .score:after {
     .midcol {
         margin-left: 0px;
         margin-right: 8px;
-        width: 31px;
     }
 
     .title {
-        font-size: small;
+        font-size: x-large;
         margin-top: 10px;
     }
 
@@ -2788,6 +2791,7 @@ textarea.gray { color: gray; }
     display: flex;
     display: -webkit-flex;
     max-width: 600px;
+    font-size: large;
 }
 
 .footer .col {
@@ -4647,7 +4651,6 @@ form input[type=radio] {margin: 2px .5em 0 0; }
 .thumbnail.self {
     height: 50px;
     background-image: url(../self_default2.png); /* SPRITE */
-    margin: 10px;
 }
 
 .thumbnail.default {
@@ -4870,7 +4873,7 @@ ul#image-preview-list .description pre {
 #sr-more-link {
     color: black;
     background-color: #f0f0f0;
-    position: absolute;
+    position: relative;
     right: 0;
     top: 0;
     padding: 0 5px 0 15px;
@@ -5303,11 +5306,11 @@ ul.tabmenu.formtab {
 .usertext-edit {
     margin-top: 5px;
     padding: 0 1px; /* so the border of help/textbox don't get chopped off */
-    width: 500px;
+    width: 90%;
 }
 
 .usertext-edit textarea {
-    width: 500px;
+    width: 90%;
     height: 100px;
 }
 

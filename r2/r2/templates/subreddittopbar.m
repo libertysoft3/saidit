@@ -37,9 +37,11 @@
       <%
         editmore = 'edit' if c.user_is_loggedin else 'more'
       %>
+
+       ${plain_link(format_html("- %s &raquo;", _(editmore)),
+                 "/subs/mine/", id="sr-more-link")}
+    
     </div>
 
-    ${plain_link(format_html("%s &raquo;", _(editmore)),
-                 "/subs/mine/", id="sr-more-link")}
   </div>
 </div>
