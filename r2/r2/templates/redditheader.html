@@ -50,14 +50,18 @@
             header_img = d.header
             header_size = d.header_size
             header_title = d.header_title
+
+        home_url = '/'
+        if c.extension:
+          home_url = "/.%s" % c.extension
     %>
     
     % if header_img != g.default_header_url:
         ${img_link(c.site.name, header_url(header_img),
-            '/', _id="header-img-a", img_id='header-img',
+            home_url, _id="header-img-a", img_id='header-img',
             title=header_title, size=header_size)}
     % else:
-        <a href="/" id="header-img" class="default-header">${g.domain}</a>
+        <a href="${home_url}" id="header-img" class="default-header">${g.domain}</a>
     % endif
     
     ##keeps the height of the header from varying when there isnt any content
