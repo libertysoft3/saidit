@@ -481,6 +481,7 @@ ul.flat-vert {text-align: left;}
     background-color: #2f2f2f;
     border-bottom-right-radius: 8px;
     border-top-right-radius: 8px;
+    display: block;
 
  }
 
@@ -846,8 +847,8 @@ body > .content .link.compressed .midcol {
     overflow: hidden; 
     margin-left: 3px;
     opacity: 1;
-    float: left;
-    width: 100%;
+    float: right;
+    width: 75%;
 }
 .domain { color: #888; font-size:large; white-space: nowrap; }
 .domain a {
@@ -1255,7 +1256,7 @@ body.with-listing-chooser.explore-page #header .pagename {
         overflow-y: hidden;
         position: relative;
         .md {
-            font-size: x-small;
+            font-size: medium;
             padding-bottom: 2px;
             p {
                 margin: 5px;
@@ -1755,7 +1756,7 @@ body.with-listing-chooser.explore-page #header .pagename {
     margin: 5px 10px;
 
     .md p {
-        font-size: smaller;
+        font-size: medium;
         margin: 1px 0 0;
     }
 
@@ -1837,7 +1838,7 @@ body.with-listing-chooser.explore-page #header .pagename {
 .commentarea .menuarea .toggle a {
     color: gray;
     font-weight: bold;
-    font-size: x-small;
+    font-size: medium;
 }
 
 .commentarea > .usertext {
@@ -2104,7 +2105,7 @@ a.star { text-decoration: none; color: #ff8b60 }
 .thing .stub { display: none; }
 .link.last-clicked { border: 1px dashed gray; overflow: hidden; }
 
-.link { margin: 0; margin-bottom: 31px; padding-left: 9px; margin-top: 18px;}
+.link { margin: 0; margin-bottom: 31px; padding-left: 9px; margin-top: 18px; display: inline-block;}
 .link .score {text-align: center; display: block; margin-right: 11%; font-size: 6.5vw;}
 .link .title {font-size:x-large; font-weight: normal; margin-bottom: 1px;}
 
@@ -2311,7 +2312,7 @@ body.show-controversial .comment.controversial > .entry .score:after {
     .child, .showreplies {
         margin-top: 10px; 
         margin-left: 15px; 
-        border-left: 1px dotted #DDF;
+    
     }
 
     &.collapsed-for-reason {
@@ -4354,7 +4355,8 @@ form input[type=radio] {margin: 2px .5em 0 0; }
     padding: 10px; 
     font-weight: bold; 
     vertical-align: top;
-    text-align: right;
+    text-align: left;
+    font-size: xx-large;
     white-space: nowrap;
 }
 .preftable th label { display: block; }
@@ -5385,7 +5387,7 @@ ul.tabmenu.formtab {
 }
 
 .roundfield .usertext-edit {
-    width: 500px;
+    width: 95%;
 }
 
 .roundfield textarea,
@@ -5395,7 +5397,7 @@ ul.tabmenu.formtab {
 .roundfield input[type=number],
 #compose-message .roundfield select {
     font-size: 100%;
-    width: 492px;
+    width: 95%;
     padding: 3px;
     margin: 0;
     border: 1px solid gray;

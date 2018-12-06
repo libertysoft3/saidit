@@ -143,14 +143,15 @@
   <tr>
     <th>${_("interface language")}</th>
      </tr>
-
+<tr>
     <td class="prefright">
       ${language_tool(allow_blank = False, show_regions = True,
                       default_lang = c.user.pref_lang)}
       &#32;<span class="details hover">(*) ${_("incomplete")}
     </span>
     </td>
- 
+ </tr>
+
   %if c.user_is_loggedin:
     %if not c.user.has_subscribed and (c.user.pref_use_global_defaults or c.user.pref_hide_locationbar):
     <tr>
@@ -166,10 +167,11 @@
   <tr>
     <th>${_("clicking options")}</th>
       </tr>
+  <tr>
     <td class="prefright">
       ${checkbox(_("open links in a new window"), "newwindow")}
     </td>
-
+  </tr>
   %if thing.feature_autoexpand_media_previews:
     <tr class="preferences-media">
   %else:
@@ -177,6 +179,7 @@
   %endif
     <th>${_("media")}</th>
       </tr>
+      <tr>
     <td class="prefright">
       %if thing.feature_autoexpand_media_previews:
         <h6>${_("thumbnails")}</h6>
@@ -211,10 +214,12 @@
         </span>
       %endif
     </td>
+    </tr>
 
   <tr>
     <th>${_("link options")}</th>
       </tr>
+     <tr>
     <td class="prefright">
  <!--      <p>
         ${checkbox(_("show the spotlight box on the front page"), "organic")}
@@ -259,10 +264,12 @@
       &#32;<span class="details">${_("(leave blank to show all submissions)")}</span>
       </p> -->
     </td>
+    </tr>
 
   <tr>
     <th>${_("comment options")}</th>
       </tr>
+      <tr>
     <td class="prefright">
     <p>
       ${_wsf("sort comments by %(sort)s", sort=unsafe(capture(comment_sort_options)))}
@@ -301,6 +308,7 @@
       ${_("the smaller the number, the faster your comments pages will load")}
     </span>
     </td>
+    </tr>
 
 
 
@@ -308,6 +316,7 @@
   <tr>
     <th>${_("messaging options")}</th>
       </tr>
+      <tr>
     <td class="prefright">
       ${checkbox(_("show message conversations in the inbox"), \
          "threaded_messages")}
@@ -337,10 +346,12 @@
       <br>
       ${checkbox(_("enable threaded modmail display"), "threaded_modmail")}
     </td>
+    </tr>
 
   <tr>
     <th>${_("display options")}</th>
       </tr>
+      <tr>
     <td class="prefright">
       
       ## CUSTOM: Site theme
@@ -369,10 +380,11 @@
         ${checkbox(_("show legacy search page"), "legacy_search")}
       %endif
     </td>
-
+	</tr>
   <tr>
     <th>${_("content options")}</th>
       </tr>
+    <tr>
     <td class="prefright">
       ${checkbox(_("I am over eighteen years old and willing to view adult content"), "over_18")}
       &#32;<span class="details">(${_("required to view some subreddits")})</span>
@@ -383,9 +395,12 @@
        &#32;<span class="details">
         ${_("(available from the 'RSS feed' tab in prefs)")}</span> -->
     </td>
+    </tr>
+  
   <tr>
     <th>${_("privacy options")}</th>
     </tr>
+    <tr>
     <td class="prefright">
       ${checkbox(_("make my votes public"), "public_votes")}
       &#32;
@@ -415,11 +430,13 @@
         )
       </span>
     </td>
+    </tr>
 
   % if feature.is_enabled('beta_opt_in'):
   <tr>
     <th>${_("beta options")}</th>
      </tr>
+     <tr>
     <td class="prefright">
       ${checkbox(_("I would like to beta test features for reddit"), "beta")}
       &#32;
@@ -432,6 +449,7 @@
           <a href="/${g.brander_community_abbr}/${g.beta_sr}/wiki">${_("details on the /" + g.brander_community_abbr + "/{beta_sr} wiki").format(beta_sr=g.beta_sr)}</a>)
       </span>
     </td>
+    </tr>
  
   %endif
 
@@ -450,11 +468,13 @@
   <tr>
     <th>${_("subscriptions")}</th>
       </tr>
+      <tr>
       <td class="prefright">
         <p>
           ${_wsf("unsubscribe from all subs %(sort)s", sort=unsafe(capture(unsubscribe_actions_options)))}
         </p>
     </td>
+    </tr>
 
 
   ## CUSTOM: chat
@@ -475,6 +495,7 @@
   <tr>
     <th>${_("chat")}</th>
       </tr>
+      <tr>
     <td class="prefright">
       ${checkbox(_("enable chat"), "chat_enabled")}
       <br/>
@@ -541,6 +562,7 @@
       <p>&#8226; "not connected": type and send IRC command "/connect" a few times until you re-connect to the IRC server</p>
       <p>&#8226; "authentication failed": refresh the page. ensure other browser tabs with chat are closed. try clearing your cache and cookies and login to this site again. if you still get this error, set a new IRC nickname above and click "save options".</p>
     </td>
+    </tr>
 
 
   ## end if logged in
@@ -550,6 +572,7 @@
   <tr class="gold-accent">
     <th>${_("gold options")}</th>
       </tr>
+      <tr>
     <td class="prefright">
         ${checkbox(_("hide ads"), "hide_ads")}
         <br>
@@ -570,10 +593,12 @@
         ${checkbox(_wsf("use a %(creddit_link)s to automatically renew my gold if it expires", creddit_link=creddit_link), "creddit_autorenew")}
     </td>
   </tr>
+
   %elif c.user.is_moderator_somewhere:
   <tr class="gold-accent">
     <th>${_("gold options")}</th>
     </tr>
+    <tr>
     <td class="prefright">
       ${checkbox(_("highlight new comments"), "highlight_new_comments")}
       <% gold_link = unsafe('&#32;<a href="/gold/about">' + _("gold system") + '</a>') %>
@@ -581,6 +606,7 @@
         (${_wsf("This a test feature, this will only apply in subs you moderate")})
       </span>
     </td>
+    </tr>
 
   %endif
 
@@ -590,6 +616,7 @@
     <tr class="gold-accent">
       <th>${_("reddit themes")}</th>
       </tr>
+      <tr>
       <td class="prefright">
         <div class="reddit-themes-description">
           <span>
@@ -630,6 +657,7 @@
         <p class="error">${_(error_list[thing.error_style_override])}</p>
       %endif
       </td>
+      </tr>
     
   %endif
 
