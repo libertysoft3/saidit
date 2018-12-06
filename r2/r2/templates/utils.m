@@ -136,7 +136,7 @@ ${first_defined(kw[1:])}
   </%call>
 </%def>
 
-<%def name="plain_link(link_text, path, _sr_path = True, nocname=False, fmt='', target='', **kw)">
+<%def name="plain_link(link_text, path, _sr_path = True, nocname=False, fmt='', target='', _retain_extension=True, **kw)">
   ## caching comment: 
   ##  in addition to the args, this function also makes use of
   ##  both c.site.name and c.render_style via add_sr.
@@ -149,7 +149,7 @@ ${first_defined(kw[1:])}
          kw['target'] = target
 
      link = _a_buffered(link_text, 
-                        href=path and add_sr(path, sr_path=_sr_path),
+                        href=path and add_sr(path, sr_path=_sr_path, retain_extension=_retain_extension),
                         **kw) 
   %>
 

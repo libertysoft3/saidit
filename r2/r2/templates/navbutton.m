@@ -27,7 +27,7 @@
                thing.path, _sr_path = thing.sr_path,
                target = thing.target, 
                _class = thing.css_class, _id = thing._id,
-               data=thing.data)}
+               data=thing.data, _retain_extension=thing.retain_extension)}
 </%def>
 
 <%def name="js()">

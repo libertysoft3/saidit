@@ -302,7 +302,7 @@ class NavButton(Styled):
     _style = "plain"
 
     def __init__(self, title, dest, sr_path=True, aliases=None,
-                 target="", use_params=False, css_class='', data=None):
+                 target="", use_params=False, css_class='', data=None, retain_extension=True):
         aliases = aliases or []
         aliases = set(_force_unicode(a.rstrip('/')) for a in aliases)
         if dest:
@@ -317,6 +317,7 @@ class NavButton(Styled):
         self.target = target
         self.use_params = use_params
         self.data = data
+        self.retain_extension = retain_extension
 
         Styled.__init__(self, self._style, css_class=css_class)
 
