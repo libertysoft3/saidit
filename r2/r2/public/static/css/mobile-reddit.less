@@ -377,6 +377,7 @@ ul.flat-vert {text-align: left;}
     font-size: 1.2em;
     vertical-align: bottom;
     font-size: x-large;
+    display: block;
 }
 .pagename a {color: black; }
 .redditname { }
@@ -464,16 +465,15 @@ ul.flat-vert {text-align: left;}
 .tabmenu {
     list-style-type: none;
     white-space: nowrap;
-    display: inline-grid;
     margin-top: 5px;
     vertical-align: bottom;
     font-size: large;
+    margin-top: -52px;
 }
 
 .tabmenu li {
-    display: inline;
     font-weight: bold;
-    margin: 0px 3px;
+    margin: 2px 0px;
 }
 
 .tabmenu li a {
@@ -481,7 +481,7 @@ ul.flat-vert {text-align: left;}
     background-color: #2f2f2f;
     border-bottom-right-radius: 8px;
     border-top-right-radius: 8px;
-    display: block;
+    
 
  }
 
@@ -519,13 +519,14 @@ ul.flat-vert {text-align: left;}
     float: right; 
     background-color: #2f2f2f; 
     margin: 0px 5px 0 5px;
-    width: 300px;
+    width: 95%;
     color: wheat;
-    font-size: large;
+    font-size: small;
+    padding-top: 47px;
 }
 
 .side .spacer {
-    margin: 7px 0 12px 0;
+    margin: 7px 26px 12px 0;
  }
 
 .side .side-message {
@@ -798,8 +799,8 @@ ul.flat-vert {text-align: left;}
     outline: none;
     float: left;
     background-position-y: center;
-    padding-top: 102%;
-    padding-bottom: 21%;
+    padding-top: 116%;
+    padding-bottom: 25%;
     }
 
 
@@ -830,12 +831,10 @@ ul.flat-vert {text-align: left;}
 
 .midcol {
     float: left; 
-    margin-top: 4px;
+    margin-top: 0px;
     margin-left: 0px; 
-    margin-bottom: 4%;
     background: transparent; 
-    overflow: hidden;
-    width: 20%;
+    width: 17%;
 }
 
 body > .content .link.compressed .midcol {
@@ -848,7 +847,8 @@ body > .content .link.compressed .midcol {
     margin-left: 3px;
     opacity: 1;
     float: right;
-    width: 75%;
+    width: 100%;
+    padding-bottom: 15px;
 }
 .domain { color: #888; font-size:large; white-space: nowrap; }
 .domain a {
@@ -2119,7 +2119,7 @@ a.star { text-decoration: none; color: #ff8b60 }
 
 .profile-page .link .rank, .single-page .link .rank { display: none; }
 
-.link .midcol {font-size: x-large; text-align: center; width: 20%;}
+.link .midcol {font-size: x-large; text-align: center; width: 17%; padding-bottom: 6%; margin-top: -22px;}
 
 .link .score.likes   { color: #FF8B60; }
 .link .score.dislikes { color: #9494FF; }
@@ -2293,6 +2293,10 @@ body.show-controversial .comment.controversial > .entry .score:after {
     .midcol {
         margin-left: 0px;
         margin-right: 8px;
+        display: inline-flex;
+        width: 100px;
+        margin-top: -31px;
+        height: 100px;
     }
 
     .title {
@@ -3226,7 +3230,7 @@ label + #moresearchinfo {
     font-size: 13px;
     font-family: verdana; /* Override Chrome's defaults. */
 	color: white;
-    width: 300px;
+    width: 90%;
     .box-sizing(border-box);
     padding: 6px;
     padding-right: 25px; /* 13px image + 6px right margin + 6px left margin */
@@ -4808,10 +4812,9 @@ ul#image-preview-list .description pre {
 
 #sr-header-area {
     background-color: #f0f0f0;
-    white-space: nowrap;
     text-transform: uppercase;
     border-bottom: 1px solid gray;
-    font-size: 90%;
+    font-size: 151%;
     height: 18px;
     line-height: 18px;
  }
@@ -5094,7 +5097,7 @@ ul.tabmenu.formtab {
 /******* embed stuff ******/
 .expando {
     clear: left;
-    margin: 5px 0 5px 0;
+    margin: 5px 5px 5px 0;
     position: relative;
 
     .form-bar {
@@ -11587,20 +11590,23 @@ body:not(.loggedin) .report-button {
 	background-color: #000000;
 	background-image: url(../header-banner-85.jpg);
 	background-position: top left;
-	background-repeat: no-repeat;
-	min-height: 83px; /* can fine tune and hide top of banner */
+	
+	min-height: 106px; /* can fine tune and hide top of banner */
 	border-color: #000000;
 }
 #header-img.default-header {
-	display: block;
+	
 	margin: 0px 0 0px 0; /* can fine tune vertical posittion */
  	
 	/* NOTE: you can only set these styles because the logo has been removed from the sprite image */
-	background-position: 109px 0;
+	background-position: 81px 0;
 	background-repeat: no-repeat;
 }
 .pagename, .pagename a {
 	color: #ffffff;
+	text-align: right;
+	height: 0px;
+	margin-bottom: 55px;
 }
 
 
@@ -11626,6 +11632,7 @@ body:not(.loggedin) .report-button {
 }
 #sr-header-area {
 	border-bottom: none;
+	padding-bottom: 48px;
 }
 
 /* CUSTOM: See more custom imports at top of file */

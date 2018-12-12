@@ -29,18 +29,20 @@
   <div class="width-clip">
     ${thing.my_subreddits_dropdown}
 
+     <%
+        editmore = 'edit' if c.user_is_loggedin else 'more'
+      %>
+
+       ${plain_link(format_html("%s &raquo;", _(editmore)),
+                 "/subs/mine/", id="sr-more-link")}
+    
+
     <div class="sr-list">
       %for m in thing.sr_bar():
         ${m.render()}
       %endfor
 
-      <%
-        editmore = 'edit' if c.user_is_loggedin else 'more'
-      %>
-
-       ${plain_link(format_html("- %s &raquo;", _(editmore)),
-                 "/subs/mine/", id="sr-more-link")}
-    
+ 
     </div>
 
   </div>

@@ -1063,9 +1063,9 @@ class Reddit(Templated):
             elif isinstance(c.site, AllSR) and not isinstance(c.site, HomeSR):
                 func = 'subredditheadertitle'
             # NOTE: fails for url https://www.reddit.local/try.compact?dest=/.mobile your redirect when appending 'mobile' or when visiting simple.reddit.local, comment out to see page
-            toolbar.insert(0, PageNameNav(func))
+            toolbar.insert(1, PageNameNav(func))
         elif isinstance(c.site, DefaultSR):
-            toolbar.insert(0, PageNameNav('subredditheadertitle'))
+            toolbar.insert(1, PageNameNav('subredditheadertitle'))
 
         return toolbar
 
@@ -1181,16 +1181,16 @@ class RedditFooter(CachedTemplate):
     def __init__(self):
         self.nav = [
             NavMenu([
+                    OffsiteButton(_("Welcome to saidit"), "https://saidit.net/s/SaidIt/comments/37r/welcome_to_saiditnet/"),
                     OffsiteButton(_("official sub"), "https://saidit.net/s/SaidIt"),
-                    OffsiteButton(_("welcome to saidit"), "https://saidit.net/s/SaidIt/comments/37r/welcome_to_saiditnet/"),
+                    OffsiteButton(_("canary"), "https://saidit.net/s/SaiditCanary"),
                 ],
                 title = _("about"),
                 type = "flat_vert",
                 separator = ""),
 
             NavMenu([
-                    OffsiteButton(_("contact"), "https://saidit.net/s/help"),
-                    OffsiteButton(_("list all subs"), "https://saidit.net/subs"),
+                    OffsiteButton(_("contact"), "https://saidit.net/s/help"),    
                     OffsiteButton(_("terms & content policy"), "https://saidit.net/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/"),
                 ],
                 title = _("help"),
@@ -1198,9 +1198,11 @@ class RedditFooter(CachedTemplate):
                 separator = ""),
 
             NavMenu([
-                    OffsiteButton(_("RES for saidit"), "https://saidit.net/s/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
+
                     OffsiteButton(_("open source code"), "https://github.com/libertysoft3/reddit-ae", retain_extension=False),
-                    OffsiteButton(_("canary"), "https://saidit.net/s/SaiditCanary"),
+                    OffsiteButton(_("RES for saidit"), "https://saidit.net/s/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
+                    OffsiteButton(_("list all subs"), "https://saidit.net/subs"),
+                    OffsiteButton(_("recent comments"), "https://saidit.net/comments"),
                 ],
                 title = _("apps & tools"),
                 type = "flat_vert",

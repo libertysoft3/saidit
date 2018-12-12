@@ -41,6 +41,7 @@
   %if thing.nextprev and (thing.prev or thing.next):
     <div class="nav-buttons" style="margin-top: 26px; margin-left: 10px;">
       <span class="nextprev">${_("view more:")}&#32;
+      <br>
       %if thing.prev:
         ${plain_link(format_html("&lsaquo; %s", _("prev")), thing.prev, rel="nofollow prev")}
       %endif
