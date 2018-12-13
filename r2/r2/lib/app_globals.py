@@ -418,6 +418,7 @@ class Globals(object):
         ],
         ConfigValue.dict(ConfigValue.str, ConfigValue.str): [
             'employee_approved_clients',
+	    'mobile_auth_allowed_clients',
             'modmail_forwarding_email',
             'modmail_account_map',
         ],
@@ -726,6 +727,8 @@ class Globals(object):
         # readability.
         self.employee_approved_clients = \
             self.live_config["employee_approved_clients"].values()
+
+        self.mobile_auth_allowed_clients = self.live_config["mobile_auth_allowed_clients"].values()
 
         self.startup_timer.intermediate("zookeeper")
 
