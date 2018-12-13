@@ -316,7 +316,7 @@ class OAuth2AccessController(MinimalController):
                  "refresh_token",
                  "password",
                  "client_credentials",
-                 "https://oauth.reddit.com/grants/installed_client",
+                 "https://oauth.saidit.net/grants/installed_client",
             )
         ),
     )
@@ -362,7 +362,7 @@ class OAuth2AccessController(MinimalController):
             return self._access_token_password()
         elif grant_type == "client_credentials":
             return self._access_token_client_credentials()
-        elif grant_type == "https://oauth.reddit.com/grants/installed_client":
+        elif grant_type == "https://oauth.saidit.net/grants/installed_client":
             return self._access_token_extension_client_credentials()
         else:
             resp = {"error": "unsupported_grant_type"}
