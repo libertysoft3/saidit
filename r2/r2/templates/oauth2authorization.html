@@ -50,7 +50,7 @@
       )
     %>
     ${_wsf(
-      "Hey %(username)s! %(app)s would like to connect with your reddit account.",
+      "Hey %(username)s! %(app)s would like to connect with your SaidIt account.",
       app=unsafe(app_link(thing.client)),
       username=username_link,
     )}
@@ -61,7 +61,7 @@
         ${scope_details(thing.scope, expiration=thing.expiration)}
     </div>
     <p class="notice">
-        ${_wsf("%(app)s will not be able to access your reddit password.", app=app_name)}
+        ${_wsf("%(app)s will not be able to access your SaidIt password.", app=app_name)}
     </p>
     <form method="post" action="/api/v1/authorize" class="pretty-form">
       <input type="hidden" name="client_id" value="${thing.client._id}" />
