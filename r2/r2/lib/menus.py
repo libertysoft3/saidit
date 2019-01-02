@@ -56,7 +56,7 @@ menu =   MenuHandler(hot          = _('hot'),
                      top          = _('top'),
                      more         = _('more'),
                      relevance    = _('relevance'),
-                     # CUSTOM: set key to g.voting_controversial_path
+                     # NOTE: manually set key to g.voting_controversial_path
                      funny        = _(g.voting_controversial_name),
                      gilded       = _('gilded'),
                      confidence   = _('best'),

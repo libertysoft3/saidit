@@ -1022,6 +1022,9 @@ class Reddit(Templated):
                 """main_buttons.append(NamedButton('gilded',
                                                 aliases=['/comments/gilded']))"""
 
+            if feature.is_enabled('sr_comments_sort'):
+                main_buttons.append(NamedButton('comments'))
+
             mod = False
             if c.user_is_loggedin:
                 mod = bool(c.user_is_admin
@@ -1063,9 +1066,15 @@ class Reddit(Templated):
             elif isinstance(c.site, AllSR) and not isinstance(c.site, HomeSR):
                 func = 'subredditheadertitle'
             # NOTE: fails for url https://www.reddit.local/try.compact?dest=/.mobile your redirect when appending 'mobile' or when visiting simple.reddit.local, comment out to see page
-            toolbar.insert(1, PageNameNav(func))
+            if c.render_style == g.extension_subdomain_mobile_v2_render_style:
+                toolbar.insert(1, PageNameNav(func))
+            else:
+                toolbar.insert(0, PageNameNav(func))
         elif isinstance(c.site, DefaultSR):
-            toolbar.insert(1, PageNameNav('subredditheadertitle'))
+            if c.render_style == g.extension_subdomain_mobile_v2_render_style:
+                toolbar.insert(1, PageNameNav('subredditheadertitle'))
+            else:
+                toolbar.insert(0, PageNameNav('subredditheadertitle'))
 
         return toolbar
 
