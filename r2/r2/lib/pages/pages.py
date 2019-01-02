@@ -1181,7 +1181,7 @@ class RedditFooter(CachedTemplate):
     def __init__(self):
         self.nav = [
             NavMenu([
-                    OffsiteButton(_("Welcome to saidit"), "https://saidit.net/s/SaidIt/comments/37r/welcome_to_saiditnet/"),
+                    OffsiteButton(_("welcome to saidit"), "https://saidit.net/s/SaidIt/comments/37r/welcome_to_saiditnet/"),
                     OffsiteButton(_("official sub"), "https://saidit.net/s/SaidIt"),
                     OffsiteButton(_("canary"), "https://saidit.net/s/SaiditCanary"),
                 ],
@@ -1203,6 +1203,8 @@ class RedditFooter(CachedTemplate):
                     OffsiteButton(_("RES for saidit"), "https://saidit.net/s/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
                     OffsiteButton(_("list all subs"), "https://saidit.net/subs"),
                     OffsiteButton(_("recent comments"), "https://saidit.net/comments"),
+                    OffsiteButton(_("mobile site"), "https://m.saidit.net"),
+                    OffsiteButton(_("android app"), "https://play.google.com/store/apps/details?id=org.saiditnet.redreader"),
                 ],
                 title = _("apps & tools"),
                 type = "flat_vert",
