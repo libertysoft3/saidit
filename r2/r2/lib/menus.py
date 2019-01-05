@@ -56,6 +56,8 @@ menu =   MenuHandler(hot          = _('hot'),
                      top          = _('top'),
                      more         = _('more'),
                      relevance    = _('relevance'),
+                     # NOTE: manually set key to g.voting_upvote_path
+                     insightful   = _(g.voting_upvote_name),
                      # NOTE: manually set key to g.voting_controversial_path
                      funny        = _(g.voting_controversial_name),
                      gilded       = _('gilded'),
@@ -556,7 +558,7 @@ class SortMenu(NavMenu):
 
     # these are _ prefixed to avoid colliding with NavMenu attributes
     _default = 'hot'
-    _options = ('hot', 'new', 'top', 'old', g.voting_controversial_path)
+    _options = ('hot', 'new', 'top', 'old', g.voting_upvote_path, g.voting_controversial_path)
     _type = 'lightdrop'
     _title = N_("sorted by")
 
@@ -587,6 +589,7 @@ class SortMenu(NavMenu):
         "new": operators.desc('_date'),
         "old": operators.asc('_date'),
         "top": operators.desc('_score'),
+        g.voting_upvote_path: operators.desc('_upvotes'),
         g.voting_controversial_path: operators.desc('_controversy'),
         "confidence": operators.desc('_confidence'),
         "random": operators.shuffled('_confidence'),
@@ -605,13 +608,13 @@ class SortMenu(NavMenu):
 
 class ProfileSortMenu(SortMenu):
     _default = 'new'
-    _options = ('hot', 'new', 'top', g.voting_controversial_path)
+    _options = ('hot', 'new', 'top', g.voting_upvote_path, g.voting_controversial_path)
 
 
 class CommentSortMenu(SortMenu):
     """Sort menu for comments pages"""
     _default = 'new'
-    _options = ('confidence', 'top', 'new', g.voting_controversial_path, 'old', 'random',
+    _options = ('confidence', 'top', 'new', g.voting_upvote_path, g.voting_controversial_path, 'old', 'random',
                 'qa',)
     hidden_options = ['random', 'confidence', 'qa', 'old']
 
@@ -677,7 +680,7 @@ class SubredditSearchSortMenu(SortMenu):
 class RecSortMenu(SortMenu):
     """Sort menu for recommendation page"""
     _default = 'new'
-    _options = ('hot', 'new', 'top', g.voting_controversial_path, 'relevance')
+    _options = ('hot', 'new', 'top', g.voting_upvote_path, g.voting_controversial_path, 'relevance')
 
 
 class KindMenu(SortMenu):

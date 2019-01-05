@@ -35,7 +35,7 @@ MESSAGE_TREE_SIZE_LIMIT = 15000
 
 
 def write_comment_scores(link, comments):
-    for sort in ("_controversy", "_confidence", "_score", "_qa"):
+    for sort in ("_upvotes", "_controversy", "_confidence", "_score", "_qa"):
         scores = calculate_comment_scores(link, sort, comments)
         CommentScoresByLink.set_scores(link, sort, scores)
 
@@ -71,7 +71,7 @@ def add_comments(comments):
 
 
 def calculate_comment_scores(link, sort, comments):
-    if sort in ("_controversy", "_confidence", "_score"):
+    if sort in ("_upvotes", "_controversy", "_confidence", "_score"):
         scores = {
             comment._id36: getattr(comment, sort)
             for comment in comments

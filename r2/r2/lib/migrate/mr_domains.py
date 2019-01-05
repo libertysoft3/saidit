@@ -52,7 +52,7 @@ cat links.joined | paster --plugin=r2 run $INI r2/lib/migrate/mr_domains.py -c "
 import sys
 
 from r2.models import Account, Subreddit, Link
-from r2.lib.db.sorts import epoch_seconds, score, controversy, _hot
+from r2.lib.db.sorts import epoch_seconds, score, upvotes, controversy, _hot
 from r2.lib.db import queries
 from r2.lib import mr_tools
 from r2.lib.utils import timeago, UrlParser
@@ -86,9 +86,12 @@ def time_listings(times = ('all',)):
                     sc = score(ups, downs)
                     contr = controversy(ups, downs)
                     h = _hot(ups, downs, timestamp)
+                    upvotes = upvotes(ups)
                     for domain in domains:
                         yield ('domain/top/%s/%s' % (tkey, domain),
                                sc, timestamp, fname)
+                        yield ('domain/%s/%s/%s' % (g.voting_upvote_path, tkey, domain),
+                               upvotes, timestamp, fname)
                         yield ('domain/%s/%s/%s' % (g.voting_controversial_path, tkey, domain),
                                contr, timestamp, fname)
                         if tkey == "all":
@@ -129,7 +132,7 @@ def store_keys(key, maxes):
         if sort == 'controversy':
             # I screwed this up in the mapper and it's too late to fix
             # it
-            sort = 'controversial'
+            sort = g.voting_controversial_path
 
         q = queries.get_links(Subreddit._byID(sr_id), sort, time)
         q._insert_tuples([tuple([item[-1]] + map(float, item[:-1]))

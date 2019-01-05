@@ -252,7 +252,7 @@ def consume_link_vote_queue(qname="vote_link_q"):
 
 # these sorts can be changed by voting - we don't need to do "new" since that's
 # taken care of by new_link and doesn't change afterwards
-SORTS = ["hot", "top", g.voting_controversial_path]
+SORTS = ["hot", "top", g.voting_upvote_path, g.voting_controversial_path]
 
 
 def add_to_author_query_q(link):

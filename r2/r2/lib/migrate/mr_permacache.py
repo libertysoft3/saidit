@@ -28,22 +28,22 @@ storage failure in Cassandra
 """
 cat > mr_permacache <<HERE
 #!/bin/sh
-cd ~/reddit/r2
-paster run staging.ini ./mr_permacache.py -c "\$1"
+cd ~/src/reddit/r2
+paster run development.ini r2/lib/migrate/mr_permacache.py -c "\$1"
 HERE
 chmod u+x mr_permacache
 
-LINKDBHOST=prec01
-COMMENTDBHOST=db02s1
-VOTEDBHOST=db03s1
-SAVEHIDEDBHOST=db01s1
+LINKDBHOST=localhost
+COMMENTDBHOST=localhost
+VOTEDBHOST=localhost
+SAVEHIDEDBHOST=localhost
 
 ## links
-time psql -F"\t" -A -t -d newreddit -U ri -h $LINKDBHOST \
+time psql -F"\t" -A -t -d reddit -U reddit -h $LINKDBHOST \
      -c "\\copy (select t.thing_id, 'thing', 'link',
                         t.ups, t.downs, t.deleted, t.spam, extract(epoch from t.date)
                    from reddit_thing_link t) to 'reddit_thing_link.dump'"
-time psql -F"\t" -A -t -d newreddit -U ri -h $LINKDBHOST \
+time psql -F"\t" -A -t -d reddit -U reddit -h $LINKDBHOST \
      -c "\\copy (select d.thing_id, 'data', 'link',
                         d.key, d.value
                    from reddit_data_link d
@@ -52,17 +52,17 @@ pv reddit_data_link.dump reddit_thing_link.dump | sort -T. -S200m | ./mr_permaca
 pv links.joined | ./mr_permacache "link_listings()" | sort -T. -S200m > links.listings
 
 ## comments
-psql -F"\t" -A -t -d newreddit -U ri -h $COMMENTDBHOST \
+psql -F"\t" -A -t -d reddit -U reddit -h $COMMENTDBHOST \
      -c "\\copy (select t.thing_id, 'thing', 'comment',
                         t.ups, t.downs, t.deleted, t.spam, extract(epoch from t.date)
                    from reddit_thing_comment t) to 'reddit_thing_comment.dump'"
-psql -F"\t" -A -t -d newreddit -U ri -h $COMMENTDBHOST \
+psql -F"\t" -A -t -d reddit -U reddit -h $COMMENTDBHOST \
      -c "\\copy (select d.thing_id, 'data', 'comment',
                         d.key, d.value
                    from reddit_data_comment d
                   where d.key = 'author_id') to 'reddit_data_comment.dump'"
 cat reddit_data_comment.dump reddit_thing_comment.dump | sort -T. -S200m | ./mr_permacache "join_comments()" > comments.joined
-cat links.joined | ./mr_permacache "comment_listings()" | sort -T. -S200m > comments.listings
+cat comments.joined | ./mr_permacache "comment_listings()" | sort -T. -S200m > comments.listings
 
 ## linkvotes
 psql -F"\t" -A -t -d newreddit -U ri -h $VOTEDBHOST \
@@ -99,7 +99,7 @@ from r2.lib.mr_tools import dataspec_m_thing, dataspec_m_rel, join_things
 from dateutil.parser import parse as parse_timestamp
 
 from r2.models import *
-from r2.lib.db.sorts import epoch_seconds, score, controversy, _hot
+from r2.lib.db.sorts import epoch_seconds, score, upvotes, controversy, _hot
 from r2.lib.utils import fetch_things2, in_chunks, progress, UniqueIterator, tup
 from r2.lib import comment_tree
 from r2.lib.db import queries
@@ -129,14 +129,19 @@ def link_listings():
                    timestamp, fname)
             yield 'sr-new-all-%d' % sr_id, timestamp, fname
             yield 'sr-top-all-%d' % sr_id, score(ups, downs), timestamp, fname
-            yield ('sr-controversial-all-%d' % sr_id,
+            yield ('sr-%s-all-%d' % (g.voting_upvote_path, sr_id),
+                   upvotes(ups), timestamp, fname)
+            yield ('sr-%s-all-%d' % (g.voting_controversial_path, sr_id),
                    controversy(ups, downs), timestamp, fname)
             for time in '1 year', '1 month', '1 week', '1 day', '1 hour':
                 if timestamp > epoch_seconds(timeago(time)):
                     tkey = time.split(' ')[1]
                     yield ('sr-top-%s-%d' % (tkey, sr_id),
                            score(ups, downs), timestamp, fname)
-                    yield ('sr-controversial-%s-%d' % (tkey, sr_id),
+                    yield ('sr-%s-%s-%d' % (g.voting_upvote_path, tkey, sr_id),
+                           upvotes(ups),
+                           timestamp, fname)
+                    yield ('sr-%s-%s-%d' % (g.voting_controversial_path, tkey, sr_id),
                            controversy(ups, downs),
                            timestamp, fname)
 
@@ -200,7 +205,7 @@ def store_keys(key, maxes):
         if sort == 'controversy':
             # I screwed this up in the mapper and it's too late to fix
             # it
-            sort = 'controversial'
+            sort = g.voting_controversial_path
 
         q = queries.get_links(Subreddit._byID(sr_id), sort, time)
         insert_to_query(q, [tuple([item[-1]] + map(float, item[:-1]))

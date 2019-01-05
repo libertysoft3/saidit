@@ -28,12 +28,13 @@
 import sys
 
 from r2.models import Link, Comment
-from r2.lib.db.sorts import epoch_seconds, score, controversy
+from r2.lib.db.sorts import epoch_seconds, score, upvotes, controversy
 from r2.lib.db import queries
 from r2.lib import mr_tools
 from r2.lib.utils import timeago, UrlParser
 from r2.lib.jsontemplates import make_fullname # what a strange place
                                                # for this function
+from pylons import app_globals as g
 
 thingcls_by_name = {
     "link": Link,
@@ -78,6 +79,7 @@ def time_listings(intervals, thing_type):
         thing_cls = thingcls_by_name[thing.thing_type]
         fname = make_fullname(thing_cls, thing.thing_id)
         thing_score = score(thing.ups, thing.downs)
+        thing_upvotes = upvotes(thing.ups)
         thing_controversy = controversy(thing.ups, thing.downs)
 
         for interval, cutoff in cutoff_by_interval.iteritems():
@@ -86,7 +88,9 @@ def time_listings(intervals, thing_type):
 
             yield ("user/%s/top/%s/%d" % (thing.thing_type, interval, thing.author_id),
                    thing_score, thing.timestamp, fname)
-            yield ("user/%s/controversial/%s/%d" % (thing.thing_type, interval, thing.author_id),
+            yield ("user/%s/%s/%s/%d" % (thing.thing_type, g.voting_upvote_path, interval, thing.author_id),
+                   thing_upvotes, thing.timestamp, fname)
+            yield ("user/%s/%s/%s/%d" % (thing.thing_type, g.voting_controversial_path, interval, thing.author_id),
                    thing_controversy, thing.timestamp, fname)
 
             if thing.spam:
@@ -95,7 +99,9 @@ def time_listings(intervals, thing_type):
             if thing.thing_type == "link":
                 yield ("sr/link/top/%s/%d" % (interval, thing.sr_id),
                        thing_score, thing.timestamp, fname)
-                yield ("sr/link/controversial/%s/%d" % (interval, thing.sr_id),
+                yield ("sr/link/%s/%s/%d" % (g.voting_upvote_path, interval, thing.sr_id),
+                       thing_upvotes, thing.timestamp, fname)
+                yield ("sr/link/%s/%s/%d" % (g.voting_controversial_path, interval, thing.sr_id),
                        thing_controversy, thing.timestamp, fname)
 
                 if thing.url:
@@ -107,7 +113,9 @@ def time_listings(intervals, thing_type):
                     for domain in parsed.domain_permutations():
                         yield ("domain/link/top/%s/%s" % (interval, domain),
                                thing_score, thing.timestamp, fname)
-                        yield ("domain/link/controversial/%s/%s" % (interval, domain),
+                        yield ("domain/link/%s/%s/%s" % (g.voting_upvote_path, interval, domain),
+                               thing_upvotes, thing.timestamp, fname)
+                        yield ("domain/link/%s/%s/%s" % (g.voting_controversial_path, interval, domain),
                                thing_controversy, thing.timestamp, fname)
 
     mr_tools.mr_map(process)

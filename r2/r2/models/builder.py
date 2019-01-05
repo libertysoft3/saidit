@@ -974,13 +974,13 @@ class CommentOrdererBase(object):
 SORT_OPERATOR_BY_NAME = {
     "new": operators.desc('_date'),
     "old": operators.asc('_date'),
-    "controversial": operators.desc('_controversy'),
     "confidence": operators.desc('_confidence'),
     "qa": operators.desc('_qa'),
     "hot": operators.desc('_hot'),
     "top": operators.desc('_score'),
     "random": operators.shuffled('_confidence'),
 }
+SORT_OPERATOR_BY_NAME[g.voting_upvote_path] = operators.desc('_upvotes')
 SORT_OPERATOR_BY_NAME[g.voting_controversial_path] = operators.desc('_controversy')
 
 

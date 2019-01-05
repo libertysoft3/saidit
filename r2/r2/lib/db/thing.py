@@ -683,6 +683,10 @@ class Thing(DataThing):
         return sorts.score(self._ups, self._downs)
 
     @property
+    def _upvotes(self):
+        return sorts.upvotes(self._ups)
+
+    @property
     def _controversy(self):
         return sorts.controversy(self._ups, self._downs)
 

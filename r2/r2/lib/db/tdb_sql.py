@@ -146,6 +146,7 @@ def index_commands(table, type):
         commands.append(index_str(table, 'deleted_spam', 'deleted, spam'))
         commands.append(index_str(table, 'hot', 'hot(ups, downs, date), date'))
         commands.append(index_str(table, 'score', 'score(ups, downs), date'))
+        commands.append(index_str(table, 'upvotes', 'upvotes(ups), date'))
         commands.append(index_str(table, 'controversy', 'controversy(ups, downs), date'))
     elif type == 'data':
         commands.append(index_str(table, 'key_value', 'key, substring(value, 1, %s)' \
@@ -745,6 +746,8 @@ def translate_sort(table, column_name, lval = None, rewrite_name = True):
             return sa.func.hot(table.c.ups, table.c.downs, table.c.date)
         elif column_name == 'score':
             return sa.func.score(table.c.ups, table.c.downs)
+        elif column_name == 'upvotes':
+            return sa.func.upvotes(table.c.ups)
         elif column_name == 'controversy':
             return sa.func.controversy(table.c.ups, table.c.downs)
     #else

@@ -76,16 +76,17 @@ from r2.models.query_cache import (
     UserQueryCache,
 )
 from r2.models.vote import Vote
+from r2.models.comment_tree import CommentTree
 
 
 precompute_limit = 1000
 
 db_sorts = dict(hot = (desc, '_hot'),
                 new = (desc, '_date'),
-                top = (desc, '_score'),
-                controversial = (desc, '_controversy'))
+                top = (desc, '_score'))
 
 def db_sort(sort):
+    db_sorts[g.voting_upvote_path] = (desc, '_upvotes')
     db_sorts[g.voting_controversial_path] = (desc, '_controversy')
     cls, col = db_sorts[sort]
     return cls(col)
@@ -101,7 +102,7 @@ db_times = dict(all = None,
 # etc). All of these but 'all' are done in mr_top, who knows about the
 # structure of the stored CachedResults (so changes here may warrant
 # changes there)
-time_filtered_sorts = set(('top', 'controversial'))
+time_filtered_sorts = set(('top', g.voting_upvote_path, g.voting_controversial_path))
 
 #we need to define the filter functions here so cachedresults can be pickled
 def filter_identity(x):
@@ -195,6 +196,7 @@ class CachedResults(object):
         if self.query._sort in ([desc('_date')],
                                 [desc('_hot'), desc('_date')],
                                 [desc('_score'), desc('_date')],
+                                [desc('_upvotes'), desc('_date')],
                                 [desc('_controversy'), desc('_date')]):
             if not any(r for r in self.query._rules
                        if r.lval.name == '_date'):
@@ -1639,7 +1641,8 @@ def unban(things, insert=True):
             # put it back in the listings
             results = [get_links(sr, 'hot', 'all'),
                        get_links(sr, 'top', 'all'),
-                       get_links(sr, 'controversial', 'all'),
+                       get_links(sr, g.voting_upvote_path, 'all'),
+                       get_links(sr, g.voting_controversial_path, 'all'),
                        ]
             # the time-filtered listings will have to wait for the
             # next mr_top run
@@ -1749,7 +1752,7 @@ def add_all_srs():
        very slow."""
     q = Subreddit._query(sort = asc('_date'))
     for sr in fetch_things2(q):
-        g.log.warning("!!! permacache add_all_srs() %s" % sr.name)
+        g.log.warning("permacache updating sr %s" % sr.name)
         for q in all_queries(get_links, sr, ('hot', 'new'), ['all']):
             q.update()
         for q in all_queries(get_links, sr, time_filtered_sorts, db_times.keys()):
@@ -1766,7 +1769,7 @@ def update_user(user):
     elif isinstance(user, int):
         user = Account._byID(user)
 
-    g.log.warning("!!! permacache update_user() %s" % user.name)
+    g.log.warning("permacache updating user %s" % user.name)
     results = [get_inbox_messages_results(user),
                get_inbox_messages_results(user),
                get_inbox_selfreply_results(user),
@@ -1794,6 +1797,13 @@ def add_all_users():
     q = Account._query(sort = asc('_date'))
     for user in fetch_things2(q):
         update_user(user)
+
+# Rebuild permacache comment trees for every link
+def add_all_comments():
+    q = Link._query(sort = desc('_date'))
+    for link in fetch_things2(q):
+        g.log.warning("permacache updating comments for link %s" % link._id)
+        CommentTree.rebuild(link)
 
 # amqp queue processing functions
 

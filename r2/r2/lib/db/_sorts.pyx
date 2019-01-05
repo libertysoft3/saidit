@@ -67,6 +67,9 @@ cpdef double _hot(long ups, long downs, double date):
     # return round(sign * order + seconds / 45000, 7)
     return round(sign * order + seconds / 180000, 7)
 
+cpdef long upvotes(long ups):
+    return ups
+
 cpdef double controversy(long ups, long downs):
     """The controversy sort, now called funny."""
     # CUSTOM: self-voting allows 0 ups, prevent divide by zero
