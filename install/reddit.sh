@@ -134,11 +134,11 @@ function clone_reddit_repo {
 }
 
 function clone_reddit_service_repo {
-    clone_reddit_repo $1 reddit/reddit-service-$1
+    clone_reddit_repo $1 reddit-archive/reddit-service-$1
 }
 
 clone_reddit_repo reddit libertysoft3/reddit-ae
-clone_reddit_repo i18n reddit/reddit-i18n
+clone_reddit_repo i18n reddit-archive/reddit-i18n
 clone_reddit_service_repo websockets
 clone_reddit_service_repo activity
 clone_reddit_repo snudown libertysoft3/snudown
