@@ -60,7 +60,6 @@ def cast_vote(user, thing, direction, **data):
 
     # CUSTOM: voting model, validate direction
     if direction not in (Vote.DIRECTIONS.up, Vote.DIRECTIONS.down, Vote.DIRECTIONS.unup, Vote.DIRECTIONS.undown):
-        g.log.warning("!!! cast_vote() discarding vote with dir: %s" % direction)
         return
 
     # CUSTOM: voting model, use direction as state

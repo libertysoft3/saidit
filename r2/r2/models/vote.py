@@ -285,7 +285,7 @@ class VoteEffects(object):
             return False
 
         if vote.previous_vote:
-            if not vote.previous_vote.effects.affects_score:
+            if not vote.previous_vote.effects.affects_score and g.voting_allow_selfvote == 'false':
                 self.add_note("PREVIOUS_VOTE_NO_EFFECT")
                 return False
 
