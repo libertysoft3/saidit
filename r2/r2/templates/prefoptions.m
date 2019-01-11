@@ -409,7 +409,6 @@
            link1 = format_html('&#32;<a href="/user/%s/upvoted">/user/%s/upvoted</a>&#32;', c.user.name, c.user.name)
            link2 = format_html('&#32;<a href="/user/%s/downvoted">/user/%s/downvoted</a>', c.user.name, c.user.name)
            %>
-        (${_wsf("let everyone see %(link1)s and %(link2)s", link1=link1, link2=link2)})
       </span>
 <!--       <br/>
       ${checkbox(_("allow my data to be used for research purposes"), "research")}

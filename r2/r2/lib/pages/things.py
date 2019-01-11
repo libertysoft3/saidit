@@ -122,7 +122,7 @@ class LinkButtons(PrintableButtons):
                     not (thing.has_thumbnail or thing.media_object)):
                 show_rescrape = True
 
-        show_givegold = thing.can_gild and (c.permalink_page or c.profilepage)
+        show_givegold = False # thing.can_gild and (c.permalink_page or c.profilepage)
 
         # do we show the delete button?
         show_delete = is_author and delete and not thing._deleted
@@ -247,8 +247,7 @@ class CommentButtons(PrintableButtons):
                                is_author and
                                thing.can_ban)
 
-        show_givegold = thing.can_gild
-
+        show_givegold = False # thing.can_gild
         embed_button = False
         
         show_admin_context = c.user_is_admin

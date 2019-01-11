@@ -94,7 +94,7 @@ string_dict = dict(
         moderator = _('below are the subs that you have moderator access to.')
         ),
 
-    sr_subscribe =  _('click the `subscribe` or `unsubscribe` buttons to choose which subs appear on your front page.'),
+    sr_subscribe =  _('click the `subscribe` or `unsubscribe` buttons to choose which subs appear on your subscribed page.'),
 
     searching_a_reddit = _('you\'re searching within the [%(reddit_name)s](%(reddit_link)s) sub. '+
                            'you can also search within [all subreddits](%(all_reddits_link)s)'),
