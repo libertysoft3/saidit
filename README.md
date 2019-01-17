@@ -1,27 +1,23 @@
-# saidit
+# SaidIt
 
-[saidit.net](https://saidit.net) is a [reddit](https://github.com/reddit-archive/reddit) fork which also uses:
+[SaidIt](https://saidit.net) is a [reddit open source](https://github.com/reddit-archive/reddit) fork. Major SaidIt additions include:
 
-* forked [TheLounge web IRC client](https://github.com/libertysoft3/lounge-autoconnect)
-* custom [snudown](https://github.com/libertysoft3/snudown)
-* optional custom [Reddit Enhancement Suite](https://github.com/libertysoft3/Reddit-Enhancement-Suite)
-
-saidit changes:
-
-* voting uses two upvotes, insightful is worth 2 points and funny is worth 1
-* site rebranding feature
-* admin tools: sitewide user ban, ip ban
-* bug fixes
+* two dimensional voting where insightful is +2 and funny is +1
+* chat integration with a custom [TheLounge](https://github.com/libertysoft3/lounge-autoconnect) web IRC client
+* admin tools: global user ban, ip ban
+* mostly configurable site branding
+* critical configurations and cron jobs restored
 
 ---
 
-## Installing
-
-This guide will walk you through installing saidit/reddit open source on a [VirtualBox](https://www.virtualbox.org/wiki/Downloads) virtual machine. This can be done on Linux, Mac, or Windows. Or get [Ubuntu 14](http://releases.ubuntu.com/14.04/) running somewhere and skip ahead to "Install reddit".
-
+## Installation
 
 ### Create a Ubuntu 14.04 VM with VirtualBox
 
+If you have [Ubuntu 14](http://releases.ubuntu.com/14.04/) running on a server you can skip this step.
+
+
+1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) (Linux, Mac, or Windows)
 1. Download Ubuntu 14.04 server edition
 1. In VirtualBox, after creating a new VM with 4gb RAM and 30gb disk space, 
 1. Set networking to use a "Bridged Adapter"
@@ -31,84 +27,32 @@ This guide will walk you through installing saidit/reddit open source on a [Virt
   1. Choose username "reddit"
   1. Choose to install "OpenSSH Server"
   1. Complete Ubuntu installation. 
-1. Login and run `ifconfig` and note your ip address
+1. Login and run `$ ifconfig` and note your VM's ip address
 1. If you forgot to install the openssh server, run `sudo apt-get install openssh-server`
 1. You can now detach your VM or shut it down and restart in headless mode. Don't forget to shut down your VM before shutting down your host OS or you may corrupt your reddit installation.
 
 ### Update your hosts file to resolve https://reddit.local in your browser
 
-Add the ip you noted earlier to your hosts file as "reddit.local". This procedure [varies by OS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/). On linux edit `/etc/hosts` and add, e.g. `192.168.1.20 reddit.local`. Once this is setup you can ssh into your VM easily with `ssh reddit@reddit.local`.
+Add the ip of your Ubuntu 14 server or virtual machine to your "hosts" file as domain name "reddit.local". This procedure [varies by OS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/). On linux edit `/etc/hosts` and add something like `192.168.1.20 reddit.local`.
 
 ### Install reddit
 
-SSH into your VM as user `reddit` and update the OS.
+SSH into your Ubuntu 14 reddit server and update the OS
 
-    # host OS
     $ ssh reddit@reddit.local
-    # VM
     $ sudo apt-get update
     $ sudo apt-get upgrade
     $ sudo apt-get install git
 
-Then install the saidit reddit open source fork
+Install saidit/reddit open source
 
     $ cd ~/
     $ git clone https://github.com/libertysoft3/saidit.git
-    $ chmod +x reddit/install-reddit.sh
-    $ sudo ./reddit/install-reddit.sh
+    $ chmod +x saidit/install-reddit.sh
+    $ sudo ./saidit/install-reddit.sh
     # if you get an error about "less" restart the server and try again
-    # reddit has been installed at ~/src/reddit. to cleanup run:
-    $ rm -rf ~/reddit
-
-Install sample data, optional but recommended
-
-    $ cd ~/src/reddit
-    $ reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
-    $ sudo start reddit-job-update_popular_subreddits
-    # NOTE: an admin user "reddit" with password "password" is created
-
-
-### Additional configuration
-
-Grant your reddit user 'reddituser' the admin role
-
-    $ cd ~/src/reddit/r2
-    $ sed -i '/# employees = saidit:admin/c\employees = saidit:admin, reddituser:admin' development.update
-    $ make ini
-    $ sudo reddit-flush
-
-increase PostgreSQL max_connections for greater stability (87/100 in use at reddit idle without Solr running?)
-
-    $ sudo nano /etc/postgresql/9.3/main/postgresql.conf
-    # edit: max_connections = 100
-    # to: max_connections = 150
-    $ sudo service postgresql restart
-    $ sudo reddit-restart
-
-optional: change the default subreddits that guests see
-
-    $ cd ~/src/reddit/r2
-    $ paster shell run.ini
-    # paste the following, hit enter:
-    from r2.models import *
-    srs = [Subreddit._by_name(n) for n in ("pics", "videos", "science", "technology")]
-    LocalizedDefaultSubreddits.set_global_srs(srs)
-    LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
-    exit()
-
-watch reddit run and debug errors
-
-    $ sudo tail -f /var/log/syslog
-
-additional configuration changes you may wish to make are shown in `r2/development.update.saidit` 
-
-### Optional: accessing VM files from your host
-
-You can mount the VM's reddit files as a folder on your host machine for easy editing and searching. sshfs is a quick and easy approach. On your host install sshfs and run `sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm`. Unmount it later with `fusermount -u ~/vm` to avoid crashing your editor when your VM shuts down.
-
----
-
-## Misc upgrades
+    # cleanup the installer checkout:
+    $ rm -rf ~/saidit
  
 ### Upgrade curl
 
@@ -126,15 +70,14 @@ this will improve the new link 'fetch title' capability and potentially more
     $ curl --version
  
  
-### Upgrade to python 2.7.14
+### Upgrade to python 2.7
  
     $ sudo add-apt-repository ppa:jonathonf/python-2.7
     $ sudo apt-get update
     $ sudo apt-get install python2.7
     $ python --version
 
-
-### Rebuild and recompile reddit
+### Rebuild reddit
  
     $ sudo reddit-stop
     $ sudo reddit-flush
@@ -146,11 +89,27 @@ this will improve the new link 'fetch title' capability and potentially more
     $ make
     $ sudo reddit-start
 
+### Configure PostgreSQL
+
+Increase PostgreSQL `max_connections` to 150 for greater stability (87/100 in use at idle without Solr)
+
+    $ sudo nano /etc/postgresql/9.3/main/postgresql.conf
+    $ sudo service postgresql restart
+    $ sudo reddit-restart
+
+### Install sample data
+
+This also creates a reddit admin user "saidit" with password "password".
+
+    $ cd ~/src/reddit
+    $ reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
+    $ sudo reddit-restart
+
 ---
 
-## Install search
+## Install Solr for search
  
-### Install Solr
+Install Solr
 
     $ cd ~
     $ sudo apt-get install tomcat7 tomcat7-admin software-properties-common
@@ -262,7 +221,7 @@ and then...
 
 ---
 
-## Install Chat
+## Install SaidIt Chat
 
 In a production environments, irc and related services should be run by a dedicated unix user for security.
 
@@ -424,13 +383,40 @@ start TheLounge:
     $ cd ~/lounge-autoconnect
     $ nohup npm start ./ > thelounge.log 2>&1 &
 
-# Additional documentation
+---
+
+## SaidIt dev guide
+
+watch reddit run and debug errors
+
+    $ sudo tail -f /var/log/syslog
+
+additional configuration changes you may wish to make are shown in `r2/development.update.saidit`
+
+You can mount the VM's reddit files as a folder on your host machine for easy editing and searching. On your host install sshfs and run `$ sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm`. Unmount it before shutting down your VM later with `$ fusermount -u ~/vm` to avoid crashing your editor when your VM shuts down.
+
+change the default subs:
+
+    $ cd ~/src/reddit/r2
+    $ paster shell run.ini
+    # paste the following, hit enter:
+    from r2.models import *
+    srs = [Subreddit._by_name(n) for n in ("pics", "videos", "science", "technology")]
+    LocalizedDefaultSubreddits.set_global_srs(srs)
+    LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
+    exit()
+
+---
+
+## Additional documentation
 
 * [https://github.com/reddit-archive/reddit/wiki](https://github.com/reddit-archive/reddit/wiki)
 * [https://www.reddit.com/r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
 * [https://www.reddit.com/r/redditdev](https://www.reddit.com/r/redditdev)
 
-# See also
+---
+
+## See also
 
 * https://www.reddit.com/r/RedditAlternatives
 
