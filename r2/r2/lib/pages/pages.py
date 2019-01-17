@@ -1209,7 +1209,7 @@ class RedditFooter(CachedTemplate):
 
             NavMenu([
 
-                    OffsiteButton(_("open source code"), "https://github.com/libertysoft3/reddit-ae", retain_extension=False),
+                    OffsiteButton(_("open source code"), "https://github.com/libertysoft3/saidit", retain_extension=False),
                     OffsiteButton(_("RES for saidit"), "https://saidit.net/s/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
                     OffsiteButton(_("list all subs"), "https://saidit.net/subs"),
                     OffsiteButton(_("recent comments"), "https://saidit.net/comments"),

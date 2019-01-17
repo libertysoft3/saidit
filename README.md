@@ -53,7 +53,7 @@ SSH into your VM as user `reddit` and update the OS.
 Then install the saidit reddit open source fork
 
     $ cd ~/
-    $ git clone https://github.com/libertysoft3/reddit-ae.git
+    $ git clone https://github.com/libertysoft3/saidit.git
     $ chmod +x reddit/install-reddit.sh
     $ sudo ./reddit/install-reddit.sh
     # if you get an error about "less" restart the server and try again
