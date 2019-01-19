@@ -1200,6 +1200,7 @@ class RedditFooter(CachedTemplate):
                 separator = ""),
 
             NavMenu([
+                    OffsiteButton(_("list of subs"), "https://saidit.net/subs"),
                     OffsiteButton(_("contact"), "https://saidit.net/s/help"),    
                     OffsiteButton(_("terms & content policy"), "https://saidit.net/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/"),
                 ],
@@ -1211,10 +1212,9 @@ class RedditFooter(CachedTemplate):
 
                     OffsiteButton(_("open source code"), "https://github.com/libertysoft3/saidit", retain_extension=False),
                     OffsiteButton(_("RES for saidit"), "https://saidit.net/s/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
-                    OffsiteButton(_("list all subs"), "https://saidit.net/subs"),
-                    OffsiteButton(_("recent comments"), "https://saidit.net/comments"),
                     OffsiteButton(_("mobile site"), "https://m.saidit.net"),
-                    OffsiteButton(_("android app"), "https://play.google.com/store/apps/details?id=org.saiditnet.redreader"),
+                    OffsiteButton(_("f-droid android app"), "https://f-droid.org/en/packages/org.saiditnet.redreader/", retain_extension=False),
+                    OffsiteButton(_("google android app"), "https://play.google.com/store/apps/details?id=org.saiditnet.redreader", retain_extension=False),
                 ],
                 title = _("apps & tools"),
                 type = "flat_vert",
