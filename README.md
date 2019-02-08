@@ -89,14 +89,6 @@ this will improve the new link 'fetch title' capability and potentially more
     $ make
     $ sudo reddit-start
 
-### Configure PostgreSQL
-
-Increase PostgreSQL `max_connections` to 150 for greater stability (87/100 in use at idle without Solr)
-
-    $ sudo nano /etc/postgresql/9.3/main/postgresql.conf
-    $ sudo service postgresql restart
-    $ sudo reddit-restart
-
 ### Install sample data
 
 This also creates a reddit admin user "saidit" with password "password".
