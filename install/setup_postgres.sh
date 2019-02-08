@@ -69,3 +69,6 @@ create or replace function domain(url text) returns text as \$\$
     select substring(\$1 from E'(?i)(?:.+?://)?(?:www[\\d]*\\.)?([^#/]*)/?')
 \$\$ language sql immutable;
 FUNCTIONSQL
+
+sudo sed -i "s/^max_connections = .*$/max_connections = 150/" /etc/postgresql/9.3/main/postgresql.conf
+sudo service postgresql restart
