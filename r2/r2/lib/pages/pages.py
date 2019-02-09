@@ -1360,8 +1360,8 @@ class PrefsPage(Reddit):
         buttons = [NavButton(menu.options, ''),
                    NamedButton('apps')]
 
-        if c.user.pref_private_feeds:
-            buttons.append(NamedButton('feeds'))
+        # if c.user.pref_private_feeds:
+        #    buttons.append(NamedButton('feeds'))
 
         buttons.extend([
             NamedButton('friends'),
@@ -1376,7 +1376,6 @@ class PrefsPage(Reddit):
 
         return [PageNameNav('nomenu', title = _("preferences")),
                 NavMenu(buttons, base_path = "/prefs", type="tabmenu")]
-
 
 class PrefOptions(Templated):
     """Preference form for updating language and display options"""

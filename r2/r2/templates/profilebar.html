@@ -111,60 +111,6 @@
     %endif
   %endif
 
-  %if thing.show_users_gold_expiration or thing.show_private_gold_info:
-    <div class="rounded gold-accent gold-expiration-info">
-      %if hasattr(thing, "gold_remaining"):
-        <div class="gold-remaining" title="${thing.user.gold_expiration.strftime('%Y-%m-%d')}">
-          <span class="karma">
-            ${thing.gold_remaining}
-          </span>
-          <br>
-          ${_("of gold remaining")}
-          <br>
-          <a href="/gold/about">${_("view gold features/benefits")}</a>
-        </div>
-        %if thing.show_private_info:
-          %if hasattr(thing, "paypal_subscr_id"):
-             <div>
-              <a href="${thing.paypal_url}">
-                ${_("Recurring Paypal subscription")}
-              </a>
-              &#32;
-              ${thing.paypal_subscr_id}
-            </div>
-          %endif
-
-          %if hasattr(thing, "stripe_customer_id"):
-             <div>
-              <a href="/gold/subscription">
-                ${_("manage recurring subscription")}
-              </a>
-            </div>
-          %endif
-        %endif
-      %endif
-      %if hasattr(thing, "gold_creddit_message"):
-        <div class="gold-creddits-remaining">
-          ${plain_link(thing.gold_creddit_message, "/gold?goldtype=gift")}
-        </div>
-      %endif
-      %if hasattr(thing, "num_gildings_message"):
-        <div>
-          ${thing.num_gildings_message}
-        </div>
-      %endif
-    </div>
-  %endif
-
-%if hasattr(thing, "goldlink"):
-  <div class="giftgold">
-    <a href="${thing.goldlink}" class="access-required"
-       data-type="account" data-fullname="${thing.user._fullname}"
-       data-event-action="gild">
-      ${thing.giftmsg}
-    </a>
-  </div>
-%endif
 
   <div class="bottom">
     %if not thing.viewing_self:
