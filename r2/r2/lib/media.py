@@ -963,6 +963,9 @@ class _YouTubeScraper(Scraper):
         if not (html and width and height):
             return
 
+        # force youtube-nocookie embeds
+        html = html.replace("youtube.com/embed/", "youtube-nocookie.com/embed/")
+
         return MediaEmbed(
             width=width,
             height=height,

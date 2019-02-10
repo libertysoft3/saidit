@@ -12,8 +12,9 @@
     var buttonOpenClass = 'md-expando-open';
     var buttonClosedClass = 'md-expando-closed';
     var reYouTube = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/i; // src https://stackoverflow.com/a/5831191 without 'g'
-    var reYouTubeTimestamp = /t=([^&#]*)/; // t=1h6m30s
-    var reYouTubeTimestampParts = /^(\d+h)?(\d+m)?(\d+s)$/i; // 1h6m30s
+    var reYouTubeTimestampParam = /t=([^&#]*)/; // capture param t
+    var reYouTubeTimestampA = /^(\d+h)?(\d+m)?(\d+s)$/i; // 1h6m30s
+    var reYouTubeTimestampB = /^(\d+)$/; // 960
 
     function initMdExpandosByThingId(thingId) {
       $('#' + thingId + ' > .entry .md a').each(function() {
@@ -90,9 +91,9 @@
       var match = reYouTube.exec(href);
       if (match) {
         match[1] += '?rel=0';
-        var ts = reYouTubeTimestamp.exec(href);
+        var ts = reYouTubeTimestampParam.exec(href);
         if (ts) {
-          var parts = reYouTubeTimestampParts.exec(ts[1]);
+          var parts = reYouTubeTimestampA.exec(ts[1]);
           if (parts) {
             var secs = 0;
             if (parts[3]) {
@@ -105,6 +106,11 @@
               secs += 60 * 60 * parseInt(parts[1].substring(0, parts[1].length - 1));
             }
             match[1] += '&start=' + secs;
+          } else {
+            var secs = reYouTubeTimestampB.exec(ts[1]);
+            if (secs) {
+              match[1] += '&start=' + parseInt(secs[1]);
+            }
           }
         }
         return match[1];
