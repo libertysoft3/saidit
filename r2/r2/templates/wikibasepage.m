@@ -27,8 +27,8 @@
 <%inherit file="reddit.m"/>
 
 <%def name="global_stylesheets()">
-    ${parent.global_stylesheets()}
     ${less_stylesheet('mobile-wiki.less')}
+    ${parent.global_stylesheets()}
 </%def>
 
 <%def name="actionsbar(actions)">
