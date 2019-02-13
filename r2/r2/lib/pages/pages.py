@@ -890,7 +890,7 @@ class Reddit(Templated):
                 if num_not_shown > 0:
                     more_text = _("...and %d more") % (num_not_shown)
                 else:
-                    more_text = _("about moderation team")
+                    more_text = _("moderation team")
 
                 is_admin_sr = '/%s/%s' % (g.brander_community_abbr, c.site.name) == g.admin_message_acct
 
@@ -912,11 +912,18 @@ class Reddit(Templated):
                     })
 
                 mod_href = c.site.path + 'about/moderators'
+
+                # Public modlogs
+                mod_two_href = c.site.path + 'about/log'
+                more_two_text = _("moderation log")
+
                 ps.append(SideContentBox(_('moderators'),
                                          wrapped_moderators,
                                          helplink = helplink,
                                          more_href = mod_href,
-                                         more_text = more_text))
+                                         more_text = more_text,
+                                         more_two_href = mod_two_href,
+                                         more_two_text = more_two_text))
 
         if no_ads_yet and show_adbox:
             ps.append(Ads())
@@ -1324,10 +1331,11 @@ class HelpLink(Templated):
 
 class SideContentBox(Templated):
     def __init__(self, title, content, helplink=None, _id=None, extra_class=None,
-                 more_href=None, more_text="more", collapsible=False):
+                 more_href=None, more_text="more", more_two_href=None, more_two_text="", collapsible=False):
         Templated.__init__(self, title=title, helplink = helplink,
                            content=content, _id=_id, extra_class=extra_class,
                            more_href = more_href, more_text = more_text,
+                           more_two_href = more_two_href, more_two_text = more_two_text,
                            collapsible=collapsible)
 
 class SideBox(CachedTemplate):

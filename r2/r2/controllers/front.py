@@ -603,7 +603,9 @@ class FrontController(RedditController):
 
     modname_splitter = re.compile('[ ,]+')
 
-    @require_oauth2_scope("modlog")
+    # Public modlogs
+    # @require_oauth2_scope("modlog")
+    @require_oauth2_scope("read")
     @disable_subreddit_css()
     @paginated_listing(max_page_size=500, backend='cassandra')
     @validate(
@@ -626,10 +628,11 @@ class FrontController(RedditController):
         The `type` parameter is optional and if sent limits the log entries
         returned to only those of the type specified.
 
-        """
-        if not c.user_is_loggedin or not (c.user_is_admin or
-                                          c.site.is_moderator(c.user)):
-            return self.abort404()
+        """ 
+        # Public modlogs
+        # if not c.user_is_loggedin or not (c.user_is_admin or
+        #                                   c.site.is_moderator(c.user)):
+        #     return self.abort404()
 
         VNotInTimeout().run(action_name="pageview", details_text="modlog")
         if mod:
@@ -694,7 +697,9 @@ class FrontController(RedditController):
                          title=_('filter by action'), type='lightdrop', css_class='modaction-drop'),
                 NavMenu(mod_buttons, base_path=base_path,
                         title=_('filter by moderator'), type='lightdrop')]
-        extension_handling = "private" if c.user.pref_private_feeds else False
+        # Public modlogs
+        # extension_handling = "private" if c.user.pref_private_feeds else False
+        extension_handling = "private" if c.user_is_loggedin and c.user.pref_private_feeds else False
         return EditReddit(content=panes,
                           nav_menus=menus,
                           location="log",
