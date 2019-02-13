@@ -1213,6 +1213,7 @@ class RedditFooter(CachedTemplate):
                     OffsiteButton(_("open source code"), "https://github.com/libertysoft3/saidit", retain_extension=False),
                     OffsiteButton(_("RES for saidit"), "https://saidit.net/s/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
                     OffsiteButton(_("mobile site"), "https://m.saidit.net"),
+                    OffsiteButton(_("RSS feed"), "https://saidit.net/.rss"),
                     OffsiteButton(_("f-droid android app"), "https://f-droid.org/en/packages/org.saiditnet.redreader/", retain_extension=False),
                     OffsiteButton(_("google android app"), "https://play.google.com/store/apps/details?id=org.saiditnet.redreader", retain_extension=False),
                 ],
