@@ -1,20 +1,29 @@
 /**
  * Markdown Expandos - SaidIt 2018
  *
- * Supports urls: static images, YouTube
  * Unsupported static image urls:
  *   https://example.com/folder/file.jpg?param.eter#hash=12.345
  *   https://en.wikipedia.org/wiki/Portable_Network_Graphics#/media/File:PNG_transparency_demonstration_1.png
+ *
+ * Making ajax requests for providers:
+ *   SoundCloud - oEmbed
  */
 !function(r) {
   $(function() {
     var buttonClass = 'md-expando-button';
     var buttonOpenClass = 'md-expando-open';
     var buttonClosedClass = 'md-expando-closed';
-    var reYouTube = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/i; // src https://stackoverflow.com/a/5831191 without 'g'
+    var reValidExpandoUrl = /^https?\:\/\//i;
+    var reYouTube = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/i; // https://stackoverflow.com/a/5831191
     var reYouTubeTimestampParam = /t=([^&#]*)/; // capture param t
     var reYouTubeTimestampA = /^(\d+h)?(\d+m)?(\d+s)$/i; // 1h6m30s
     var reYouTubeTimestampB = /^(\d+)$/; // 960
+    var rePeerTube = /^https?\:\/\/(([^:\/?#]*)(?:\:([0-9]+))?)\/videos\/watch\/(\w{8}\-\w{4}\-\w{4}\-\w{4}\-\w{12})(\?start=(\w+))?$/i; // https://stackoverflow.com/a/21553982/1525014
+    var reBitChute = /^https?\:\/\/(www\.)*bitchute\.com\/video\/\w+/i;
+    var reDTube = /^https?\:\/\/d\.tube\/(#\!\/)*v\/.+\/\w+/i;
+    var reVimeo = /^https?\:\/\/(player\.)*vimeo\.com\/((.+\/.+\/)|(video\/))*(\d+)(#.+)*/i;
+    var reSoundCloud = /^https?\:\/\/(www\.)*soundcloud.com\/.+\/.+/i;
+    var reImgur = /^https?\:\/\/(www\.)*imgur.com\/(gallery|t\/\w+|user\/\w+\/favorites)\/(\w+)$/i;
 
     function initMdExpandosByThingId(thingId) {
       $('#' + thingId + ' > .entry .md a').each(function() {
@@ -26,14 +35,54 @@
     }
 
     function initMdExpando($thing) {
+      if (!$thing.attr('href').length || !reValidExpandoUrl.exec($thing.attr('href'))) {
+        return;
+      }
+
+      // Images
       var check = getImageExtension($thing.attr('href'));
       if (check) {
         $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="image" data-expando-exists="false" href="javascript:void(0);">' + check + '</a> ');
         return;
       }
-      check = getYouTubeEmbedUrl($thing.attr('href'));
+
+      // Imgur
+      check = getEmbedIdImgur($thing.attr('href'));
+      if (check) {
+        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="imgur" data-embed-id="' + check  + '" data-expando-exists="false" href="javascript:void(0);">Imgur</a> ');
+        return;
+      }
+
+      // SoundCloud - embed fetched on click
+      if (reSoundCloud.exec($thing.attr('href'))) {
+        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="soundcloud" data-url="' + $thing.attr('href')  + '" data-expando-exists="false" href="javascript:void(0);">SoundCloud</a> ');
+        return;
+      }
+
+      // Videos
+      check = getEmbedUrlYouTube($thing.attr('href'));
       if (check) {
         $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="youtube" data-video-url="' + check  + '" data-expando-exists="false" href="javascript:void(0);">YouTube</a> ');
+        return;
+      }
+      check = getEmbedUrlPeerTube($thing.attr('href'));
+      if (check) {
+        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="peertube" data-video-url="' + check  + '" data-expando-exists="false" href="javascript:void(0);">PeerTube</a> ');
+        return;
+      }
+      check = getEmbedUrlBitChute($thing.attr('href'));
+      if (check) {
+        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="bitchute" data-video-url="' + check  + '" data-expando-exists="false" href="javascript:void(0);">BitChute</a> ');
+        return;
+      }
+      check = getEmbedUrlDTube($thing.attr('href'));
+      if (check) {
+        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="dtube" data-video-url="' + check  + '" data-expando-exists="false" href="javascript:void(0);">DTube</a> ');
+        return;
+      }
+      check = getEmbedUrlVimeo($thing.attr('href'));
+      if (check) {
+        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="vimeo" data-video-url="' + check  + '" data-expando-exists="false" href="javascript:void(0);">Vimeo</a> ');
         return;
       }
     }
@@ -43,10 +92,8 @@
       if ($button.hasClass(buttonOpenClass)) {
         $button.addClass(buttonClosedClass).removeClass(buttonOpenClass);
         $button.next().hide();
-
-        // remove video iframes on close to make them stop playing
         if ($button.data('video-url')) {
-          $button.data('expando-exists', false).next().remove();
+          $button.data('expando-exists', false).next().remove(); // remove video iframes on close to make them stop playing
         }
         return;
       }
@@ -62,18 +109,38 @@
       $button.data('expando-exists', true);
       switch ($button.data('type')) {
         case 'image':
-              var sourceHref = $button.prev().attr('href');
-              $button.after('<div class="md-expando"><a href="' + sourceHref + '" draggable="false" style="outline: none;"><img src="' + sourceHref + '" draggable="false"/></a></div>');
-              initMdExpandoImageResize($button.next().find('a'), $button.next().find('img'));
+          var sourceHref = $button.prev().attr('href');
+          $button.after('<div class="md-expando"><a href="' + sourceHref + '" draggable="false" style="outline: none;"><img src="' + sourceHref + '" draggable="false"/></a></div>');
+          initMdExpandoImageResize($button.next().find('a'), $button.next().find('img'));
+          break;
+        case 'imgur':
+          var html  = '<blockquote class="imgur-embed-pub" lang="en" data-id="a/' + $button.data('embed-id') + '"><a href="//imgur.com/' + $button.data('embed-id') + '"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>';
+          $button.after('<div class="md-expando">' + html + '</div>');
           break;
         case 'youtube':
-              $button.after('<div class="md-expando"><iframe width="560" height="315" style="max-width: 100%;" src="https://www.youtube-nocookie.com/embed/' + $button.data('video-url') + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>');
+          $button.after('<div class="md-expando"><iframe width="560" height="315" style="max-width: 100%;" src="https://www.youtube-nocookie.com/embed/' + $button.data('video-url') + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>');
           break;
+        case 'peertube':
+          $button.after('<div class="md-expando"><iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" style="max-width: 100%;" src="' + $button.data('video-url') + '" frameborder="0" allowfullscreen></iframe></div>');
+          break;
+        case 'bitchute':
+          $button.after('<div class="md-expando"><iframe width="640" height="360" scrolling="no" frameborder="0" style="border: none; max-width: 100%;" src="' + $button.data('video-url') + '"></iframe></div>');
+          break;
+        case 'dtube':
+          $button.after('<div class="md-expando"><iframe width="560" height="315" style="max-width: 100%;" src="' + $button.data('video-url') + '" frameborder="0" allowfullscreen></iframe></div>');
+          break;
+        case 'vimeo':
+          $button.after('<div class="md-expando"><iframe width="640" height="360" style="max-width: 100%;" src="' + $button.data('video-url') + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>');
+          break;
+        case 'soundcloud':
+          $.getJSON('https://soundcloud.com/oembed?url=' + encodeURIComponent($button.data('url')), function(data) {
+            $button.after('<div class="md-expando">' + data['html'] + '</div>');
+          });
       }
     }
 
     function getImageExtension(href) {
-      if (!href || href.indexOf('#') != -1 || href.indexOf('?') != -1) {
+      if (href.indexOf('#') != -1 || href.indexOf('?') != -1) {
         return false;
       }
       var allowed = ['jpg', 'jpeg', 'gif', 'png'];
@@ -84,10 +151,15 @@
       return allowed[extIndex].toUpperCase();
     }
 
-    function getYouTubeEmbedUrl(href) {
-      if (!href) {
-        return false;
+    function getEmbedIdImgur(href) {
+      var match = reImgur.exec(href);
+      if (match && match[3]) {
+        return match[3];
       }
+      return false;
+    }
+
+    function getEmbedUrlYouTube(href) {
       var match = reYouTube.exec(href);
       if (match) {
         match[1] += '?rel=0';
@@ -114,6 +186,39 @@
           }
         }
         return match[1];
+      }
+      return false;
+    }
+    function getEmbedUrlPeerTube(href) {
+      var match = rePeerTube.exec(href);
+      if (match) {
+        return href.replace('/videos/watch/','/videos/embed/');
+      }
+      return false;
+    }
+    function getEmbedUrlBitChute(href) {
+      if (reBitChute.exec(href)) {
+        return href.replace('/video/','/embed/');
+      }
+      return false;
+    }
+    function getEmbedUrlDTube(href) {
+      if (reDTube.exec(href)) {
+        href = href.replace('d.tube/#!/v/','d.tube/#!/'); // A https://d.tube/#!/v/lagtvgames/7d6495li
+        href = href.replace('d.tube/v/', 'd.tube/#!/'); // B https://d.tube/v/lagtvgames/7d6495li
+        return href.replace('d.tube/','emb.d.tube/');
+      }
+      return false;
+    }
+    function getEmbedUrlVimeo(href) {
+      var match = reVimeo.exec(href);
+      console.log(match);
+      if (match && match[5]) {
+        var url = 'https://player.vimeo.com/video/' + match[5];
+        if (match[6]) {
+          url += match[6];
+        }
+        return url;
       }
       return false;
     }

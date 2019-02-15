@@ -4928,14 +4928,19 @@ def make_link_child(item, show_media_preview=False):
                 if media_embed.sandbox:
                     should_authenticate = (item.subreddit.type in Subreddit.private_types or
                         item.subreddit.quarantine)
-                    media_embed = MediaEmbed(
-                        media_domain=g.media_domain,
-                        height=media_embed.height + 10,
-                        width=media_embed.width + 10,
-                        scrolling=media_embed.scrolling,
-                        id36=item._id36,
-                        authenticated=should_authenticate,
-                    )
+                    if media_embed.direct_embed:
+                        media_embed = MediaEmbedDirect(
+                            content=media_embed.content,
+                        )
+                    else:
+                        media_embed = MediaEmbed(
+                            media_domain=g.media_domain,
+                            height=media_embed.height + 10,
+                            width=media_embed.width + 10,
+                            scrolling=media_embed.scrolling,
+                            id36=item._id36,
+                            authenticated=should_authenticate,
+                        )
                 else:
                     media_embed = media_embed.content
             else:
@@ -5014,6 +5019,10 @@ class MediaEmbed(Templated):
             self.credentials = ""
         Templated.__init__(self, *args, **kwargs)
 
+class MediaEmbedDirect(Templated):
+    """Non-iframe embeds, for dynamic sized imgur embeds, etc. """
+    def __init__(self, *args, **kwargs):
+        Templated.__init__(self, *args, **kwargs)
 
 class MediaPreview(Templated):
     """Rendered html container for a media child"""

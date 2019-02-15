@@ -3,6 +3,8 @@
 [SaidIt](https://saidit.net) is a [reddit open source](https://github.com/reddit-archive/reddit) fork. Major SaidIt additions include:
 
 * two dimensional voting where insightful is +2 and funny is +1
+* public moderator logs
+* more embedded media
 * chat integration with a custom [TheLounge](https://github.com/libertysoft3/lounge-autoconnect) web IRC client
 * admin tools: global user ban, ip ban
 * mostly configurable site branding
@@ -60,9 +62,9 @@ this will improve the new link 'fetch title' capability and potentially more
 
     $ sudo apt-get build-dep curl
     # use latest version from https://curl.haxx.se/download.html:
-    $ wget http://curl.haxx.se/download/curl-7.58.0.tar.bz2
-    $ tar -xvjf curl-7.58.0.tar.bz2
-    $ cd curl-7.58.0
+    $ wget http://curl.haxx.se/download/curl-7.64.0.tar.bz2
+    $ tar -xvjf curl-7.64.0.tar.bz2
+    $ cd curl-7.64.0
     $ ./configure --prefix=/usr
     $ make
     $ sudo make install
@@ -76,6 +78,18 @@ this will improve the new link 'fetch title' capability and potentially more
     $ sudo apt-get update
     $ sudo apt-get install python2.7
     $ python --version
+
+### Upgrade gcc
+
+    $ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+    $ sudo apt-get update
+    $ sudo apt-get install gcc-4.9 g++-4.9 cpp-4.9
+    $ cd /usr/bin
+    $ sudo rm gcc g++ cpp x86_64-linux-gnu-gcc
+    $ sudo ln -s gcc-4.9 gcc
+    $ sudo ln -s g++-4.9 g++
+    $ sudo ln -s cpp-4.9 cpp
+    $ sudo ln -s x86_64-linux-gnu-gcc-4.9 x86_64-linux-gnu-gcc
 
 ### Rebuild reddit
  
