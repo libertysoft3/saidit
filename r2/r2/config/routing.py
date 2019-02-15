@@ -78,9 +78,9 @@ def make_map(config):
     mc('/about/team', controller='redirect', action='redirect',
        dest=ABOUT_BASE)
     mc('/about/alien', controller='redirect', action='redirect',
-       dest=ABOUT_BASE + "press")
+       dest=ABOUT_BASE)
     mc('/jobs', controller='redirect', action='redirect',
-       dest=ABOUT_BASE + "careers")
+       dest=ABOUT_BASE)
 
     mc('/over18', controller='post', action='over18')
     mc('/quarantine', controller='post', action='quarantine')
@@ -175,6 +175,7 @@ def make_map(config):
        connect('/:controller', action='listing',
           requirements=dict(controller="hot|new|rising|randomrising|ads|newcomments"))
 
+
     mc('/user/:username/:where/:show', controller='user', action='listing')
     
     mc('/explore', controller='front', action='explore')
@@ -196,6 +197,7 @@ def make_map(config):
        connect('/about/message/:where', controller='message',
           action='listing')
        connect('/about/log', controller='front', action='moderationlog')
+       connect('/modlog', controller='front', action='moderationlog')
        connect('/about/:location', controller='front',
           action='spamlisting',
           requirements=dict(location='reports|spam|modqueue|unmoderated|edited'))
@@ -208,6 +210,7 @@ def make_map(config):
        connect('/comments/gilded', action='listing', controller='gilded')
        connect('/gilded', action='listing', controller='gilded')
        connect('/search', controller='front', action='search')
+
 
     mc('/u/:username', controller='redirect', action='user_redirect')
     mc('/u/:username/*rest', controller='redirect', action='user_redirect')

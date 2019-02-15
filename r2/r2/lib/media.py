@@ -452,15 +452,10 @@ def _set_media(link, force=False, **kwargs):
                           use_youtube_scraper=youtube_scraper, **kwargs)
 
     if media and not link.promoted:
-        # While we want to add preview images to self posts for the new apps,
-        # let's not muck about with the old-style thumbnails in case that
-        # breaks assumptions.
-        if not link.is_self:
-            link.thumbnail_url = media.thumbnail_url
-            link.thumbnail_size = media.thumbnail_size
-
-            link.set_media_object(media.media_object)
-            link.set_secure_media_object(media.secure_media_object)
+        link.thumbnail_url = media.thumbnail_url
+        link.thumbnail_size = media.thumbnail_size
+        link.set_media_object(media.media_object)
+        link.set_secure_media_object(media.secure_media_object)
         link.set_preview_object(media.preview_object)
 
         link._commit()
