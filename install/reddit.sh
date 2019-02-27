@@ -339,6 +339,12 @@ service gunicorn start
 mkdir -p /srv/www/media
 chown $REDDIT_USER:$REDDIT_GROUP /srv/www/media
 
+cat > /etc/nginx/conf.d/reddit.conf <<CONFIG
+log_format directlog '\$remote_addr - \$remote_user [\$time_local] '
+                      '"\$request_method \$request_uri \$server_protocol" \$status \$body_bytes_sent '
+                      '"\$http_referer" "\$http_user_agent"';
+CONFIG
+
 cat > /etc/nginx/sites-available/reddit-media <<MEDIA
 server {
     listen 9000;
@@ -358,10 +364,6 @@ upstream click_server {
 
 server {
   listen 8082;
-
-  log_format directlog '\$remote_addr - \$remote_user [\$time_local] '
-                      '"\$request_method \$request_uri \$server_protocol" \$status \$body_bytes_sent '
-                      '"\$http_referer" "\$http_user_agent"';
   access_log      /var/log/nginx/traffic/traffic.log directlog;
 
   location / {
