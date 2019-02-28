@@ -339,11 +339,11 @@ service gunicorn start
 mkdir -p /srv/www/media
 chown $REDDIT_USER:$REDDIT_GROUP /srv/www/media
 
-cat > /etc/nginx/conf.d/reddit.conf <<CONFIG
+cat > /etc/nginx/conf.d/reddit.conf <<NGINX
 log_format directlog '\$remote_addr - \$remote_user [\$time_local] '
                       '"\$request_method \$request_uri \$server_protocol" \$status \$body_bytes_sent '
                       '"\$http_referer" "\$http_user_agent"';
-CONFIG
+NGINX
 
 cat > /etc/nginx/sites-available/reddit-media <<MEDIA
 server {
@@ -395,12 +395,19 @@ server {
     ssl on;
     ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
     ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
+    ssl_dhparam /etc/nginx/dhparam.pem;
 
+    # Android 4.3 compatibility (Samsung Galaxy S3)
+    # https://www.ssllabs.com/ssltest/viewClient.html?name=Android&version=4.3&key=61
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-    ssl_ciphers EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;
     ssl_prefer_server_ciphers on;
-
     ssl_session_cache shared:SSL:1m;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
 
     location / {
         proxy_pass http://127.0.0.1:8080;
@@ -415,6 +422,9 @@ server {
     }
 }
 SSL
+
+# SSL stuff
+openssl dhparam -out /etc/nginx/dhparam.pem 4096
 
 # remove the default nginx site that may conflict with haproxy
 rm -rf /etc/nginx/sites-enabled/default
