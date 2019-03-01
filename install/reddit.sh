@@ -194,20 +194,11 @@ if [ ! -f development.update ]; then
 # after editing this file, run "make ini" to
 # generate a new development.ini
 [secrets]
-# the tokens in this section are base64 encoded
-# SECRET = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
-# FEEDSECRET = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
-# ADMINSECRET = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
-# websocket = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
-# media_embed = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
-# action_name = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
-# email_notifications = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
-# cache_poisoning = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
-# adserver_click_url_secret = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
-# modmail_email_secret = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
-# request_signature_secret = YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5
+# the tokens in this section are base64 encoded general purpose secret
+# WARNING: set these for production
 
 [DEFAULT]
+# WARNING: db_pass also hardcoded in /etc/cron.d/reddit
 # global debug flag -- displays pylons stacktrace rather than 500 page on error when true
 # WARNING: a pylons stacktrace allows remote code execution. Make sure this is false
 # if your server is publicly accessible.
@@ -215,23 +206,32 @@ debug = true
 uncompressedJS = true
 sqlprinting = false
 
-disable_ads = true
-disable_captcha = true
-disable_ratelimit = true
-disable_require_admin_otp = true
-
 domain = $REDDIT_DOMAIN
 oauth_domain = $REDDIT_DOMAIN
 https_endpoint = https://%(domain)s
 default_scheme = https
-
-plugins = $plugin_str
+trust_local_proxies = true
 
 media_provider = filesystem
 media_fs_root = /srv/www/media
 media_fs_base_url_http = http://%(domain)s/media/
 
+plugins = $plugin_str
+
+disable_ads = true
+disable_captcha = true
+disable_ratelimit = true
+disable_require_admin_otp = true
+
+brander_site = SaidIt[DEV]
+home_page_title = SaidIt[DEV]
+short_description = open source is awesome
+
 min_membership_create_community = 0
+default_sr = frontpage
+ARCHIVE_AGE = 180 days
+automoderator_account = automoderator
+voting_allow_selfvote = true
 
 [server:main]
 port = 8001
@@ -240,6 +240,13 @@ port = 8001
 # Specify global admins and permissions, each user should have one of admin, sponsor, or employee as their permission level
 # employees = saidit:admin
 feature_force_https = on
+
+announcement_message = The site is undergoing maintenance and may not be fully operational. Thanks for your patience.
+sidebar_message = ["sidebar_message 1", "sidebar message 2"]
+
+feature_subreddit_rules = on
+feature_sticky_comments = on
+feature_auto_subscribe_all = off
 
 create_sr_account_age_days = 0
 create_sr_link_karma = 0

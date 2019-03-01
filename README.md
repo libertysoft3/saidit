@@ -1,53 +1,51 @@
 # SaidIt
 
-[SaidIt](https://saidit.net) is a [reddit open source](https://github.com/reddit-archive/reddit) fork. Major SaidIt additions include:
+[SaidIt](https://saidit.net) is a continuation and fork of [reddit open source](https://github.com/reddit-archive/reddit) which was [sunset](https://www.reddit.com/r/changelog/comments/6xfyfg/an_update_on_the_state_of_the_redditreddit_and/) in 2017. SaidIt changes include:
 
-* two dimensional voting where insightful is +2 and funny is +1
-* public moderator logs
-* more embedded media
-* chat integration with a custom [TheLounge](https://github.com/libertysoft3/lounge-autoconnect) web IRC client
-* admin tools: global user ban, ip ban
-* mostly configurable site branding
-* critical configurations and cron jobs restored
+* Two dimensional voting where insightful is +2 and funny is +1
+* Public moderator logs
+* More embedded media
+* IRC integration with [TheLounge](https://github.com/libertysoft3/lounge-autoconnect) web client
+* Configurable site branding
+* Admin tools restored: global user ban, ip ban
+* Bug fixes, critical configuration and cron jobs restored
+* Ubuntu 18 support
+
+SaidIt changes can be disabled and/or reverted in your fork to provide a vanilla reddit experience. Additionally, the SaidIt team is happy to help create an updated reddit-only fork with the traditional reddit voting model, etc.
 
 ---
 
 ## Installation
 
-### Create a Ubuntu 14.04 VM with VirtualBox
+### Optional: create a Ubuntu virtual machine
 
-If you have [Ubuntu 14](http://releases.ubuntu.com/14.04/) running on a server you can skip this step.
+1. Download [Ubuntu Server 18.04.2 LTS](https://www.ubuntu.com/download/server)
+1. Install and run [VirtualBox](https://www.virtualbox.org/wiki/Downloads) (free and supports Linux, Mac, or Windows)
+1. Creating a new VM with 4gb+ RAM and 30gb+ disk space
+1. In Settings -> Network for Adapter 1, select "Attached to: Bridged Adapter"
+1. In Settings -> Storage fill the optical drive by clicking "Choose Virtual Optical Disk File" and selecting the Ubuntu 18 .iso from step 1
+1. Start the VM (Normal or Detachable)
+1. Proceed through Ubuntu installation by choosing the default options
+1. Your server's name: ubuntu-vm
+1. Pick a username: reddit
+1. Select "Install OpenSSH server"
+1. Choose "Reboot Now", press enter if prompted, login
+1. If you forgot to install the OpenSSH server, run:
+  1. `$ sudo apt-get update`
+  1. `$ sudo apt-get upgrade`
+  1. `$ sudo apt-get install openssh-server`
+1. Run `$ ifconfig` and note your VM's ip address
 
+You can now detach your VM or shut it down and restart it in headless mode, to interact with the VM via SSH instead, with your normal terminal. Don't forget to shut down your VM before shutting down your host/desktop OS.
 
-1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) (Linux, Mac, or Windows)
-1. Download Ubuntu 14.04 server edition
-1. In VirtualBox, after creating a new VM with 4gb RAM and 30gb disk space, 
-1. Set networking to use a "Bridged Adapter"
-1. Add a CD rom entry and select the Ubuntu 14 .iso
-1. Boot the VM
-1. In the Ubuntu installer:
-  1. Choose username "reddit"
-  1. Choose to install "OpenSSH Server"
-  1. Complete Ubuntu installation. 
-1. Login and run `$ ifconfig` and note your VM's ip address
-1. If you forgot to install the openssh server, run `sudo apt-get install openssh-server`
-1. You can now detach your VM or shut it down and restart in headless mode. Don't forget to shut down your VM before shutting down your host OS or you may corrupt your reddit installation.
+### Install SaidIt/reddit open source
 
-### Update your hosts file to resolve https://reddit.local in your browser
+SSH into your server or VM to install. This documentation assumes you connect as user 'reddit' with sudo privileges.
 
-Add the ip of your Ubuntu 14 server or virtual machine to your "hosts" file as domain name "reddit.local". This procedure [varies by OS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/). On linux edit `/etc/hosts` and add something like `192.168.1.20 reddit.local`.
-
-### Install reddit
-
-SSH into your Ubuntu 14 reddit server and update the OS
-
-    $ ssh reddit@reddit.local
+    $ ssh reddit@UBUNTU-18-IP
     $ sudo apt-get update
     $ sudo apt-get upgrade
     $ sudo apt-get install git
-
-Install saidit/reddit open source
-
     $ cd ~/
     $ git clone https://github.com/libertysoft3/saidit.git
     $ chmod +x saidit/install-reddit.sh
@@ -55,7 +53,11 @@ Install saidit/reddit open source
     # if you get an error about "less" restart the server and try again
     # cleanup the installer checkout:
     $ rm -rf ~/saidit
- 
+
+
+
+
+
 ### Upgrade curl
 
 this will improve the new link 'fetch title' capability and potentially more
@@ -102,6 +104,11 @@ this will improve the new link 'fetch title' capability and potentially more
     $ make clean
     $ make
     $ sudo reddit-start
+
+
+
+
+
 
 ### Install sample data
 
@@ -393,11 +400,11 @@ start TheLounge:
 
 ## SaidIt dev guide
 
-watch reddit run and debug errors
+To interact with your site via https://reddit.local rather than your server or VM's ip address, edit `/etc/hosts` and add something like `192.168.1.20 reddit.local`. This procedure [varies by OS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/).
+
+watch saidit/reddit open source run, view errors
 
     $ sudo tail -f /var/log/syslog
-
-additional configuration changes you may wish to make are shown in `r2/development.update.saidit`
 
 You can mount the VM's reddit files as a folder on your host machine for easy editing and searching. On your host install sshfs and run `$ sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm`. Unmount it before shutting down your VM later with `$ fusermount -u ~/vm` to avoid crashing your editor when your VM shuts down.
 
