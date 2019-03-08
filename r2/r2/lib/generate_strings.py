@@ -22,7 +22,7 @@
 
 
 funny_translatable_strings = {
-    "500_page": ["Funny 500 page message %d" % i for i in xrange(1, 11)],
+    "500_page": ["500 error message %d" % i for i in xrange(1, 11)],
     "create_subreddit": [
         "Reason to create a reddit %d" % i for i in xrange(1, 21)],
 }

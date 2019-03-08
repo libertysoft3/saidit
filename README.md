@@ -2,7 +2,7 @@
 
 [SaidIt](https://saidit.net) is a [reddit open source](https://github.com/reddit-archive/reddit) fork. Major SaidIt additions include:
 
-* two dimensional voting where insightful is +2 and funny is +1
+* two dimensional voting where insightful is +2 and fun is +1
 * public moderator logs
 * more embedded media
 * chat integration with a custom [TheLounge](https://github.com/libertysoft3/lounge-autoconnect) web IRC client

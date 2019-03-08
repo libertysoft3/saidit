@@ -253,7 +253,7 @@ class Builder(object):
             # Comments: dual points display
             # insightful total across 4 different vote states
             w.voting_score_ups = [base_ups_score, base_ups_score, base_ups_score + 1, base_ups_score + 1]
-            # funny total across 4 different vote states
+            # funny/fun total across 4 different vote states
             w.voting_score_downs = [base_downs_score + 1, base_downs_score, base_downs_score, base_downs_score + 1]
 
             w.deleted = item._deleted

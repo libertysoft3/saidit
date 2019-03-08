@@ -59,7 +59,7 @@ menu =   MenuHandler(hot          = _('hot'),
                      # NOTE: manually set key to g.voting_upvote_path
                      insightful   = _(g.voting_upvote_name),
                      # NOTE: manually set key to g.voting_controversial_path
-                     funny        = _(g.voting_controversial_name),
+                     fun          = _(g.voting_controversial_name),
                      gilded       = _('gilded'),
                      confidence   = _('best'),
                      random       = _('random'),

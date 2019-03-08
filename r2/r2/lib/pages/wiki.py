@@ -166,13 +166,13 @@ class WikiPageView(WikiBasePage):
 class WikiNotFound(WikiBasePage):
     def __init__(self, page, **context):
         content = WikiPageNotFound(page)
-        context['alert'] = _("page %s does not exist in this subreddit") % page
+        context['alert'] = _("page %s does not exist in this sub") % page
         context['actionless'] = True
         WikiBasePage.__init__(self, content, page=page, **context)
 
 class WikiCreate(WikiBasePage):
     def __init__(self, page, **context):
-        context['alert'] = _("page %s does not exist in this subreddit") % page
+        context['alert'] = _("page %s does not exist in this sub") % page
         context['actionless'] = True
         content = WikiEditPage(page=page)
         WikiBasePage.__init__(self, content, page, **context)
@@ -207,7 +207,7 @@ class WikiListing(WikiBasePage):
     def __init__(self, pages, linear_pages, **context):
         content = WikiPageListing(pages, linear_pages)
         context['wikiaction'] = ('pages', _("Viewing pages for /%s/%s") % (g.brander_community_abbr, c.wiki_id))
-        description = [_("Below is a list of pages in this wiki visible to you in this subreddit.")]
+        description = [_("Below is a list of pages in this wiki visible to you in this sub.")]
         WikiBasePage.__init__(self, content, description=description, showtitle=True, **context)
 
 class WikiDiscussions(WikiBasePage):

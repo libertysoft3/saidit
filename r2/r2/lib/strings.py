@@ -282,6 +282,7 @@ plurals = PluralManager([P_("comment",     "comments"),
                          # CUSTOM
                          P_("insightful", "insightful"),
                          P_("funny", "funny"),
+                         P_("fun", "fun"),
 ])
 
 
@@ -305,7 +306,7 @@ class Score(object):
     # CUSTOM: voting model
     @staticmethod
     def points_dual(x, y):
-        return strings.points_dual % dict(ups=x, downs=y, pointups=plurals.N_insightful(x), pointdowns=plurals.N_funny(y))
+        return strings.points_dual % dict(ups=x, downs=y, pointups=plurals.N_insightful(x), pointdowns=plurals.N_fun(y))
 
     @staticmethod
     def safepoints(x):
