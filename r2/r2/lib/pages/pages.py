@@ -656,6 +656,27 @@ class Reddit(Templated):
                               _id="moderation_tools",
                               collapsible=True)
 
+    def wikiactionsbox(self):
+        """generates wikibox at the top of the page instead of sidebar"""
+
+        psq = PaneStack(css_class='spacer')
+
+        if not isinstance(c.site, FakeSubreddit):
+            moderator = c.user_is_loggedin and (c.user_is_admin or
+                                          c.site.is_moderator(c.user))
+            wiki_moderator = c.user_is_loggedin and (
+                c.user_is_admin
+                or c.site.is_moderator_with_perms(c.user, 'wiki'))
+            if self.show_wiki_actions:
+                menu = self.wiki_actions_menu(moderator=wiki_moderator)
+                psq.append(menu)
+
+        elif self.show_wiki_actions:
+            psq.append(self.wiki_actions_menu())
+
+        return psq
+
+
     def rightbox(self):
         """generates content in <div class="rightbox">"""
 
@@ -850,24 +871,24 @@ class Reddit(Templated):
                     notebar = SidebarChat('subreddit', g.live_config['chat_front_channel'])
                     ps.append(notebar)
 
-        # don't show the subreddit info bar on cnames unless the option is set
+         # don't show the subreddit info bar on cnames unless the option is set
         if not isinstance(c.site, FakeSubreddit):
             ps.append(SubredditInfoBar())
             moderator = c.user_is_loggedin and (c.user_is_admin or
                                           c.site.is_moderator(c.user))
-            wiki_moderator = c.user_is_loggedin and (
-                c.user_is_admin
-                or c.site.is_moderator_with_perms(c.user, 'wiki'))
-            if self.show_wiki_actions:
-                menu = self.wiki_actions_menu(moderator=wiki_moderator)
-                ps.append(menu)
+        #     wiki_moderator = c.user_is_loggedin and (
+        #         c.user_is_admin
+        #         or c.site.is_moderator_with_perms(c.user, 'wiki'))
+        #     if self.show_wiki_actions:
+        #         menu = self.wiki_actions_menu(moderator=wiki_moderator)
+        #         ps.append(menu)
             if moderator:
                 ps.append(self.sr_admin_menu())
-            if show_adbox:
-                ps.append(Ads())
-            no_ads_yet = False
-        elif self.show_wiki_actions:
-            ps.append(self.wiki_actions_menu())
+        #     if show_adbox:
+        #         ps.append(Ads())
+        #     no_ads_yet = False
+        # elif self.show_wiki_actions:
+        #     ps.append(self.wiki_actions_menu())
 
 
         if c.default_sr:

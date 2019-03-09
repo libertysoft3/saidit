@@ -37,7 +37,7 @@
                     %if thing.permlevel == 0:
                         checked
                     %endif
-                /><label for="permlevel0">${_('use subreddit wiki permissions')}</label><br/>
+                /><label for="permlevel0">${_('use sub wiki permissions')}</label><br/>
                 <input type="radio" name="permlevel" id="permlevel1" value="1"
                 %if thing.permlevel == 1:
                     checked

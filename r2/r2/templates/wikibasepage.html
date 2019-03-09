@@ -21,15 +21,34 @@
 ###############################################################################
 <%!
     from r2.config import feature
+#    from r2.lib.pages import pages
+
+#    from r2.config import feature
+#    from r2.lib.template_helpers import add_sr, static, join_urls, class_dict, get_domain
+#    from r2.lib.filters import unsafe, scriptsafe_dumps
+#    from r2.lib.pages import (
+#      SearchForm,
+#      ClickGadget,
+#      SideContentBox,
+#      Login,
+#      ListingChooser,
+#      InTimeoutInterstitial,
+#    )
+#    from r2.lib import tracking
+#    from pylons import request
+#    from r2.lib.strings import strings
+#    from r2.models import make_feedurl
 %>
 
 <%namespace file="less.html" import="less_stylesheet"/>
 <%inherit file="reddit.html"/>
 
 <%def name="global_stylesheets()">
-    ${less_stylesheet('wiki.less')}
     ${parent.global_stylesheets()}
+    ${less_stylesheet('wiki.less')}
 </%def>
+
+
 
 <%def name="actionsbar(actions)">
     %for action in actions:
@@ -54,6 +73,10 @@
 
 <%def name="content()">
     ${thing.infobar}
+    <div class="side">  
+      ${thing.wikiactionsbox()}
+    </div>
+
     <span>
         <h1 class="wikititle">
             %if thing.pagetitle:
@@ -70,7 +93,7 @@
             </span>
         %endif
     </span>
-        
+
     <div class="wiki-page-content md-container">
         %if thing.description:
             <div class="description">
@@ -84,5 +107,4 @@
         ${thing.content()}
     </div>
 
-    <!--reddit wikis are powered by Cray-1™ supercomputers-->
 </%def>
