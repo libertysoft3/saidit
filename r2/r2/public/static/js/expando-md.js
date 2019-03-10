@@ -212,7 +212,6 @@
     }
     function getEmbedUrlVimeo(href) {
       var match = reVimeo.exec(href);
-      console.log(match);
       if (match && match[5]) {
         var url = 'https://player.vimeo.com/video/' + match[5];
         if (match[6]) {

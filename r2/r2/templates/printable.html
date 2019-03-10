@@ -230,9 +230,9 @@ ${self.RenderPrintable()}
     %if not g.read_only_mode:
        role="button"
        % if dir > 0:
-       aria-label="${_("upvote")}"
+       aria-label="${_("vote " + g.voting_upvote_name)}"
        % else:
-       aria-label="${_("downvote")}"
+       aria-label="${_("vote " + g.voting_controversial_name)}"
        % endif
        tabindex="0"
     %endif
@@ -249,11 +249,12 @@ ${self.RenderPrintable()}
   %endfor
 </%def>
 
+## Comment midcol
 <%def name="midcol(display=True, cls = '')">
   <div class="midcol ${cls}" 
        ${not display and "style='display:none'" or ''}>
-    ${self.arrow(thing, 1, thing.likes)}
-    ${self.arrow(thing, 0, thing.dislikes)}
+    ${self.arrow_intfun_comments(thing, 1, thing.likes)}
+    ${self.arrow_intfun_comments(thing, 0, thing.dislikes)}
   </div>
 </%def>
 
@@ -270,9 +271,9 @@ ${self.RenderPrintable()}
     %if not g.read_only_mode:
        role="button"
        % if dir > 0:
-       aria-label="${_("upvote")}"
+       aria-label="${_("vote " + g.voting_upvote_name)}"
        % else:
-       aria-label="${_("downvote")}"
+       aria-label="${_("vote " + g.voting_controversial_name)}"
        % endif
        tabindex="0"
     %endif
@@ -283,6 +284,34 @@ ${self.RenderPrintable()}
       ${self.score_downvotes(thing, mod=mod)}
     %elif hide_score:
       <span class="score">&bull;</span>
+    %endif
+  </div>
+</%def>
+
+<%def name="arrow_intfun_comments(this, dir, mod)">
+<%
+   arrow_type = "up" if dir > 0 else "down"
+   arrow_class = arrow_type + ("mod" if mod else "")
+   login_class = "login-required" if not g.read_only_mode else ""
+   archived_class = "archived" if not getattr(thing, 'votable', True) else ""
+   access_class = "access-required"
+%>
+  <div ${classes("arrow", arrow_class, login_class, archived_class, access_class)}
+    data-event-action="${arrow_type}vote"
+    %if not g.read_only_mode:
+       role="button"
+       % if dir > 0:
+       aria-label="${_("vote " + g.voting_upvote_name)}"
+       % else:
+       aria-label="${_("vote " + g.voting_controversial_name)}"
+       % endif
+       tabindex="0"
+    %endif
+    >
+    %if arrow_type is "up":
+      ${self.score_upvotes(thing, mod=mod)}
+    %elif arrow_type is "down":
+      ${self.score_downvotes(thing, mod=mod)}
     %endif
   </div>
 </%def>

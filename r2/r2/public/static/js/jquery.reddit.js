@@ -322,7 +322,8 @@ $.fn.updateThing = function(update) {
         var $elems = $($midcol).add($entry);
 
         // CUSTOM: voting model
-        var updateLinkVotes = $thing.hasClass('link');
+        // Comment scores in the arrows (.comment .arrow .score) are hidden by default but can be exposed with CSS
+        var updateLinkVotes = $thing.hasClass('link') || $thing.hasClass('comment');
         var zeroLabel = '-';
         var $upvotes = false;
         var $downvotes = false;
