@@ -127,7 +127,7 @@ function countChars(countfrom,displayto) {
 </div>
 
 <div class="spacer">
-  <%utils:round_field title="${_('options')}">
+  <%utils:round_field title="${_('options')}" id="sendreplies-field">
     <input class="nomargin" type="checkbox" ${'checked="checked"' if c.user.pref_sendreplies else ''} name="sendreplies" id="sendreplies" data-send-checked="true"/>
     <label for="sendreplies">
       ${_("send replies to my inbox")}
