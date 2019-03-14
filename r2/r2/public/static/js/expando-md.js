@@ -147,7 +147,7 @@
       if (trimIndex !== -1) {
         href = href.slice(0, trimIndex);
       }
-      var trimIndex = href.indexOf('?');
+      trimIndex = href.indexOf('?');
       if (trimIndex !== -1) {
         // return false if query strings should be banned
         href = href.slice(0, trimIndex);
