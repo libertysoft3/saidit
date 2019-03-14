@@ -2,8 +2,11 @@
  * Markdown Expandos - SaidIt 2018
  *
  * Unsupported static image urls:
- *   https://example.com/folder/file.jpg?param.eter#hash=12.345
  *   https://en.wikipedia.org/wiki/Portable_Network_Graphics#/media/File:PNG_transparency_demonstration_1.png
+ *   https://example.com/download.php?file=folder/file.jpg
+ *
+ * Supported static image urls:
+ *   https://example.com/folder/file.jpg?param.eter#hash=12.345
  *
  * Making ajax requests for providers:
  *   SoundCloud - oEmbed
@@ -140,10 +143,17 @@
     }
 
     function getImageExtension(href) {
-      if (href.indexOf('#') != -1 || href.indexOf('?') != -1) {
-        return false;
+      var trimIndex = href.indexOf('#');
+      if (trimIndex !== -1) {
+        href = href.slice(0, trimIndex);
       }
-      var allowed = ['jpg', 'jpeg', 'gif', 'png'];
+      var trimIndex = href.indexOf('?');
+      if (trimIndex !== -1) {
+        // return false if query strings should be banned
+        href = href.slice(0, trimIndex);
+      }
+
+      var allowed = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'ico', 'bmp'];
       var extIndex = allowed.indexOf(href.split('.').pop().toLowerCase());
       if (extIndex == -1) {
         return false;
