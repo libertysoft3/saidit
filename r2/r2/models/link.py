@@ -914,7 +914,7 @@ class Link(Thing, Printable):
                                                 "%(lastedited)s"))
                     taglinetext = unsafe(taglinetext + author_text)
                 elif item.different_sr:
-                    taglinetext = _("submitted %(when)s %(lastedited)s "
+                    taglinetext = _("%(when)s %(lastedited)s "
                                     "by %(author)s to %(reddit)s")
                 else:
                     taglinetext = _("submitted %(when)s %(lastedited)s "
@@ -925,7 +925,7 @@ class Link(Thing, Printable):
                                               _("%(score)s submitted %(when)s"))
                     taglinetext = unsafe(taglinetext + author_text)
                 elif item.different_sr:
-                    taglinetext = _("submitted %(when)s by %(author)s "
+                    taglinetext = _("%(when)s by %(author)s "
                                     "to %(reddit)s")
                 else:
                     taglinetext = _("submitted %(when)s by %(author)s")
