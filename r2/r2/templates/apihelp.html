@@ -125,8 +125,8 @@
 
 <div class="contents">
   <div class="section introduction">
-    <p>This is automatically-generated documentation for the reddit API.</p>
-    <p><strong>Please take care to respect our&#32;<a href="https://github.com/reddit/reddit/wiki/API">API access rules</a>.</strong></p>
+    <p>This is automatically-generated documentation for the ${g.brander_site} API.</p>
+    <p><strong>Please take care to respect our&#32;<a href="https://github.com/reddit-archive/reddit/wiki/API">API access rules</a>.</strong></p>
   </div>
 
   <div class="section overview">
@@ -135,7 +135,7 @@
     <h3 id="listings">listings</h3>
 
     <%text filter="safemarkdown">
-Many endpoints on reddit use the same protocol for controlling pagination and
+Many endpoints on the site use the same protocol for controlling pagination and
 filtering. These endpoints are called Listings and share five common
 parameters: `after` / `before`, `limit`, `count`, and `show`.
 
@@ -167,7 +167,7 @@ fetched.
     <h3 id="modhashes">modhashes</h3>
 
     <%text filter="safemarkdown">
-A modhash is a token that the reddit API requires to help prevent
+A modhash is a token that the API requires to help prevent
 [CSRF](http://en.wikipedia.org/wiki/CSRF). Modhashes can be obtained via the
 [/api/me.json](#GET_api_me.json) call or in response data of listing endpoints.
 
@@ -181,7 +181,7 @@ Modhashes are not required when authenticated with OAuth.
 
     <%text filter="safemarkdown">
 A fullname is a combination of a thing's type (e.g. `Link`) and its unique ID
-which forms a compact encoding of a globally unique ID on reddit.
+which forms a compact encoding of a globally unique ID on the site.
 
 Fullnames start with the type prefix for the object's type, followed by the
 thing's unique ID in [base 36](http://en.wikipedia.org/wiki/Base36).  For
@@ -236,14 +236,14 @@ of this behaviour, add a `raw_json=1` parameter to your request.
               %if docs['oauth_scopes']:
                 <span class="oauth-scope-list">
                   %for scope in docs['oauth_scopes']:
-                    <a href="https://github.com/reddit/reddit/wiki/OAuth2">
+                    <a href="https://github.com/reddit-archive/reddit/wiki/OAuth2">
                         <span class="api-badge oauth-scope">${scope or "any"}</span>
                     </a>
                   %endfor
                 </span>
               %endif
               %if docs['supports_rss']:
-                <a href="https://www.reddit.com/wiki/rss">
+                <a href="https://${g.domain}/wiki/rss">
                     <span class="api-badge rss-support">rss support</span>
                 </a>
               %endif

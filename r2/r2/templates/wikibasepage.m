@@ -83,6 +83,4 @@
         %endif
         ${thing.content()}
     </div>
-
-    <!--reddit wikis are powered by Cray-1™ supercomputers-->
 </%def>
