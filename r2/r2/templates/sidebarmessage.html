@@ -26,6 +26,6 @@
 
 <%namespace file="utils.html" import="classes"/>
 
-<div ${classes('side-message', thing.extra_class)}>
+<div ${classes('side-message', 'md-container', thing.extra_class)}>
   ${unsafe(safemarkdown(thing.message))}
 </div>
