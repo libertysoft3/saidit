@@ -685,14 +685,14 @@ class Reddit(Templated):
         if self.searchbox:
             ps.append(SearchForm())
 
-        # CUSTOM: All On Front
+        # CUSTOM: HomeSR support
         sidebar_message = g.live_config.get("sidebar_message")
         if sidebar_message and isinstance(c.site, DefaultSR):
             ps.append(SidebarMessage(sidebar_message[0]))
         elif sidebar_message and isinstance(c.site, (AllSR, HomeSR)):
             ps.append(SidebarMessage(sidebar_message[0]))
 
-        # CUSTOM: All On Front
+        # CUSTOM: HomeSR support
         gold_sidebar_message = g.live_config.get("gold_sidebar_message")
         if (c.user_is_loggedin and c.user.gold and
                 gold_sidebar_message and isinstance(c.site, (HomeSR, AllSR, DefaultSR))):
@@ -722,7 +722,7 @@ class Reddit(Templated):
         elif isinstance(c.site, HomeSR):
             pass
         elif isinstance(c.site, AllSR):
-            if g.live_config['all_on_front_show_all_info_bar'] == 'true':
+            if g.all_show_info_bar == 'true':
                 ps.append(AllInfoBar(c.site, c.user))
         elif isinstance(c.site, ModSR):
             ps.append(ModSRInfoBar())
@@ -3003,16 +3003,16 @@ class SubredditTopBar(CachedTemplate):
     def special_reddits(self):
         css_classes = {Random: "random",
                        RandomSubscription: "gold"}
-        
-        # CUSTOM: All On Front
+
+        # CUSTOM: HomeSR support
         reddits = []
         if g.menu_show_home == 'true':
             reddits.append(Home)
-        if g.live_config['all_on_front_show_all_in_menu'] == 'true':
+        if g.menu_show_all == 'true':
             reddits.append(All)
-        if g.live_config['all_on_front_show_front_in_menu'] == 'true':
+        if g.menu_show_front == 'true':
             reddits.append(Frontpage)
-        if g.live_config['all_on_front_show_random_in_menu'] == 'true':
+        if g.menu_show_random == 'true':
             reddits.append(Random)
 
         if getattr(c.site, "over_18", False):

@@ -1707,16 +1707,11 @@ class FriendsSR(FakeSubreddit):
 
 
 class AllSR(FakeSubreddit):
-    name = 'all'
-    title = 'all subreddits'
-    path = '/%s/all' % g.brander_community_abbr
-
-    # CUSTOM: All On Front
-    if feature.is_enabled('all_on_front'):
-        header = g.default_header_url
-        name = g.live_config['all_on_front_all_name']
-        path = g.live_config['all_on_front_all_path']
-        header_title = g.live_config['all_on_front_all_header_title']
+    name = g.all_name
+    title = g.all_title
+    path = g.all_path
+    header = g.default_header_url
+    header_title = g.all_header_title
 
     def keep_for_rising(self, sr_id):
         return True
@@ -1757,10 +1752,9 @@ class AllSR(FakeSubreddit):
 
         return MergedCachedQuery(qs)
 
-    # CUSTOM: All On Front
     @property
     def title(self):
-        return _(g.live_config['all_on_front_all_page_title'])
+        return _(g.all_page_title)
 
 class AllMinus(AllSR):
     analytics_name = "all"
@@ -1792,7 +1786,7 @@ class AllMinus(AllSR):
             q._filter(not_(Link.c.sr_id.in_(self.exclude_sr_ids)))
         return q
 
-# CUSTOM: similar to AllMinus
+# SaidIt: HomeSR is a filtered All, like AllMinus
 class HomeSR(AllSR):
     analytics_name = g.home_name
     name = g.home_name
@@ -1891,17 +1885,12 @@ class AllFiltered(Filtered, AllMinus):
 
 # Subscribed
 class _DefaultSR(FakeSubreddit):
-    analytics_name = 'subscribed'
+    analytics_name = g.front_name
     # notice the space before site.com
-    name = ' ' + g.domain
-    path = '/'
+    # name = ' ' + g.domain
+    name = g.front_name
+    path = g.front_path
     header = g.default_header_url
-
-    # CUSTOM: All On Front
-    if feature.is_enabled('all_on_front'):
-        analytics_name = g.live_config['all_on_front_front_name']
-        name = g.live_config['all_on_front_front_name']
-        path = g.live_config['all_on_front_front_path']
 
     def _get_sr_ids(self):
         if not c.defaultsr_cached_sr_ids:
@@ -1919,10 +1908,9 @@ class _DefaultSR(FakeSubreddit):
         sr_ids = self._get_sr_ids()
         return get_links_sr_ids(sr_ids, sort, time)
 
-    # CUSTOM: All On Front
     @property
     def title(self):
-        return _(g.live_config['all_on_front_front_page_title'])
+        return _(g.front_page_title)
 
 # This is the base class for the instantiated front page reddit
 class DefaultSR(_DefaultSR):
@@ -1983,12 +1971,8 @@ class DefaultSR(_DefaultSR):
 
     @property
     def header_title(self):
-
-        # CUSTOM: All On Front
-        if feature.is_enabled('all_on_front'):
-            return g.live_config['all_on_front_front_header_title']
-        else:
-            return (self._base and self._base.header_title) or ""
+        # return (self._base and self._base.header_title) or ""
+        return g.front_header_title
 
     @property
     def header_size(self):

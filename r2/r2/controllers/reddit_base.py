@@ -302,7 +302,12 @@ def set_subreddit():
 
     can_stale = request.method.upper() in ('GET', 'HEAD')
 
-    c.site = Home
+    if g.site_index == 'home':
+        c.site = Home
+    elif g.site_index == 'all':
+        c.site = All
+    else:
+        c.site = Frontpage
 
     if not sr_name:
         #check for cnames
@@ -371,7 +376,7 @@ def set_subreddit():
             elif not c.error_page and not request.path.startswith("/api/login/") :
                 abort(404)
 
-    # CUSTOM: All On Front
+    # CUSTOM: add HomeSR support
     #if we didn't find a subreddit, check for a domain listing
     if not sr_name and isinstance(c.site, HomeSR) and domain:
         # Redirect IDN to their IDNA name if necessary

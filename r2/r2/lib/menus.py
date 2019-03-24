@@ -32,7 +32,7 @@ from r2.lib.strings import StringHandler, plurals
 from r2.lib.utils import  class_property, query_string, timeago
 from r2.lib.wrapped import Styled
 
-# CUSTOM: All On Front
+# CUSTOM: Add HomeSR support
 from r2.models.subreddit import DefaultSR, AllSR, HomeSR
 
 class MenuHandler(StringHandler):
@@ -463,11 +463,11 @@ class SubredditButton(NavButton):
         
         # CUSTOM: warning HomeSR extends AllSR, must be first
         if isinstance(sr, DefaultSR):
-            name = g.live_config['all_on_front_front_name']
+            name = g.front_name
         elif isinstance(sr, HomeSR):
             name = g.home_name
         elif isinstance(sr, AllSR):
-            name = g.live_config['all_on_front_all_name']
+            name = g.all_name
 
         name = _(name) if name else sr.name
         self.isselected = (c.site == sr)
