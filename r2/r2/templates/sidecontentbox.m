@@ -38,9 +38,18 @@
 
     %if thing.more_href:
       <li class="more">
-        <a href="${thing.more_href}">
-          ${thing.more_text} &raquo;
-        </a>
+        %if not hasattr(thing, "more_two_text"):
+          <a href="${thing.more_href}">
+            ${thing.more_text} &raquo;
+          </a>
+        %else:
+          <a href="${thing.more_href}">
+            ${thing.more_text}&nbsp;&bull;&nbsp;
+          </a>
+          <a href="${thing.more_two_href}">
+            ${thing.more_two_text}
+          </a>
+        %endif
       </li>
     %endif
   </ul>

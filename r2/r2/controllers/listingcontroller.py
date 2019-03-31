@@ -1142,12 +1142,12 @@ class MessageController(ListingController):
     def menus(self):
         if c.default_sr and self.where in ('inbox', 'messages', 'comments',
                           'selfreply', 'unread', 'mentions'):
-            buttons = [NavButton(_("all"), "inbox"),
-                       NavButton(_("unread"), "unread"),
-                       NavButton(plurals.messages, "messages"),
-                       NavButton(_("comment replies"), 'comments'),
-                       NavButton(_("post replies"), 'selfreply'),
-                       NavButton(_("username mentions"), "mentions"),
+            buttons = [NavButton(_("all"), "inbox", sr_path=False),
+                       NavButton(_("unread"), "unread", sr_path=False),
+                       NavButton(plurals.messages, "messages", sr_path=False),
+                       NavButton(_("comment replies"), 'comments', sr_path=False),
+                       NavButton(_("post replies"), 'selfreply', sr_path=False),
+                       NavButton(_("username mentions"), "mentions", sr_path=False),
             ]
 
             return [NavMenu(buttons, base_path = '/message/',

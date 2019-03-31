@@ -48,7 +48,7 @@
         <span class="separator"></span>
       %endif
       %if thing.next:
-        ${plain_link(format_html("%s &rsaquo;", _("next")), thing.next, rel="nofollow next")}
+        ${plain_link(format_html("%s &rsaquo;", _("next")), thing.next, rel="nofollow next", _sr_path=thing.sr_path)}
       %endif
       </span>
       %if thing.next_suggestions:

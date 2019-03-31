@@ -2505,23 +2505,23 @@ class ProfilePage(Reddit):
 
     def build_toolbars(self):
         path = "/user/%s/" % self.user.name
-        main_buttons = [NavButton(menu.overview, '/', aliases = ['/overview']),
-                   NamedButton('comments'),
-                   NamedButton('submitted')]
+        main_buttons = [NavButton(menu.overview, '/', aliases = ['/overview'], sr_path=False),
+                   NamedButton('comments', sr_path=False),
+                   NamedButton('submitted', sr_path=False)]
 
         if votes_visible(self.user):
             """main_buttons += [
-                NamedButton('upvoted'),
-                NamedButton('downvoted')]
+                NamedButton('upvoted', sr_path=False),
+                NamedButton('downvoted', sr_path=False)]
             """
             
 
         if c.user_is_loggedin and (c.user._id == self.user._id or
                                    c.user_is_admin):
-            main_buttons += [NamedButton('hidden'), NamedButton('saved')]
+            main_buttons += [NamedButton('hidden', sr_path=False), NamedButton('saved', sr_path=False)]
 
         if c.user_is_sponsor:
-            main_buttons += [NamedButton('promoted')]
+            main_buttons += [NamedButton('promoted', sr_path=False)]
 
         toolbar = [PageNameNav('nomenu', title = self.user.name),
                    NavMenu(main_buttons, base_path = path, type="tabmenu")]
