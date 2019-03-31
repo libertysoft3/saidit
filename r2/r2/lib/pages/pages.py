@@ -72,6 +72,7 @@ from r2.models import (
     # CUSTOM
     HomeSR,
     Home,
+    DynamicSR,
 )
 from r2.models.bidding import Bid
 from r2.models.gold import (
@@ -301,20 +302,23 @@ class Reddit(Templated):
         if feature.is_enabled("expando_nsfw_flow"):
             self.feature_expando_nsfw_flow = True
 
-        # CUSTOM: set self.show_sidebar_chat for templates
+        # SaidIt: chat
         self.show_sidebar_chat = False
         if feature.is_enabled('chat') and c.user.pref_chat_enabled:
-            if isinstance(c.site, Subreddit):
-                if c.site.chat_enabled:
+            if isinstance(c.site, Subreddit) and c.site.chat_enabled:
+                self.show_sidebar_chat = True
+            elif isinstance(c.site, HomeSR) and g.live_config['chat_home'] == 'true':
+                self.show_sidebar_chat = True
+            elif isinstance(c.site, AllSR) and g.live_config['chat_all'] == 'true':
+                self.show_sidebar_chat = True
+            elif isinstance(c.site, DefaultSR) and g.live_config['chat_front'] == 'true':
+                self.show_sidebar_chat = True
+            elif isinstance(c.site, DynamicSR):
+                if c.site.name == g.front_name and g.live_config['chat_front'] == 'true':
                     self.show_sidebar_chat = True
-            elif isinstance(c.site, HomeSR):
-                if g.live_config['chat_home'] == 'true':
+                elif c.site.name == g.all_name and g.live_config['chat_all'] == 'true':
                     self.show_sidebar_chat = True
-            elif isinstance(c.site, AllSR):
-                if g.live_config['chat_all'] == 'true':
-                    self.show_sidebar_chat = True
-            elif isinstance(c.site, DefaultSR):
-                if g.live_config['chat_front'] == 'true':
+                elif c.site.name == g.home_name and g.live_config['chat_home'] == 'true':
                     self.show_sidebar_chat = True
 
         # generate a canonical link for google
@@ -440,7 +444,7 @@ class Reddit(Templated):
             c.render_style == "html" and
             c.user_is_loggedin and
             (
-                isinstance(c.site, (DefaultSR, AllSR, HomeSR, ModSR, LabeledMulti)) or
+                isinstance(c.site, (DefaultSR, AllSR, HomeSR, ModSR, LabeledMulti, DynamicSR)) or
                 c.site.name == g.live_config["listing_chooser_explore_sr"]
             )
         )
@@ -685,17 +689,14 @@ class Reddit(Templated):
         if self.searchbox:
             ps.append(SearchForm())
 
-        # CUSTOM: HomeSR support
+        # SaidIt: HomeSR, DynamicSR
         sidebar_message = g.live_config.get("sidebar_message")
-        if sidebar_message and isinstance(c.site, DefaultSR):
-            ps.append(SidebarMessage(sidebar_message[0]))
-        elif sidebar_message and isinstance(c.site, (AllSR, HomeSR)):
+        if sidebar_message and isinstance(c.site, (DefaultSR, AllSR, HomeSR, DynamicSR)):
             ps.append(SidebarMessage(sidebar_message[0]))
 
-        # CUSTOM: HomeSR support
         gold_sidebar_message = g.live_config.get("gold_sidebar_message")
         if (c.user_is_loggedin and c.user.gold and
-                gold_sidebar_message and isinstance(c.site, (HomeSR, AllSR, DefaultSR))):
+                gold_sidebar_message and isinstance(c.site, (HomeSR, AllSR, DefaultSR, DynamicSR))):
             ps.append(SidebarMessage(gold_sidebar_message[0],
                                      extra_class="gold"))
 
@@ -720,6 +721,8 @@ class Reddit(Templated):
             (isinstance(c.site, AllSR) and not c.user.gold)):
             ps.append(FilteredInfoBar())
         elif isinstance(c.site, HomeSR):
+            pass
+        elif isinstance(c.site, DynamicSR):
             pass
         elif isinstance(c.site, AllSR):
             if g.all_show_info_bar == 'true':
@@ -850,8 +853,8 @@ class Reddit(Templated):
                            data_attrs=data_attrs,
                            show_cover = True))
 
-        # CUSTOM: add Sidebar Chat
-        # WARNING: HomeSR extends AllSR
+        # SaidIt: sidebar Chat
+        # WARNING: HomeSR extends AllSR, first on purpose
         if feature.is_enabled('chat') and c.user.pref_chat_enabled:
             from r2.lib.pages.chat import SidebarChat
             if isinstance(c.site, Subreddit):
@@ -870,12 +873,23 @@ class Reddit(Templated):
                 if g.live_config['chat_front'] == 'true':
                     notebar = SidebarChat('subreddit', g.live_config['chat_front_channel'])
                     ps.append(notebar)
+            elif isinstance(c.site, DynamicSR):
+                if c.site.name == g.front_name and g.live_config['chat_front'] == 'true':
+                    notebar = SidebarChat('subreddit', g.live_config['chat_front_channel'])
+                    ps.append(notebar)
+                elif c.site.name == g.all_name and g.live_config['chat_all'] == 'true':
+                    notebar = SidebarChat('subreddit', g.live_config['chat_all_channel'])
+                    ps.append(notebar)
+                elif c.site.name == g.home_name and g.live_config['chat_home'] == 'true':
+                    notebar = SidebarChat('subreddit', g.live_config['chat_home_channel'])
+                    ps.append(notebar)
 
-         # don't show the subreddit info bar on cnames unless the option is set
+        # don't show the subreddit info bar on cnames unless the option is set
         if not isinstance(c.site, FakeSubreddit):
             ps.append(SubredditInfoBar())
             moderator = c.user_is_loggedin and (c.user_is_admin or
                                           c.site.is_moderator(c.user))
+        # SaidIt: wiki actions menu moved elsewhere
         #     wiki_moderator = c.user_is_loggedin and (
         #         c.user_is_admin
         #         or c.site.is_moderator_with_perms(c.user, 'wiki'))
@@ -887,6 +901,8 @@ class Reddit(Templated):
         #     if show_adbox:
         #         ps.append(Ads())
         #     no_ads_yet = False
+
+        # SaidIt: wiki actions menu moved elsewhere
         # elif self.show_wiki_actions:
         #     ps.append(self.wiki_actions_menu())
 
@@ -1032,27 +1048,38 @@ class Reddit(Templated):
     def build_toolbars(self):
         """Sets the layout of the navigation topbar on a Reddit.  The result
         is a list of menus which will be rendered in order and
-        displayed at the top of the Reddit.
-        SAIDIT CUSTOM: Removed NamedButton('rising'), from list"""
+        displayed at the top of the Reddit."""
         if c.site == Friends:
             main_buttons = [NamedButton('new', dest='', aliases=['/hot']),
                             NamedButton('comments'),
                             NamedButton('gilded'),
                             ]
         else:
-            main_buttons = [NamedButton('hot', dest='', aliases=['/hot']),
-                            NamedButton('new'),
-                            NamedButton(g.voting_upvote_path),
-                            NamedButton(g.voting_controversial_path),
-                            NamedButton('top'),
+            is_sr_path  = True
+            if g.site_index_user_configurable != 'true' and c.site.name == g.site_index:
+                is_sr_path  = False
+            elif g.site_index_user_configurable == 'true' and isinstance(c.site, DynamicSR):
+                if c.user.pref_site_index == 'site_index_front' and c.site.path == g.front_path:
+                    is_sr_path  = False
+                elif c.user.pref_site_index == 'site_index_all' and c.site.path == g.all_path:
+                    is_sr_path  = False
+                elif c.user.pref_site_index == 'site_index_home' and c.site.path == g.home_path:
+                    is_sr_path  = False
+
+            main_buttons = [NamedButton('hot', dest='', aliases=['/hot'], sr_path=is_sr_path),
+                            NamedButton('new', sr_path=is_sr_path),
+                            # NamedButton('rising', sr_path=is_sr_path),
+                            NamedButton(g.voting_upvote_path, sr_path=is_sr_path),
+                            NamedButton(g.voting_controversial_path, sr_path=is_sr_path),
+                            NamedButton('top', sr_path=is_sr_path),
                             ]
 
-            if c.site.allow_gilding:
-                """main_buttons.append(NamedButton('gilded',
-                                                aliases=['/comments/gilded']))"""
+            if g.gold_gilding_enabled == 'true' and c.site.allow_gilding:
+                main_buttons.append(NamedButton('gilded',
+                                                aliases=['/comments/gilded']))
 
-            if feature.is_enabled('sr_comments_sort'):
-                main_buttons.append(NamedButton('comments'))
+            if feature.is_enabled('sr_comments_tab'):
+                main_buttons.append(NamedButton('comments', sr_path=is_sr_path))
 
             mod = False
             if c.user_is_loggedin:
@@ -1062,13 +1089,14 @@ class Reddit(Templated):
                 if not g.disable_wiki:
                     main_buttons.append(NavButton('wiki', 'wiki'))
 
-            if (isinstance(c.site, (Subreddit, DefaultSR, MultiReddit)) and
+            if g.ads_promos_enabled == 'true':
+                if (isinstance(c.site, (Subreddit, DefaultSR, MultiReddit)) and
                     c.site.allow_ads):
-                """main_buttons.append(NavButton(menu.promoted, 'ads'))"""
+                    main_buttons.append(NavButton(menu.promoted, 'ads'))
 
         more_buttons = []
 
-        if c.user_is_loggedin and c.site.allow_ads:
+        if g.ads_promos_enabled == 'true' and c.user_is_loggedin and c.site.allow_ads:
             if c.user_is_sponsor:
                 sponsor_button = NavButton(
                     menu.sponsor, dest='/sponsor', sr_path=False)
@@ -1085,25 +1113,42 @@ class Reddit(Templated):
         if more_buttons:
             toolbar.append(NavMenu(more_buttons, title=menu.more, type='tabdrop'))
 
-        # CUSTOM: warning HomeSR extends AllSR, first on purpose
-        if not isinstance(c.site, DefaultSR):
-            func = 'subreddit'
-            if isinstance(c.site, DomainSR):
-                func = 'domain'
-            elif isinstance(c.site, HomeSR):
+        # SaidIt: configurable home page
+        func = 'subreddit'
+        if isinstance(c.site, DomainSR):
+            func = 'domain'
+        elif isinstance(c.site, HomeSR):
+            func = 'subredditheadertitle'
+            if g.site_index_user_configurable == 'true' and c.user.pref_site_index == 'site_index_home':
                 func = 'subredditnositelink'
-            elif isinstance(c.site, AllSR) and not isinstance(c.site, HomeSR):
-                func = 'subredditheadertitle'
-            # NOTE: fails for url https://www.reddit.local/try.compact?dest=/.mobile your redirect when appending 'mobile' or when visiting simple.reddit.local, comment out to see page
-            if c.render_style == g.extension_subdomain_mobile_v2_render_style:
-                toolbar.insert(1, PageNameNav(func))
-            else:
-                toolbar.insert(0, PageNameNav(func))
+            elif g.site_index_user_configurable != 'true' and g.site_index == g.home_name:
+                func = 'subredditnositelink'
+        elif isinstance(c.site, AllSR) and not isinstance(c.site, HomeSR):
+            func = 'subredditheadertitle'
+            if g.site_index_user_configurable == 'true' and c.user.pref_site_index == 'site_index_all':
+                func = 'subredditnositelink'
+            elif g.site_index_user_configurable != 'true' and g.site_index == g.all_name:
+                func = 'subredditnositelink'
         elif isinstance(c.site, DefaultSR):
-            if c.render_style == g.extension_subdomain_mobile_v2_render_style:
-                toolbar.insert(1, PageNameNav('subredditheadertitle'))
-            else:
-                toolbar.insert(0, PageNameNav('subredditheadertitle'))
+            func = 'subredditheadertitle'
+            if g.site_index_user_configurable == 'true' and c.user.pref_site_index == 'site_index_front':
+                func = 'subredditnositelink'
+            elif g.site_index_user_configurable != 'true' and g.site_index == g.front_name:
+                func = 'subredditnositelink'
+        elif isinstance(c.site, DynamicSR):
+            func = 'subredditheadertitle'
+            if c.site.name == g.front_name and c.user.pref_site_index == 'site_index_front':
+                func = 'subredditnositelink'
+            elif c.site.name == g.home_name and c.user.pref_site_index == 'site_index_home':
+                func = 'subredditnositelink'
+            elif c.site.name == g.all_name and c.user.pref_site_index == 'site_index_all':
+                func = 'subredditnositelink'
+
+        if c.render_style == g.extension_subdomain_mobile_v2_render_style:
+            # NOTE: fails for url https://www.reddit.local/try.compact?dest=/.mobile your redirect when appending 'mobile' or when visiting simple.reddit.local, comment out to see page
+            toolbar.insert(1, PageNameNav(func))
+        else:
+            toolbar.insert(0, PageNameNav(func))
 
         return toolbar
 
@@ -1387,22 +1432,22 @@ class PrefsPage(Reddit):
                         *a, **kw)
 
     def build_toolbars(self):
-        buttons = [NavButton(menu.options, ''),
-                   NamedButton('apps')]
+        buttons = [NavButton(menu.options, '', sr_path=False),
+                   NamedButton('apps', sr_path=False)]
 
         # if c.user.pref_private_feeds:
-        #    buttons.append(NamedButton('feeds'))
+        #    buttons.append(NamedButton('feeds', sr_path=False))
 
         buttons.extend([
-            NamedButton('friends'),
-            NamedButton('blocked'),
-            NamedButton('update'),
+            NamedButton('friends', sr_path=False),
+            NamedButton('blocked', sr_path=False),
+            NamedButton('update', sr_path=False),
         ])
 
         if c.user.name in g.admins:
-            buttons += [NamedButton('security')]
+            buttons += [NamedButton('security', sr_path=False)]
 
-        buttons += [NamedButton('deactivate')]
+        buttons += [NamedButton('deactivate', sr_path=False)]
 
         return [PageNameNav('nomenu', title = _("preferences")),
                 NavMenu(buttons, base_path = "/prefs", type="tabmenu")]
@@ -1575,7 +1620,7 @@ class BoringPage(Reddit):
         Reddit.__init__(self, **context)
 
     def build_toolbars(self):
-        if isinstance(c.site, HomeSR):
+        if isinstance(c.site, (HomeSR, DynamicSR)):
             return [PageNameNav('nomenu', title = self.pagename)]
         elif isinstance(c.site, (AllSR)):
             return [PageNameNav('subredditnositelink', title = self.pagename)]
@@ -2385,24 +2430,25 @@ class SubredditsPage(Reddit):
         self.interestbar = InterestBar(True) if show_interestbar else None
 
     def build_toolbars(self):
-        buttons =  [NavButton(menu.popular, ""),
-                    NamedButton("new")]
+        buttons =  [NavButton(menu.popular, "", sr_path=False),
+                    NamedButton("new", sr_path=False)]
         if c.user_is_admin:
-            buttons.append(NamedButton("banned"))
+            buttons.append(NamedButton("banned", sr_path=False))
         if c.user.employee:
-            buttons.append(NamedButton("employee"))
+            buttons.append(NamedButton("employee", sr_path=False))
         if c.user.gold or c.user.gold_charter:
-            buttons.append(NamedButton("gold"))
+            buttons.append(NamedButton("gold", sr_path=False))
         if c.user_is_admin:
-            buttons.append(NamedButton("quarantine"))
+            buttons.append(NamedButton("quarantine", sr_path=False))
         if c.user_is_admin:
-            buttons.append(NamedButton("featured"))
+            buttons.append(NamedButton("featured", sr_path=False))
         if c.user_is_loggedin:
             #add the aliases to "my reddits" stays highlighted
             buttons.append(NamedButton("mine",
                                        aliases=['/subs/mine/subscriber',
                                                 '/subs/mine/contributor',
-                                                '/subs/mine/moderator']))
+                                                '/subs/mine/moderator'],
+                                        sr_path=False))
 
         return [PageNameNav('subreddits'),
                 NavMenu(buttons, base_path = '/subs', type="tabmenu")]
@@ -2952,6 +2998,8 @@ class SubredditTopBar(CachedTemplate):
         # it is added to the render cache key.
         self.location = c.location or "no_location"
         self.my_subreddits_dropdown = self.my_reddits_dropdown()
+        # SaidIt: site_index_user_configurable
+        self.pref_site_index = c.user.pref_site_index
         CachedTemplate.__init__(self, name=name, t=t, over18=c.over18)
 
     @property
@@ -3004,14 +3052,29 @@ class SubredditTopBar(CachedTemplate):
         css_classes = {Random: "random",
                        RandomSubscription: "gold"}
 
-        # CUSTOM: HomeSR support
+        # SaidIt: configurable home page
         reddits = []
-        if g.menu_show_home == 'true':
-            reddits.append(Home)
-        if g.menu_show_all == 'true':
-            reddits.append(All)
-        if g.menu_show_front == 'true':
-            reddits.append(Frontpage)
+        if g.site_index_user_configurable == 'true':
+            if c.user.pref_site_index == 'site_index_front':
+                reddits.append(Frontpage)
+                reddits.append(All)
+                reddits.append(Home)
+            elif c.user.pref_site_index == 'site_index_all':
+                reddits.append(All)
+                reddits.append(Frontpage)
+                reddits.append(Home)
+            elif c.user.pref_site_index == 'site_index_home':
+                reddits.append(Home)
+                reddits.append(Frontpage)
+                reddits.append(All)
+        else:
+            if g.menu_show_home == 'true':
+                reddits.append(Home)
+            if g.menu_show_front == 'true':
+                reddits.append(Frontpage)
+            if g.menu_show_all == 'true':
+                reddits.append(All)
+
         if g.menu_show_random == 'true':
             reddits.append(Random)
 

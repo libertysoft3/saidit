@@ -141,6 +141,8 @@ from r2.models import (
     HomeSR,
     Home,
     HomeMinus,
+    DynamicSR,
+    Dynamic
 )
 from r2.lib.db import tdb_cassandra
 
@@ -302,12 +304,22 @@ def set_subreddit():
 
     can_stale = request.method.upper() in ('GET', 'HEAD')
 
-    if g.site_index == 'home':
-        c.site = Home
-    elif g.site_index == 'all':
+    # SaidIt configurable home page
+    c.site = Frontpage
+    if g.site_index == 'all':
         c.site = All
-    else:
-        c.site = Frontpage
+    elif g.site_index == 'home':
+        c.site = Home
+    elif g.site_index == 'friends':
+        c.site = Friends
+    elif g.site_index == 'mod':
+        c.site = Mod
+    elif g.site_index == 'random':
+        c.site = Random
+
+    # SaidIt user configurable home page
+    if g.site_index_user_configurable == 'true':
+        c.site = Dynamic
 
     if not sr_name:
         #check for cnames
@@ -376,21 +388,28 @@ def set_subreddit():
             elif not c.error_page and not request.path.startswith("/api/login/") :
                 abort(404)
 
-    # CUSTOM: add HomeSR support
+    # SaidIt: configurable home page support
     #if we didn't find a subreddit, check for a domain listing
-    if not sr_name and isinstance(c.site, HomeSR) and domain:
-        # Redirect IDN to their IDNA name if necessary
-        try:
-            idna = _force_unicode(domain).encode("idna")
-            if idna != domain:
-                path_info = request.environ["PATH_INFO"]
-                path = "/domain/%s%s" % (idna, path_info)
-                abort(302, location=BaseController.format_output_url(path))
-        except UnicodeError:
-            domain = ''  # Ensure valid_ascii_domain fails
-        if not c.error_page and not valid_ascii_domain.match(domain):
-            abort(404)
-        c.site = DomainSR(domain)
+    if not sr_name and domain:
+        tryForDomainSR = False
+        if g.site_index_user_configurable == 'true' and isinstance(c.site, DynamicSR):
+            tryForDomainSR = True
+        else:
+            if g.site_index == c.site.name:
+                tryForDomainSR = True
+        if tryForDomainSR:
+            # Redirect IDN to their IDNA name if necessary
+            try:
+                idna = _force_unicode(domain).encode("idna")
+                if idna != domain:
+                    path_info = request.environ["PATH_INFO"]
+                    path = "/domain/%s%s" % (idna, path_info)
+                    abort(302, location=BaseController.format_output_url(path))
+            except UnicodeError:
+                domain = ''  # Ensure valid_ascii_domain fails
+            if not c.error_page and not valid_ascii_domain.match(domain):
+                abort(404)
+            c.site = DomainSR(domain)
 
     if isinstance(c.site, FakeSubreddit):
         c.default_sr = True

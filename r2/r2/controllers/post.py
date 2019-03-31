@@ -62,7 +62,8 @@ class PostController(ApiController):
             value = request.params.get('media_preview')
             prefs["pref_media_preview"] = validator.run(value)
 
-        u = UrlParser(c.site.path + "prefs")
+        # SaidIt: don't use c.site.path
+        u = UrlParser("/prefs")
 
         filter_prefs(prefs, c.user)
         if c.errors.errors:
