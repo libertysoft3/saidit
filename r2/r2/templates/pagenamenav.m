@@ -71,7 +71,7 @@
 </%def>
 
 <%def name="newpagelink()">
-<span class="newpagelink">reddit all?&#32;${plain_link("click here to find new links.", "/new/", _sr_path=False)}</span>
+  <span class="newpagelink">${g.brander_site} all?&#32;${plain_link("click here to find new links.", "/new/", _sr_path=False)}</span>
 </%def>
 
 <%def name="subredditnositelink()">

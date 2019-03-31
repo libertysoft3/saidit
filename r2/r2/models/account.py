@@ -169,6 +169,7 @@ class Account(Thing):
                      pref_chat_client_user=g.live_config['chat_default_username'],
                      pref_chat_client_password='',
                      pref_subscriptions_unsubscribe='subs_do_nothing',
+                     pref_site_index=g.site_index_user_configurable_default,
                      pref_site_theme=g.live_config['site_theme_default'],
                      pref_lightswitch=False if g.live_config['site_theme_lightswitch_default'] == 'off' else True,
                      pref_sendreplies=True,
@@ -378,8 +379,8 @@ class Account(Thing):
         if (self.link_karma < g.live_config["create_sr_link_karma"] and
                 self.comment_karma < g.live_config["create_sr_comment_karma"]):
             return False
-		
-	# CUSTOM - allow subreddit creation once every X days
+
+        # CUSTOM - allow subreddit creation once every X days
         # To avoid checking all subs, we get a list of user's contributed to subs,
         # and then check the sub author and sub creation date. Works even if they
         # create a sub then quit as moderator.
@@ -395,8 +396,8 @@ class Account(Thing):
                     if sr.author_id == self._id and sr._date > min_last_created.replace(tzinfo=g.tz) and not c.user_is_admin and not self.employee:
                         # g.log.warning("!!! dbg: user %s cannot create sub, created %s at %s, once every %s days max" % (self.name, sr.name, sr._date, g.live_config["create_sr_ratelimit_once_per_days"]))
                         return False
-	
-	# CUSTOM - Global Ban enforcement
+
+        # CUSTOM - Global Ban enforcement
         # TODO: Use the can_create_subreddit hook to do this stuff elsewhere
         from r2.models.globalban import GlobalBan
         if GlobalBan._user_banned(self._id):
@@ -965,10 +966,10 @@ def register(name, password, registration_ip):
                 pref_no_profanity=True,
                 registration_ip=registration_ip,
 
-		# CUSTOM - Set chat defaults
+                # CUSTOM - Set chat defaults
                 pref_chat_user=name,
-                pref_chat_client_user=''.join(random.choice(string.ascii_letters+string.digits) for i in range(20)),
-                pref_chat_client_password=''.join(random.choice(string.ascii_letters+string.digits) for i in range(20)),
+                pref_chat_client_user=''.join(random.choice(string.ascii_letters+string.digits) for i in range(30)),
+                pref_chat_client_password=''.join(random.choice(string.ascii_letters+string.digits) for i in range(30)),
 
             )
             account._commit()

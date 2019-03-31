@@ -58,6 +58,7 @@ from subreddit import (
     # CUSTOM
     AllSR,
     HomeSR,
+    DynamicSR,
 )
 from printable import Printable
 from r2.config import extensions
@@ -678,7 +679,7 @@ class Link(Thing, Printable):
                     show_media = True
 
             # CUSTOM
-            elif feature.is_enabled('force_show_media_front') and pref_media != 'off' and isinstance(site, (AllSR, DefaultSR, HomeSR)):
+            elif feature.is_enabled('force_show_media_front') and pref_media != 'off' and isinstance(site, (AllSR, DefaultSR, HomeSR, DynamicSR)):
                 show_media = True
 
             show_media_preview = False

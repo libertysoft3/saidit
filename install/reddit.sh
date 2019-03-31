@@ -406,7 +406,7 @@ server {
     ssl_stapling on;
     ssl_stapling_verify on;
     add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
-    # reddit sets these
+    # reddit code manages these headers
     # add_header X-Frame-Options DENY;
     # add_header X-Content-Type-Options nosniff;
     # add_header X-XSS-Protection "1; mode=block";

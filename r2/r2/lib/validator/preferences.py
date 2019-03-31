@@ -27,7 +27,12 @@ from r2.config import feature
 from r2.lib.menus import CommentSortMenu
 
 # CUSTOM
-from r2.lib.menus import ChatSidebarSizeMenu, SubscriptionsSubscribeMenu, SiteThemeMenu
+from r2.lib.menus import (
+    ChatSidebarSizeMenu,
+    SubscriptionsSubscribeMenu,
+    SiteThemeMenu,
+    SiteIndexMenu,
+)
 
 from r2.lib.validator.validator import (
     VBoolean,
@@ -115,7 +120,8 @@ PREFS_VALIDATORS = dict(
     # empty password defaults to prefixed random in this validator
     pref_chat_client_password=VChatClientAuthToken('chat_client_password'),
     pref_subscriptions_unsubscribe=VOneOf('subscriptions_unsubscribe', SubscriptionsSubscribeMenu._options),
-    pref_site_theme=VSiteTheme('site_theme'),
+    pref_site_index=VOneOf('site_index', SiteIndexMenu._options),
+    pref_site_theme=VOneOf('site_theme', SiteThemeMenu._options),
 )
 
 
@@ -132,30 +138,30 @@ def set_prefs(user, prefs):
                 g.log.warning("Could not find beta subreddit '%s'. It may "
                               "need to be created." % g.beta_sr)
 
-        # CUSTOM: refuse empty IRC nick
-        elif k == 'pref_chat_user' and v is None:
-           continue
-        # CUSTOM: Nick change: force generate new chat client credentials, avoids user having to change their 
-        # nick in the chat client. Forces new chat client session and account.
-        elif k == 'pref_chat_user' and v != user.pref_chat_user:
-            setattr(user, 'pref_chat_client_user', None)
-            setattr(user, 'pref_chat_client_password', None)
-            
-            # CUSTOM: "update caches" (from account.py, for delete user case). Clears comment cache (sidebar block is not cached/always updates)
-            # TODO - Post cache does not clear, chat posts are wonky on IRC nick change. only known way is reddit-flush. asking for too much liveness?
-            blah = Account._by_name(user.name, allow_deleted = True, _update = True)
-        elif k == 'pref_chat_client_user' and v is None:
-           continue
-        elif k == 'pref_chat_client_password' and v is None:
-           continue
-
         # CUSTOM: mass unsubscribe
         # TODO: create Subreddit.unsubscribe_multiple(cls, user, sr_ids)
         elif k == 'pref_subscriptions_unsubscribe' and v == 'subs_reset_subscriptions':
             subscriber_srs = Subreddit.user_subreddits(user, ids=False, limit=None)
             for sub in subscriber_srs:
                 sub.remove_subscriber(user)
+            # we don't need to setattr()
             continue
+
+        # CUSTOM: refuse empty IRC nick
+        # elif k == 'pref_chat_user' and v is None:
+        #    continue
+        # # CUSTOM: Nick change: force generate new chat client credentials, avoids user having to change their
+        # # nick in the chat client. Forces new chat client session and account.
+        # elif k == 'pref_chat_user' and v != user.pref_chat_user:
+        #     setattr(user, 'pref_chat_client_user', None)
+        #     setattr(user, 'pref_chat_client_password', None)
+        #     # CUSTOM: "update caches" (from account.py, for delete user case). Clears comment cache (sidebar block is not cached/always updates)
+        #     # TODO - Post cache does not clear, chat posts are wonky on IRC nick change. only known way is reddit-flush. asking for too much liveness?
+        #     blah = Account._by_name(user.name, allow_deleted = True, _update = True)
+        # elif k == 'pref_chat_client_user' and v is None:
+        #    continue
+        # elif k == 'pref_chat_client_password' and v is None:
+        #    continue
 
         setattr(user, k, v)
 

@@ -198,9 +198,9 @@ class ListingController(RedditController):
         def keep(item):
             wouldkeep = item.keep_item(item)
 
-            # CUSTOM support alternate home pages for the /subs path
-            # distinguish subs vs. links when checking sub.discoverable
-            if isinstance(c.site, (HomeSR, AllSR)):
+            # SaidIt: support alternate home pages
+            # Distinguish between subs and links when checking discoverable
+            if isinstance(c.site, (HomeSR, AllSR)) or (isinstance(c.site, DynamicSR) and (c.site.name == g.home_name or c.site.name == g.all_name)):
                 if hasattr(item, 'subreddit') and not item.subreddit.discoverable:
                     return False
                 elif hasattr(item, 'discoverable') and not item.discoverable:
@@ -326,7 +326,15 @@ class SubredditListingController(ListingController):
     def render_params(self):
         render_params = {}
 
-        if isinstance(c.site, HomeSR):
+        if g.site_index_user_configurable == 'true':
+            if c.site.name == g.front_name and c.user.pref_site_index == 'site_index_front':
+                render_params.update({'show_locationbar': True})
+            elif c.site.name == g.all_name and c.user.pref_site_index == 'site_index_all':
+                render_params.update({'show_locationbar': True})
+            elif c.site.name == g.home_name and c.user.pref_site_index == 'site_index_home':
+               render_params.update({'show_locationbar': True})
+
+        elif g.site_index == c.site.name:
             render_params.update({'show_locationbar': True})
 
         else:
@@ -464,8 +472,17 @@ class ListingWithPromos(SubredditListingController):
             show_sponsors = not c.user.pref_hide_ads or not c.user.gold
             show_organic = self.show_organic and c.user.pref_organic
 
-            # CUSTOM
-            on_frontpage = isinstance(c.site, HomeSR)
+            # SaidIt: configurable home page
+            on_frontpage = False
+            if g.site_index_user_configurable == 'true':
+                if c.site.name == g.front_name and c.user.pref_site_index == 'site_index_front':
+                    on_frontpage = True
+                elif c.site.name == g.all_name and c.user.pref_site_index == 'site_index_all':
+                    on_frontpage = True
+                elif c.site.name == g.home_name and c.user.pref_site_index == 'site_index_home':
+                    on_frontpage = True
+            else:
+                on_frontpage = (c.site.name == g.site_index)
 
             requested_ad = request.GET.get('ad')
 
@@ -637,7 +654,7 @@ class BrowseController(ListingWithPromos):
         if self.time != 'all' and c.default_sr:
             oldest = utils.timeago('1 %s' % (str(self.time),))
             def keep(item):
-                if isinstance(c.site, (HomeSR, AllSR)):
+                if isinstance(c.site, (HomeSR, AllSR)) or (isinstance(c.site, DynamicSR) and (c.site.name == g.home_name or c.site.name == g.all_name)):
                     if not item.subreddit.discoverable:
                         return False
                 return item._date > oldest and item.keep_item(item)

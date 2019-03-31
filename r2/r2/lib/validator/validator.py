@@ -2334,7 +2334,7 @@ class VNop(Validator):
                                                   for s in self.options),
         }
 
-# CUSTOM - Defaults to reddit username
+# CUSTOM - Defaults to c.user.name
 class VChatUser(Validator):
     def __init__(self, param, default = "", **kw):
         Validator.__init__(self, param, default, **kw)
@@ -3395,6 +3395,7 @@ class VIpBanByIp(Validator):
             return a
 
 # CUSTOM: Site Theme
+# TODO: should be a VOneOf
 class VSiteTheme(Validator):
     @staticmethod
     def validate_theme(theme, strict=False):

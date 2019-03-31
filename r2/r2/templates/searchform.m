@@ -22,7 +22,7 @@
 
 <%!
    from r2.config import feature
-   from r2.models.subreddit import DefaultSR, AllSR, HomeSR
+   from r2.models.subreddit import DefaultSR, AllSR, HomeSR, DynamicSR
    from r2.lib.template_helpers import add_sr, static
 %>
 
@@ -73,13 +73,13 @@
     %endif
   %elif thing.simple:
   <div id="searchexpando" class="infobar">
-    %if not isinstance(c.site, (DefaultSR, AllSR, HomeSR)):
+    %if not isinstance(c.site, (DefaultSR, AllSR, HomeSR, DynamicSR)):
       <label><input type="checkbox" name="restrict_sr" tabindex="21">${_('limit my search to %(path)s') % dict(path=c.site.path.rstrip('/'))}</label>
     % endif
     ${search_faq()}
   </div>
   %else:
-    %if not thing.site or isinstance(thing.site, (DefaultSR, AllSR, HomeSR)):
+    %if not thing.site or isinstance(thing.site, (DefaultSR, AllSR, HomeSR, DynamicSR)):
       <input type="hidden" name="restrict_sr">
     %else:
       <label><input type="checkbox" ${'checked="checked"' if thing.restrict_sr else ''} name="restrict_sr" tabindex="21">

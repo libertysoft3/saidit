@@ -182,15 +182,15 @@ class Vote(object):
         """Apply the effects of the vote to the thing that was voted on."""
         # remove the old vote
         if self.previous_vote and self.is_unupvote and self.effects.affects_score:
-            g.log.warning("!!! apply_effects() decrementing _ups")
+            # g.log.warning("!!! apply_effects() decrementing _ups")
             self.thing._incr("_ups", -1)
         elif self.previous_vote and self.is_undownvote and self.effects.affects_score:
-            g.log.warning("!!! apply_effects() decrementing _downs")
+            # g.log.warning("!!! apply_effects() decrementing _downs")
             self.thing._incr("_downs", -1)
 
         # add the new vote
         if self.affected_thing_attr:
-            g.log.warning("!!! apply_effects() incrementing %s" % self.affected_thing_attr)
+            # g.log.warning("!!! apply_effects() incrementing %s" % self.affected_thing_attr)
             self.thing._incr(self.affected_thing_attr, 1)
 
         if self.effects.affects_karma:

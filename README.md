@@ -393,13 +393,11 @@ start TheLounge:
 
 ## SaidIt dev guide
 
-watch reddit run and debug errors
+You can mount the VM's reddit files as a folder on your host machine for easy editing and searching. On your host install sshfs and run `$ sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm`. Unmount it before shutting down your VM later with `$ fusermount -u ~/vm` to avoid crashing your editor when your VM shuts down.
+
+watch reddit run and debug errors:
 
     $ sudo tail -f /var/log/syslog
-
-additional configuration changes you may wish to make are shown in `r2/development.update.saidit`
-
-You can mount the VM's reddit files as a folder on your host machine for easy editing and searching. On your host install sshfs and run `$ sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm`. Unmount it before shutting down your VM later with `$ fusermount -u ~/vm` to avoid crashing your editor when your VM shuts down.
 
 change the default subs:
 
@@ -416,8 +414,8 @@ change the default subs:
 
 ## Additional documentation
 
-* [https://github.com/reddit-archive/reddit/wiki](https://github.com/reddit-archive/reddit/wiki)
 * [https://www.reddit.com/r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
+* [https://github.com/reddit-archive/reddit/wiki](https://github.com/reddit-archive/reddit/wiki)
 * [https://www.reddit.com/r/redditdev](https://www.reddit.com/r/redditdev)
 
 ---

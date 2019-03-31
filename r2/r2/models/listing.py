@@ -394,7 +394,7 @@ class SpotlightListing(Listing):
                                  for keyword in keywords])
         self.navigable = kw.get('navigable', True)
         self.things = kw.get('organic_links', [])
-        self.show_placeholder = isinstance(c.site, (DefaultSR, AllSR, HomeSR))
+        self.show_placeholder = isinstance(c.site, (DefaultSR, AllSR, HomeSR, DynamicSR))
 
     def get_items(self):
         from r2.lib.template_helpers import replace_render

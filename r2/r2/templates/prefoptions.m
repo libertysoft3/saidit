@@ -26,8 +26,12 @@
    from r2.lib.menus import CommentSortMenu
 
    ## CUSTOM
-   from r2.lib.menus import ChatSidebarSizeMenu, SubscriptionsSubscribeMenu, SiteThemeMenu
-
+   from r2.lib.menus import (
+    ChatSidebarSizeMenu,
+    SubscriptionsSubscribeMenu,
+    SiteThemeMenu,
+    SiteIndexMenu
+    )
    from r2.lib.template_helpers import add_sr, _wsf, format_html, make_url_protocol_relative
    from r2.lib.utils import UrlParser
    import random
@@ -113,6 +117,19 @@
   <select name="site_theme">
         %for sort in menu._options:
         <option ${'selected="selected"' if sort == c.user.pref_site_theme else ""}
+                value="${sort}">
+          ${menu.make_title(sort)}&#32;${_('(default)') if sort == menu._default else ''}
+        </option>
+        %endfor
+  </select>
+</%def>
+
+## SaidIt: site index
+<%def name="site_index_sort_options()">
+  <% menu = SiteIndexMenu() %>
+  <select name="site_index">
+        %for sort in menu._options:
+        <option ${'selected="selected"' if sort == c.user.pref_site_index else ""}
                 value="${sort}">
           ${menu.make_title(sort)}&#32;${_('(default)') if sort == menu._default else ''}
         </option>
@@ -358,7 +375,6 @@
       <p>
         ${_wsf("theme %(sort)s", sort=unsafe(capture(site_theme_sort_options)))}
       </p>
-      <br/>
 
       ${checkbox(_("allow subreddits to show me custom themes"), "show_stylesheets")}
       %if feature.is_enabled('stylesheets_everywhere'):
@@ -386,6 +402,11 @@
       </tr>
     <tr>
     <td class="prefright">
+      %if g.site_index_user_configurable == 'true':
+        <p>
+          ${_wsf("home page %(sort)s", sort=unsafe(capture(site_index_sort_options)))}
+        <p>
+      %endif
       ${checkbox(_("I am over eighteen years old and willing to view adult content"), "over_18")}
       &#32;<span class="details">(${_("required to view some subreddits")})</span>
       <br/>
@@ -501,65 +522,6 @@
       <p>
         ${_wsf("sidebar chat width %(sort)s", sort=unsafe(capture(chat_sidebar_size_options)))}
       </p>
-      <!-- 
-      ${checkbox(_("click to load sidebar chats"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(coming soon)")}
-      <br/>
-        ${checkbox(_("click to load post chats"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(coming soon)")}
-      <br/>
-        ${checkbox(_("click to load comment chats"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(coming soon)")}
-      <br/> -->
-      <p>
-          <%
-           input = unsafe(capture(text_input_all, c.user.pref_chat_user,
-                                  'chat_user', 30, False))
-           %>
-        <% s = c.user.pref_chat_user %>
-        ${_wsf("IRC nickname %(chat_user)s", chat_user=input)}
-        &#32; <span class="details">${_("(changing will generate new chat client credentials)")}</span>
-        <!--
-        &#32;
-         <span class="details">
-          ${_("(as well as IRC username and realname)")}
-        </span> 
-        -->
-      </p>
-      <p>
-          <%
-           disabled = True
-           input = unsafe(capture(text_input_all, c.user.pref_chat_client_user,
-                                  'chat_client_user', 30, disabled))
-           %>
-        <% s = c.user.pref_chat_client_user %>
-        ${_wsf("chat client username %(val)s", val=input)}
-        <!-- &#32; <span class="details">${_("(clear field and save to generate new credentials)")}</span> -->
-      </p>
-      <p>
-          <%
-           disabled = True
-           input = unsafe(capture(text_input_all, c.user.pref_chat_client_password,
-                                  'chat_client_password', 30, disabled))
-           %>
-        <% s = c.user.pref_chat_client_password %>
-        ${_wsf("chat client password %(val)s", val=input)}
-      </p>
-
-      <br>
-      <p>${_("creating chat widgets")}</p>
-      <% chat_enabler = g.live_config['chat_enabling_post_content'] %>
-      <p>&#8226; ${_("post chat:")} submit a text post with any title and set the optional text to "${chat_enabler}". the title of the post will be the chat channel/topic &#32;<span class="details">(if ${_(g.config['brander_community'])} allows)</span></p>
-      <p>&#8226; ${_("comment chat:")} comment "${chat_enabler}" followed by your desired chat channel/topic &#32;<span class="details">(if ${_(g.config['brander_community'])} allows)</span></p>
-      
-      ## <br>
-      ## <p>${_("bring your own IRC client")}</p>
-      ## <p>&#8226; connect to: coming soon
-      ## &nbsp;<a href="${g.live_config['chat_external_url_href']}">${g.live_config['chat_external_url']}</a>
-      ## </p>
-
-      <br>
-      <p>${_("troubleshooting")}</p>
-      <p>&#8226; disconnect from unused IRC channels to improve performance</p>
-      <p>&#8226; "not connected": type and send IRC command "/connect" a few times until you re-connect to the IRC server</p>
-      <p>&#8226; "authentication failed": refresh the page. ensure other browser tabs with chat are closed. try clearing your cache and cookies and login to this site again. if you still get this error, set a new IRC nickname above and click "save options".</p>
     </td>
     </tr>
 

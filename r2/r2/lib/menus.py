@@ -32,8 +32,8 @@ from r2.lib.strings import StringHandler, plurals
 from r2.lib.utils import  class_property, query_string, timeago
 from r2.lib.wrapped import Styled
 
-# CUSTOM: All On Front
-from r2.models.subreddit import DefaultSR, AllSR, HomeSR
+# CUSTOM: Add HomeSR support
+from r2.models.subreddit import DefaultSR, AllSR, HomeSR, DynamicSR
 
 class MenuHandler(StringHandler):
     """Bastard child of StringHandler and plurals.  Menus are
@@ -218,6 +218,9 @@ menu =   MenuHandler(hot          = _('hot'),
                      subs_reset_subscriptions       = _('yes (danger)'),
                      theme_nightmode                = _('Night mode'),
                      theme_daymode                  = _('Day mode'),
+                     site_index_home                = _(g.home_name.title()),
+                     site_index_front               = _(g.front_name.title()),
+                     site_index_all                 = _(g.all_name.title()),
                      )
 
 def menu_style(type):
@@ -338,7 +341,6 @@ class NavButton(Styled):
 
     def is_selected(self):
         stripped_path = _force_unicode(request.path.rstrip('/').lower())
-
         if not (self.sr_path or c.default_sr):
             return False
         if stripped_path == self.bare_path:
@@ -451,8 +453,8 @@ class SubredditButton(NavButton):
     # TRANSLATORS: This refers to /r/mod
     name_overrides = {Mod: N_("mod"),
     # TRANSLATORS: This refers to the user's front page
-                      Frontpage: N_("front"),
-                      All: N_("all"),
+                      Frontpage: N_(g.front_name),
+                      All: N_(g.all_name),
                       Random: N_("random"),
     # TRANSLATORS: Gold feature, "myrandom", a random subreddit from your subscriptions
                       RandomSubscription: N_("myrandom")}
@@ -460,17 +462,23 @@ class SubredditButton(NavButton):
     def __init__(self, sr, css_class='', data=None):
         self.path = sr.path
         name = self.name_overrides.get(sr)
-        
-        # CUSTOM: warning HomeSR extends AllSR, must be first
-        if isinstance(sr, DefaultSR):
-            name = g.live_config['all_on_front_front_name']
-        elif isinstance(sr, HomeSR):
-            name = g.home_name
-        elif isinstance(sr, AllSR):
-            name = g.live_config['all_on_front_all_name']
-
         name = _(name) if name else sr.name
         self.isselected = (c.site == sr)
+        self.pref_site_index = c.user.pref_site_index
+
+        if isinstance(c.site, DynamicSR):
+            self.isselected = (c.site.name == sr.name)
+
+        if g.site_index_user_configurable != 'true' and g.site_index == sr.name:
+            self.path = '/'
+        if g.site_index_user_configurable == 'true':
+            if sr.name == g.front_name and c.user.pref_site_index == 'site_index_front':
+                self.path = '/'
+            elif sr.name == g.all_name and c.user.pref_site_index == 'site_index_all':
+                self.path = '/'
+            elif sr.name == g.home_name and c.user.pref_site_index == 'site_index_home':
+                self.path = '/'
+
         NavButton.__init__(self, name, sr.path, sr_path=False,
                            css_class=css_class, data=data)
 
@@ -487,6 +495,7 @@ class SubredditButton(NavButton):
             ('isselected', self.isselected),
             ('css_class', self.css_class),
             ('data', self.data),
+            ('pref_site_index', self.pref_site_index),
         ]
 
 
@@ -761,5 +770,11 @@ class SiteThemeMenu(SortMenu):
     _default = 'theme_nightmode'
     _options = (
         'theme_nightmode',
-'theme_daymode')
+        'theme_daymode')
 
+class SiteIndexMenu(SortMenu):
+    _default = 'site_index_home'
+    _options = (
+        'site_index_home',
+        'site_index_front',
+        'site_index_all')
