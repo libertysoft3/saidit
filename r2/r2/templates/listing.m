@@ -43,13 +43,13 @@
       <span class="nextprev">${_("view more:")}&#32;
       <br>
       %if thing.prev:
-        ${plain_link(format_html("&lsaquo; %s", _("prev")), thing.prev, rel="nofollow prev")}
+        ${plain_link(format_html("&lsaquo; %s", _("prev")), thing.prev, rel="nofollow prev", _sr_path=thing.sr_path)}
       %endif
       %if thing.prev and thing.next:
         <span class="separator"></span>
       %endif
       %if thing.next:
-        ${plain_link(format_html("%s &rsaquo;", _("next")), thing.next, rel="nofollow next")}
+        ${plain_link(format_html("%s &rsaquo;", _("next")), thing.next, rel="nofollow next", _sr_path=thing.sr_path)}
       %endif
       </span>
       %if thing.next_suggestions:

@@ -110,15 +110,12 @@ PREFS_VALIDATORS = dict(
     pref_legacy_search=VBoolean('legacy_search'),
     pref_threaded_modmail=VBoolean('threaded_modmail', False),
 
-    # CUSTOM
+    # SaidIt
     pref_chat_enabled=VBoolean("chat_enabled"),
     pref_chat_sidebar_size=VOneOf('chat_sidebar_size', ChatSidebarSizeMenu._options),
-    # empty user defaults to user.name in this validator
-    pref_chat_user=VChatUser('chat_user'),
-    # empty user defaults to prefixed random user in this validator
-    pref_chat_client_user=VChatClientUser('chat_client_user'),
-    # empty password defaults to prefixed random in this validator
-    pref_chat_client_password=VChatClientAuthToken('chat_client_password'),
+    # pref_chat_user=VChatUser('chat_user'),
+    # pref_chat_client_user=VChatClientUser('chat_client_user'),
+    # pref_chat_client_password=VChatClientAuthToken('chat_client_password'),
     pref_subscriptions_unsubscribe=VOneOf('subscriptions_unsubscribe', SubscriptionsSubscribeMenu._options),
     pref_site_index=VOneOf('site_index', SiteIndexMenu._options),
     pref_site_theme=VOneOf('site_theme', SiteThemeMenu._options),

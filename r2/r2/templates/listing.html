@@ -42,7 +42,7 @@
     <div class="nav-buttons" style="margin-top: 26px; margin-left: 10px;">
       <span class="nextprev">${_("view more:")}&#32;
       %if thing.prev:
-        ${plain_link(format_html("&lsaquo; %s", _("prev")), thing.prev, rel="nofollow prev")}
+        ${plain_link(format_html("&lsaquo; %s", _("prev")), thing.prev, rel="nofollow prev", _sr_path=thing.sr_path)}
       %endif
       %if thing.prev and thing.next:
         <span class="separator"></span>
