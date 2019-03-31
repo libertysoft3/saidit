@@ -27,7 +27,7 @@
         <input type="hidden"
                 name="thing_id"
                 value="${fullname}">
-        <a href="${rules_page_link}"
+        <a href="https://saidit.net/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/"
                 class="action-icon action-icon-info c-hide-text may-blank"
                 title="${_('View the community rules')}">
             ${_('View the community rules')}

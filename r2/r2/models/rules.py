@@ -40,8 +40,10 @@ OLD_SITEWIDE_RULES = [
 
 SITEWIDE_RULES = [
     _("Spam"),
-    _("Personal and confidential information"),
-    _("Threatening, harassing, or inciting violence"),
+    # _("Personal and confidential information"),
+    # _("Threatening, harassing, or inciting violence"),
+    _("Dragging down discussion on Pyramid Of Debate"),
+    _("Content is Illegal in USA (piracy content, illegal selling, etc)"),
 ]
 MAX_RULES_PER_SUBREDDIT = 10
 
