@@ -20,16 +20,21 @@ There are two ways to set up a saidit server: on a standalone physical server, o
 
 1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 1. Download [Ubuntu 14.04.6](http://releases.ubuntu.com/14.04/) server install image
-1. In VirtualBox, after creating a new VM with 4gb RAM and 30gb disk space, 
-1. Set networking to use a "Bridged Adapter"
-1. Add a CD rom entry and select the Ubuntu 14 .iso
-1. Boot the VM
+1. Start VirtualBox and click 'New'
+   1. Type: Linux
+   1. Version: Ubuntu (64-bit)
+   1. Memory Size: 4000 MB (minimum)
+   1. File location and size: 30.0 GB (minimim)
+1. Right click the new VM and choose 'Settings'
+   1. Network: Adapter 1: Attached to: "Bridged Adapter"
+   1. Storage: Click "Choose Virtual Optical Disk File" and select the Ubuntu 14 .iso you file previously downloaded
+1. Select the new VM and click 'Start'
 1. Install Ubuntu with the following options, but leaving all other options with the default selection:
    1. username "reddit"
    1. "Choose software to install": Select OpenSSH, but no others
 1. Complete Ubuntu installation
 
-From this point forward you can start your VM with Start -> Headless Start and ssh in as the 'reddit' user if you wish, using a program like [PuTTY](https://www.putty.org/). Don't forget to shut down your VM with Close -> ACPI Shutdown before shutting down your host OS or you may corrupt your VM.
+From this point forward you can start your VM with 'Start -> Headless Start' and ssh in as the 'reddit' user if you wish, using a program like [PuTTY](https://www.putty.org/). Don't forget to shut down your VM with 'Close -> ACPI Shutdown' before shutting down your host OS or you may corrupt your VM.
 
 ### Setting up a physical server
 
@@ -53,7 +58,7 @@ This step is optional and for convenience but is highly recommended. These instr
     $ ifconfig
     # note the 'inet addr' for device 'eth0'
 
-#### Update your hosts file (development machine/host OS)
+#### Update the 'hosts' file on your development machine/host OS
 
 On linux:
 
