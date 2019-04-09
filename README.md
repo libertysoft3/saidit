@@ -14,51 +14,81 @@
 
 ## Installation
 
-### Create a Ubuntu 14.04 VM with VirtualBox
+There are two ways to set up a saidit server: on a standalone physical server, or through a Virtual Machine environment (running within another OS such as linux, MacOS, or Windows) for development and testing purposes.
 
-If you have [Ubuntu 14](http://releases.ubuntu.com/14.04/) running on a server you can skip this step.
+### Setting up a virtual machine
+
+1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+1. Download [Ubuntu 14.04.6](http://releases.ubuntu.com/14.04/) server install image
+1. Start VirtualBox and click 'New'
+   1. Type: Linux
+   1. Version: Ubuntu (64-bit)
+   1. Memory Size: 4000 MB (minimum)
+   1. File location and size: 30.0 GB (minimim)
+1. Right click the new VM and choose 'Settings'
+   1. Network: Adapter 1: Attached to: "Bridged Adapter"
+   1. Storage: Click "Choose Virtual Optical Disk File" and select the Ubuntu 14 .iso you file previously downloaded
+1. Select the new VM and click 'Start'
+1. Install Ubuntu with the following options, but leaving all other options with the default selection:
+   1. username "reddit"
+   1. "Choose software to install": Select OpenSSH, but no others
+1. Complete Ubuntu installation
+
+From this point forward you can start your VM with 'Start -> Headless Start' and ssh in as the 'reddit' user if you wish, using a program like [PuTTY](https://www.putty.org/). Don't forget to shut down your VM with 'Close -> ACPI Shutdown' before shutting down your host OS or you may corrupt your VM.
+
+### Setting up a physical server
+
+1. Download the [Ubuntu 14.04.6](http://releases.ubuntu.com/14.04/) Server Amd64 (64-bit version) .ISO file
+1. Download [Rufus](https://rufus.ie/) (as recommended by Ubuntu) and use it to write the .ISO to a USB drive
+1. Once finished, put the USB drive in the server and boot to it
+1. Install Ubuntu with the following options, but leaving all other options with the default selection:
+   1. username: reddit
+   1. "Choose software to install": Select OpenSSH, but no others
+1. When install finishes, remove USB drive and boot to linux
+
+From this point forward physical access to the server is no longer needed and you can ssh in as the 'reddit' user remotely if you wish, using a program like [PuTTY](https://www.putty.org/).
 
 
-1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) (Linux, Mac, or Windows)
-1. Download Ubuntu 14.04 server edition
-1. In VirtualBox, after creating a new VM with 4gb RAM and 30gb disk space, 
-1. Set networking to use a "Bridged Adapter"
-1. Add a CD rom entry and select the Ubuntu 14 .iso
-1. Boot the VM
-1. In the Ubuntu installer:
-  1. Choose username "reddit"
-  1. Choose to install "OpenSSH Server"
-  1. Complete Ubuntu installation. 
-1. Login and run `$ ifconfig` and note your VM's ip address
-1. If you forgot to install the openssh server, run `sudo apt-get install openssh-server`
-1. You can now detach your VM or shut it down and restart in headless mode. Don't forget to shut down your VM before shutting down your host OS or you may corrupt your reddit installation.
+### Connecting to your saidit server
 
-### Update your hosts file to resolve https://reddit.local in your browser
+This step is optional and for convenience but is highly recommended. These instructions will help you update your hosts file to resolve https://reddit.local (to your saidit server) in both your browser and your SSH client.
 
-Add the ip of your Ubuntu 14 server or virtual machine to your "hosts" file as domain name "reddit.local". This procedure [varies by OS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/). On linux edit `/etc/hosts` and add something like `192.168.1.20 reddit.local`.
+#### Find the ip address of your saidit server
 
-### Install reddit
+    $ ifconfig
+    # note the 'inet addr' for device 'eth0'
 
-SSH into your Ubuntu 14 reddit server and update the OS
+#### Update the 'hosts' file on your development machine/host OS
+
+On linux:
+
+    $ sudo sed -i '1i 192.168.1.20 reddit.local' /etc/hosts
+
+On Windows and MacOS: https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
+
+
+### Install saidit/reddit open source
+
+SSH into your saidit server and update the OS
 
     $ ssh reddit@reddit.local
     $ sudo apt-get update
     $ sudo apt-get upgrade
-    $ sudo apt-get install git
+    $ sudo apt-get install git gperf
 
-Install saidit/reddit open source
+Install saidit
 
     $ cd ~/
     $ git clone https://github.com/libertysoft3/saidit.git
     $ chmod +x saidit/install-reddit.sh
     $ sudo ./saidit/install-reddit.sh
-    # if you get an error about "less" restart the server and try again
-    # cleanup the installer checkout:
+    # do not proceed if the installer printed any errors
+    # cleanup installation, saidit has been installed elsewhere:
     $ rm -rf ~/saidit
  
 ### Upgrade curl
 
-this will improve the new link 'fetch title' capability and potentially more
+This will improve the new link 'fetch title' capability and potentially more
 
     $ sudo apt-get build-dep curl
     # use latest version from https://curl.haxx.se/download.html:
@@ -393,13 +423,19 @@ start TheLounge:
 
 ## SaidIt dev guide
 
-You can mount the VM's reddit files as a folder on your host machine for easy editing and searching. On your host install sshfs and run `$ sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm`. Unmount it before shutting down your VM later with `$ fusermount -u ~/vm` to avoid crashing your editor when your VM shuts down.
+You can mount the VM's reddit files as a folder on your host machine for easy editing and searching. On your host/development machine:
 
-watch reddit run and debug errors:
+    $ sudo apt-get install sshfs
+    $ mkdir ~/vm
+    $ sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm
+    # optionally unmount with:
+    $ fusermount -u ~/vm
+
+SaidIt log file, debug errors:
 
     $ sudo tail -f /var/log/syslog
 
-change the default subs:
+Change the default subs:
 
     $ cd ~/src/reddit/r2
     $ paster shell run.ini
@@ -409,6 +445,15 @@ change the default subs:
     LocalizedDefaultSubreddits.set_global_srs(srs)
     LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
     exit()
+
+Taking it to production:
+
+    # change db_pass in example.ini and /etc/cron.d/reddit
+    # change saidit user saidit's password
+    # install fail2ban
+    # configure your firewall
+    debug = false
+    uncompressedJS = false
 
 ---
 
