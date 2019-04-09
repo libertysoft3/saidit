@@ -25,13 +25,12 @@ There are two ways to set up a saidit server: on a standalone physical server, o
 1. Add a CD rom entry and select the Ubuntu 14 .iso
 1. Boot the VM
 1. In the Ubuntu installer:
-  1. Choose username "reddit"
-  1. Choose to install "OpenSSH Server"
-  1. Complete Ubuntu installation. 
-1. Login and run `$ ifconfig` and note your VM's ip address
-1. If you forgot to install the openssh server, run `sudo apt-get install openssh-server`
+   1. Choose username "reddit"
+   1. Choose to install "OpenSSH Server" (only)
+1. When install finishes, login and run `$ ifconfig` and note your VM's ip address
+1. If you forgot to install the openssh server, run `$ sudo apt-get install openssh-server`
 
-Don't forget to shut down your VM with 'ACPI shutdown' before shutting down your host OS or you may corrupt your saidit/reddit open source installation.
+Don't forget to shut down your VM with 'ACPI shutdown' before shutting down your host OS or you may corrupt your VM.
 
 ### Setting up a physical server
 
@@ -39,8 +38,8 @@ Don't forget to shut down your VM with 'ACPI shutdown' before shutting down your
 1. Download [Rufus](https://rufus.ie/) (as recommended by Ubuntu) and use it to write the .ISO to a USB drive
 1. Once finished, put the USB drive in the server and boot to it
 1. Install Ubuntu with the following options, but leaving all other options with the default selection:
-  1. username: reddit
-  1. "Choose software to install": Select OpenSSH, but no others
+   1. username: reddit
+   1. "Choose software to install": Select OpenSSH, but no others
 1. When install finishes, remove USB drive and boot to linux
 
 From this point forward, physical access to the server is no longer needed and you can ssh in to the 'reddit' user remotely if you wish, using a program like [PuTTY](https://www.putty.org/).
