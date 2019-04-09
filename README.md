@@ -24,13 +24,12 @@ There are two ways to set up a saidit server: on a standalone physical server, o
 1. Set networking to use a "Bridged Adapter"
 1. Add a CD rom entry and select the Ubuntu 14 .iso
 1. Boot the VM
-1. In the Ubuntu installer:
-   1. Choose username "reddit"
-   1. Choose to install "OpenSSH Server" (only)
-1. When install finishes, login and run `$ ifconfig` and note your VM's ip address
-1. If you forgot to install the openssh server, run `$ sudo apt-get install openssh-server`
+1. Install Ubuntu with the following options, but leaving all other options with the default selection:
+   1. username "reddit"
+   1. "Choose software to install": Select OpenSSH, but no others
+1. Complete Ubuntu installation
 
-Don't forget to shut down your VM with 'ACPI shutdown' before shutting down your host OS or you may corrupt your VM.
+From this point forward you can start your VM with Start -> Headless Start and ssh in as the 'reddit' user if you wish, using a program like [PuTTY](https://www.putty.org/). Don't forget to shut down your VM with Close -> ACPI Shutdown before shutting down your host OS or you may corrupt your VM.
 
 ### Setting up a physical server
 
@@ -42,16 +41,23 @@ Don't forget to shut down your VM with 'ACPI shutdown' before shutting down your
    1. "Choose software to install": Select OpenSSH, but no others
 1. When install finishes, remove USB drive and boot to linux
 
-From this point forward, physical access to the server is no longer needed and you can ssh in to the 'reddit' user remotely if you wish, using a program like [PuTTY](https://www.putty.org/).
+From this point forward physical access to the server is no longer needed and you can ssh in as the 'reddit' user remotely if you wish, using a program like [PuTTY](https://www.putty.org/).
 
 
 ### Connecting to your saidit server
 
-This is optional and for convenience but is highly recommended. Update your hosts file to resolve https://reddit.local to your saidit server in both your browser and your SSH client. Replace the ip address below with the ip address of your saidit server.
+This step is optional and for convenience but is highly recommended. These instructions will help you update your hosts file to resolve https://reddit.local (to your saidit server) in both your browser and your SSH client.
+
+#### Find the ip address of your saidit server
+
+    $ ifconfig
+    # note the 'inet addr' for device 'eth0'
+
+#### Update your hosts file (development machine/host OS)
 
 On linux:
 
-    sudo sed -i '1i 192.168.1.20 reddit.local' /etc/hosts
+    $ sudo sed -i '1i 192.168.1.20 reddit.local' /etc/hosts
 
 On Windows and MacOS: https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
 
@@ -434,6 +440,15 @@ Change the default subs:
     LocalizedDefaultSubreddits.set_global_srs(srs)
     LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
     exit()
+
+Taking it to production:
+
+    # change db_pass in example.ini and /etc/cron.d/reddit
+    # change saidit user saidit's password
+    # install fail2ban
+    # configure your firewall
+    debug = false
+    uncompressedJS = false
 
 ---
 
