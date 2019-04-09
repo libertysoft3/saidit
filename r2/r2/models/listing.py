@@ -39,7 +39,6 @@ from collections import namedtuple
 from copy import deepcopy, copy
 import time
 
-
 class Listing(object):
     # class used in Javascript to manage these objects
     _js_cls = "Listing"
@@ -75,16 +74,16 @@ class Listing(object):
                 item.render_replaced = True
         return builder_items
 
-    def listing(self, next_suggestions=None):
+    def listing(self, next_suggestions=None, sr_path=True):
         self.things, prev, next, bcount, acount = self.get_items()
 
         self.next_suggestions = next_suggestions
         self._max_num = max(acount, bcount)
         self.after = None
         self.before = None
-
         # SaidIt: configurable home page
-        self.sr_path = True
+        self.sr_path = sr_path
+
         if isinstance(c.site, DynamicSR):
             if g.site_index_user_configurable != 'true' and c.site.name == g.site_index:
                 self.sr_path = False

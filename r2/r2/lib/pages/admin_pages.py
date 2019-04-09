@@ -41,11 +41,11 @@ from r2.lib.utils import timesince
 def admin_menu(**kwargs):
     buttons = [
         OffsiteButton("traffic", "/traffic"),
-        NavButton(menu.awards, "awards"),
-        NavButton(menu.errors, "error log"),
+        NavButton(menu.awards, "awards", sr_path=False),
+        NavButton(menu.errors, "error log", sr_path=False),
         # CUSTOM
-        NavButton(menu.global_user_bans, "globaluserbans"),
-        NavButton(menu.ip_bans, "ipbans"),
+        NavButton(menu.global_user_bans, "globaluserbans", sr_path=False),
+        NavButton(menu.ip_bans, "ipbans", sr_path=False),
     ]
 
     admin_menu = NavMenu(buttons, title='admin tools', base_path='/admin',

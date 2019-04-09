@@ -788,9 +788,16 @@ class UrlParser(object):
         Adds the subreddit's path to the path if another subreddit's
         prefix is not already present.
         """
+        from r2.models import DynamicSR
         if not (self.path_has_subreddit()
                 or self.path.startswith(subreddit.user_path)):
-            self.path = (subreddit.user_path + self.path)
+            # SaidIt: configurable home page: don't prepend subreddit.user_path, 
+            # vanilla reddit would have subreddit.user_path='/' here. Fixes issues
+            # with routes /user, /prefs, /subs.
+            if (isinstance(subreddit, DynamicSR)):
+                pass
+            else:
+                self.path = (subreddit.user_path + self.path)
         return self
 
     @property

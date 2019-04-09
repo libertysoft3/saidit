@@ -108,6 +108,9 @@ class ListingController(RedditController):
     render_params = {}
     extra_page_classes = ['listing-page']
 
+    # SaidIt: configurable home page
+    sr_path = True
+
     @property
     def menus(self):
         """list of menus underneat the header (e.g., sort, time, kind,
@@ -235,7 +238,8 @@ class ListingController(RedditController):
         if c.render_style == "html" and self.next_suggestions_cls:
             suggestions = self.next_suggestions_cls()
 
-        pane = model.listing(next_suggestions=suggestions)
+        # SaidIt: configurable home page, pass along sr_path
+        pane = model.listing(next_suggestions=suggestions, sr_path=self.sr_path)
 
         # Indicate that the comment tree wasn't built for comments
         for i in pane:
@@ -341,7 +345,7 @@ class SubredditListingController(ListingController):
             if not c.user_is_loggedin:
                 # This data is only for scrapers, which shouldn't be logged in.
                 twitter_card = {
-                    "site": "reddit",
+                    "site": g.brander_site,
                     "card": "summary",
                     "title": self._build_og_title(max_length=70),
                     # Twitter will fall back to any defined OpenGraph
@@ -353,7 +357,7 @@ class SubredditListingController(ListingController):
 
                 render_params.update({
                     "og_data": {
-                        "site_name": "reddit",
+                        "site_name": g.brander_site,
                         "title": self._build_og_title(),
                         "image": static('icon.png', absolute=True),
                         "description": self._build_og_description(),
@@ -1057,6 +1061,9 @@ class UserController(ListingController):
         if vuser.pref_hide_from_robots:
             self.robots = 'noindex,nofollow'
 
+        # SaidIt: configurable home page: /user is never a sr_path
+        self.sr_path = False
+
         return ListingController.GET_listing(self, **env)
 
     @property
@@ -1494,7 +1501,7 @@ class RedditsController(ListingController):
     extra_page_classes = ListingController.extra_page_classes + ['subreddits-page']
 
     def title(self):
-        return _('subs')
+        return _('%s: %s %s' % (g.brander_site, self.where, g.brander_community_plural))
 
     def keep_fn(self):
         base_keep_fn = ListingController.keep_fn(self)
@@ -1621,6 +1628,8 @@ class RedditsController(ListingController):
 
         """
         self.where = where
+        # SaidIt: configurable home page: /subs is never a sr_path
+        self.sr_path = False
         return ListingController.GET_listing(self, **env)
 
 class MyredditsController(ListingController):
@@ -1629,15 +1638,15 @@ class MyredditsController(ListingController):
 
     @property
     def menus(self):
-        buttons = (NavButton(plurals.subscriber,  'subscriber'),
-                    NavButton(getattr(plurals, "approved submitter"), 'contributor'),
-                    NavButton(plurals.moderator,   'moderator'))
+        buttons = (NavButton(plurals.subscriber,  'subscriber', sr_path=False),
+                    NavButton(getattr(plurals, "approved submitter"), 'contributor', sr_path=False),
+                    NavButton(plurals.moderator,   'moderator', sr_path=False))
 
         return [NavMenu(buttons, base_path = '/subs/mine/',
                         default = 'subscriber', type = "flatlist")]
 
     def title(self):
-        return _('subs: ') + self.where
+        return _('%s: my %s: %s' % (g.brander_site, g.brander_community_plural, self.where))
 
     def builder_wrapper(self, thing):
         w = ListingController.builder_wrapper(thing)
@@ -1729,6 +1738,8 @@ class MyredditsController(ListingController):
 
         """
         self.where = where
+        # SaidIt: configurable home page: /subs/mine is never a sr_path
+        self.sr_path = False
         return ListingController.GET_listing(self, **env)
 
 
