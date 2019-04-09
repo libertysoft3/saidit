@@ -892,15 +892,22 @@ function lightswitch() {
     if ($('body').hasClass('theme-nightmode')) {
         $('.pref-lightswitch').addClass('pref-lightswitch-on').removeClass('pref-lightswitch-off').text('lights off');
         $('body').addClass('theme-daymode').removeClass('theme-nightmode');
-	document.querySelector(".chat-iframe").contentWindow.postMessage({type: "saidit_theme", light: false}, "https://saidit.net:2053");
+	lightswitch.chat(false);
         $.request("lightswitch", {"lightswitch": true});
     }  else if ($('body').hasClass('theme-daymode')) {
         $('.pref-lightswitch').addClass('pref-lightswitch-off').removeClass('pref-lightswitch-on').text('lights on');
         $('body').addClass('theme-nightmode').removeClass('theme-daymode');
-	document.querySelector(".chat-iframe").contentWindow.postMessage({type: "saidit_theme", light: true}, "https://saidit.net:2053");
+	lightswitch.chat(true);
         $.request("lightswitch", {"lightswitch": false});
     }
 };
+lightswitch.chat = function lightswitch_chat(on) {
+	var chat_iframe = document.querySelector(".chat-iframe");
+	if (!chat_iframe) return;
+	var chat_window = chat_iframe.contentWindow;
+	if (!chat_window) return;
+	chat_window.postMessage({type: "saidit_theme", light: on}, "https://saidit.net:2053");
+}
 
 /* The ready method */
 $(function() {
