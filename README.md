@@ -49,7 +49,7 @@ From this point forward you can start your VM with 'Start -> Headless Start' and
 From this point forward physical access to the server is no longer needed and you can ssh in as the 'reddit' user remotely if you wish, using a program like [PuTTY](https://www.putty.org/).
 
 
-### Connecting to your saidit server
+### Connecting to your saidit/reddit open source server
 
 This step is optional and for convenience but is highly recommended. These instructions will help you update your hosts file to resolve https://reddit.local (to your saidit server) in both your browser and your SSH client.
 
@@ -60,14 +60,14 @@ This step is optional and for convenience but is highly recommended. These instr
 
 #### Update the 'hosts' file on your development machine/host OS
 
-On linux:
+E.g. host OS linux and saidit server ip 192.168.1.20:
 
     $ sudo sed -i '1i 192.168.1.20 reddit.local' /etc/hosts
 
-On Windows and MacOS: https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
+Instructions for Windows and MacOS: https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
 
 
-### Install saidit/reddit open source
+### Install saidit
 
 SSH into your saidit server and update the OS
 
@@ -91,10 +91,10 @@ Install saidit
 This will improve the new link 'fetch title' capability and potentially more
 
     $ sudo apt-get build-dep curl
-    # use latest version from https://curl.haxx.se/download.html:
-    $ wget http://curl.haxx.se/download/curl-7.64.0.tar.bz2
-    $ tar -xvjf curl-7.64.0.tar.bz2
-    $ cd curl-7.64.0
+    # use latest stable curl version from https://curl.haxx.se
+    $ wget https://curl.haxx.se/download/curl-7.64.1.tar.bz2
+    $ tar -xvjf curl-7.64.1.tar.bz2
+    $ cd curl-7.64.1
     $ ./configure --prefix=/usr
     $ make
     $ sudo make install
@@ -103,6 +103,9 @@ This will improve the new link 'fetch title' capability and potentially more
  
  
 ### Upgrade to python 2.7
+
+TODO: if you upgrade python before running install-reddit.sh, install-reddit.sh will error out on cython dependencies
+TODO: is this upgrade necessary on Ubuntu 14?
  
     $ sudo add-apt-repository ppa:jonathonf/python-2.7
     $ sudo apt-get update

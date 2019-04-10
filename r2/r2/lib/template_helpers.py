@@ -288,7 +288,10 @@ def js_config(extra_config=None):
         "facebook_app_id": g.live_config["facebook_app_id"],
         "feature_new_report_dialog": feature.is_enabled('new_report_dialog'),
         "email_verified": logged and c.user.email and c.user.email_verified,
+
+        # CUSTOM
         "brander_community_abbr": g.brander_community_abbr,
+        "chat_client_url": g.chat_client_url,
     }
 
     if g.tracker_url:

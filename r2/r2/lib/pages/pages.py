@@ -863,25 +863,25 @@ class Reddit(Templated):
                     ps.append(notebar)
             elif isinstance(c.site, HomeSR):
                 if g.live_config['chat_home'] == 'true':
-                    notebar = SidebarChat('subreddit', g.live_config['chat_home_channel'])
+                    notebar = SidebarChat('subreddit', g.chat_home_channel)
                     ps.append(notebar)
             elif isinstance(c.site, AllSR):
                 if g.live_config['chat_all'] == 'true':
-                    notebar = SidebarChat('subreddit', g.live_config['chat_all_channel'])
+                    notebar = SidebarChat('subreddit', g.chat_all_channel)
                     ps.append(notebar)
             elif isinstance(c.site, DefaultSR):
                 if g.live_config['chat_front'] == 'true':
-                    notebar = SidebarChat('subreddit', g.live_config['chat_front_channel'])
+                    notebar = SidebarChat('subreddit', g.chat_front_channel)
                     ps.append(notebar)
             elif isinstance(c.site, DynamicSR):
                 if c.site.name == g.front_name and g.live_config['chat_front'] == 'true':
-                    notebar = SidebarChat('subreddit', g.live_config['chat_front_channel'])
+                    notebar = SidebarChat('subreddit', g.chat_front_channel)
                     ps.append(notebar)
                 elif c.site.name == g.all_name and g.live_config['chat_all'] == 'true':
-                    notebar = SidebarChat('subreddit', g.live_config['chat_all_channel'])
+                    notebar = SidebarChat('subreddit', g.chat_all_channel)
                     ps.append(notebar)
                 elif c.site.name == g.home_name and g.live_config['chat_home'] == 'true':
-                    notebar = SidebarChat('subreddit', g.live_config['chat_home_channel'])
+                    notebar = SidebarChat('subreddit', g.chat_home_channel)
                     ps.append(notebar)
 
         # don't show the subreddit info bar on cnames unless the option is set
@@ -5146,7 +5146,7 @@ class SelfTextChild(LinkChild):
                     chat_client_user = c.user.pref_chat_client_user
                     chat_client_password = c.user.pref_chat_client_password
                     chat_client = g.live_config['chat_client']
-                    chat_client_url = g.live_config['chat_client_url']
+                    chat_client_url = g.chat_client_url
                     if c.user_is_loggedin:
                         chat_user_is_guest = False
 

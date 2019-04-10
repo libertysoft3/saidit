@@ -36,7 +36,7 @@ class SidebarChat(Templated):
         self.chat_client_user = c.user.pref_chat_client_user
         self.chat_client_password = c.user.pref_chat_client_password
         self.chat_client = g.live_config['chat_client']
-        self.chat_client_url = g.live_config['chat_client_url']
+        self.chat_client_url = g.chat_client_url
         self.user_is_loggedin = c.user_is_loggedin
 
         Templated.__init__(self)

@@ -146,7 +146,7 @@ class LinkButtons(PrintableButtons):
         if feature.is_enabled('chat') and thing.subreddit.chat_enabled and thing.selftext == g.live_config['chat_enabling_post_content']:
           show_chat_link = True
           chat_client = g.live_config['chat_client']
-          chat_client_url = g.live_config['chat_client_url']
+          chat_client_url = g.chat_client_url
           chat_user = c.user.pref_chat_user
           chat_client_user = c.user.pref_chat_client_user
           chat_client_password = c.user.pref_chat_client_password
@@ -273,7 +273,7 @@ class CommentButtons(PrintableButtons):
         if feature.is_enabled('chat') and thing.subreddit.chat_enabled and thing.body.find(chat_enabling_post_content) == 0:
           show_chat_link = True
           chat_client = g.live_config['chat_client']
-          chat_client_url = g.live_config['chat_client_url']
+          chat_client_url = g.chat_client_url
           chat_user = c.user.pref_chat_user
           chat_client_user = c.user.pref_chat_client_user
           chat_client_password = c.user.pref_chat_client_password

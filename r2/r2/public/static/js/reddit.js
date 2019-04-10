@@ -892,10 +892,12 @@ function lightswitch() {
     if ($('body').hasClass('theme-nightmode')) {
         $('.pref-lightswitch').addClass('pref-lightswitch-on').removeClass('pref-lightswitch-off').text('lights off');
         $('body').addClass('theme-daymode').removeClass('theme-nightmode');
+        if (document.querySelector(".chat-iframe")) { document.querySelector(".chat-iframe").contentWindow.postMessage({type: "set_theme", message: "light"}, r.config.chat_client_url); }
         $.request("lightswitch", {"lightswitch": true});
     }  else if ($('body').hasClass('theme-daymode')) {
         $('.pref-lightswitch').addClass('pref-lightswitch-off').removeClass('pref-lightswitch-on').text('lights on');
         $('body').addClass('theme-nightmode').removeClass('theme-daymode');
+        if (document.querySelector(".chat-iframe")) { document.querySelector(".chat-iframe").contentWindow.postMessage({type: "set_theme", message: "dark"}, r.config.chat_client_url); }
         $.request("lightswitch", {"lightswitch": false});
     }
 };
