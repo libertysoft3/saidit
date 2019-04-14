@@ -127,7 +127,6 @@
     ${self.approval_checkmark()}
     &#32;
 
-    ${self.domain()}
 
     %if c.user_is_admin:
         %for link_note in thing.link_notes:
@@ -137,10 +136,12 @@
   </p>
 
  
-
   <p class="tagline">
     ${self.tagline()}
+    &nbsp;from&nbsp;
+    ${self.domain()}
   </p>
+
 
   <% 
      child_content = ""

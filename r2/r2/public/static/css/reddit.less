@@ -839,10 +839,10 @@ body > .content .link.compressed .midcol {
 .domain a {
     color: #888;
     display: inline-block;
-    overflow: hidden;
+    /* overflow: hidden; */
     white-space: nowrap;
     text-overflow: ellipsis;
-    vertical-align: middle;
+    /* vertical-align: middle; */
     max-width: 19em;
 }
 .domain a:hover { text-decoration: underline; max-width: none; }
@@ -897,6 +897,7 @@ body > .content .link.compressed .midcol {
 }
 
 a.author { margin-right: 0.5em; }
+.tagline a.author { margin-right: 0; }
 .tagline .subreddit {
     .userattrs { margin-left: 0.5em; }
     .admin-distinguish { color: @admin-color; }
@@ -1096,7 +1097,7 @@ a.banned-user { color: red; }
     overflow: hidden;
 }
 
-.thing .title:visited, .thing.visited .title { color: #9386c8; }
+.thing .title:visited, .thing.visited .title { color: #62659b; }
 
 .thing.stickied.link a.title {
   font-weight: bold;
