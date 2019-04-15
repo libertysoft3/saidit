@@ -102,7 +102,7 @@ def basic_query(query=None, bq=None, faceting=None, size=1000,
                 if 'error' in response_json:
                     message = response_json['error'].get('msg', 'Unknown error')
                     raise InvalidQuery(resp.status, resp.reason, message,
-                                       search_api, path, reasons)
+                                       search_api, path, response_json)
             raise SearchHTTPError(resp.status, resp.reason,
                                   search_api, path, response)
     except socket.error as e:
@@ -293,7 +293,9 @@ class LinkSearchQuery(SolrSearchQuery):
     sorts = {
         'relevance': 'score desc',
         'hot': 'max(hot/45000.0, 1.0) desc',
-        'top': 'top desc',
+        # reddit score model
+        # 'top': 'sum(ups, product(downs,-1)) desc',
+        'top': 'sum(product(ups,2), downs) desc',
         'new': 'timestamp desc',
         'comments': 'num_comments desc',
     }
@@ -311,6 +313,8 @@ class LinkSearchQuery(SolrSearchQuery):
 
     def customize_query(self, bq):
         queries = [bq]
+        # SaidIt: links only!
+        queries.append('(type_id:' + str(Link._type_id) + ')')
         subreddit_query = self._get_sr_restriction(self.sr)
         if subreddit_query:
             queries.append(subreddit_query)
@@ -332,7 +336,7 @@ class LinkSearchQuery(SolrSearchQuery):
     def _restrict_recent(recent):
         now = datetime.now(g.tz)
         since = epoch_seconds(now - recent)
-        return 'timestamp:%i..' % since
+        return 'timestamp:[%i TO *]' % since
 
     @staticmethod
     def _get_sr_restriction(sr):
@@ -372,6 +376,13 @@ class SolrSubredditSearchQuery(SolrSearchQuery):
     known_syntaxes = ("plain", "solr")
     default_syntax = "plain"
 
+    # SaidIt: return subreddits only, wildcard matching
+    def customize_query(self, q):
+        if q and q[0] not in ['*','~']:
+            q = "*%s" % q
+        if q and q[-1] not in ['*','~']:
+            q = "%s*" % q
+        return q + ' AND (type_id:' + str(Subreddit._type_id) + ')'
 
 def _encode_query(query, faceting, size, start, rank, return_fields):
     if not query:

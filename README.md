@@ -1,14 +1,25 @@
 # SaidIt
 
-[SaidIt](https://saidit.net) is a [reddit open source](https://github.com/reddit-archive/reddit) fork. Major SaidIt additions include:
+[SaidIt](https://saidit.net) is a [reddit open source](https://github.com/reddit-archive/reddit) continuation and fork. Major SaidIt changes include:
+
+* configurable site branding
+* critical features, cron jobs, and configurations restored
+* admin tools including global user bans and ip bans
+* more embedable media services
+* configurable home page
+
+User-facing SaidIt changes include:
 
 * two dimensional voting where insightful is +2 and fun is +1
+* markdown media expandos
 * public moderator logs
-* more embedded media
 * chat integration with a custom [TheLounge](https://github.com/libertysoft3/lounge-autoconnect) web IRC client
-* admin tools: global user ban, ip ban
-* mostly configurable site branding
-* critical configurations and cron jobs restored
+
+Goals:
+
+* reddit API compatibility
+* platform upgrades, longevity
+* easily setup your own reddit or saidit clone
 
 ---
 
@@ -177,7 +188,8 @@ Setup Tomcat for Solr
       <Environment name="solr/home" type="java.lang.String" value="/usr/share/solr/example/solr" override="true" />
     </Context>
  
-    # have tomcat use port 8983, 8080 is taken by haproxy
+    # have tomcat use port 8983 (see 'solr_port' in example.ini)
+    # port 8080 is taken by haproxy
     sudo nano /etc/tomcat7/server.xml
     # edit to set:
     <Connector port="8983" protocol="HTTP/1.1"
@@ -199,33 +211,14 @@ Start solr:
     # verify working, these should return html pages:
     $ wget 127.0.0.1:8983
     $ wget 127.0.0.1:8983/solr
- 
-### Configure reddit to use Solr for search:
 
-Add the following to `~/src/reddit/r2/development.update` to the default section. NOTE: solr port changed from default 8080 to 8983.
-
-    search_provider = solr
-    solr_version = 4
-    solr_search_host = 127.0.0.1
-    solr_doc_host = 127.0.0.1
-    solr_subreddit_search_host = 127.0.0.1
-    solr_subreddit_doc_host = 127.0.0.1
-    solr_port = 8983
-    solr_core = collection1
-    solr_min_batch = 500
-    solr_query_parser =
  
-Since reddit config has changed:
-
-    $ cd ~/src/reddit/r2
-    $ make ini
-    $ sudo reddit-restart
- 
-### Add reddit content to Solr, verify working:
+### Add reddit content to Solr:
 
     $ cd ~/src/reddit/r2
     $ paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs.rebuild_subreddit_index()'
     $ paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()'
+    # do a search on the site, verify working
  
  
 ### Setup Solr cron jobs:
@@ -241,8 +234,7 @@ Since reddit config has changed:
         . /etc/default/reddit
         wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs.rebuild_subreddit_index()'
     end script
- 
-and then...
+
  
     $ sudo nano /etc/init/reddit-job-solr_links.conf
     # paste lines, save:
@@ -256,7 +248,7 @@ and then...
         wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()'
     end script
  
- TODO: assume Solr will be installed, add these two jobs to the codebase, configure solr in example.ini.
+ TODO: assume Solr will be installed, add these two jobs to the codebase/installer.
 
 ---
 
