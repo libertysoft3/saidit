@@ -158,6 +158,8 @@ This also creates a reddit admin user "saidit" with password "password".
 ---
 
 ## Install Solr for search
+
+SaidIt comes pre-configured for Solr search, but Solr and Tomcat are not currently installed automatically.
  
 Install Solr
 
@@ -212,43 +214,11 @@ Start solr:
     $ wget 127.0.0.1:8983
     $ wget 127.0.0.1:8983/solr
 
- 
-### Add reddit content to Solr:
+Index site content and test:
 
-    $ cd ~/src/reddit/r2
-    $ paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs.rebuild_subreddit_index()'
-    $ paster run run.ini -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()'
+    $ sudo start reddit-job-solr_subreddits
+    $ sudo start reddit-job-solr_links
     # do a search on the site, verify working
- 
- 
-### Setup Solr cron jobs:
- 
-    $ sudo nano /etc/init/reddit-job-solr_subreddits.conf
-    # paste lines, save:
-    description "Add new subreddits to Solr."
-    manual
-    task
-    stop on reddit-stop or runlevel [016]
-    nice 10
-    script
-        . /etc/default/reddit
-        wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs.rebuild_subreddit_index()'
-    end script
-
- 
-    $ sudo nano /etc/init/reddit-job-solr_links.conf
-    # paste lines, save:
-    description "Add new posts to Solr."
-    manual
-    task
-    stop on reddit-stop or runlevel [016]
-    nice 10
-    script
-        . /etc/default/reddit
-        wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()'
-    end script
- 
- TODO: assume Solr will be installed, add these two jobs to the codebase/installer.
 
 ---
 

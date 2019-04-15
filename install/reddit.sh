@@ -679,20 +679,23 @@ if [ ! -f /etc/cron.d/reddit ]; then
 0    * * * * root /sbin/start --quiet reddit-job-hourly_traffic
 0    * * * * root /sbin/start --quiet reddit-job-subscribers
 
-# liveupdate
-*    * * * * root /sbin/start --quiet reddit-job-liveupdate_activity
+# liveupdate plugin
+#*    * * * * root /sbin/start --quiet reddit-job-liveupdate_activity
+
+# gold plugin
+#0    0 * * * root /sbin/start --quiet reddit-job-update_gold_users
 
 # jobs that recalculate time-limited listings (e.g. top this year)
+# NOTICE: must match your configuration's 'db_pass'
 PGPASSWORD=password
 */15 * * * * $REDDIT_USER $REDDIT_SRC/reddit/scripts/compute_time_listings link year "['hour', 'day', 'week', 'month', 'year']" 2>&1 | /usr/bin/logger -t compute_time_listings_link
 */15 * * * * $REDDIT_USER $REDDIT_SRC/reddit/scripts/compute_time_listings comment year "['hour', 'day', 'week', 'month', 'year']" 2>&1 | /usr/bin/logger -t compute_time_listings_comment
 
 # disabled by default, uncomment if you need these jobs
 #*    * * * * root /sbin/start --quiet reddit-job-email
-#0    0 * * * root /sbin/start --quiet reddit-job-update_gold_users
 #*/15  * * * * root /sbin/start reddit-job-update_trending_subreddits
 
-# Solr search
+# solr search
 */15  * * * * root /sbin/start --quiet reddit-job-solr_subreddits
 */5 * * * * root /sbin/start --quiet reddit-job-solr_links
 CRON
