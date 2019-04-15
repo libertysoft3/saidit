@@ -1880,7 +1880,7 @@ class Comment(Thing, Printable):
             if (item.link.contest_mode and
                     item.subreddit.contest_mode_upvotes_only and
                     not item.score_hidden):
-                # CUSTOM: voting model, upvotes/interesting only
+                # CUSTOM: voting model, upvotes/insightful only
                 item.score = item._ups + item._ups
                 item.voting_score = [
                     item.score + 1, item.score, item.score + 2, item.score + 3]

@@ -679,7 +679,7 @@ class Thing(DataThing):
 
     @property
     def _score(self):
-        # Note: score() is modified _sorts.pyx for interesting and funny
+        # Note: score() is modified in _sorts.pyx for insightful and funny model
         return sorts.score(self._ups, self._downs)
 
     @property

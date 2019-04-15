@@ -67,7 +67,7 @@ def cast_vote(user, thing, direction, **data):
     vote_direction = direction
     previous_vote = VoteDetailsByThing.get_vote(user, thing)
     if previous_vote:
-        if direction == Vote.DIRECTIONS.up: # interesting/liked
+        if direction == Vote.DIRECTIONS.up: # insightful/liked
             if previous_vote.is_offonvote:
                 direction = Vote.DIRECTIONS.onon
             elif previous_vote.is_offoffvote:
@@ -91,7 +91,7 @@ def cast_vote(user, thing, direction, **data):
             else:
                 # g.log.warning("!!! cast_vote() down, discarding vote with dir: %s prev dir: %s" % (direction, previous_vote.direction))
                 return
-        elif direction == Vote.DIRECTIONS.unup: # un-interesting / unliked
+        elif direction == Vote.DIRECTIONS.unup: # un-insightful / unliked
             if previous_vote.is_ononvote:
                 direction = Vote.DIRECTIONS.offon
             elif previous_vote.is_onoffvote:
