@@ -2312,14 +2312,16 @@ class ApiController(RedditController):
 
         `id` should be the fullname of the Link or Comment to vote on.
 
-        `dir` indicates the direction of the vote. Voting `1` is an upvote,
-        `-1` is a downvote, and `0` is equivalent to "un-voting" by clicking
-        again on a highlighted arrow.
+        `dir` indicates the direction of the vote. Voting `1` is an insightful vote (tracked as `ups`),
+        and `-1` is a funny vote (tracked as `downs`). `11` is un-voting an insightful vote and `-11` is
+        un-voting a funny vote. Un-voting is accomplished by clicking again on the respective highlighted
+        voting button/link.
 
         **Note: votes must be cast by humans.** That is, API clients proxying a
         human's action one-for-one are OK, but bots deciding how to vote on
-        content or amplifying a human's vote are not. See [the reddit
-        rules](/rules) for more details on what constitutes vote cheating.
+        content or amplifying a human's vote are not. See [the SaidIt
+        Content Policy](/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/)
+        for more details on what constitutes vote cheating.
 
         """
 
