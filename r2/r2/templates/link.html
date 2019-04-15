@@ -213,9 +213,9 @@
 <%def name="domain(link=True)">
   <span class="domain">
     %if link:
-      (<a href="${thing.domain_path}">${thing.domain_str}</a>)
+      <a href="${thing.domain_path}">${thing.domain_str}</a>
     %else:
-      (${thing.domain_str})
+      ${thing.domain_str}
     %endif
     %if c.user_is_admin:
       &#32;
