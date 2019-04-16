@@ -1,15 +1,19 @@
 /**
  * Markdown Expandos - SaidIt 2018
  *
- * Unsupported static image urls:
+ * Unsupported static image url formats:
  *   https://en.wikipedia.org/wiki/Portable_Network_Graphics#/media/File:PNG_transparency_demonstration_1.png
  *   https://example.com/download.php?file=folder/file.jpg
  *
- * Supported static image urls:
+ * Supported static image url formats:
+ *   https://example.com/folder/file.jpg
  *   https://example.com/folder/file.jpg?param.eter#hash=12.345
  *
- * Making ajax requests for providers:
+ * Making on click ajax requests for providers:
  *   SoundCloud - oEmbed
+ *
+ * On click js injected for providers:
+ *   imgur
  */
 !function(r) {
   $(function() {
@@ -48,24 +52,17 @@
         $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="image" data-expando-exists="false" href="javascript:void(0);">' + check + '</a> ');
         return;
       }
-
-      // Imgur
       check = getEmbedIdImgur($thing.attr('href'));
       if (check) {
         $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="imgur" data-embed-id="' + check  + '" data-expando-exists="false" href="javascript:void(0);">Imgur</a> ');
         return;
       }
 
-      // SoundCloud - embed fetched on click
-      if (reSoundCloud.exec($thing.attr('href'))) {
-        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="soundcloud" data-url="' + $thing.attr('href')  + '" data-expando-exists="false" href="javascript:void(0);">SoundCloud</a> ');
-        return;
-      }
-
-      // Videos
+      // Video
       check = getVideoExtension($thing.attr('href'));
       if (check) {
         $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="video" data-expando-exists="false" href="javascript:void(0);">' + check + '</a> ');
+        return;
       }
       check = getEmbedUrlYouTube($thing.attr('href'));
       if (check) {
@@ -90,6 +87,18 @@
       check = getEmbedUrlVimeo($thing.attr('href'));
       if (check) {
         $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="vimeo" data-video-url="' + check  + '" data-expando-exists="false" href="javascript:void(0);">Vimeo</a> ');
+        return;
+      }
+
+      // Audio
+      check = getAudioExtension($thing.attr('href'));
+      if (check) {
+        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="audio" data-expando-exists="false" href="javascript:void(0);">' + check + '</a> ');
+        return;
+      }
+      check = reSoundCloud.exec($thing.attr('href'))
+      if (check) {
+        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="soundcloud" data-url="' + $thing.attr('href')  + '" data-expando-exists="false" href="javascript:void(0);">SoundCloud</a> ');
         return;
       }
     }
@@ -120,12 +129,16 @@
           $button.after('<div class="md-expando"><a href="' + sourceHref + '" draggable="false" style="outline: none;"><img src="' + sourceHref + '" draggable="false"/></a></div>');
           initMdExpandoImageResize($button.next().find('a'), $button.next().find('img'));
           break;
+        case 'video':
+          $button.after('<div class="md-expando"><video controls preload="auto" style="max-width: 100%;" src="' + $button.prev().attr('href') + '"></video></div>');
+          break;
+        case 'audio':
+          $button.after('<div class="md-expando"><audio controls preload="auto" style="max-width: 100%;" src="' + $button.prev().attr('href') + '"></audio></div>');
+          break;
         case 'imgur':
           var html  = '<blockquote class="imgur-embed-pub" lang="en" data-id="a/' + $button.data('embed-id') + '"><a href="//imgur.com/' + $button.data('embed-id') + '"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>';
           $button.after('<div class="md-expando">' + html + '</div>');
           break;
-        case 'video':
-          $button.after('<div class="md-expando"><video controls preload="auto" src="' + $button.prev().attr('href') + '"></video></div>');
         case 'youtube':
           $button.after('<div class="md-expando"><iframe width="560" height="315" style="max-width: 100%;" src="https://www.youtube-nocookie.com/embed/' + $button.data('video-url') + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>');
           break;
@@ -145,6 +158,7 @@
           $.getJSON('https://soundcloud.com/oembed?url=' + encodeURIComponent($button.data('url')), function(data) {
             $button.after('<div class="md-expando">' + data['html'] + '</div>');
           });
+          break;
       }
     }
     
@@ -155,17 +169,14 @@
       }
       trimIndex = href.indexOf('?');
       if (trimIndex !== -1) {
-        // return false if query strings should be banned
         href = href.slice(0, trimIndex);
       }
       return href.split('.').pop();
     }
 
     function getImageExtension(href) {
-      var extension = getExtension(href);
-
       var allowed = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'ico', 'bmp', 'webp'];
-      var extIndex = allowed.indexOf(extension.toLowerCase());
+      var extIndex = allowed.indexOf(getExtension(href).toLowerCase());
       if (extIndex == -1) {
         return false;
       }
@@ -173,11 +184,17 @@
     }
     
     function getVideoExtension(href) {
-      var extension = getExtension(href);
-      
-      var allowed = ['webm', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'ogg', 'mp4', 'm4p', 'm4v',
-                     'mp3', 'm4a', 'aac', 'oga']; // audio files treated as video because I'm lazy
-      var extIndex = allowed.indexOf(extension.toLowerCase());
+      var allowed = ['ogg', 'webm', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'mp4', 'm4v'];
+      var extIndex = allowed.indexOf(getExtension(href).toLowerCase());
+      if (extIndex == -1) {
+        return false;
+      }
+      return allowed[extIndex].toUpperCase();
+    }
+
+    function getAudioExtension(href) {
+      var allowed = ['wav', 'm4p', 'mp3', 'm4a', 'aac', 'oga'];
+      var extIndex = allowed.indexOf(getExtension(href).toLowerCase());
       if (extIndex == -1) {
         return false;
       }

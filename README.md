@@ -3,10 +3,11 @@
 [SaidIt](https://saidit.net) is a [reddit open source](https://github.com/reddit-archive/reddit) continuation and fork. Major SaidIt changes include:
 
 * configurable site branding
-* critical features, cron jobs, and configurations restored
 * admin tools including global user bans and ip bans
 * more embedable media services
 * configurable home page
+* critical features, cron jobs, and configurations restored
+* bug fixes
 
 User-facing SaidIt changes include:
 
