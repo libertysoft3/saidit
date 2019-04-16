@@ -63,6 +63,10 @@
       }
 
       // Videos
+      check = getVideoExtension($thing.attr('href'));
+      if (check) {
+        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="video" data-expando-exists="false" href="javascript:void(0);">' + check + '</a> ');
+      }
       check = getEmbedUrlYouTube($thing.attr('href'));
       if (check) {
         $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="youtube" data-video-url="' + check  + '" data-expando-exists="false" href="javascript:void(0);">YouTube</a> ');
@@ -120,6 +124,8 @@
           var html  = '<blockquote class="imgur-embed-pub" lang="en" data-id="a/' + $button.data('embed-id') + '"><a href="//imgur.com/' + $button.data('embed-id') + '"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>';
           $button.after('<div class="md-expando">' + html + '</div>');
           break;
+        case 'video':
+          $button.after('<div class="md-expando"><video controls preload="auto" src="' + $button.prev().attr('href') + '"></video></div>');
         case 'youtube':
           $button.after('<div class="md-expando"><iframe width="560" height="315" style="max-width: 100%;" src="https://www.youtube-nocookie.com/embed/' + $button.data('video-url') + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>');
           break;
@@ -141,8 +147,8 @@
           });
       }
     }
-
-    function getImageExtension(href) {
+    
+    function getExtension(href) {
       var trimIndex = href.indexOf('#');
       if (trimIndex !== -1) {
         href = href.slice(0, trimIndex);
@@ -152,9 +158,26 @@
         // return false if query strings should be banned
         href = href.slice(0, trimIndex);
       }
+      return href.split('.').pop();
+    }
 
-      var allowed = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'ico', 'bmp'];
-      var extIndex = allowed.indexOf(href.split('.').pop().toLowerCase());
+    function getImageExtension(href) {
+      var extension = getExtension(href);
+
+      var allowed = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'ico', 'bmp', 'webp'];
+      var extIndex = allowed.indexOf(extension.toLowerCase());
+      if (extIndex == -1) {
+        return false;
+      }
+      return allowed[extIndex].toUpperCase();
+    }
+    
+    function getVideoExtension(href) {
+      var extension = getExtension(href);
+      
+      var allowed = ['webm', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'ogg', 'mp4', 'm4p', 'm4v',
+                     'mp3', 'm4a', 'aac', 'oga']; // audio files treated as video because I'm lazy
+      var extIndex = allowed.indexOf(extension.toLowerCase());
       if (extIndex == -1) {
         return false;
       }
