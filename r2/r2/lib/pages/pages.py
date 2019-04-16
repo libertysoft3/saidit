@@ -1264,18 +1264,19 @@ class RedditFooter(CachedTemplate):
     def __init__(self):
         self.nav = [
             NavMenu([
-                    OffsiteButton(_("welcome to saidit"), "https://saidit.net/s/SaidIt/comments/37r/welcome_to_saiditnet/"),
-                    OffsiteButton(_("official sub"), "https://saidit.net/s/SaidIt"),
-                    OffsiteButton(_("canary"), "https://saidit.net/s/SaiditCanary"),
+                    NavButton(_("welcome to saidit"), "/s/SaidIt/comments/37r/welcome_to_saiditnet/"),
+                    NavButton(_("official sub"), "/s/SaidIt"),
+                    NavButton(_("canary"), "/s/SaiditCanary"),
+                    NavButton(_("wiki"), "/s/SaidIt/wiki"),
                 ],
                 title = _("about"),
                 type = "flat_vert",
                 separator = ""),
 
             NavMenu([
-                    OffsiteButton(_("list of subs"), "https://saidit.net/subs"),
-                    OffsiteButton(_("contact"), "https://saidit.net/s/help"),    
-                    OffsiteButton(_("terms & content policy"), "https://saidit.net/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/"),
+                    NavButton(_("list of subs"), "/subs", sr_path=False),
+                    NavButton(_("contact"), "/s/help"),
+                    NavButton(_("terms & content policy"), "/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/"),
                 ],
                 title = _("help"),
                 type = "flat_vert",
@@ -1284,9 +1285,9 @@ class RedditFooter(CachedTemplate):
             NavMenu([
 
                     OffsiteButton(_("open source code"), "https://github.com/libertysoft3/saidit", retain_extension=False),
-                    OffsiteButton(_("RES for saidit"), "https://saidit.net/s/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
+                    NavButton(_("RES for saidit"), "/s/SaidIt/comments/je/res_for_saidit_supports_chrome_opera_firefox_and/"),
                     OffsiteButton(_("mobile site"), "https://m.saidit.net"),
-                    OffsiteButton(_("RSS feed"), "https://saidit.net/.rss"),
+                    OffsiteButton(_("RSS feed"), "https://saidit.net/s/home/.rss"),
                     OffsiteButton(_("f-droid android app"), "https://f-droid.org/en/packages/org.saiditnet.redreader/", retain_extension=False),
                     OffsiteButton(_("google android app"), "https://play.google.com/store/apps/details?id=org.saiditnet.redreader", retain_extension=False),
                 ],
