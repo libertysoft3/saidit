@@ -849,7 +849,7 @@ class VAccountByName(VRequired):
         return self.error()
 
     def param_docs(self):
-        return {self.param: "A valid, existing reddit username"}
+        return {self.param: "A valid, existing %s username" % g.brander_site}
 
 
 class VFriendOfMine(VAccountByName):

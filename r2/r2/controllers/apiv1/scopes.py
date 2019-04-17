@@ -38,7 +38,7 @@ class APIv1ScopesController(RedditController):
     )
     @api_docs.api_doc(api_docs.api_section.misc)
     def GET_scopes(self, scope_str):
-        """Retrieve descriptions of reddit's OAuth2 scopes.
+        """Retrieve descriptions of the site's OAuth2 scopes.
 
         If no scopes are given, information on all scopes are returned.
 
