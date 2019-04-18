@@ -20,6 +20,7 @@
     var buttonClass = 'md-expando-button';
     var buttonOpenClass = 'md-expando-open';
     var buttonClosedClass = 'md-expando-closed';
+    var destroyOnCloseTypes = ['video', 'audio', 'soundcloud', 'youtube', 'bitchute', 'peertube', 'dtube', 'vimeo']
     var reValidExpandoUrl = /^https?\:\/\//i;
     var reYouTube = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/i; // https://stackoverflow.com/a/5831191
     var reYouTubeTimestampParam = /t=([^&#]*)/; // capture param t
@@ -108,8 +109,8 @@
       if ($button.hasClass(buttonOpenClass)) {
         $button.addClass(buttonClosedClass).removeClass(buttonOpenClass);
         $button.next().hide();
-        if ($button.data('video-url')) {
-          $button.data('expando-exists', false).next().remove(); // remove video iframes on close to make them stop playing
+        if (destroyOnCloseTypes.indexOf($button.data('type')) != -1) {
+          $button.data('expando-exists', false).next().remove(); // remove players to make them stop playing
         }
         return;
       }
