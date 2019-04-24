@@ -176,7 +176,7 @@
     }
 
     function getImageExtension(href) {
-      var allowed = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'ico', 'bmp', 'webp'];
+      var allowed = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'ico', 'bmp', 'webp', 'tif', 'tiff'];
       var extIndex = allowed.indexOf(getExtension(href).toLowerCase());
       if (extIndex == -1) {
         return false;
@@ -185,7 +185,8 @@
     }
     
     function getVideoExtension(href) {
-      var allowed = ['ogg', 'webm', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'mp4', 'm4v'];
+      var allowed = ['ogg', 'webm', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'mp4', 'm4v', 'avi', 'ogv', 'ogx', 'webm',
+                     '3gp', '3g2', 'flv', 'f4v', 'f4p', 'f4f', 'hevc'];
       var extIndex = allowed.indexOf(getExtension(href).toLowerCase());
       if (extIndex == -1) {
         return false;
@@ -194,7 +195,7 @@
     }
 
     function getAudioExtension(href) {
-      var allowed = ['wav', 'm4p', 'mp3', 'm4a', 'aac', 'oga'];
+      var allowed = ['wav', 'm4p', 'mp3', 'm4a', 'aac', 'oga', 'mid', 'midi', 'weba', 'f4a', 'f4b', 'opus'];
       var extIndex = allowed.indexOf(getExtension(href).toLowerCase());
       if (extIndex == -1) {
         return false;
