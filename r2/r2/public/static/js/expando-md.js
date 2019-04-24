@@ -141,16 +141,16 @@
           $button.after('<div class="md-expando">' + html + '</div>');
           break;
         case 'youtube':
-          $button.after('<div class="md-expando"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/' + $button.data('video-url') + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>');
+          $button.after('<div class="md-expando"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/' + $button.data('video-url') + '" frameborder="0" allow="autoplay; encrypted-media" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>');
           break;
         case 'peertube':
-          $button.after('<div class="md-expando"><iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" src="' + $button.data('video-url') + '" frameborder="0" allowfullscreen></iframe></div>');
+          $button.after('<div class="md-expando"><iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" src="' + $button.data('video-url') + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>');
           break;
         case 'bitchute':
-          $button.after('<div class="md-expando"><iframe width="640" height="360" scrolling="no" frameborder="0" style="border: none;" src="' + $button.data('video-url') + '"></iframe></div>');
+          $button.after('<div class="md-expando"><iframe width="640" height="360" scrolling="no" frameborder="0" style="border: none;" src="' + $button.data('video-url') + '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>');
           break;
         case 'dtube':
-          $button.after('<div class="md-expando"><iframe width="560" height="315" src="' + $button.data('video-url') + '" frameborder="0" allowfullscreen></iframe></div>');
+          $button.after('<div class="md-expando"><iframe width="560" height="315" src="' + $button.data('video-url') + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>');
           break;
         case 'vimeo':
           $button.after('<div class="md-expando"><iframe width="640" height="360" src="' + $button.data('video-url') + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>');
