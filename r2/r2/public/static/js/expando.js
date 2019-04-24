@@ -6,7 +6,6 @@
 
   function initImageResize($wrapper, $link, $img) {
     var threshold = 3;
-    $img.css('max-width', 'none');
     $link.click(function(event){
       event.preventDefault();
     })
@@ -14,7 +13,6 @@
       event.preventDefault(); // prevents FF from overlaying the image with blue
       $link.data('dragging', true).data('startX', event.pageX).data('startY', event.pageY);
       $img.data('original-width', $img.width()).css('width', $img.width() + 'px');
-      $wrapper.css('max-width', 'none');
     })
     .mousemove(function(event) {
       if (!$link.data('dragging')) return;
