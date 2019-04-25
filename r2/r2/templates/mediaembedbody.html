@@ -28,6 +28,11 @@
             margin:  0;
             padding: 0;
         }
+        @media only screen and (max-width: 600px) {
+            iframe {
+                max-width: 100%;
+            }
+        }
     </style>
   </head>
   <body>${unsafe(thing.body)}</body>
