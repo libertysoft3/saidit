@@ -6,6 +6,7 @@
 
   function initImageResize($wrapper, $link, $img) {
     var threshold = 3;
+    $wrapper.css('max-width', 'none'); // TODO: remove the max-width inline style from mediapreview.html instead?
     $link.click(function(event){
       event.preventDefault();
     })

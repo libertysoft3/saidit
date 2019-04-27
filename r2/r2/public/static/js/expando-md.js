@@ -287,7 +287,7 @@
       .mousedown(function(event) {
         event.preventDefault(); // prevents FF from overlaying the image with blue
         $link.data('dragging', true).data('startX', event.pageX).data('startY', event.pageY);
-        $img.data('original-width', $img.width()).css('width', $img.width() + 'px');
+        $img.data('original-width', $img.width()).css('width', $img.width() + 'px').css('max-width', 'none');
       })
       .mousemove(function(event) {
         if (!$link.data('dragging')) return;
