@@ -144,12 +144,12 @@ There is a 2 week delay to create a sub after creating an account. Also there is
                            is_archived)}
       %endif
 
-      <% is_gold_restricted = thing.site and thing.site.type == 'gold_restricted' %>
+      <!-- <% is_gold_restricted = thing.site and thing.site.type == 'gold_restricted' %>
       %if c.user_is_admin or is_gold_restricted:
         ${utils.radio_type('type', "gold_restricted", _("gold restricted"),
                            _("anyone can view, but only gold members can submit or comment"),
-                           is_gold_restricted)}
-      %endif
+                           is_gold_restricted)} 
+      %endif   -->
 
       <% is_employees_only = thing.site and thing.site.type == 'employees_only' %>
       %if c.user.employee:
@@ -158,7 +158,7 @@ There is a 2 week delay to create a sub after creating an account. Also there is
                            is_employees_only)}
       %endif
 
-      <%
+      <!-- <%
           is_gold_only = thing.site and thing.site.type == 'gold_only'
           can_set_gold_only = (is_gold_only or c.user_is_admin or
                   (not thing.site and (c.user.gold or c.user.gold_charter)))
@@ -173,6 +173,8 @@ There is a 2 week delay to create a sub after creating an account. Also there is
               _("only gold members can view and submit"),
               checked=is_gold_only, disabled=not can_set_gold_only, hover_title=hover_title,
               hover_text=hover_text)}
+
+          -->
       </table>
       ${error_field("INVALID_OPTION", "type")}
       ${error_field("ADMIN_REQUIRED", "type")}

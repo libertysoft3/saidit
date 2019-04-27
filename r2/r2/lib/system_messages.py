@@ -160,10 +160,10 @@ def send_ban_message(subreddit, mod, user, note=None, days=None, new=True):
         "contact the moderator team for %(subreddit)s by replying to this "
         "message.") % {"subreddit": sr_name}
 
-    message += "\n\n" + ("**Reminder from the Reddit staff**: If you use "
+    message += "\n\n" + ("**Reminder from the saidit staff**: If you use "
         "another account to circumvent this sub ban, that will be "
-        "considered a violation of [the Content Policy](/help/contentpolicy#section_prohibited_behavior) "
-        "and can result in your account being [suspended](https://reddit.zendesk.com/hc/en-us/articles/205687686) "
+        "considered a violation of [the Content Policy](/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/) "
+        "and can result in your account being suspended"
         "from the site as a whole.")
 
     item, inbox_rel = Message._new(
