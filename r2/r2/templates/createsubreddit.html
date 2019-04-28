@@ -144,12 +144,14 @@ There is a 2 week delay to create a sub after creating an account. Also there is
                            is_archived)}
       %endif
 
-      <!-- <% is_gold_restricted = thing.site and thing.site.type == 'gold_restricted' %>
-      %if c.user_is_admin or is_gold_restricted:
-        ${utils.radio_type('type', "gold_restricted", _("gold restricted"),
-                           _("anyone can view, but only gold members can submit or comment"),
-                           is_gold_restricted)} 
-      %endif   -->
+      %if g.gold_gilding_enabled == 'true':
+        <% is_gold_restricted = thing.site and thing.site.type == 'gold_restricted' %>
+        %if c.user_is_admin or is_gold_restricted:
+          ${utils.radio_type('type', "gold_restricted", _("gold restricted"),
+                             _("anyone can view, but only gold members can submit or comment"),
+                             is_gold_restricted)}
+        %endif
+      %endif
 
       <% is_employees_only = thing.site and thing.site.type == 'employees_only' %>
       %if c.user.employee:
@@ -158,23 +160,23 @@ There is a 2 week delay to create a sub after creating an account. Also there is
                            is_employees_only)}
       %endif
 
-      <!-- <%
-          is_gold_only = thing.site and thing.site.type == 'gold_only'
-          can_set_gold_only = (is_gold_only or c.user_is_admin or
-                  (not thing.site and (c.user.gold or c.user.gold_charter)))
-          if is_gold_only:
-              hover_title = "[!]"
-              hover_text = _('If you switch this sub to another type, you will not be able to switch back to "gold only" without the assistance of an admin')
-          else:
-              hover_title = "[?]"
-              hover_text = unsafe(capture(_md, 'BETA: Subs can be created as "gold only" during creation by a user that has gold. You can find more info about this feature [here](/gold/about#gold-only-subreddits)'))
-      %>
-      ${utils.radio_type('type', "gold_only", _("gold only"),
-              _("only gold members can view and submit"),
-              checked=is_gold_only, disabled=not can_set_gold_only, hover_title=hover_title,
-              hover_text=hover_text)}
-
-          -->
+      %if g.gold_gilding_enabled == 'true':
+        <%
+            is_gold_only = thing.site and thing.site.type == 'gold_only'
+            can_set_gold_only = (is_gold_only or c.user_is_admin or
+                    (not thing.site and (c.user.gold or c.user.gold_charter)))
+            if is_gold_only:
+                hover_title = "[!]"
+                hover_text = _('If you switch this sub to another type, you will not be able to switch back to "gold only" without the assistance of an admin')
+            else:
+                hover_title = "[?]"
+                hover_text = unsafe(capture(_md, 'BETA: Subs can be created as "gold only" during creation by a user that has gold. You can find more info about this feature [here](/gold/about#gold-only-subreddits)'))
+        %>
+        ${utils.radio_type('type', "gold_only", _("gold only"),
+                _("only gold members can view and submit"),
+                checked=is_gold_only, disabled=not can_set_gold_only, hover_title=hover_title,
+                hover_text=hover_text)}
+      %endif
       </table>
       ${error_field("INVALID_OPTION", "type")}
       ${error_field("ADMIN_REQUIRED", "type")}

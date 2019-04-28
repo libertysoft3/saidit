@@ -622,7 +622,7 @@ class Reddit(Templated):
                     data=data_attrs('flair')))
 
         # append AutoMod button if it's enabled and they have perms to change it
-        """if (g.automoderator_account and
+        if (g.automoderator_account and
                 is_single_subreddit and
                 is_moderator_with_perms('config')):
             # link to their config if they have one, or the docs if not
@@ -639,7 +639,7 @@ class Reddit(Templated):
                     sr_path=False,
                     dest="../wiki/automoderator",
                     css_class="reddit-automod access-required",
-                ))"""
+                ))
 
         buttons.append(NamedButton(
             "log",
