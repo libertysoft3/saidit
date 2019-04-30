@@ -1044,7 +1044,7 @@ class _PeerTubeScraper(_ThumbnailOnlyScraper):
         thumbnail = _prepare_image(image)
         self.url = self.url.replace('/videos/watch/','/videos/embed/')
         oembed = {
-            'html': '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" src="' + self.url + '" frameborder="0" allowfullscreen style="max-width: 100%;"></iframe>',
+            'html': '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" src="' + self.url + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="max-width: 100%;"></iframe>',
             'width': 560,
             'height': 315,
             'thumbnail_url': thumbnail_url
@@ -1116,7 +1116,7 @@ class _BitChuteScraper(_ThumbnailOnlyScraper):
         thumbnail = _prepare_image(image)
         self.url = self.url.replace('/video/','/embed/')
         oembed = {
-            'html': '<iframe width="640" height="360" scrolling="no" frameborder="0" style="border: none; max-width: 100%;" src="' + self.url + '"></iframe>',
+            'html': '<iframe width="640" height="360" scrolling="no" frameborder="0" style="border: none; max-width: 100%;" src="' + self.url + '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>',
             'width': 640,
             'height': 360,
             'thumbnail_url': thumbnail_url
