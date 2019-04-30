@@ -3361,7 +3361,6 @@ class VSigned(Validator):
 def need_provider_captcha():
     return False
 
-# CUSTOM: Global Bans
 class VGlobalBanByUsername(Validator):
     def run(self, username, required_fullname=None):
         if not username:

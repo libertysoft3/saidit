@@ -996,7 +996,7 @@ class ApiController(RedditController):
                 abort(403, 'forbidden')
 
             # Don't let banned users make subreddit access changes
-            if c.user._spam:
+            if c.user._spam or c.user.is_global_banned:
                 return
             VNotInTimeout().run(action_name=action, target=friend)
 
@@ -1063,7 +1063,7 @@ class ApiController(RedditController):
         unbanned_types = ("moderator", "moderator_invite",
                           "contributor", "wikicontributor")
         if type in unbanned_types:
-            if container.is_banned(friend) or container.is_global_banned(friend):
+            if container.is_banned(friend) or friend.is_global_banned:
                 c.errors.add(errors.BANNED_FROM_SUBREDDIT, field="name")
                 form.set_error(errors.BANNED_FROM_SUBREDDIT, "name")
                 return
@@ -1749,7 +1749,8 @@ class ApiController(RedditController):
 
         if not (c.user._spam or
                 c.user.ignorereports or
-		(sr and (sr.is_banned(c.user) or sr.is_global_banned(c.user)))):
+                c.user.is_global_banned or
+		(sr and sr.is_banned(c.user))):
             Report.new(c.user, thing, reason)
             admintools.report(thing)
 
@@ -5270,7 +5271,6 @@ class ApiController(RedditController):
         c.user._commit()
         jquery.refresh()
 
-    # CUSTOM: Global Bans
     # TODO: form validation and error display is janky
     @validatedForm(VAdmin(),
                    VModhash(),
@@ -5302,7 +5302,6 @@ class ApiController(RedditController):
         form.set_html(".status", _('saved, <a href="#" onclick="location.reload();">reload</a> to see changes'))
 
 
-    # CUSTOM: Global Bans
     @validatedForm(VAdmin(),
                 VModhash(),
                 thing = VByName('globalban_id'))
@@ -5320,8 +5319,7 @@ class ApiController(RedditController):
         cache_clear = GlobalBan._all_banned_users_cache(_update=True)
         form.set_html(".status", _('deleted, <a href="#" onclick="location.reload();">reload</a> to see it'))
 
-    # CUSTOM: IP Bans
-    # TODO validate is ip
+    # TODO: validate is ip
     @validatedForm(VAdmin(),
                    VModhash(),
                    ipban=VByName("fullname"), # all things have a fullname

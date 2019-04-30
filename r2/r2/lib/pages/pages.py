@@ -506,24 +506,28 @@ class Reddit(Templated):
             "wikirecentrevisions",
             css_class="wikiaction-revisions",
             dest="/wiki/revisions",
-            data=data_attrs('wikirevisions')))
+            data=data_attrs('wikirevisions'),
+            sr_path=not c.site.is_homepage))
         buttons.append(NamedButton(
             "wikipageslist",
             css_class="wikiaction-pages",
             dest="/wiki/pages",
-            data=data_attrs('wikipages')))
+            data=data_attrs('wikipages'),
+            sr_path=not c.site.is_homepage))
 
         if moderator:
             buttons.append(NamedButton(
                 'wikibanned',
                 css_class='reddit-ban access-required',
                 dest='/about/wikibanned',
-                data=data_attrs('wikibanned')))
+                data=data_attrs('wikibanned'),
+                sr_path=not c.site.is_homepage))
             buttons.append(NamedButton(
                 'wikicontributors',
                 css_class='reddit-contributors access-required',
                 dest='/about/wikicontributors',
-                data=data_attrs('wikicontributors')))
+                data=data_attrs('wikicontributors'),
+                sr_path=not c.site.is_homepage))
 
         return SideContentBox(_('wiki tools'),
                       [NavMenu(buttons,
@@ -749,7 +753,6 @@ class Reddit(Templated):
                     box = SubscriptionBox(srs)
                 ps.append(SideContentBox(_('these subreddits'), [box]))
 
-        # CUSTOM: Global Bans
         user_banned = c.user_is_loggedin and (c.site.is_banned(c.user) or c.user.is_global_banned)
 
         if (self.submit_box
@@ -1087,12 +1090,12 @@ class Reddit(Templated):
                            or c.site.is_moderator_with_perms(c.user, 'wiki'))
             if c.site._should_wiki and (c.site.wikimode != 'disabled' or mod):
                 if not g.disable_wiki:
-                    main_buttons.append(NavButton('wiki', 'wiki'))
+                    main_buttons.append(NavButton('wiki', 'wiki', sr_path=is_sr_path))
 
             if g.ads_promos_enabled == 'true':
                 if (isinstance(c.site, (Subreddit, DefaultSR, MultiReddit)) and
                     c.site.allow_ads):
-                    main_buttons.append(NavButton(menu.promoted, 'ads'))
+                    main_buttons.append(NavButton(menu.promoted, 'ads', sr_path=is_sr_path))
 
         more_buttons = []
 
@@ -1267,7 +1270,7 @@ class RedditFooter(CachedTemplate):
                     NavButton(_("welcome to saidit"), "/s/SaidIt/comments/37r/welcome_to_saiditnet/"),
                     NavButton(_("official sub"), "/s/SaidIt"),
                     NavButton(_("canary"), "/s/SaiditCanary"),
-                    NavButton(_("wiki"), "/s/SaidIt/wiki"),
+                    NavButton(_("wiki"), "/wiki/index", sr_path=False),
                 ],
                 title = _("about"),
                 type = "flat_vert",
@@ -2578,11 +2581,7 @@ class ProfilePage(Reddit):
         if c.user_is_admin:
             from r2.lib.pages.admin_pages import AdminNotesSidebar
             from admin_pages import AdminSidebar
-
             rb.push(AdminSidebar(self.user))
-            
-            # CUSTOM: Global Bans
-            # passing in full user object to display user ban status
             rb.push(AdminNotesSidebar('user', self.user.name, self.user))
         elif c.user_is_sponsor:
             from admin_pages import SponsorSidebar

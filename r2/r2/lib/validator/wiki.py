@@ -73,7 +73,7 @@ def may_revise(sr, user, page=None):
         # Users who are wiki banned in the subreddit may not contribute
         return False
     
-    if sr.is_banned(user) or sr.is_global_banned(user):
+    if sr.is_banned(user) or user.is_global_banned:
         # If the user is banned from the subreddit, do not allow them to contribute
         return False
     

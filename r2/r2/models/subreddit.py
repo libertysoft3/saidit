@@ -738,8 +738,7 @@ class Subreddit(Thing, Printable, BaseSite):
         if override is not None:
             return override
 
-	# CUSTOM: Global Bans
-        elif self.is_banned(user) or self.is_global_banned(user):
+        elif self.is_banned(user) or user.is_global_banned:
             return False
         elif self.type == 'gold_restricted' and user.gold:
             return True
@@ -761,10 +760,9 @@ class Subreddit(Thing, Printable, BaseSite):
             return True
         elif self.is_banned(user) and not promotion:
             return False
-	# CUSTOM: Global Bans
-        elif self.is_global_banned(user):
-	    return False
-	elif self.spammy():
+        elif user.is_global_banned:
+            return False
+        elif self.spammy():
             return False
         elif self.type == 'public':
             return True
@@ -1019,15 +1017,9 @@ class Subreddit(Thing, Printable, BaseSite):
                     banned_srids.add(sr_id)
                 elif rel_name == "muted":
                     muted_srids.add(sr_id)
-	
-	# CUSTOM: Global Bans
-	# this ensures that get_trimmed_sr_dicts() gets a correct .banned value.
-	global_banned = False
-	if user and c.user_is_loggedin:
-	    from r2.models import GlobalBan
- 	    if GlobalBan._user_banned(user._id):
-		global_banned = True
-		# g.log.warning("!!! dbg: user '%s' is globally banned!" % user.name)
+
+        # ensures that get_trimmed_sr_dicts() gets a correct .banned value.
+        global_banned = user.is_global_banned
 
         ret = {}
         for sr in srs:
@@ -1036,8 +1028,7 @@ class Subreddit(Thing, Printable, BaseSite):
                 subscriber=sr_id in subscriber_srids,
                 moderator=sr_id in moderator_srids,
                 contributor=sr_id in contributor_srids,
-                # CUSTOM: Global Bans
-		banned=sr_id in banned_srids or global_banned,
+                banned=sr_id in banned_srids or global_banned,
                 muted=sr_id in muted_srids,
             )
         return ret
@@ -1170,7 +1161,7 @@ class Subreddit(Thing, Printable, BaseSite):
             sr_ids = NamedGlobals.get("popular_sr_ids")
 
         if user:
-	    # CUSTOM
+            # SaidIt
             if not feature.is_enabled('random_includes_subscriptions'):
                 excludes = set(cls.user_subreddits(user, limit=None))
                 sr_ids = list(set(sr_ids) - excludes)
@@ -1481,10 +1472,10 @@ class Subreddit(Thing, Printable, BaseSite):
             return False
         return len(self.sticky_fullnames) >= self.MAX_STICKIES
 
-    # CUSTOM: Global Bans
-    def is_global_banned(self, user):
-        from r2.models import GlobalBan
-        return GlobalBan._user_banned(user._id)
+    # Configurable home page
+    @property
+    def is_homepage(self):
+        return False
 
 class SubscribedSubredditsByAccount(tdb_cassandra.DenormalizedRelation):
     _use_db = True
@@ -1602,9 +1593,54 @@ class FakeSubreddit(BaseSite):
     def keep_for_rising(self, sr_id):
         return False
 
+    # SaidIt: configurable home page wiki support
+    @property
+    def _base(self):
+        try:
+            return Subreddit._by_name(g.default_sr, stale=True)
+        except NotFound:
+            return None
+
+    def wiki_can_submit(self, user):
+        return True
+
+    @property
+    def wiki_use_subreddit_karma(self):
+        return False
+
     @property
     def _should_wiki(self):
-        return False
+        return True
+
+    @property
+    def wikimode(self):
+        return self._base.wikimode if self._base else "disabled"
+
+    @property
+    def wiki_edit_karma(self):
+        return self._base.wiki_edit_karma
+
+    @property
+    def wiki_edit_age(self):
+        return self._base.wiki_edit_age
+
+    def is_wikicontributor(self, user):
+        return self._base.is_wikicontributor(user)
+
+    def is_wikibanned(self, user):
+        return self._base.is_wikibanned(user)
+
+    def is_wikicreate(self, user):
+        return self._base.is_wikicreate(user)
+
+    @property
+    def _id36(self):
+        return self._base._id36
+
+    @property
+    def type(self):
+        return self._base.type if self._base else "public"
+
 
     @property
     def allow_gilding(self):
@@ -1644,6 +1680,10 @@ class FakeSubreddit(BaseSite):
         raise NotImplementedError()
 
     def spammy(self):
+        return False
+
+    @property
+    def is_homepage(self):
         return False
 
 class FriendsSR(FakeSubreddit):
@@ -1769,6 +1809,16 @@ class DynamicSR(FakeSubreddit):
         elif c.user.pref_site_index == 'site_index_home':
             return self.home_sr.get_gilded()
 
+    @property
+    def is_homepage(self):
+        if c.user.pref_site_index == 'site_index_front' and c.site.path == g.front_path:
+            return True
+        elif c.user.pref_site_index == 'site_index_all' and c.site.path == g.all_path:
+            return True
+        elif c.user.pref_site_index == 'site_index_home' and c.site.path == g.home_path:
+            return True
+        return False
+
 class AllSR(FakeSubreddit):
     name = g.all_name
     title = g.all_title
@@ -1819,6 +1869,18 @@ class AllSR(FakeSubreddit):
     def title(self):
         return _(g.all_page_title)
 
+    @property
+    def _should_wiki(self):
+        if g.site_index_user_configurable != 'true' and g.site_index == g.all_name:
+            return True
+        return False
+
+    @property
+    def is_homepage(self):
+        if g.site_index_user_configurable != 'true' and g.site_index == g.all_name:
+            return True
+        return False
+
 class AllMinus(AllSR):
     analytics_name = "all"
     name = _("%s (filtered)") % "all"
@@ -1865,6 +1927,12 @@ class HomeSR(AllSR):
         exclude_srs = Subreddit._by_name(sr_names, stale=True)
         self.exclude_sr_ids = [sr._id for sr in exclude_srs.itervalues() if not isinstance(sr, FakeSubreddit)]
 
+    @property
+    def _should_wiki(self):
+        if g.site_index_user_configurable != 'true' and g.site_index == g.home_name:
+            return True
+        return False
+
     def keep_for_rising(self, sr_id):
         return sr_id not in self.exclude_sr_ids
 
@@ -1875,6 +1943,11 @@ class HomeSR(AllSR):
         if self.exclude_sr_ids:
             q._filter(not_(Link.c.sr_id.in_(self.exclude_sr_ids)))
         return q
+    @property
+    def is_homepage(self):
+        if g.site_index_user_configurable != 'true' and g.site_index == g.home_name:
+            return True
+        return False
 
 class HomeMinus(HomeSR):
     analytics_name = g.home_name
@@ -1994,7 +2067,9 @@ class DefaultSR(_DefaultSR):
 
     @property
     def _should_wiki(self):
-        return True
+        if g.site_index_user_configurable != 'true' and g.site_index == g.front_name:
+            return True
+        return False
 
     @property
     def wikimode(self):
@@ -2070,6 +2145,12 @@ class DefaultSR(_DefaultSR):
         # '' is for promos targeted to the frontpage
         sr_names = [self.name] + [sr.name for sr in srs]
         return promote.get_live_promotions(sr_names)
+
+    @property
+    def is_homepage(self):
+        if g.site_index_user_configurable != 'true' and g.site_index == g.front_name:
+            return True
+        return False
 
 
 class MultiReddit(FakeSubreddit):
