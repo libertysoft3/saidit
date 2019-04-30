@@ -811,7 +811,7 @@ class ApiController(RedditController):
                 # The requesting user is marked as spam or banned, and is
                 # trying to do a mod action. The only action they should be
                 # allowed to do and have it stick is demodding themself.
-                if c.user._spam:
+                if c.user._spam or c.user.is_global_banned:
                     return
                 VNotInTimeout().run(action_name=action, target=victim)
         else:
@@ -885,7 +885,7 @@ class ApiController(RedditController):
         if form.has_errors('permissions', errors.INVALID_PERMISSIONS):
             return
 
-        if c.user._spam:
+        if c.user._spam or c.user.is_global_banned:
             return
 
         type, permissions = type_and_permissions
@@ -1204,7 +1204,7 @@ class ApiController(RedditController):
         perm = 'wiki' if type.startswith('wiki') else 'access'
         if (not c.user_is_admin
             and (not c.site.is_moderator_with_perms(c.user, perm))):
-            if c.user._spam:
+            if c.user._spam or c.user.is_global_banned:
                 return
             else:
                 abort(403, 'forbidden')
@@ -3130,7 +3130,7 @@ class ApiController(RedditController):
         """
         if not thing: return
         if thing._deleted: return
-        if c.user._spam:
+        if c.user._spam or c.user.is_global_banned:
            self.abort403()
 
         # Don't allow user in timeout to approve link or comment
@@ -3299,6 +3299,7 @@ class ApiController(RedditController):
 
             previously_distinguished = hasattr(thing, 'distinguished')
             user_can_notify = (not c.user._spam and
+                               not c.user.is_global_banned and
                                c.user._id not in to.enemies and
                                to.name != c.user.name)
 

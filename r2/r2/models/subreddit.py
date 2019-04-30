@@ -1811,13 +1811,7 @@ class DynamicSR(FakeSubreddit):
 
     @property
     def is_homepage(self):
-        if c.user.pref_site_index == 'site_index_front' and c.site.path == g.front_path:
-            return True
-        elif c.user.pref_site_index == 'site_index_all' and c.site.path == g.all_path:
-            return True
-        elif c.user.pref_site_index == 'site_index_home' and c.site.path == g.home_path:
-            return True
-        return False
+        return True
 
 class AllSR(FakeSubreddit):
     name = g.all_name

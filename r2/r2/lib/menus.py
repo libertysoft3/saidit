@@ -467,17 +467,10 @@ class SubredditButton(NavButton):
         self.pref_site_index = c.user.pref_site_index
 
         if isinstance(c.site, DynamicSR):
-            self.isselected = (c.site.name == sr.name)
+            self.isselected = True
 
-        if g.site_index_user_configurable != 'true' and g.site_index == sr.name:
+        if sr.is_homepage:
             self.path = '/'
-        if g.site_index_user_configurable == 'true':
-            if sr.name == g.front_name and c.user.pref_site_index == 'site_index_front':
-                self.path = '/'
-            elif sr.name == g.all_name and c.user.pref_site_index == 'site_index_all':
-                self.path = '/'
-            elif sr.name == g.home_name and c.user.pref_site_index == 'site_index_home':
-                self.path = '/'
 
         NavButton.__init__(self, name, sr.path, sr_path=False,
                            css_class=css_class, data=data)

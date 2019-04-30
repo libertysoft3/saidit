@@ -1058,17 +1058,7 @@ class Reddit(Templated):
                             NamedButton('gilded'),
                             ]
         else:
-            is_sr_path  = True
-            if g.site_index_user_configurable != 'true' and c.site.name == g.site_index:
-                is_sr_path  = False
-            elif g.site_index_user_configurable == 'true' and isinstance(c.site, DynamicSR):
-                if c.user.pref_site_index == 'site_index_front' and c.site.path == g.front_path:
-                    is_sr_path  = False
-                elif c.user.pref_site_index == 'site_index_all' and c.site.path == g.all_path:
-                    is_sr_path  = False
-                elif c.user.pref_site_index == 'site_index_home' and c.site.path == g.home_path:
-                    is_sr_path  = False
-
+            is_sr_path = not c.site.is_homepage
             main_buttons = [NamedButton('hot', dest='', aliases=['/hot'], sr_path=is_sr_path),
                             NamedButton('new', sr_path=is_sr_path),
                             # NamedButton('rising', sr_path=is_sr_path),
@@ -1120,31 +1110,9 @@ class Reddit(Templated):
         func = 'subreddit'
         if isinstance(c.site, DomainSR):
             func = 'domain'
-        elif isinstance(c.site, HomeSR):
+        elif isinstance(c.site, (HomeSR, AllSR, DefaultSR, DynamicSR)):
             func = 'subredditheadertitle'
-            if g.site_index_user_configurable == 'true' and c.user.pref_site_index == 'site_index_home':
-                func = 'subredditnositelink'
-            elif g.site_index_user_configurable != 'true' and g.site_index == g.home_name:
-                func = 'subredditnositelink'
-        elif isinstance(c.site, AllSR) and not isinstance(c.site, HomeSR):
-            func = 'subredditheadertitle'
-            if g.site_index_user_configurable == 'true' and c.user.pref_site_index == 'site_index_all':
-                func = 'subredditnositelink'
-            elif g.site_index_user_configurable != 'true' and g.site_index == g.all_name:
-                func = 'subredditnositelink'
-        elif isinstance(c.site, DefaultSR):
-            func = 'subredditheadertitle'
-            if g.site_index_user_configurable == 'true' and c.user.pref_site_index == 'site_index_front':
-                func = 'subredditnositelink'
-            elif g.site_index_user_configurable != 'true' and g.site_index == g.front_name:
-                func = 'subredditnositelink'
-        elif isinstance(c.site, DynamicSR):
-            func = 'subredditheadertitle'
-            if c.site.name == g.front_name and c.user.pref_site_index == 'site_index_front':
-                func = 'subredditnositelink'
-            elif c.site.name == g.home_name and c.user.pref_site_index == 'site_index_home':
-                func = 'subredditnositelink'
-            elif c.site.name == g.all_name and c.user.pref_site_index == 'site_index_all':
+            if c.site.is_homepage:
                 func = 'subredditnositelink'
 
         if c.render_style == g.extension_subdomain_mobile_v2_render_style:
@@ -2995,7 +2963,7 @@ class SubredditTopBar(CachedTemplate):
         # it is added to the render cache key.
         self.location = c.location or "no_location"
         self.my_subreddits_dropdown = self.my_reddits_dropdown()
-        # SaidIt: site_index_user_configurable
+        # SaidIt: configrable home page
         self.pref_site_index = c.user.pref_site_index
         CachedTemplate.__init__(self, name=name, t=t, over18=c.over18)
 
@@ -3053,17 +3021,26 @@ class SubredditTopBar(CachedTemplate):
         reddits = []
         if g.site_index_user_configurable == 'true':
             if c.user.pref_site_index == 'site_index_front':
-                reddits.append(Frontpage)
-                reddits.append(All)
-                reddits.append(Home)
+                if g.menu_show_front == 'true':
+                    reddits.append(Frontpage)
+                if g.menu_show_all == 'true':
+                    reddits.append(All)
+                if g.menu_show_home == 'true':
+                    reddits.append(Home)
             elif c.user.pref_site_index == 'site_index_all':
-                reddits.append(All)
-                reddits.append(Frontpage)
-                reddits.append(Home)
+                if g.menu_show_all == 'true':
+                    reddits.append(All)
+                if g.menu_show_front == 'true':
+                    reddits.append(Frontpage)
+                if g.menu_show_home == 'true':
+                    reddits.append(Home)
             elif c.user.pref_site_index == 'site_index_home':
-                reddits.append(Home)
-                reddits.append(Frontpage)
-                reddits.append(All)
+                if g.menu_show_home == 'true':
+                    reddits.append(Home)
+                if g.menu_show_front == 'true':
+                    reddits.append(Frontpage)
+                if g.menu_show_all == 'true':
+                    reddits.append(All)
         else:
             if g.menu_show_home == 'true':
                 reddits.append(Home)
