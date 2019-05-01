@@ -330,17 +330,8 @@ class SubredditListingController(ListingController):
     def render_params(self):
         render_params = {}
 
-        if g.site_index_user_configurable == 'true':
-            if c.site.name == g.front_name and c.user.pref_site_index == 'site_index_front':
-                render_params.update({'show_locationbar': True})
-            elif c.site.name == g.all_name and c.user.pref_site_index == 'site_index_all':
-                render_params.update({'show_locationbar': True})
-            elif c.site.name == g.home_name and c.user.pref_site_index == 'site_index_home':
-               render_params.update({'show_locationbar': True})
-
-        elif g.site_index == c.site.name:
+        if c.site.is_homepage:
             render_params.update({'show_locationbar': True})
-
         else:
             if not c.user_is_loggedin:
                 # This data is only for scrapers, which shouldn't be logged in.
@@ -476,18 +467,7 @@ class ListingWithPromos(SubredditListingController):
             show_sponsors = not c.user.pref_hide_ads or not c.user.gold
             show_organic = self.show_organic and c.user.pref_organic
 
-            # SaidIt: configurable home page
-            on_frontpage = False
-            if g.site_index_user_configurable == 'true':
-                if c.site.name == g.front_name and c.user.pref_site_index == 'site_index_front':
-                    on_frontpage = True
-                elif c.site.name == g.all_name and c.user.pref_site_index == 'site_index_all':
-                    on_frontpage = True
-                elif c.site.name == g.home_name and c.user.pref_site_index == 'site_index_home':
-                    on_frontpage = True
-            else:
-                on_frontpage = (c.site.name == g.site_index)
-
+            on_frontpage = c.site.is_homepage
             requested_ad = request.GET.get('ad')
 
             if on_frontpage:

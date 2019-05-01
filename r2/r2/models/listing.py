@@ -83,17 +83,8 @@ class Listing(object):
         self.before = None
         # SaidIt: configurable home page
         self.sr_path = sr_path
-
-        if isinstance(c.site, DynamicSR):
-            if g.site_index_user_configurable != 'true' and c.site.name == g.site_index:
-                self.sr_path = False
-            elif g.site_index_user_configurable == 'true':
-                if c.site.name == g.front_name and c.user.pref_site_index == 'site_index_front':
-                    self.sr_path = False
-                elif c.site.name == g.all_name and c.user.pref_site_index == 'site_index_all':
-                    self.sr_path = False
-                elif c.site.name == g.home_name and c.user.pref_site_index == 'site_index_home':
-                    self.sr_path = False
+        if c.site.is_homepage:
+            self.sr_path = False
 
         if self.nextprev and self.prev_link and prev and bcount > 1:
             p = self.params.copy()

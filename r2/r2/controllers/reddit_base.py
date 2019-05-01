@@ -226,6 +226,11 @@ class UnloggedUser(FakeAccount):
                 self._t[k] = newv
             self._to_cookie(self._t)
 
+    # SaidIt: Global Bans
+    @property
+    def is_global_banned(self):
+        return False
+
 def read_user_cookie(name):
     uname = c.user.name if c.user_is_loggedin else ""
     cookie_name = uname + '_' + name

@@ -881,7 +881,7 @@ class RuleTarget(object):
             return True
 
         # banned accounts should never satisfy threshold checks
-        if account._spam:
+        if account._spam or account.is_global_banned:
             return False
 
         for check, compare_value in checks.iteritems():

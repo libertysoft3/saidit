@@ -109,7 +109,6 @@ class AdminNotesSidebar(Templated):
         "user": N_("user"),
     }
 
-    # CUSTOM - subject_user param
     def __init__(self, system, subject, subject_user=None):
         from r2.models.admin_notes import AdminNotesBySystem
 
@@ -117,8 +116,6 @@ class AdminNotesSidebar(Templated):
         self.subject = subject
         self.author = c.user.name
         self.notes = AdminNotesBySystem.in_display_order(system, subject)
-        
-        # CUSTOM: Global Bans
         self.global_ban = 'yes' if subject_user and subject_user.is_global_banned else 'no'
 
         # Convert timestamps for easier reading/translation

@@ -36,7 +36,7 @@ from pylons.i18n import _
 
 class WikiView(Templated):
     def __init__(self, content, edit_by, edit_date, may_revise=False,
-                 page=None, diff=None, renderer='wiki'):
+                 page=None, diff=None, renderer='wiki', sr_path=True):
         self.page_content_md = content
         if renderer == 'wiki':
             self.page_content = wikimarkdown(content)
@@ -56,6 +56,7 @@ class WikiView(Templated):
         self.may_revise = may_revise
         self.edit_date = edit_date
         self.base_url = c.wiki_base_url
+        self.sr_path = sr_path
         Templated.__init__(self)
 
 class WikiPageNotFound(Templated):
@@ -99,9 +100,10 @@ class WikiPageRevisions(Templated):
         Templated.__init__(self)
 
 class WikiPageDiscussions(Templated):
-    def __init__(self, listing, page=None):
+    def __init__(self, listing, page=None, sr_path=True):
         self.listing = listing
         self.page = page
+        self.sr_path = sr_path
         Templated.__init__(self)
 
 class WikiBasePage(Reddit):
@@ -200,19 +202,28 @@ class WikiRevisions(WikiBasePage):
 class WikiRecent(WikiBasePage):
     def __init__(self, revisions, **context):
         content = WikiPageRevisions(revisions)
-        context['wikiaction'] = ('revisions', _("Viewing recent revisions for /%s/%s") % (g.brander_community_abbr, c.wiki_id))
+        sr_path = context.get('sr_path')
+        if sr_path:
+            context['wikiaction'] = ('revisions', _("Viewing recent revisions for /%s/%s") % (g.brander_community_abbr, c.wiki_id))
+        else:
+            context['wikiaction'] = ('revisions', _("Viewing recent revisions for %s") % g.brander_site)
         WikiBasePage.__init__(self, content, showtitle=True, **context)
 
 class WikiListing(WikiBasePage):
     def __init__(self, pages, linear_pages, **context):
         content = WikiPageListing(pages, linear_pages)
-        context['wikiaction'] = ('pages', _("Viewing pages for /%s/%s") % (g.brander_community_abbr, c.wiki_id))
+        sr_path = context.get('sr_path')
+        if sr_path:
+            context['wikiaction'] = ('pages', _("Viewing pages for /%s/%s") % (g.brander_community_abbr, c.wiki_id))
+        else:
+            context['wikiaction'] = ('pages', _("Viewing pages for %s") % g.brander_site)
         description = [_("Below is a list of pages in this wiki visible to you in this sub.")]
         WikiBasePage.__init__(self, content, description=description, showtitle=True, **context)
 
 class WikiDiscussions(WikiBasePage):
     def __init__(self, listing, page, **context):
-        content = WikiPageDiscussions(listing, page)
+        sr_path = context.get('sr_path')
+        content = WikiPageDiscussions(listing, page, sr_path=sr_path)
         context['wikiaction'] = ('discussions', _("discussions"))
         description = [_("Discussions are site-wide links to this wiki page."),
                        _("Submit a link to this wiki page or see other discussions about this wiki page.")]

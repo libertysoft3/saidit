@@ -53,7 +53,7 @@ from r2.models.bans import TempTimeout
 from r2.models.last_modified import LastModified
 from r2.models.modaction import ModAction
 from r2.models.trylater import TryLater
-
+from r2.models.globalban import GlobalBan
 
 trylater_hooks = hooks.HookRegistrar()
 COOKIE_TIMESTAMP_FORMAT = '%Y-%m-%dT%H:%M:%S'
@@ -397,13 +397,8 @@ class Account(Thing):
                         # g.log.warning("!!! dbg: user %s cannot create sub, created %s at %s, once every %s days max" % (self.name, sr.name, sr._date, g.live_config["create_sr_ratelimit_once_per_days"]))
                         return False
 
-        # CUSTOM - Global Ban enforcement
-        # TODO: Use the can_create_subreddit hook to do this stuff elsewhere
-        from r2.models.globalban import GlobalBan
-        if GlobalBan._user_banned(self._id):
-            # g.log.warning("!!! dbg: user %s cannot create sub, is globally banned" % self.name)
-            return False
-
+        if self.is_global_banned:
+            return True
 
         return True
 
@@ -791,11 +786,10 @@ class Account(Thing):
         """
         return 'force_password_reset' in self._t
 
-    # CUSTOM: Global Bans
+    # SaidIt: Global Bans
     @property
     def is_global_banned(self):
-	from r2.models.globalban import GlobalBan
-	return GlobalBan._user_banned(self._id)
+        return GlobalBan._user_banned(self._id)
 
 class FakeAccount(Account):
     _nodb = True

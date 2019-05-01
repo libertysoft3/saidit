@@ -79,7 +79,7 @@ from r2.models.listing import WikiRevisionListing
 from r2.lib.pages.things import default_thing_wrapper
 from r2.lib.pages import BoringPage, CssError
 from reddit_base import base_listing
-from r2.models import IDBuilder, LinkListing, DefaultSR
+from r2.models import IDBuilder, LinkListing, DynamicSR
 from r2.lib.merge import ConflictException, make_htmldiff
 from pylons.i18n import _
 from r2.lib.pages import PaneStack
@@ -258,7 +258,7 @@ class WikiController(RedditController):
                                             skip=not c.is_wiki_mod,
                                             user=wikiuser, sr=c.site)
         listing = WikiRevisionListing(builder).listing()
-        return WikiRecent(listing).render()
+        return WikiRecent(listing, sr_path=not c.site.is_homepage).render()
 
     @require_oauth2_scope("wikiread")
     @api_doc(api_section.wiki, uri='/wiki/pages', uses_site=True)
@@ -267,7 +267,7 @@ class WikiController(RedditController):
         def check_hidden(page):
             return page.listed and this_may_view(page)
         pages, linear_pages = WikiPage.get_listing(c.site, filter_check=check_hidden)
-        return WikiListing(pages, linear_pages).render()
+        return WikiListing(pages, linear_pages, sr_path=not c.site.is_homepage).render()
 
     def GET_wiki_redirect(self, page='index'):
         return self.redirect(str("%s/%s" % (c.wiki_base_url, page)), code=301)
@@ -283,7 +283,7 @@ class WikiController(RedditController):
                                     reverse=reverse, count=count)
         listing = LinkListing(builder).listing()
         return WikiDiscussions(listing, page=page.name,
-                               may_revise=this_may_revise(page)).render()
+                               may_revise=this_may_revise(page), sr_path=not c.site.is_homepage).render()
 
     @require_oauth2_scope("modwiki")
     @api_doc(api_section.wiki, uri='/wiki/settings/{page}', uses_site=True)
@@ -353,10 +353,17 @@ class WikiController(RedditController):
             self.handle_error(403, 'WIKI_DOWN')
         if not c.site._should_wiki:
             self.handle_error(404, 'NOT_WIKIABLE')  # /r/mod for an example
-        frontpage = isinstance(c.site, DefaultSR)
+        frontpage = c.site.is_homepage
         c.wiki_base_url = join_urls(c.site.path, 'wiki')
         c.wiki_api_url = join_urls(c.site.path, '/api/wiki')
+
+        # CUSTOM
+        if frontpage:
+            c.wiki_base_url = join_urls('/', 'wiki')
+            c.wiki_api_url = join_urls('/', '/api/wiki')
+
         c.wiki_id = g.default_sr if frontpage else c.site.name
+
         self.editconflict = False
         c.is_wiki_mod = (
             c.user_is_admin or c.site.is_moderator_with_perms(c.user, 'wiki')
