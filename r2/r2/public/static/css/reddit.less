@@ -94,7 +94,11 @@ body {
 
 textarea { font:  normal small verdana, arial, helvetica, sans-serif; 
 	color: white;
-	background-color: #505050}
+	background-color: #505050;
+	outline: none;
+	border-radius: 12px;}
+
+textarea:focus { border-color: #488dd0;}
 
 /* [1] fixes a bug in old versions of WebKit, as used in Android 4.0. See
  * https://github.com/necolas/normalize.css/commit/79b3d21b697e ,
@@ -476,14 +480,12 @@ ul.flat-vert {text-align: left;}
 .tabmenu li a {
     padding: 2px 6px 0 6px;
     background-color: #2f2f2f;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 
  }
 
 .tabmenu li.selected a{
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
     color: orangered;
     background-color: #2f2f2f;
     border: 1px solid #000;
@@ -4618,6 +4620,7 @@ form input[type=radio] {margin: 2px .5em 0 0; }
     margin-bottom: 0px;
     overflow: hidden;
     width: 70px; 
+    border-radius: 11px;
 }
 
 .thumbnail.nsfw {
@@ -7845,6 +7848,7 @@ dd { margin-left: 20px;  }
     border: 1px solid gray;
     font-size: larger;
     list-style: none;
+    border-radius: 12px;
 }
 
 .sidecontentbox .more { 
