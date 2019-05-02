@@ -37,7 +37,8 @@
       $('#' + thingId + ' > .entry .md a').each(function() {
         initMdExpando($(this));
       });
-      $('#' + thingId + ' > .entry .md a.' + buttonClass).on('click', function() {
+      $('#' + thingId + ' > .entry .md a.' + buttonClass).on('click', function(event) {
+        event.preventDefault();
         toggleMdExpando($(this));
       });
     }
@@ -313,7 +314,8 @@
     });
 
     // Handle button clicks
-    $('.md a.' + buttonClass).on('click', function(){
+    $('.md a.' + buttonClass).on('click', function(event){
+      event.preventDefault();
       toggleMdExpando($(this));
     });
 
