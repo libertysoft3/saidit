@@ -224,7 +224,8 @@
 
       var showInterstitial = (
         // must be on a mixed-content listing
-        !_state.over18Listing &&
+        // SaidIt: remove this requirement, show interstitial on 18+ subs if the pref is set
+        //!_state.over18Listing &&
         // and either have the "safe(r) for work" preference on
         // or this is your first time seeing a nsfw media interstitial
         (_state.noProfanity || !_state.nsfwMediaAcknowledged) &&
@@ -252,7 +253,7 @@
         var isWarning = !_state.noProfanity;
 
         nsfwFlow = new ExpandoNSFWFlow({
-          width: width,
+          // width: width,
           height: height,
           isOverlay: isOverlay,
           isWarning: isWarning,
