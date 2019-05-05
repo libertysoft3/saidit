@@ -253,11 +253,11 @@
           ${_("(such as the source subreddit or the content author's url/name)")}
         </span>
       </p> -->
-      <p>${checkbox(_("don't show me submissions after I've voted them insightful"), "hide_ups")}
+      <p>${checkbox(_("don't show me submissions after I've voted them " + g.voting_upvote_name), "hide_ups")}
          &#32;
          <span class="details">${_("(except my own)")}</span>
       </p>
-      <p>${checkbox(_("don't show me submissions after I've voted them fun"), "hide_downs")}
+      <p>${checkbox(_("don't show me submissions after I've voted them " + g.voting_controversial_name), "hide_downs")}
          &#32;
          <span class="details">${_("(except my own)")}</span>
       </p>
