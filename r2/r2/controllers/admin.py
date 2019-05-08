@@ -22,7 +22,8 @@
 
 from reddit_base import RedditController
 from r2.lib.pages import AdminPage, AdminCreddits, AdminGold
-from r2.lib.validator import nop, validate, VAdmin
+from r2.lib.validator import *
+from pylons import app_globals as g
 
 class AdminToolController(RedditController):
     @validate(
@@ -38,3 +39,19 @@ class AdminToolController(RedditController):
     )
     def GET_gold(self, recipient):
         return AdminPage(content=AdminGold(recipient)).render()
+
+    @validatedForm(
+        VAdmin(),
+        VModhash(),
+        thing=VByName('thing'),
+        system=VLength('system', 1024),
+        message=VLength('message', 10000),
+    )
+    def POST_add_ban_message(self, form, jquery, thing, system, message):
+        if form.has_errors(('thing', 'system', 'message'),
+                           errors.TOO_LONG):
+            return
+
+        from r2.models import admintools
+        admintools.set_ban_message(thing, system, message)
+        form.refresh()

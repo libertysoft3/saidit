@@ -57,6 +57,7 @@ def make_map(config):
         plugin.add_routes(mc)
 
     mc('/admin/', controller='awards')
+    mc('/api/admin/add_ban_message', controller='admintool', action='add_ban_message')
 
     mc('/robots.txt', controller='robots', action='robots')
     mc('/crossdomain', controller='robots', action='crossdomain')

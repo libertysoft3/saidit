@@ -255,6 +255,14 @@ class AdminTools(object):
         token = AwardClaimToken._new(unique_award_id, award, description, url)
         return token.confirm_url()
 
+    def set_ban_message(self, thing, system, message):
+        if system == 'subreddit' and isinstance(thing, Subreddit):
+            ban_info = copy(getattr(thing, 'ban_info', {}))
+            ban_info['message'] = message
+            thing.ban_info = ban_info
+            thing._commit()
+        return True
+
 admintools = AdminTools()
 
 def cancel_subscription(subscr_id):
