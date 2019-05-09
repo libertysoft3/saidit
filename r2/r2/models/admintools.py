@@ -261,7 +261,8 @@ class AdminTools(object):
             ban_info['message'] = message
             thing.ban_info = ban_info
             thing._commit()
-        return True
+            return True
+        return False
 
 admintools = AdminTools()
 

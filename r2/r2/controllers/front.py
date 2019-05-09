@@ -1723,7 +1723,7 @@ class FormsController(RedditController):
         else:
             return self.abort404()
 
-        return PrefsPage(content=content, infotext=infotext).render()
+        return PrefsPage(content=content, infotext=infotext, location=location).render()
 
     @validate(dest=VDestination())
     def GET_login(self, dest):

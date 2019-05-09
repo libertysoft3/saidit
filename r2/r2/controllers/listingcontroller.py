@@ -1663,7 +1663,10 @@ class MyredditsController(ListingController):
         if self.where == 'subscriber' and num_subscriptions == 0:
             message = strings.sr_messages['empty']
         else:
-            message = strings.sr_messages.get(self.where)
+            message = strings.sr_messages.get(self.where) % {
+                    'community_plural': g.brander_community_plural,
+                    'unsubscribe_link': '/prefs#subscriptions',
+                }
 
         stack = PaneStack()
 

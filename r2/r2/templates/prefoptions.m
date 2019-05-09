@@ -486,7 +486,7 @@
     </select>
   </%def>
   <tr>
-    <th>${_("subscriptions")}</th>
+    <th>${_("subscriptions")} <a name="subscriptions"></a></th>
       </tr>
       <tr>
       <td class="prefright">

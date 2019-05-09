@@ -1394,8 +1394,8 @@ class PrefsPage(Reddit):
 
     extension_handling = False
 
-    def __init__(self, show_sidebar = False, title=None, *a, **kw):
-        title = title or "%s (%s)" % (_("preferences"), c.site.name.strip(' '))
+    def __init__(self, show_sidebar = False, title=None, location=None, *a, **kw):
+        title = "%s : %s" % (_("preferences"), title or location)
         Reddit.__init__(self, show_sidebar = show_sidebar,
                         title=title,
                         *a, **kw)
@@ -2395,7 +2395,12 @@ class SubredditsPage(Reddit):
             subreddit_search=True,
             search_path="/subs/search",
         )
-        self.sr_infobar = InfoBar(message = strings.sr_subscribe)
+        message = strings.sr_subscribe % {
+                'community_plural': g.brander_community_plural,
+                'subscribed_name': g.front_name,
+                'unsubscribe_link': '/prefs#subscriptions',
+            }
+        self.sr_infobar = InfoBar(message = message)
         self.interestbar = InterestBar(True) if show_interestbar else None
 
     def build_toolbars(self):
