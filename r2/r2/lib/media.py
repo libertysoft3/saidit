@@ -594,6 +594,8 @@ def get_media_embed(media_object):
     if "oembed" in media_object:
         if media_object.get("type") == "youtube.com":
             return _YouTubeScraper.media_embed(media_object)
+        elif media_object.get("type") == "invidious":
+            return _InvidiousScraper.media_embed(media_object)
         elif media_object.get("type") == "peertube":
             return _PeerTubeScraper.media_embed(media_object)
         elif media_object.get("type") == "bitchute":
@@ -994,6 +996,53 @@ class _YouTubeScraper(Scraper):
 
         # force youtube-nocookie embeds
         html = html.replace("youtube.com/embed/", "youtube-nocookie.com/embed/")
+
+        return MediaEmbed(
+            width=width,
+            height=height,
+            content=html,
+            public_thumbnail_url=public_thumbnail_url,
+        )
+
+class _InvidiousScraper(_YouTubeScraper):
+    URL_MATCH = re.compile(r"https?://((www\.)?invidio\.us/(?:watch|embed)/)")
+    YT_DOMAIN = "invidio.us"
+    YT_EMBED_PART = YT_DOMAIN + "/embed/
+    
+    def _fetch_from_youtube(self):
+        params = {
+            "url": self.url.replace(self.YT_DOMAIN, "youtube.com"),
+            "format": "json",
+            "maxwidth": self.maxwidth,
+        }
+
+        with g.stats.get_timer("providers.youtube.oembed"):
+            content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+
+        return json.loads(content)
+    
+    def _make_media_object(self, oembed):
+        if oembed.get("type") == "video":
+            return {
+                "type": "invidious",
+                "oembed": oembed,
+            }
+        return None
+    
+    @classmethod
+    def media_embed(cls, media_object):
+        oembed = media_object["oembed"]
+
+        html = oembed.get("html")
+        width = oembed.get("width")
+        height = oembed.get("height")
+        public_thumbnail_url = oembed.get('thumbnail_url')
+
+        if not (html and width and height):
+            return
+
+        # force invidious embeds
+        html = html.replace("youtube.com/embed/", cls.YT_EMBED_PART)
 
         return MediaEmbed(
             width=width,
