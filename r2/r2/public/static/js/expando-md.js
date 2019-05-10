@@ -20,9 +20,10 @@
     var buttonClass = 'md-expando-button';
     var buttonOpenClass = 'md-expando-open';
     var buttonClosedClass = 'md-expando-closed';
-    var destroyOnCloseTypes = ['video', 'audio', 'soundcloud', 'youtube', 'bitchute', 'peertube', 'dtube', 'vimeo']
+    var destroyOnCloseTypes = ['video', 'audio', 'soundcloud', 'youtube', 'invidious', 'bitchute', 'peertube', 'dtube', 'vimeo'];
     var reValidExpandoUrl = /^https?\:\/\//i;
     var reYouTube = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/i; // https://stackoverflow.com/a/5831191
+    var reInvidious = /^(?:https?:)?\/\/(?:[0-9A-Z-]+\.)?(?:invidio\.us)\/(?:(?:watch\?(?:[^&=]+=[^&]*)*v=)|embed\/)([\w-]{11})/i;
     var reYouTubeTimestampParam = /t=([^&#]*)/; // capture param t
     var reYouTubeTimestampA = /^(\d+h)?(\d+m)?(\d+s)$/i; // 1h6m30s
     var reYouTubeTimestampB = /^(\d+)$/; // 960
@@ -70,6 +71,10 @@
       if (check) {
         $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="youtube" data-video-url="' + check  + '" data-expando-exists="false" href="javascript:void(0);">YouTube</a> ');
         return;
+      }
+      check = getEmbedUrlInvidious($thing.attr('href'));
+      if (check) {
+        $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="invidious" data-video-url="' + check + '" data-expando-exists="false" href="javascript:void(0);">Invidious</a> ');
       }
       check = getEmbedUrlPeerTube($thing.attr('href'));
       if (check) {
@@ -144,6 +149,9 @@
         case 'youtube':
           $button.after('<div class="md-expando"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/' + $button.data('video-url') + '" frameborder="0" allow="autoplay; encrypted-media" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>');
           break;
+        case 'invidious':
+          $button.after('<div class="md-expando"><iframe width="560" height="315" src="https://www.invidio.us/embed/' + $button.data('video-url')+ '" frameborder="0" allow="autoplay; encrypted-media" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>');
+          break;
         case 'peertube':
           $button.after('<div class="md-expando"><iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" src="' + $button.data('video-url') + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>');
           break;
@@ -214,6 +222,36 @@
 
     function getEmbedUrlYouTube(href) {
       var match = reYouTube.exec(href);
+      if (match) {
+        match[1] += '?rel=0';
+        var ts = reYouTubeTimestampParam.exec(href);
+        if (ts) {
+          var parts = reYouTubeTimestampA.exec(ts[1]);
+          if (parts) {
+            var secs = 0;
+            if (parts[3]) {
+              secs += parseInt(parts[3].substring(0, parts[3].length - 1));
+            }
+            if (parts[2]) {
+              secs += 60 * parseInt(parts[2].substring(0, parts[2].length - 1));
+            }
+            if (parts[1]) {
+              secs += 60 * 60 * parseInt(parts[1].substring(0, parts[1].length - 1));
+            }
+            match[1] += '&start=' + secs;
+          } else {
+            var secs = reYouTubeTimestampB.exec(ts[1]);
+            if (secs) {
+              match[1] += '&start=' + parseInt(secs[1]);
+            }
+          }
+        }
+        return match[1];
+      }
+      return false;
+    }
+    function getEmbedUrlInvidious(href) {
+      var match = reInvidious.exec(href);
       if (match) {
         match[1] += '?rel=0';
         var ts = reYouTubeTimestampParam.exec(href);
