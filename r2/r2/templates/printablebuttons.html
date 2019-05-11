@@ -337,10 +337,11 @@
       ${self.simple_button(_("edit"), "edit_usertext", css_class="edit-usertext")}
     </li>
   %endif
+
   % if thing.show_share:
-    <li class="share">
+    <!-- <li class="share">
       <a class="post-sharing-button" href="javascript: void 0;">${_("share")}</a>
-    </li>
+    </li> --> 
   % endif
   %if thing.is_loggedin and not thing.deleted:
     %if thing.saved:
