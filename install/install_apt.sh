@@ -84,6 +84,7 @@ python-pylibmc=1.2.2-1~trusty5
 python-amqplib
 python-bcrypt
 python-snappy
+gperf
 
 python-l2cs
 python-lxml

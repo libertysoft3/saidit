@@ -1,26 +1,27 @@
 # SaidIt
 
-[SaidIt](https://saidit.net) is a [reddit open source](https://github.com/reddit-archive/reddit) continuation and fork. Major SaidIt changes include:
+SaidIt is a [reddit open source](https://github.com/reddit-archive/reddit) continuation and fork with:
 
+* critical configurations restored
+* critical bug fixes
+* admin user bans and ip bans
 * configurable site branding
-* admin tools including global user bans and ip bans
-* more embedable media services
 * configurable home page
-* critical features, cron jobs, and configurations restored
-* bug fixes
+* html5 and additional media providers for expandos/embeds
+* markdown expandos/embeds
 
-User-facing SaidIt changes include:
+SaidIt customizations include:
 
 * two dimensional voting where insightful is +2 and fun is +1
-* markdown media expandos
 * public moderator logs
 * chat integration with a custom [TheLounge](https://github.com/libertysoft3/lounge-autoconnect) web IRC client
 
 Goals:
 
+* easily setup your own saidit/reddit open source clone
 * reddit API compatibility
 * platform upgrades, longevity
-* easily setup your own reddit or saidit clone
+* general enhancements and quality of life improvements
 
 ---
 
@@ -31,7 +32,7 @@ There are two ways to set up a saidit server: on a standalone physical server, o
 ### Setting up a virtual machine
 
 1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-1. Download [Ubuntu 14.04.6](http://releases.ubuntu.com/14.04/) server install image
+1. Download the latest [Ubuntu 14.04](http://releases.ubuntu.com/14.04/) server .iso file "64-bit PC (AMD64) server install image"
 1. Start VirtualBox and click 'New'
    1. Type: Linux
    1. Version: Ubuntu (64-bit)
@@ -39,122 +40,79 @@ There are two ways to set up a saidit server: on a standalone physical server, o
    1. File location and size: 30.0 GB (minimim)
 1. Right click the new VM and choose 'Settings'
    1. Network: Adapter 1: Attached to: "Bridged Adapter"
-   1. Storage: Click "Choose Virtual Optical Disk File" and select the Ubuntu 14 .iso you file previously downloaded
+   1. Storage: select the empty CD icon and click "Choose Virtual Optical Disk File" and choose the ubuntu server .iso file
 1. Select the new VM and click 'Start'
-1. Install Ubuntu with the following options, but leaving all other options with the default selection:
-   1. username "reddit"
-   1. "Choose software to install": Select OpenSSH, but no others
+1. Install Ubuntu and choose following options, but leaving all other options with the default selection:
+   1. Username: reddit
+   1. Choose software to install: select OpenSSH, but no others
 1. Complete Ubuntu installation
 
-From this point forward you can start your VM with 'Start -> Headless Start' and ssh in as the 'reddit' user if you wish, using a program like [PuTTY](https://www.putty.org/). Don't forget to shut down your VM with 'Close -> ACPI Shutdown' before shutting down your host OS or you may corrupt your VM.
+From this point forward you can start your VM with Start -> Headless Start and connect via ssh as user 'reddit' if you wish, using a program like [PuTTY](https://www.putty.org/). Don't forget to shut down your VM by right clicking it and choosing Close -> ACPI Shutdown before shutting down your host OS or you may corrupt your VM.
 
 ### Setting up a physical server
 
-1. Download the [Ubuntu 14.04.6](http://releases.ubuntu.com/14.04/) Server Amd64 (64-bit version) .ISO file
+1. Download the latest [Ubuntu 14.04](http://releases.ubuntu.com/14.04/) server .ISO file "64-bit PC (AMD64) server install image"
 1. Download [Rufus](https://rufus.ie/) (as recommended by Ubuntu) and use it to write the .ISO to a USB drive
 1. Once finished, put the USB drive in the server and boot to it
 1. Install Ubuntu with the following options, but leaving all other options with the default selection:
-   1. username: reddit
-   1. "Choose software to install": Select OpenSSH, but no others
+   1. Username: reddit
+   1. Choose software to install: select OpenSSH, but no others
 1. When install finishes, remove USB drive and boot to linux
 
 From this point forward physical access to the server is no longer needed and you can ssh in as the 'reddit' user remotely if you wish, using a program like [PuTTY](https://www.putty.org/).
 
 
-### Connecting to your saidit/reddit open source server
+### Configure DNS for reddit.local
 
-This step is optional and for convenience but is highly recommended. These instructions will help you update your hosts file to resolve https://reddit.local (to your saidit server) in both your browser and your SSH client.
-
-#### Find the ip address of your saidit server
+To use your reddit server, you are expected to be able to resolve reddit.local and https://reddit.local. First, find the ip address of your saidit server by running:
 
     $ ifconfig
-    # note the 'inet addr' for device 'eth0'
+    # note the 'inet addr' for device 'eth0' or similar
 
-#### Update the 'hosts' file on your development machine/host OS
-
-E.g. host OS linux and saidit server ip 192.168.1.20:
+Then update your `hosts` file on your development machine/host OS. For example, on linux with saidit server ip 192.168.1.20  run:
 
     $ sudo sed -i '1i 192.168.1.20 reddit.local' /etc/hosts
 
-Instructions for Windows and MacOS: https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
+For Windows and MacOS see https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
 
 
 ### Install saidit
 
-SSH into your saidit server and update the OS
+SSH into your saidit server
 
     $ ssh reddit@reddit.local
+
+OS updates
+ 
     $ sudo apt-get update
     $ sudo apt-get upgrade
-    $ sudo apt-get install git gperf
 
 Install saidit
 
     $ cd ~/
-    $ git clone https://github.com/libertysoft3/saidit.git
-    $ chmod +x saidit/install-reddit.sh
-    $ sudo ./saidit/install-reddit.sh
-    # do not proceed if the installer printed any errors
-    # cleanup installation, saidit has been installed elsewhere:
-    $ rm -rf ~/saidit
- 
-### Upgrade curl
+    $ sudo apt-get install git
+    $ sudo npm -g install less
+    $ git clone https://github.com/libertysoft3/saidit.git saidit-installer
+    $ cd saidit-installer
+    $ chmod +x install-reddit.sh
+    $ sudo ./install-reddit.sh
 
-This will improve the new link 'fetch title' capability and potentially more
+Do not proceed if the installer printed any errors. You should see the message "Congratulations! reddit is now installed."
 
-    $ sudo apt-get build-dep curl
-    # use latest stable curl version from https://curl.haxx.se
-    $ wget https://curl.haxx.se/download/curl-7.64.1.tar.bz2
-    $ tar -xvjf curl-7.64.1.tar.bz2
-    $ cd curl-7.64.1
-    $ ./configure --prefix=/usr
-    $ make
-    $ sudo make install
-    $ sudo ldconfig
-    $ curl --version
- 
- 
-### Upgrade to python 2.7
-
-TODO: if you upgrade python before running install-reddit.sh, install-reddit.sh will error out on cython dependencies
-TODO: is this upgrade necessary on Ubuntu 14?
- 
-    $ sudo add-apt-repository ppa:jonathonf/python-2.7
-    $ sudo apt-get update
-    $ sudo apt-get install python2.7
-    $ python --version
-
-### Upgrade gcc
-
-    $ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-    $ sudo apt-get update
-    $ sudo apt-get install gcc-4.9 g++-4.9 cpp-4.9
-    $ cd /usr/bin
-    $ sudo rm gcc g++ cpp x86_64-linux-gnu-gcc
-    $ sudo ln -s gcc-4.9 gcc
-    $ sudo ln -s g++-4.9 g++
-    $ sudo ln -s cpp-4.9 cpp
-    $ sudo ln -s x86_64-linux-gnu-gcc-4.9 x86_64-linux-gnu-gcc
-
-### Rebuild reddit
- 
-    $ sudo reddit-stop
-    $ sudo reddit-flush
-    $ sudo apt-get install libxml2-dev libxslt1-dev python-dev
-    $ cd ~/src/reddit/r2
-    $ python setup.py build
-    $ sudo python setup.py develop
-    $ make clean
-    $ make
-    $ sudo reddit-start
+    $ cd ..
+    $ rm -rf ~/saidit-installer
+    # saidit has been installed at ~/src/reddit
 
 ### Install sample data
 
-This also creates a reddit admin user "saidit" with password "password".
+This step is required because it creates a saidit admin user "saidit" with password "password", etc. It also adds sample posts and and users.
 
     $ cd ~/src/reddit
     $ reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
     $ sudo reddit-restart
+    $ sudo reddit-flush
+
+SaidIt is now fully functional aside from chat and search. Test at https://reddit.local Due to using a self-signed SSL certificate, you will see security warnings.
 
 ---
 
@@ -387,21 +345,89 @@ start TheLounge:
 
 ---
 
-## SaidIt dev guide
+## SaidIt Dev Guide
 
-You can mount the VM's reddit files as a folder on your host machine for easy editing and searching. On your host/development machine:
+### Logging
+
+    $ sudo tail -f /var/log/syslog
+    > g.log.warning("hello log")
+
+### Mounting VM files locally
+
+You can mount the reddit open source app's files as a folder on your host machine for easy editing and searching. On your host/development machine:
 
     $ sudo apt-get install sshfs
     $ mkdir ~/vm
     $ sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm
-    # optionally unmount with:
+    # optionally unmount it later with:
     $ fusermount -u ~/vm
 
-SaidIt log file, debug errors:
+### Upgrade curl
 
-    $ sudo tail -f /var/log/syslog
+Ubuntu 14 comes with curl 7.35.0. Upgrade it for improved SSL compatibility, particularly for "suggest title".
 
-Change the default subs:
+    $ sudo apt-get remove curl
+    $ sudo apt-get install build-essential
+    # substitute version from https://curl.haxx.se/download.html
+    $ wget https://curl.haxx.se/download/curl-7.64.1.tar.bz2
+    $ tar -xvjf curl-7.64.1.tar.bz2
+    $ cd curl-7.64.1
+    $ ./configure --prefix=/usr
+    $ make
+    $ sudo make install
+    $ sudo ldconfig
+    # verify:
+    $ curl --version
+    $ cd ..
+    $ rm -rf curl-7.64.1*
+
+### Upgrade python
+
+For reference only, experimental. Ubuntu provides python 2.7.6 but it's upgradable to at least 2.7.16. Doing this breaks (cython) dependencies in reddit repos, so `install-reddit.sh` will fail if this upgrade is in place.
+ 
+    $ sudo add-apt-repository ppa:jonathonf/python-2.7
+    $ sudo apt-get update
+    $ sudo apt-get install python2.7
+    $ python --version
+
+### Upgrade gcc
+
+For reference only, experimental.
+
+    $ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+    $ sudo apt-get update
+    $ sudo apt-get install gcc-4.9 g++-4.9 cpp-4.9
+    $ cd /usr/bin
+    $ sudo rm gcc g++ cpp x86_64-linux-gnu-gcc
+    $ sudo ln -s gcc-4.9 gcc
+    $ sudo ln -s g++-4.9 g++
+    $ sudo ln -s cpp-4.9 cpp
+    $ sudo ln -s x86_64-linux-gnu-gcc-4.9 x86_64-linux-gnu-gcc
+
+### Rebuilding from source
+
+You need to rebuild if you edit any Cython `.pyx` files.
+
+    $ sudo reddit-stop
+    $ sudo reddit-flush
+    $ sudo apt-get install libxml2-dev libxslt1-dev python-dev
+    $ cd ~/src/reddit/r2
+    $ python setup.py build
+    $ sudo python setup.py develop
+    $ make clean
+    $ make
+    $ sudo reddit-start
+
+---
+
+## SaidIt Admin Guide
+
+### Updating/refreshing static assets
+
+    $ cd ~/src/reddit/r2
+    $ ./refresh-css.sh
+
+### Set the default subs
 
     $ cd ~/src/reddit/r2
     $ paster shell run.ini
@@ -412,27 +438,30 @@ Change the default subs:
     LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
     exit()
 
-Taking it to production:
+### Production configuration
 
-    # change db_pass in example.ini and /etc/cron.d/reddit
-    # change saidit user saidit's password
-    # install fail2ban
-    # configure your firewall
-    debug = false
-    uncompressedJS = false
+- development.update settings
+  - debug = false
+  - uncompressedJS = false
+- Change `db_pass` in development.update and copy it to /etc/cron.d/reddit
+- Change the `[secrets]` section in development.update
+- Change the password for installer created users `saidit` and `automoderator` (current password is 'password')
+- Enable `reddit-job-email` in `/etc/cron.d/reddit` to send emails
+- Install fail2ban
+- Use a firewall
+- Run chat stuff as a different unix user
+- Get a real SSL certificate https://certbot.eff.org/
 
 ---
 
 ## Additional documentation
 
-* [https://www.reddit.com/r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
-* [https://github.com/reddit-archive/reddit/wiki](https://github.com/reddit-archive/reddit/wiki)
-* [https://www.reddit.com/r/redditdev](https://www.reddit.com/r/redditdev)
-
----
+* https://github.com/libertysoft3/saidit/wiki
+* [r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
+* [r/redditdev](https://www.reddit.com/r/redditdev)
 
 ## See also
 
-* https://www.reddit.com/r/RedditAlternatives
+* [r/RedditAlternatives](https://www.reddit.com/r/RedditAlternatives)
 
 
