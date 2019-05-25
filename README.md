@@ -438,6 +438,28 @@ You need to rebuild if you edit any Cython `.pyx` files.
     LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
     exit()
 
+### Memory management
+
+Make sure you have swap configured.
+
+Memory by process
+
+    ps aux  | awk '{print $6/1024 " MB\t\t" $11}'  | sort -n
+
+Free memory, flush cached OS and swap data
+
+    $ cd ~/src/reddit/r2
+    $ ./free-memory.sh
+
+### Updating configuration
+
+    $ cd ~/src/reddit/r2
+    $ nano development.update
+    $ make ini
+    $ sudo reddit-restart
+
+Note: `[live_config]` changes can be applied with `make ini` and `sudo reddit-flush` instead.
+
 ### Production configuration
 
 - development.update settings
