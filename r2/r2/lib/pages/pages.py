@@ -751,7 +751,7 @@ class Reddit(Templated):
                     box = SubscriptionBox(srs, multi_text=strings.mod_multi)
                 else:
                     box = SubscriptionBox(srs)
-                ps.append(SideContentBox(_('these subreddits'), [box]))
+                ps.append(SideContentBox(_('includes these %s' % g.brander_community_plural), [box]))
 
         user_banned = c.user_is_loggedin and (c.site.is_banned(c.user) or c.user.is_global_banned)
 

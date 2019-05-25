@@ -782,7 +782,7 @@
             ${_("subreddits included on the frontpage are based on users\' subscriptions")}
           </div>
           <div class="label collection-label" style="display:none;">
-            ${_('includes these subreddits')}
+            ${_('includes these %s' % g.brander_community_plural)}
             &#32;<a href="/wiki/advertising/interestaudiencegroups">${_('and more!')}</a>
           </div>
           <ul></ul>
