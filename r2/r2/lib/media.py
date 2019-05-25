@@ -1007,7 +1007,7 @@ class _YouTubeScraper(Scraper):
 class _InvidiousScraper(_YouTubeScraper):
     URL_MATCH = re.compile(r"https?://((www\.)?invidio\.us/(?:watch|embed)/)")
     YT_DOMAIN = "invidio.us"
-    YT_EMBED_PART = YT_DOMAIN + "/embed/
+    YT_EMBED_PART = YT_DOMAIN + "/embed/"
     
     def _fetch_from_youtube(self):
         params = {
