@@ -665,7 +665,7 @@ class Scraper(object):
                                        autoplay=autoplay,
                                        maxwidth=maxwidth)
 
-        # TODO - use scraper.factory hook in a new file
+        # TODO - use scraper.factory hook in a module?
         if _PeerTubeScraper.matches(url):
             return _PeerTubeScraper(url, maxwidth=maxwidth)
         elif _BitChuteScraper.matches(url):
@@ -674,6 +674,8 @@ class Scraper(object):
             return _DTubeScraper(url, maxwidth=maxwidth)
         elif _VimeoScraper.matches(url):
             return _VimeoScraper(url, maxwidth=maxwidth)
+        elif _InvidiousScraper.matches(url):
+            return _InvidiousScraper(url, maxwidth=maxwidth)
         elif _SoundCloudScraper.matches(url):
             return _SoundCloudScraper(url, maxwidth=maxwidth)
         elif _ImgurScraper.matches(url):
@@ -1005,7 +1007,7 @@ class _YouTubeScraper(Scraper):
         )
 
 class _InvidiousScraper(_YouTubeScraper):
-    URL_MATCH = re.compile(r"https?://((www\.)?invidio\.us/(?:watch|embed)/)")
+    URL_MATCH = re.compile(r"https?://((www\.)?invidio\.us/(watch|embed))", re.IGNORECASE)
     YT_DOMAIN = "invidio.us"
     YT_EMBED_PART = YT_DOMAIN + "/embed/"
     
@@ -1041,7 +1043,8 @@ class _InvidiousScraper(_YouTubeScraper):
         if not (html and width and height):
             return
 
-        # force invidious embeds
+        # embed from invidious
+        html = html.replace("www.", "")
         html = html.replace("youtube.com/embed/", cls.YT_EMBED_PART)
 
         return MediaEmbed(

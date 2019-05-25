@@ -75,6 +75,7 @@
       check = getEmbedUrlInvidious($thing.attr('href'));
       if (check) {
         $thing.after(' <a class="' + buttonClass + ' ' + buttonClosedClass + '" data-type="invidious" data-video-url="' + check + '" data-expando-exists="false" href="javascript:void(0);">Invidious</a> ');
+        return;
       }
       check = getEmbedUrlPeerTube($thing.attr('href'));
       if (check) {
