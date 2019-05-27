@@ -79,11 +79,12 @@ from r2.models import (
 from r2.models.automoderator import PerformedRulesByThing
 from r2.models.wiki import wiki_id
 
-
+ACCOUNT = None
 if g.automoderator_account:
-    ACCOUNT = Account._by_name(g.automoderator_account)
-else:
-    ACCOUNT = None
+    try:
+        ACCOUNT = Account._by_name(g.automoderator_account)
+    except Exception:
+        ACCOUNT = None
 
 DISCLAIMER = "*I am a bot, and this action was performed automatically. Please [contact the moderators of this sub](/message/compose/?to=/" + g.brander_community_abbr + "/{{subreddit}}) if you have any questions or concerns.*"
 
