@@ -99,6 +99,9 @@ done
 # install primary packages
 $RUNDIR/install_apt.sh
 
+# install npm packages
+$RUNDIR/install_npm.sh
+
 # install cassandra from datastax
 $RUNDIR/install_cassandra.sh
 
@@ -235,7 +238,7 @@ min_membership_create_community = 0
 # the default subreddit for submissions and wiki. created by inject_test_data.py
 default_sr = frontpage
 
-# remove or set to empty to disable automoderator
+# account name that AutoModerator actions will be done by
 automoderator_account = automoderator
 
 [server:main]

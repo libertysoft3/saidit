@@ -91,26 +91,20 @@ Install saidit
 
     $ cd ~/
     $ sudo apt-get install git
-    $ sudo npm -g install less
     $ git clone https://github.com/libertysoft3/saidit.git saidit-installer
     $ cd saidit-installer
     $ chmod +x install-reddit.sh
     $ sudo ./install-reddit.sh
 
-Do not proceed if the installer printed any errors. You should see the message "Congratulations! reddit is now installed."
+Do not proceed if the installer failed with an error. You should see success message "Congratulations! reddit is now installed."
 
-    $ cd ..
-    $ rm -rf ~/saidit-installer
-    # saidit has been installed at ~/src/reddit
-
-### Install sample data
-
-This step is required because it creates a saidit admin user "saidit" with password "password", etc. It also adds sample posts and and users.
+Install default data: users "saidit" and "automoderator" (password "password"), default subs, sample posts, sample comments, and sample users.
 
     $ cd ~/src/reddit
     $ reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
     $ sudo reddit-restart
     $ sudo reddit-flush
+    $ rm -rf ~/saidit-installer
 
 SaidIt is now fully functional aside from chat and search. Test at https://reddit.local Due to using a self-signed SSL certificate, you will see security warnings.
 
@@ -364,7 +358,7 @@ You can mount the reddit open source app's files as a folder on your host machin
 
 ### Upgrade curl
 
-Ubuntu 14 comes with curl 7.35.0. Upgrade it for improved SSL compatibility, particularly for "suggest title".
+Ubuntu 14 comes with curl 7.35.0. Upgrade it for improved SSL compatibility, particularly for "suggest title" and other remote fetching.
 
     $ sudo apt-get remove curl
     $ sudo apt-get install build-essential
@@ -422,11 +416,6 @@ You need to rebuild if you edit any Cython `.pyx` files.
 
 ## SaidIt Admin Guide
 
-### Updating/refreshing static assets
-
-    $ cd ~/src/reddit/r2
-    $ ./refresh-css.sh
-
 ### Set the default subs
 
     $ cd ~/src/reddit/r2
@@ -437,6 +426,17 @@ You need to rebuild if you edit any Cython `.pyx` files.
     LocalizedDefaultSubreddits.set_global_srs(srs)
     LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
     exit()
+
+### Automoderator
+
+Create a user and set `automoderator_account` in `development.update`
+
+### Updating/refreshing static assets
+
+For production environments where `uncompressedJS = false`
+
+    $ cd ~/src/reddit/r2
+    $ ./refresh-css.sh
 
 ### Memory management
 
@@ -467,7 +467,7 @@ Note: `[live_config]` changes can be applied with `make ini` and `sudo reddit-fl
   - uncompressedJS = false
 - Change `db_pass` in development.update and copy it to /etc/cron.d/reddit
 - Change the `[secrets]` section in development.update
-- Change the password for installer created users `saidit` and `automoderator` (current password is 'password')
+- Change the password for installer created users `saidit` and `automoderator` (default password is 'password')
 - Enable `reddit-job-email` in `/etc/cron.d/reddit` to send emails
 - Install fail2ban
 - Use a firewall
