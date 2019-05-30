@@ -37,6 +37,10 @@ from pylons import request
 from pylons import app_globals as g
 from pylons.i18n import _
 
+# SaidIt: see g.databases
+# ENGINE_NAME = 'email'
+ENGINE_NAME = 'main'
+
 def mail_queue(metadata):
     return sa.Table(g.db_app_name + '_mail_queue', metadata,
                     sa.Column("uid", sa.Integer,
@@ -128,7 +132,7 @@ def opt_out(metadata):
 
 class EmailHandler(object):
     def __init__(self, force = False):
-        engine = g.dbm.get_engine('email')
+        engine = g.dbm.get_engine(ENGINE_NAME)
         self.metadata = make_metadata(engine)
         self.queue_table = mail_queue(self.metadata)
         indices = [index_str(self.queue_table, "date", "date"),

@@ -694,7 +694,7 @@ if [ ! -f /etc/cron.d/reddit ]; then
 #0    0 * * * root /sbin/start --quiet reddit-job-update_gold_users
 
 # jobs that recalculate time-limited listings (e.g. top this year)
-# NOTICE: must match your configuration's 'db_pass'
+# must match 'db_pass' in development.update
 PGPASSWORD=password
 */15 * * * * $REDDIT_USER $REDDIT_SRC/reddit/scripts/compute_time_listings link year "['hour', 'day', 'week', 'month', 'year']" 2>&1 | /usr/bin/logger -t compute_time_listings_link
 */15 * * * * $REDDIT_USER $REDDIT_SRC/reddit/scripts/compute_time_listings comment year "['hour', 'day', 'week', 'month', 'year']" 2>&1 | /usr/bin/logger -t compute_time_listings_comment

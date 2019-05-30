@@ -48,8 +48,11 @@ from r2.lib.utils import Enum, to_date, tup
 from r2.models.account import Account
 from r2.models import Link, Frontpage
 
+# SaidIt: see g.databases
+# ENGINE_NAME = 'authorize'
+ENGINE_NAME = 'main'
 
-engine = g.dbm.get_engine('authorize')
+engine = g.dbm.get_engine(ENGINE_NAME)
 # Allocate a session maker for communicating object changes with the back end  
 Session = sessionmaker(autocommit = True, autoflush = True, bind = engine)
 # allocate a SQLalchemy base class for auto-creation of tables based

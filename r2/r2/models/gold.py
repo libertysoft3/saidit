@@ -60,7 +60,9 @@ gold_static_goal_cutoff = datetime(2013, 11, 7, tzinfo=g.display_tz)
 NON_REVENUE_STATUSES = ("declined", "chargeback", "fudge", "invalid",
                         "refunded", "reversed")
 
-ENGINE_NAME = 'authorize'
+# SaidIt: see g.databases
+# ENGINE_NAME = 'authorize'
+ENGINE_NAME = 'main'
 
 ENGINE = g.dbm.get_engine(ENGINE_NAME)
 METADATA = make_metadata(ENGINE)

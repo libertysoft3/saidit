@@ -53,8 +53,11 @@ from r2.lib.memoize import memoize
 from r2.lib.utils import timedelta_by_name, tup
 from r2.models.link import Link
 
+# SaidIt: see g.databases
+# ENGINE_NAME = 'traffic'
+ENGINE_NAME = 'main'
 
-engine = g.dbm.get_engine("traffic")
+engine = g.dbm.get_engine(ENGINE_NAME)
 Session = scoped_session(sessionmaker(bind=engine, autocommit=True))
 Base = declarative_base(bind=engine)
 
