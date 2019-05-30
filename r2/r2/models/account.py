@@ -77,7 +77,7 @@ class Account(Thing):
                                               )
     _int_prop_suffix = '_karma'
     _essentials = ('name', )
-    _defaults = dict(pref_numsites = 25,
+    _defaults = dict(pref_numsites = 100,
                      pref_newwindow = False,
                      pref_clickgadget = 5,
                      pref_store_visits = False,
