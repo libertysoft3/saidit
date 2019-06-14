@@ -7,8 +7,7 @@ SaidIt is a [reddit open source](https://github.com/reddit-archive/reddit) conti
 * admin user bans and ip bans
 * configurable site branding
 * configurable home page
-* html5 and additional media providers for expandos/embeds
-* markdown expandos/embeds
+* enhanced expandos/embeds: more media providers, direct media links, used in comments, sidebars and wiki pages
 
 SaidIt customizations include:
 
@@ -19,9 +18,9 @@ SaidIt customizations include:
 Goals:
 
 * easily setup your own saidit/reddit open source clone
-* reddit API compatibility
 * platform upgrades, longevity
-* general enhancements and quality of life improvements
+* enhancements and quality of life improvements
+* reddit API compatibility
 
 ---
 
@@ -76,43 +75,31 @@ Then update your `hosts` file on your development machine/host OS. For example, 
 For Windows and MacOS see https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
 
 
-### Install saidit
+### Install SaidIt
 
 SSH into your saidit server
 
     $ ssh reddit@reddit.local
 
-OS updates
- 
-    $ sudo apt-get update
-    $ sudo apt-get upgrade
+Install SaidIt
 
-Install saidit
-
-    $ cd ~/
-    $ sudo apt-get install git
-    $ git clone https://github.com/libertysoft3/saidit.git saidit-installer
-    $ cd saidit-installer
+    $ wget https://raw.github.com/libertysoft3/saidit/master/install-reddit.sh
     $ chmod +x install-reddit.sh
     $ sudo ./install-reddit.sh
 
-Do not proceed if the installer failed with an error. You should see success message "Congratulations! reddit is now installed."
+You should see success message "Congratulations! reddit is now installed." Do not proceed if installation failed with an error.
 
-Install default data: users "saidit" and "automoderator" (password "password"), default subs, sample posts, sample comments, and sample users.
+Now install some default data including users "saidit" and "automoderator" (password is "password"), default subs, sample posts, sample comments, and sample users.
 
-    $ cd ~/src/reddit
-    $ reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
-    $ sudo reddit-restart
-    $ sudo reddit-flush
-    $ rm -rf ~/saidit-installer
+    $ reddit-run ~/src/reddit/scripts/inject_test_data.py -c 'inject_test_data()'
 
-SaidIt is now fully functional aside from chat and search. Test at https://reddit.local Due to using a self-signed SSL certificate, you will see security warnings.
+SaidIt is now fully functional at https://reddit.local aside from chat and search. The [SaidIt Admin Guide](https://github.com/libertysoft3/saidit#saidit-admin-guide) has instructions for how to change your site configuration.
 
 ---
 
 ## Install Solr for search
 
-SaidIt comes pre-configured for Solr search, but Solr and Tomcat are not currently installed automatically.
+SaidIt comes pre-configured for Solr search, but Solr and Tomcat are not installed yet.
  
 Install Solr
 
@@ -175,7 +162,7 @@ Index site content and test:
 
 ---
 
-## Install SaidIt Chat
+## Optional: SaidIt Chat
 
 In a production environments, irc and related services should be run by a dedicated unix user for security.
 
@@ -416,6 +403,22 @@ You need to rebuild if you edit any Cython `.pyx` files.
 
 ## SaidIt Admin Guide
 
+### Updating configuration
+
+    $ cd ~/src/reddit/r2
+    $ nano development.update
+    $ make ini
+    $ sudo reddit-restart
+
+Override `example.ini` settings in `development.update`. Changes to section `[live_config]` can be applied with `reddit-flush` rather than `reddit-restart`.
+
+### Updating/refreshing CSS and static assets
+
+For production environments where `uncompressedJS = false`
+
+    $ cd ~/src/reddit/r2
+    $ ./refresh-css.sh
+
 ### Set the default subs
 
     $ cd ~/src/reddit/r2
@@ -431,13 +434,6 @@ You need to rebuild if you edit any Cython `.pyx` files.
 
 Create a user and set `automoderator_account` in `development.update`
 
-### Updating/refreshing static assets
-
-For production environments where `uncompressedJS = false`
-
-    $ cd ~/src/reddit/r2
-    $ ./refresh-css.sh
-
 ### Memory management
 
 Make sure you have swap configured.
@@ -450,15 +446,6 @@ Free memory, flush cached OS and swap data
 
     $ cd ~/src/reddit/r2
     $ ./free-memory.sh
-
-### Updating configuration
-
-    $ cd ~/src/reddit/r2
-    $ nano development.update
-    $ make ini
-    $ sudo reddit-restart
-
-Note: `[live_config]` changes can be applied with `make ini` and `sudo reddit-flush` instead.
 
 ### Production configuration
 
