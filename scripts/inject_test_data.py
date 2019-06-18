@@ -112,14 +112,14 @@ class TextGenerator(object):
 
 
 def fetch_listing(path, limit=1000, batch_size=100):
-    """Fetch a listing from reddit.com."""
+    """Fetch a listing from saidit.net."""
 
     session = requests.Session()
     session.headers.update({
         "User-Agent": "saidit-test-data-generator/1.0",
     })
 
-    base_url = "https://api.reddit.com" + path
+    base_url = "https://api.saidit.net" + path
 
     after = None
     count = 0
@@ -274,14 +274,17 @@ def inject_test_data(num_links=25, num_comments=25, num_votes=5):
     modeler = Modeler()
     subreddits = [
         modeler.model_subreddit("pics"),
-        modeler.model_subreddit("videos"),
-        modeler.model_subreddit("askhistorians"),
+        modeler.model_subreddit("funny"),
+        modeler.model_subreddit("music"),
     ]
     extra_settings = {
         "pics": {
             "show_media": True,
         },
-        "videos": {
+        "funny": {
+            "show_media": True,
+        },
+        "music": {
             "show_media": True,
         },
     }
@@ -355,6 +358,6 @@ def inject_test_data(num_links=25, num_comments=25, num_votes=5):
 
     amqp.worker.join()
 
-    srs = [Subreddit._by_name(n) for n in ("pics", "videos", "askhistorians")]
+    srs = [Subreddit._by_name(n) for n in ("pics", "funny", "music")]
     LocalizedDefaultSubreddits.set_global_srs(srs)
     LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])

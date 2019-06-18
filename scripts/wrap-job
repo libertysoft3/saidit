@@ -48,6 +48,7 @@ root = os.environ.get("REDDIT_ROOT", "/opt/reddit/lib/public/r2")
 os.chdir(root)
 
 # configure syslog
+# TODO - needs refactor???
 job_name = os.environ.get("UPSTART_JOB", "-".join(sys.argv[1:]))
 if job_name.startswith(CONSUMER_PREFIX):
     # consumers are a bit different from crons, while crons want an
@@ -55,6 +56,7 @@ if job_name.startswith(CONSUMER_PREFIX):
     # of CONSUMERNAME_INSTANCE
     job_name = (job_name[len(CONSUMER_PREFIX):] +
                 "_" +
+                # TODO - needs refactor?
                 os.environ.get("UPSTART_INSTANCE", ""))
 facility = getattr(syslog, "LOG_" + os.environ.get("REDDIT_LOG_FACILITY", "CRON"))
 syslog.openlog(ident=job_name, facility=facility)

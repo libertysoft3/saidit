@@ -70,5 +70,6 @@ create or replace function domain(url text) returns text as \$\$
 \$\$ language sql immutable;
 FUNCTIONSQL
 
-sudo sed -i "s/^max_connections = .*$/max_connections = 150/" /etc/postgresql/9.3/main/postgresql.conf
+# WARNING: postgresql 10 only
+sudo sed -i "s/^max_connections = .*$/max_connections = 150         # (change requires restart)/" /etc/postgresql/10/main/postgresql.conf
 sudo service postgresql restart

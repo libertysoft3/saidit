@@ -59,13 +59,14 @@ END
     exit 1
 fi
 
+# TODO - removing ppa worked?
 # seriously! these checks are here for a reason. the packages from the
-# reddit ppa aren't built for anything but trusty (14.04) right now, so
+# reddit ppa aren't built for anything but 18.04.2 right now, so
 # if you try and use this install script on another release you're gonna
 # have a bad time.
 source /etc/lsb-release
-if [ "$DISTRIB_ID" != "Ubuntu" -o "$DISTRIB_RELEASE" != "14.04" ]; then
-    echo "ERROR: Only Ubuntu 14.04 is supported."
+if [ "$DISTRIB_ID" != "Ubuntu" -o "$DISTRIB_RELEASE" != "18.04" ]; then
+    echo "ERROR: Only Ubuntu 18.04.2 is supported."
     exit 1
 fi
 
@@ -99,6 +100,12 @@ done
 # install primary packages
 $RUNDIR/install_apt.sh
 
+# install from git repos
+# $RUNDIR/install_source.sh
+
+# install from pip
+$RUNDIR/install_pip.sh
+
 # install cassandra from datastax
 $RUNDIR/install_cassandra.sh
 
@@ -116,9 +123,10 @@ if [ ! -d $REDDIT_SRC ]; then
     chown $REDDIT_USER $REDDIT_SRC
 fi
 
-function copy_upstart {
-    if [ -d ${1}/upstart ]; then
-        cp ${1}/upstart/* /etc/init/
+# TODO - check all dl'ed repos for 'upstart' folders
+function copy_service {
+    if [ -d ${1}/service ]; then
+        cp ${1}/service/* /etc/systemd/system
     fi
 }
 
@@ -130,13 +138,14 @@ function clone_reddit_repo {
         sudo -u $REDDIT_USER -H git clone $repository_url $destination
     fi
 
-    copy_upstart $destination
+    copy_service $destination
 }
 
 function clone_reddit_service_repo {
     clone_reddit_repo $1 reddit-archive/reddit-service-$1
 }
 
+clone_reddit_repo l2cs kemitche/l2cs
 clone_reddit_repo reddit libertysoft3/saidit
 clone_reddit_repo i18n reddit-archive/reddit-i18n
 clone_reddit_service_repo websockets
@@ -172,7 +181,8 @@ function install_reddit_repo {
 install_reddit_repo reddit/r2
 install_reddit_repo i18n
 for plugin in $REDDIT_AVAILABLE_PLUGINS; do
-    copy_upstart $REDDIT_SRC/$plugin
+    # TODO - must port servies to systemd too
+    copy_service $REDDIT_SRC/$plugin
     install_reddit_repo $plugin
 done
 install_reddit_repo websockets
@@ -542,8 +552,9 @@ service haproxy restart
 # websocket service
 ###############################################################################
 
-if [ ! -f /etc/init/reddit-websockets.conf ]; then
-    cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
+# TODO - PORT TO SYSTEMD
+if [ ! -f /etc/systemd/system/reddit-websockets.service ]; then
+    cat > /etc/systemd/system/reddit-websockets.service << SERVICE_WEBSOCKETS
 description "websockets service"
 
 stop on runlevel [!2345] or reddit-restart all or reddit-restart websockets
@@ -556,7 +567,7 @@ kill timeout 15
 limit nofile 65535 65535
 
 exec baseplate-serve2 --bind localhost:9001 $REDDIT_SRC/websockets/example.ini
-UPSTART_WEBSOCKETS
+SERVICE_WEBSOCKETS
 fi
 
 service reddit-websockets restart
@@ -565,8 +576,9 @@ service reddit-websockets restart
 # activity service
 ###############################################################################
 
-if [ ! -f /etc/init/reddit-activity.conf ]; then
-    cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
+# TODO - PORT TO SYSTEMD
+if [ ! -f /etc/systemd/system/reddit-activity.service ]; then
+    cat > /etc/systemd/system/reddit-activity.service << SERVICE_ACTIVITY
 description "activity service"
 
 stop on runlevel [!2345] or reddit-restart all or reddit-restart activity
@@ -577,7 +589,7 @@ respawn limit 10 5
 kill timeout 15
 
 exec baseplate-serve2 --bind localhost:9002 $REDDIT_SRC/activity/example.ini
-UPSTART_ACTIVITY
+SERVICE_ACTIVITY
 fi
 
 service reddit-activity restart

@@ -21,9 +21,10 @@ SaidIt changes can be disabled and/or reverted in your fork to provide a vanilla
 
 1. Download [Ubuntu Server 18.04.2 LTS](https://www.ubuntu.com/download/server)
 1. Install and run [VirtualBox](https://www.virtualbox.org/wiki/Downloads) (free and supports Linux, Mac, or Windows)
-1. Creating a new VM with 4gb+ RAM and 30gb+ disk space
-1. In Settings -> Network for Adapter 1, select "Attached to: Bridged Adapter"
+1. Creating a new Linux virtual machine with 30gb+ disk space
+1. In Settings -> System set Base Memory to 4gb+ RAM and Processors to 4+
 1. In Settings -> Storage fill the optical drive by clicking "Choose Virtual Optical Disk File" and selecting the Ubuntu 18 .iso from step 1
+1. In Settings -> Network for Adapter 1, select "Attached to: Bridged Adapter"
 1. Start the VM (Normal or Detachable)
 1. Proceed through Ubuntu installation by choosing the default options
 1. Your server's name: ubuntu-vm
@@ -49,10 +50,17 @@ SSH into your server or VM to install. This documentation assumes you connect as
     $ cd ~/
     $ git clone https://github.com/libertysoft3/saidit.git
     $ chmod +x saidit/install-reddit.sh
+    # on a production server with a domain name run:
+    $ sudo REDDIT_DOMAIN=example.com ./saidit/install/reddit.sh
+    # otherwise run:
     $ sudo ./saidit/install-reddit.sh
-    # if you get an error about "less" restart the server and try again
-    # cleanup the installer checkout:
+    # cleanup
     $ rm -rf ~/saidit
+    $ ls -la ~/src/reddit
+
+    ??
+    # if you get an error about "less" restart the server and try again
+
 
 
 
@@ -112,7 +120,7 @@ this will improve the new link 'fetch title' capability and potentially more
 
 ### Install sample data
 
-This also creates a reddit admin user "saidit" with password "password".
+`inject_test_data()` also creates an admin user "saidit" with password "password" if the user doesn't exist.
 
     $ cd ~/src/reddit
     $ reddit-run scripts/inject_test_data.py -c 'inject_test_data()'

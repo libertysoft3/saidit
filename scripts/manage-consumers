@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# TODO - needs refactor??
 command=${UPSTART_JOB#reddit-consumers-}
 for consumerpath in $REDDIT_CONSUMER_CONFIG/*; do
     consumer=$(basename $consumerpath)

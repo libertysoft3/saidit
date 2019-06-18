@@ -1,0 +1,15 @@
+# replaces reddit-boot.conf, no event stuff in systemd
+[Unit]
+# Description=start reddit on boot
+Description=reddit
+
+[Service]
+Type=oneshot
+# ?
+RemainAfterExit=true
+# ExecStart=initctl emit reddit-start
+# ExecStart=/opt/a/bin/start.sh
+# ExecStop=/opt/a/bin/stop.sh
+
+[Install]
+WantedBy=multi-user.target

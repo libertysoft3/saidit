@@ -64,7 +64,9 @@ And if you think caching might be hurting you, you can flush memcache with
 Now that the core of reddit is installed, you may want to do some additional
 steps:
 
-* Ensure that $REDDIT_DOMAIN resolves to this machine.
+* Ensure that $REDDIT_DOMAIN resolves to this machine. Resolving to the 
+appropriate domain name is beyond the scope of this document, but the easiest
+thing is probably editing /etc/hosts on the host machine.
 
 * To populate the database with test data, run:
 

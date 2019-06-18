@@ -25,7 +25,7 @@
 RUNDIR=$(dirname $0)
 source $RUNDIR/install.cfg
 
-# run an aptitude update to make sure python-software-properties
+# run an aptitude update to make sure software-properties-common
 # dependencies are found
 apt-get update
 
@@ -38,17 +38,25 @@ echo deb http://debian.datastax.com/community stable main | \
 wget -qO- -L https://debian.datastax.com/debian/repo_key | \
     sudo apt-key add -
 
+echo deb https://facebook.github.io/mcrouter/debrepo/bionic bionic contrib | \
+    sudo tee $FACEBOOK_SOURCES_LIST
+
+wget -qO- -L https://facebook.github.io/mcrouter/debrepo/xenial/PUBLIC.KEY | \
+    sudo apt-key add -
+
 # add the reddit ppa for some custom packages
-apt-get install $APTITUDE_OPTIONS python-software-properties
-apt-add-repository -y ppa:reddit/ppa
+apt-get install $APTITUDE_OPTIONS software-properties-common
+
+# TODO - try to move away from this
+# apt-add-repository -y ppa:reddit/ppa
 
 # pin the ppa -- packages present in the ppa will take precedence over
 # ones in other repositories (unless further pinning is done)
-cat <<HERE > /etc/apt/preferences.d/reddit
-Package: *
-Pin: release o=LP-PPA-reddit
-Pin-Priority: 600
-HERE
+# cat <<HERE > /etc/apt/preferences.d/reddit
+# Package: *
+# Pin: release o=LP-PPA-reddit
+# Pin-Priority: 600
+# HERE
 
 # grab the new ppas' package listings
 apt-get update
@@ -57,12 +65,14 @@ apt-get update
 apt-get remove $APTITUDE_OPTIONS $(dpkg-query  -W -f='${binary:Package}\n' | grep libmemcached | tr '\n' ' ')
 apt-get autoremove $APTITUDE_OPTIONS
 
+# TODO - removing python-pylibmc=1.2.2-1~trusty5 too ????
 # install prerequisites
 cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
 netcat-openbsd
-git-core
+git
 
 python-dev
+python-pip
 python-setuptools
 python-routes
 python-pylons
@@ -78,24 +88,17 @@ python-beautifulsoup
 python-chardet
 python-psycopg2
 python-pycassa
-python-imaging
-python-pycaptcha
-python-pylibmc=1.2.2-1~trusty5
+python-pil
+python-pylibmc
 python-amqplib
 python-bcrypt
 python-snappy
 
-python-l2cs
 python-lxml
 python-kazoo
-python-stripe
-python-tinycss2
 python-unidecode
 python-mock
 python-yaml
-python-httpagentparser
-
-python-baseplate
 
 python-flask
 geoip-bin
@@ -114,9 +117,36 @@ libpcre3-dev
 
 python-gevent
 python-gevent-websocket
-python-haigha
 
 python-redis
 python-pyramid
 python-raven
+
+libssl-dev
+flex
+bison
+libboost-all-dev
+
+g++
+cmake
+make
+automake
+pkg-config
+libboost-all-dev
+libevent-dev
+libdouble-conversion-dev
+libgoogle-glog-dev
+libgflags-dev
+libiberty-dev
+liblz4-dev
+liblzma-dev
+libsnappy-dev
+zlib1g-dev
+binutils-dev
+libjemalloc-dev
+libzstd-dev
+libffi-dev
+python-cffi
+
+mcrouter
 PACKAGES

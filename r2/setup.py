@@ -83,10 +83,12 @@ setup(
         "unidecode",
         "PyYAML",
         "Pillow",
+        # TODO
         "pylibmc==1.2.2",
         "webob",
         "webtest",
         "python-snappy",
+        # TODO
         "httpagentparser==1.7.8",
         "raven",
     ],
@@ -95,7 +97,8 @@ setup(
     test_suite="nose.collector",
     dependency_links=[
         "https://github.com/libertysoft3/snudown/archive/v1.5.1.tar.gz#egg=snudown-1.5.1",
-        "https://s3.amazonaws.com/code.reddit.com/pycaptcha-0.4.tar.gz#egg=pycaptcha-0.4",
+        "https://github.com/kemitche/l2cs/archive/v2.0.2.tar.gz#egg=l2cs-2.0.2",
+        # "https://s3.amazonaws.com/code.reddit.com/pycaptcha-0.4.tar.gz#egg=pycaptcha-0.4",
     ],
     packages=find_packages(exclude=["ez_setup"]),
     cmdclass=commands,
