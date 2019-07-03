@@ -1238,7 +1238,7 @@ class RedditFooter(CachedTemplate):
                     NavButton(_("welcome to saidit"), "/s/SaidIt/comments/37r/welcome_to_saiditnet/"),
                     NavButton(_("official sub"), "/s/SaidIt"),
                     NavButton(_("canary"), "/s/SaiditCanary"),
-                    NavButton(_("wiki"), "/wiki/index", sr_path=False),
+                    NavButton(_("wiki & faq"), "/wiki/index", sr_path=False),
                 ],
                 title = _("about"),
                 type = "flat_vert",
