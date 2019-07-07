@@ -170,11 +170,12 @@ In a production environments, irc and related services should be run by a dedica
 
     $ sudo apt-get install make gcc build-essential openssl libssl-dev libcurl4-openssl-dev zlib1g zlib1g-dev zlibc libgcrypt11 libgcrypt11-dev
     # UPDATE to the latest stable release
-    $ wget https://www.unrealircd.org/unrealircd4/unrealircd-4.2.0.tar.gz
-    $ tar xzvf unrealircd-4.2.0.tar.gz
-    $ cd unrealircd-4.2.0/
+    $ wget https://www.unrealircd.org/unrealircd4/unrealircd-4.2.3.tar.gz
+    $ tar xzvf unrealircd-4.2.3.tar.gz
+    $ cd unrealircd-4.2.3/
     $ ./Config
-    # space to read the license, press [Enter] a bunch of times to install, for "Do you want to generate an SSL certificate for the IRCd?" respond "No"
+    # space to read the license, press [Enter] a bunch of times, wait for configuration tasks
+    # For "Do you want to generate an SSL certificate for the IRCd?" respond "No"
     $ make
     $ make install
 
@@ -228,8 +229,8 @@ start unreal:
 cleanup, substitute your version number where appropriate:
 
     $ cd ~
-    $ rm -rf unrealircd-4.2.0
-    $ rm unrealircd-4.2.0.tar.gz
+    $ rm -rf unrealircd-4.2.3
+    $ rm unrealircd-4.2.3.tar.gz
 
 ### Install anope IRC services
 
@@ -347,12 +348,12 @@ You can mount the reddit open source app's files as a folder on your host machin
 
 Ubuntu 14 comes with curl 7.35.0. Upgrade it for improved SSL compatibility, particularly for "suggest title" and other remote fetching.
 
-    $ sudo apt-get remove curl
+    $ sudo apt-get remove curl libcurl3
     $ sudo apt-get install build-essential
     # substitute version from https://curl.haxx.se/download.html
-    $ wget https://curl.haxx.se/download/curl-7.64.1.tar.bz2
-    $ tar -xvjf curl-7.64.1.tar.bz2
-    $ cd curl-7.64.1
+    $ wget https://curl.haxx.se/download/curl-7.65.1.tar.bz2
+    $ tar -xvjf curl-7.65.1.tar.bz2
+    $ cd curl-7.65.1
     $ ./configure --prefix=/usr
     $ make
     $ sudo make install
@@ -360,7 +361,7 @@ Ubuntu 14 comes with curl 7.35.0. Upgrade it for improved SSL compatibility, par
     # verify:
     $ curl --version
     $ cd ..
-    $ rm -rf curl-7.64.1*
+    $ rm -rf curl-7.65.1*
 
 ### Upgrade python
 
@@ -460,6 +461,7 @@ Free memory, flush cached OS and swap data
 - Use a firewall
 - Run chat stuff as a different unix user
 - Get a real SSL certificate https://certbot.eff.org/
+- If you want email, install something like postfix and enable `reddit-job-email` in `/etc/cron.d/reddit`
 
 ---
 
