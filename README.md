@@ -344,62 +344,6 @@ You can mount the reddit open source app's files as a folder on your host machin
     # optionally unmount it later with:
     $ fusermount -u ~/vm
 
-### Upgrade curl
-
-Ubuntu 14 comes with curl 7.35.0. Upgrade it for improved SSL compatibility, particularly for "suggest title" and other remote fetching.
-
-    $ sudo apt-get remove curl libcurl3
-    $ sudo apt-get install build-essential
-    # substitute version from https://curl.haxx.se/download.html
-    $ wget https://curl.haxx.se/download/curl-7.65.1.tar.bz2
-    $ tar -xvjf curl-7.65.1.tar.bz2
-    $ cd curl-7.65.1
-    $ ./configure --prefix=/usr
-    $ make
-    $ sudo make install
-    $ sudo ldconfig
-    # verify:
-    $ curl --version
-    $ cd ..
-    $ rm -rf curl-7.65.1*
-
-### Upgrade python
-
-For reference only, experimental. Ubuntu provides python 2.7.6 but it's upgradable to at least 2.7.16. Doing this breaks (cython) dependencies in reddit repos, so `install-reddit.sh` will fail if this upgrade is in place.
- 
-    $ sudo add-apt-repository ppa:jonathonf/python-2.7
-    $ sudo apt-get update
-    $ sudo apt-get install python2.7
-    $ python --version
-
-### Upgrade gcc
-
-For reference only, experimental.
-
-    $ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-    $ sudo apt-get update
-    $ sudo apt-get install gcc-4.9 g++-4.9 cpp-4.9
-    $ cd /usr/bin
-    $ sudo rm gcc g++ cpp x86_64-linux-gnu-gcc
-    $ sudo ln -s gcc-4.9 gcc
-    $ sudo ln -s g++-4.9 g++
-    $ sudo ln -s cpp-4.9 cpp
-    $ sudo ln -s x86_64-linux-gnu-gcc-4.9 x86_64-linux-gnu-gcc
-
-### Rebuilding from source
-
-You need to rebuild if you edit any Cython `.pyx` files.
-
-    $ sudo reddit-stop
-    $ sudo reddit-flush
-    $ sudo apt-get install libxml2-dev libxslt1-dev python-dev
-    $ cd ~/src/reddit/r2
-    $ python setup.py build
-    $ sudo python setup.py develop
-    $ make clean
-    $ make
-    $ sudo reddit-start
-
 ---
 
 ## SaidIt Admin Guide
@@ -462,6 +406,49 @@ Free memory, flush cached OS and swap data
 - Run chat stuff as a different unix user
 - Get a real SSL certificate https://certbot.eff.org/
 - If you want email, install something like postfix and enable `reddit-job-email` in `/etc/cron.d/reddit`
+
+### SSL upgrade, for improved "Suggest Title" compatibility
+
+#### Upgrade curl
+
+Ubuntu 14 comes with curl 7.35.0. Upgrade it for improved SSL compatibility, particularly for "suggest title" and other remote fetching.
+
+    $ sudo apt-get remove curl libcurl3
+    $ sudo apt-get install build-essential
+    # substitute version from https://curl.haxx.se/download.html
+    $ wget https://curl.haxx.se/download/curl-7.65.1.tar.bz2
+    $ tar -xvjf curl-7.65.1.tar.bz2
+    $ cd curl-7.65.1
+    $ ./configure --prefix=/usr
+    $ make
+    $ sudo make install
+    $ sudo ldconfig
+    $ curl --version
+    $ cd ..
+    $ rm -rf curl-7.65.1*
+
+#### Upgrade python
+
+Ubuntu 14 LTS provides python 2.7.6 but it's upgradable to at least 2.7.16 which modernizes SSL support.
+
+WARNING: this currently breaks Cython dependencies in reddit PPAs/repos, so `install-reddit.sh` will fail with this upgrade in place. Don't upgrade until you have completed installation.
+
+    $ sudo add-apt-repository ppa:jonathonf/python-2.7
+    $ sudo apt-get update
+    $ sudo apt-get install python2.7
+    $ python --version
+
+#### Rebuild reddit open source
+
+    $ sudo reddit-stop
+    $ sudo reddit-flush
+    $ sudo apt-get install python-dev libxml2-dev libxslt1-dev zlib1g-dev
+    $ cd ~/src/reddit/r2
+    $ python setup.py build
+    $ sudo python setup.py develop
+    $ make clean
+    $ make
+    $ sudo reddit-start
 
 ---
 
