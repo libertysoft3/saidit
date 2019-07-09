@@ -217,6 +217,7 @@ if [ ! -f development.update ]; then
 debug = true
 uncompressedJS = true
 sqlprinting = false
+profile_directory =
 
 disable_ads = true
 disable_captcha = true

@@ -137,7 +137,8 @@ class ProfilingMiddleware(object):
         import cProfile
 
         try:
-            tmpfile = tempfile.NamedTemporaryFile(prefix='profile',
+            prefix = 'profile' + environ['FULLPATH'].replace('/', '-') + '-'
+            tmpfile = tempfile.NamedTemporaryFile(prefix=prefix,
                                                   dir=self.directory,
                                                   delete=False)
 

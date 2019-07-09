@@ -334,6 +334,10 @@ start TheLounge:
     $ sudo tail -f /var/log/syslog
     > g.log.warning("hello log")
 
+### Profiling
+
+Set `profile_directory` in `development.update` to an absolute path and create the directory first. cProfile results can be [viewed with pstats](https://web.archive.org/web/20180706112510/http://stefaanlippens.net/python_profiling_with_pstats_interactive_mode/).
+
 ### Mounting VM files locally
 
 You can mount the reddit open source app's files as a folder on your host machine for easy editing and searching. On your host/development machine:
@@ -394,6 +398,8 @@ Free memory, flush cached OS and swap data
 
 ### Production configuration
 
+SaidIt
+
 - development.update settings
   - debug = false
   - uncompressedJS = false
@@ -401,11 +407,14 @@ Free memory, flush cached OS and swap data
 - Change the `[secrets]` section in development.update
 - Change the password for installer created users `saidit` and `automoderator` (default password is 'password')
 - Enable `reddit-job-email` in `/etc/cron.d/reddit` to send emails
-- Install fail2ban
-- Use a firewall
-- Run chat stuff as a different unix user
 - Get a real SSL certificate https://certbot.eff.org/
 - If you want email, install something like postfix and enable `reddit-job-email` in `/etc/cron.d/reddit`
+
+OS
+
+- Make sure you OS file limits are high, want > 1024 for `$ ulimit -Hn` and `$ ulimit -Sn`
+- Configure fail2ban
+- Configure the firewall, need at least ports 22 and 443 open
 
 ### SSL upgrade, for improved "Suggest Title" compatibility
 
