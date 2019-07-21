@@ -147,15 +147,21 @@ class BaseSite(object):
         return True
 
     def is_moderator_with_perms(self, user, *perms):
+        if user.is_global_banned:
+                return False
         rel = self.is_moderator(user)
         if rel:
             return all(rel.has_permission(perm) for perm in perms)
 
     def is_limited_moderator(self, user):
+        if user.is_global_banned:
+                return False
         rel = self.is_moderator(user)
         return bool(rel and not rel.is_superuser())
 
     def is_unlimited_moderator(self, user):
+        if user.is_global_banned:
+                return False
         rel = self.is_moderator(user)
         return bool(rel and rel.is_superuser())
 
