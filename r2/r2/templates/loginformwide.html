@@ -21,6 +21,7 @@
 ###############################################################################
 
 <%!
+   from r2.config import feature
    from r2.lib.template_helpers import add_sr
    from r2.lib.utils import UrlParser
    import random
@@ -32,6 +33,7 @@
   op = "login-main"
   base = g.https_endpoint
 %>
+%if not feature.is_enabled('login_disabled'):
 <form method="post"
       action="${add_sr(base + '/post/login')}"
       id="login_${op}"
@@ -55,4 +57,4 @@
   
   <div class="clear"></div>
 </form>
-
+%endif
