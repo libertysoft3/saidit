@@ -326,6 +326,14 @@ start TheLounge:
 
 ## SaidIt Dev Guide
 
+### Locally mounting VM or server files
+
+    $ sudo apt-get install sshfs
+    $ mkdir ~/vm
+    $ sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm
+    # optionally unmount it later with:
+    $ fusermount -u ~/vm
+
 ### Logging
 
     $ sudo tail -f /var/log/syslog
@@ -335,15 +343,9 @@ start TheLounge:
 
 Set `profile_directory` in `development.update` to an absolute path and create the directory first. cProfile results can be [viewed with pstats](https://web.archive.org/web/20180706112510/http://stefaanlippens.net/python_profiling_with_pstats_interactive_mode/).
 
-### Mounting VM files locally
+### Memory by process
 
-You can mount the reddit open source app's files as a folder on your host machine for easy editing and searching. On your host/development machine:
-
-    $ sudo apt-get install sshfs
-    $ mkdir ~/vm
-    $ sshfs reddit@reddit.local:/home/reddit/src/reddit ~/vm
-    # optionally unmount it later with:
-    $ fusermount -u ~/vm
+    ps aux  | awk '{print $6/1024 " MB\t\t" $11}'  | sort -n
 
 ---
 
@@ -380,14 +382,6 @@ For production environments where `uncompressedJS = false`
 
 Create a user and set `automoderator_account` in `development.update`
 
-### Memory management
-
-Make sure you have swap configured.
-
-Memory by process
-
-    ps aux  | awk '{print $6/1024 " MB\t\t" $11}'  | sort -n
-
 ### Production configuration
 
 SaidIt
@@ -402,6 +396,7 @@ SaidIt
 
 OS
 
+- Ensure swap space is configured, check `$ free -h`
 - Make sure you OS file limits are high, want > 1024 for `$ ulimit -Hn` and `$ ulimit -Sn`
 - Configure fail2ban
 - Configure the firewall, need at least ports 22 and 443 open

@@ -39,8 +39,8 @@ cp /etc/init/reddit-paster.conf $BKUPPATH/temp/reddit-paster.conf
 cp /etc/init/reddit-paster2.conf $BKUPPATH/temp/reddit-paster2.conf
 cp /etc/init/reddit-paster3.conf $BKUPPATH/temp/reddit-paster3.conf
 cp /etc/init/reddit-paster4.conf $BKUPPATH/temp/reddit-paster4.conf
-cp /etc/init/reddit-paster4.conf $BKUPPATH/temp/reddit-paster5.conf
-cp /etc/init/reddit-paster4.conf $BKUPPATH/temp/reddit-paster6.conf
+cp /etc/init/reddit-paster5.conf $BKUPPATH/temp/reddit-paster5.conf
+cp /etc/init/reddit-paster6.conf $BKUPPATH/temp/reddit-paster6.conf
 
 # app dependencies
 cp /etc/memcached.conf $BKUPPATH/temp/memcached.conf
