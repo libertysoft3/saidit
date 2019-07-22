@@ -78,6 +78,22 @@ INIFILES := $(UPDATE_FILES:.update=.ini)
 .PHONY: clean_ini
 
 ini: $(INIFILES)
+	# NOTE: temporary SaidIt hack for until 'paster serve'
+	# is replaced with a better uwsgi server. README.md for details.
+	cp development.ini development2.ini
+	sed -i 's/port = 8001/port = 8002/g' development2.ini
+	cp development.ini development3.ini
+	sed -i 's/port = 8001/port = 8003/g' development3.ini
+	cp development.ini development4.ini
+	sed -i 's/port = 8001/port = 8004/g' development4.ini
+	cp development.ini development5.ini
+	sed -i 's/port = 8001/port = 8015/g' development5.ini
+	cp development.ini development6.ini
+	sed -i 's/port = 8001/port = 8016/g' development6.ini
+	cp development.ini development7.ini
+	sed -i 's/port = 8001/port = 8017/g' development7.ini
+	cp development.ini development8.ini
+	sed -i 's/port = 8001/port = 8018/g' development8.ini
 
 $(INIFILES): %.ini: %.update example.ini
 	  ./updateini.py example.ini $< > $@ || rm $@ 

@@ -174,32 +174,35 @@ In a production environments, irc and related services should be run by a dedica
     $ tar xzvf unrealircd-4.2.3.tar.gz
     $ cd unrealircd-4.2.3/
     $ ./Config
-    # space to read the license, press [Enter] a bunch of times, wait for configuration tasks
+    # Press [Enter] a bunch of times, press space to read the license, wait for configuration tasks
     # For "Do you want to generate an SSL certificate for the IRCd?" respond "No"
     $ make
     $ make install
 
-use the reddit.local SSL cert with unreal:
-
-    $ sudo cp /etc/ssl/certs/ssl-cert-snakeoil.pem ~/unrealircd/conf/ssl/server.cert.pem
-    $ sudo cp /etc/ssl/private/ssl-cert-snakeoil.key ~/unrealircd/conf/ssl/server.key.pem
-    # assuming you are installing as user 'reddit':
-    $ sudo chown reddit:reddit ~/unrealircd/conf/ssl/*
-
-configure unreal:
+Configure unreal:
 
     $ cd ~/unrealircd
     $ cp conf/examples/example.conf conf/unrealircd.conf
-    # edit conf/unrealircd.conf and change:
-    #   change 'oper bobsmith' to `oper ircoperator`
-    #   change 'password "test";' to a unique password
-    #   section 'cloak-keys' needs 2 keys added
-    #   set 'kline-address' to an email address
-    #   set 'maxchannelsperuser' t0 50
-    #   in 'allow' block for ip '*@*' change 'maxperip' to 10
-    #   add a new allow block: allow { ip *@127.0.0.1; class clients; maxperip 50000; };
+    $ nano conf/unrealircd.conf
+      # change 'oper bobsmith' to `oper ircoperator`
+      # change 'password "test";' to a unique password
+      # add 2 more keys to section 'cloak-keys'
+      # set 'kline-address' to a valid email address
+      # set 'maxchannelsperuser' t0 50
+      # in 'allow' block for ip '*@*' change 'maxperip' to 10
 
-configure unreal for anope services. add the following to `~/unrealircd/conf/unrealircd.conf`, before `ulines`:
+Also add a new allow block (after the '*@*' block):
+
+    allow { ip *@127.0.0.1; class clients; maxperip 50000; };
+
+in the final 'set' block 'Server specific configuration', near the end of , add:
+
+    ssl {
+        certificate "/etc/ssl/certs/ssl-cert-snakeoil.pem";
+        key "/etc/ssl/private/ssl-cert-snakeoil.key";
+    };
+
+Also add the following before `ulines` for anope services:
 
     link services.reddit.local
     {
@@ -216,21 +219,18 @@ configure unreal for anope services. add the following to `~/unrealircd/conf/unr
         class servers;
     };
 
-change `ulines` to:
+Also change `ulines` to:
 
     ulines {
       services.reddit.local;
     };
 
-start unreal:
+Setup SSL cert permissions, start unreal, and cleanup:
 
+    $ sudo usermod -aG ssl-cert reddit
+    $ sudo usermod -aG ssl-cert irc
     $ ./unrealircd start
-
-cleanup, substitute your version number where appropriate:
-
-    $ cd ~
-    $ rm -rf unrealircd-4.2.3
-    $ rm unrealircd-4.2.3.tar.gz
+    $ rm -rf ~/unrealircd-4.2.3*
 
 ### Install anope IRC services
 
@@ -252,21 +252,23 @@ Configure anope:
 
     $ cd ~/services/conf/
     $ cp nickserv.example.conf nickserv.conf
-    # edit nickserv.conf, set guestnickprefix = "guest" (for The Lounge autconnect feature)
+    $ nano nickserv.conf
+      # set guestnickprefix = "guest" (for The Lounge autconnect feature)
     $ cp operserv.example.conf operserv.conf
-    # NOTE: insecure if you allow outside access to IRC/6667, instead just change maxsessionlimit only and later run:
-    #    /msg OperServ exception add +0 127.0.0.1 50000 Allow many localhost TheLounge clients
-    # edit operserv.conf, set defaultsessionlimit = 50000, maxsessionlimit = 50000 (since everyone connects from localhost)
+    $ nano operserv.conf
+      # NOTE: insecure if you allow outside access to IRC/6667, instead just change maxsessionlimit only and later run:
+      #    /msg OperServ exception add +0 127.0.0.1 50000 Allow many localhost TheLounge clients
+      # set defaultsessionlimit = 50000, maxsessionlimit = 50000 (since everyone connects from localhost)
     $ cp example.conf services.conf
-    # edit services.conf and set:
-    # set uplink::ssl to 'yes'
-    # set uplink::port to 6667
-    # set uplink::password to 'my-services-password-1234'
-    # set serverinfo::name to services.reddit.local
-    # comment out the botserv include, search for `botserv.example.conf`
-    # change `nickserv.example.conf` to `nickserv.conf`
-    # change `operserv.example.conf` to `operserv.conf`
-    # change `inspircd20` (in `module`) to `unreal4`
+    $ nano services.conf
+      # set uplink::ssl to 'yes'
+      # set uplink::port to 6667
+      # set uplink::password to 'my-services-password-1234'
+      # set serverinfo::name to services.reddit.local
+      # comment out the botserv include, search for `botserv.example.conf`
+      # change `nickserv.example.conf` to `nickserv.conf`
+      # change `operserv.example.conf` to `operserv.conf`
+      # change `inspircd20` (in `module`) to `unreal4`
 
 add this oper section near the existing disabled ones:
 
@@ -277,16 +279,11 @@ add this oper section near the existing disabled ones:
         require_oper = yes
     }
 
-start anope:
+start anope and cleanup:
 
     $ cd ~/services/bin
     $ ./services
-
-cleanup, substitute your version number where appropriate:
-
-    $ cd ~
-    $ rm -rf anope-2.0.6-source
-    $ rm anope-2.0.6-source.tar.gz
+    $ rm -rf ~/anope-2.0.6*
 
 ### Install TheLounge web IRC client
 
@@ -312,7 +309,7 @@ configure TheLounge, SSL cert paths may need to be adjusted:
     #   prefetchMaxImageSize: 2048,
     #   lockNetwork: true,
     #   defaults { name: "saiditDEV", host: "127.0.0.1", nick: "guest", username: "guest", realname: "Guest", join: "#home" }
-    #   https: { enable: true, key: "/home/reddit/unrealircd/conf/ssl/server.key.pem", certificate: "/etc/ssl/certs/ssl-cert-snakeoil.pem" }
+    #   https: { enable: true, key: "/etc/ssl/private/ssl-cert-snakeoil.key", certificate: "/etc/ssl/certs/ssl-cert-snakeoil.pem" }
 
 add an intial user so the server will start:
 
@@ -391,23 +388,16 @@ Memory by process
 
     ps aux  | awk '{print $6/1024 " MB\t\t" $11}'  | sort -n
 
-Free memory, flush cached OS and swap data
-
-    $ cd ~/src/reddit/r2
-    $ ./free-memory.sh
-
 ### Production configuration
 
 SaidIt
 
-- development.update settings
+- `development.update` settings
   - debug = false
   - uncompressedJS = false
-- Change `db_pass` in development.update and copy it to /etc/cron.d/reddit
-- Change the `[secrets]` section in development.update
+  - db_pass = not-password, and update it in /etc/cron.d/reddit as well
+  - Change the `[secrets]` section
 - Change the password for installer created users `saidit` and `automoderator` (default password is 'password')
-- Enable `reddit-job-email` in `/etc/cron.d/reddit` to send emails
-- Get a real SSL certificate https://certbot.eff.org/
 - If you want email, install something like postfix and enable `reddit-job-email` in `/etc/cron.d/reddit`
 
 OS
@@ -415,6 +405,25 @@ OS
 - Make sure you OS file limits are high, want > 1024 for `$ ulimit -Hn` and `$ ulimit -Sn`
 - Configure fail2ban
 - Configure the firewall, need at least ports 22 and 443 open
+
+### Certbot/LetsEncrypt SSL Certificates
+
+    $ sudo add-apt-repository ppa:certbot/certbot
+    $ sudo apt-get update
+    $ sudo apt-get install certbot
+    $ sudo certbot certonly --manual --preferred-challenges dns -d you.net -d www.you.net -d m.you.net -d oauth.you.net
+    $ sudo chown reddit:ssl-cert /etc/letsencrypt/live/you.net/privkey.pem
+    $ sudo chmod g+r /etc/letsencrypt/live/you.net/privkey.pem
+
+Re-configure your services for your new cert:
+
+    /etc/nginx/sites-available/reddit-ssl
+    /etc/reddit/.lounge/config.js
+    /unrealircd/conf/unrealircd.conf
+
+Renew your cert every 90 days:
+
+    $ sudo certbot renew
 
 ### SSL upgrade, for improved "Suggest Title" compatibility
 
@@ -458,6 +467,31 @@ WARNING: this currently breaks Cython dependencies in reddit PPAs/repos, so `ins
     $ make clean
     $ make
     $ sudo reddit-start
+
+### Application server tuning
+
+Out of the box, reddit open source runs the 'paste' uwsgi server, a single process with threads that can't execute concurrently. You can effectively only utilize a single CPU core. The following example shows you how to add another paster server process for a dual core processor.
+
+Add these lines to your `development.update`, section `[server:main]` and then run `make ini`:
+
+    threadpool_workers = 1
+    threadpool_spawn_if_under = 0
+
+Then setup additional app server processes:
+
+    $ sudo nano /etc/default/reddit
+    # add line: export REDDIT_INI2=/home/reddit/src/reddit/r2/development2.ini
+    $ sudo cp /etc/init/reddit-paster.conf /etc/init/reddit-paster2.conf
+    $ sudo nano /etc/init/reddit-paster2.conf
+    # change $REDDIT_INI to $REDDIT_INI2
+    $ sudo nano /etc/haproxy/haproxy.cfg
+    # in 'backend reddit' add: server app2 localhost:8002 maxconn 30
+
+Repeat this process until you have (number of cores) to (number of coresx2) paster application server processes running. `Makefile` and `make ini` are modified to support this configuration. Finally:
+
+    $ sudo reddit-stop
+    $ sudo reddit-start
+    $ sudo service haproxy restart
 
 ---
 
