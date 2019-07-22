@@ -246,11 +246,19 @@
   <div class="split-panel">
     <div class="split-panel-section split-panel-divider">
       <h4 class="modal-title">${_("create a new account")}</h4>
-      ${lf(register=True, user=user_reg, dest=dest, autofocus=autofocus)}
+      %if not feature.is_enabled('registration_disabled'):
+        ${lf(register=True, user=user_reg, dest=dest, autofocus=autofocus)}
+      %else:
+        ${_(g.registration_disabled_message)}
+      %endif
     </div>
     <div class="split-panel-section">
       <h4 class="modal-title">${_("log in")}</h4>
-      ${lf(user = user_login, dest = dest, autofocus=autofocus)}
+      %if not feature.is_enabled('login_disabled'):
+        ${lf(user = user_login, dest = dest, autofocus=autofocus)}
+      %else:
+        ${_(g.login_disabled_message)}
+      %endif
     </div>
   </div>
   <p class="login-disclaimer">
