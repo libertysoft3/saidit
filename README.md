@@ -407,7 +407,9 @@ OS
     $ sudo apt-get update
     $ sudo apt-get install certbot
     $ sudo certbot certonly --manual --preferred-challenges dns -d you.net -d www.you.net -d m.you.net -d oauth.you.net
-    $ sudo chown reddit:ssl-cert /etc/letsencrypt/live/you.net/privkey.pem
+    $ sudo usermod -aG ssl-cert reddit
+    $ sudo usermod -aG ssl-cert irc
+    $ sudo chown -h reddit:ssl-cert /etc/letsencrypt/live/you.net/privkey.pem
     $ sudo chmod g+r /etc/letsencrypt/live/you.net/privkey.pem
 
 Re-configure your services for your new cert:
