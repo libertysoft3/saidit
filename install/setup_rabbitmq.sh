@@ -40,4 +40,9 @@ fi
 
 sudo rabbitmqctl set_permissions -p / reddit ".*" ".*" ".*"
 sudo rabbitmq-plugins enable rabbitmq_management
-sudo service rabbitmq-server restart
+
+# Work around Ubuntu bug https://bugs.launchpad.net/ubuntu/+source/rabbitmq-server/+bug/1784757
+sudo sed -i 's/rabbitmqctl stop/rabbitmqctl shutdown/g' /lib/systemd/system/rabbitmq-server.service
+sudo systemctl daemon-reload
+
+sudo systemctl restart rabbitmq-server

@@ -59,13 +59,12 @@ END
     exit 1
 fi
 
-# seriously! these checks are here for a reason. the packages from the
-# reddit ppa aren't built for anything but trusty (14.04) right now, so
-# if you try and use this install script on another release you're gonna
-# have a bad time.
+# seriously! these checks are here for a reason. the packages ren't built for
+# anything but Ubuntu 18.04 right now, so if you try and use this install
+# script on another release you're gonna have a bad time.
 source /etc/lsb-release
-if [ "$DISTRIB_ID" != "Ubuntu" -o "$DISTRIB_RELEASE" != "14.04" ]; then
-    echo "ERROR: Only Ubuntu 14.04 is supported."
+if [ "$DISTRIB_ID" != "Ubuntu" -o "$DISTRIB_RELEASE" != "18.04" ]; then
+    echo "ERROR: Only Ubuntu 18.04 is supported."
     exit 1
 fi
 
@@ -99,8 +98,15 @@ done
 # install primary packages
 $RUNDIR/install_apt.sh
 
+# TODO PORT is 'less' covered by 'node-less'?
 # install npm packages
-$RUNDIR/install_npm.sh
+# $RUNDIR/install_npm.sh
+
+# install from git repos
+$RUNDIR/install_source.sh
+
+# install from pip
+$RUNDIR/install_pip.sh
 
 # install cassandra from datastax
 $RUNDIR/install_cassandra.sh
@@ -119,9 +125,16 @@ if [ ! -d $REDDIT_SRC ]; then
     chown $REDDIT_USER $REDDIT_SRC
 fi
 
+# TODO PORT - check all dl'ed repos for 'upstart' folders, port to systemd, remove this function
 function copy_upstart {
     if [ -d ${1}/upstart ]; then
         cp ${1}/upstart/* /etc/init/
+    fi
+}
+
+function copy_service {
+    if [ -d ${1}/services ]; then
+        cp ${1}/services/* /etc/systemd/system
     fi
 }
 
@@ -133,13 +146,14 @@ function clone_reddit_repo {
         sudo -u $REDDIT_USER -H git clone $repository_url $destination
     fi
 
-    copy_upstart $destination
+    copy_service $destination
 }
 
 function clone_reddit_service_repo {
     clone_reddit_repo $1 reddit-archive/reddit-service-$1
 }
 
+clone_reddit_repo l2cs kemitche/l2cs
 clone_reddit_repo reddit libertysoft3/saidit
 clone_reddit_repo i18n libertysoft3/reddit-i18n
 clone_reddit_service_repo websockets
@@ -175,7 +189,7 @@ function install_reddit_repo {
 install_reddit_repo reddit/r2
 install_reddit_repo i18n
 for plugin in $REDDIT_AVAILABLE_PLUGINS; do
-    copy_upstart $REDDIT_SRC/$plugin
+    copy_service $REDDIT_SRC/$plugin
     install_reddit_repo $plugin
 done
 install_reddit_repo websockets
@@ -323,23 +337,25 @@ mkdir -p /srv/www/pixel
 chown $REDDIT_USER:$REDDIT_GROUP /srv/www/pixel
 cp $REDDIT_SRC/reddit/r2/r2/public/static/pixel.png /srv/www/pixel
 
-if [ ! -f /etc/gunicorn.d/click.conf ]; then
-    cat > /etc/gunicorn.d/click.conf <<CLICK
-CONFIG = {
-    "mode": "wsgi",
-    "working_dir": "$REDDIT_SRC/reddit/scripts",
-    "user": "$REDDIT_USER",
-    "group": "$REDDIT_USER",
-    "args": (
-        "--bind=unix:/var/opt/reddit/click.sock",
-        "--workers=1",
-        "tracker:application",
-    ),
-}
-CLICK
-fi
+# TODO PORT
+# mkdir -p /etc/gunicorn.d
+# if [ ! -f /etc/gunicorn.d/click.conf ]; then
+#     cat > /etc/gunicorn.d/click.conf <<CLICK
+# CONFIG = {
+#     "mode": "wsgi",
+#     "working_dir": "$REDDIT_SRC/reddit/scripts",
+#     "user": "$REDDIT_USER",
+#     "group": "$REDDIT_USER",
+#     "args": (
+#         "--bind=unix:/var/opt/reddit/click.sock",
+#         "--workers=1",
+#         "tracker:application",
+#     ),
+# }
+# CLICK
+# fi
 
-service gunicorn start
+# service gunicorn start
 
 ###############################################################################
 # nginx
@@ -407,9 +423,9 @@ server {
     ssl_dhparam /etc/nginx/dhparam.pem;
 
     # Support TLSv1 for Android 4.3 (Samsung Galaxy S3) https://www.ssllabs.com/ssltest/viewClient.html?name=Android&version=4.3&key=61
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
     # ciphers from https://cipherli.st legacy / old list
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA128:DHE-RSA-AES128-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA128:ECDHE-RSA-AES128-SHA384:ECDHE-RSA-AES128-SHA128:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA384:AES128-GCM-SHA128:AES128-SHA128:AES128-SHA128:AES128-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
+    # ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA128:DHE-RSA-AES128-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA128:ECDHE-RSA-AES128-SHA384:ECDHE-RSA-AES128-SHA128:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA384:AES128-GCM-SHA128:AES128-SHA128:AES128-SHA128:AES128-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:1m;
     ssl_stapling on;
@@ -540,71 +556,30 @@ HAPROXY
 # this will start it even if currently stopped
 service haproxy restart
 
-###############################################################################
-# websocket service
-###############################################################################
-
-if [ ! -f /etc/init/reddit-websockets.conf ]; then
-    cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
-description "websockets service"
-
-stop on runlevel [!2345] or reddit-restart all or reddit-restart websockets
-start on runlevel [2345] or reddit-restart all or reddit-restart websockets
-
-respawn
-respawn limit 10 5
-kill timeout 15
-
-limit nofile 65535 65535
-
-exec baseplate-serve2 --bind localhost:9001 $REDDIT_SRC/websockets/example.ini
-UPSTART_WEBSOCKETS
-fi
-
-service reddit-websockets restart
-
-###############################################################################
-# activity service
-###############################################################################
-
-if [ ! -f /etc/init/reddit-activity.conf ]; then
-    cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
-description "activity service"
-
-stop on runlevel [!2345] or reddit-restart all or reddit-restart activity
-start on runlevel [2345] or reddit-restart all or reddit-restart activity
-
-respawn
-respawn limit 10 5
-kill timeout 15
-
-exec baseplate-serve2 --bind localhost:9002 $REDDIT_SRC/activity/example.ini
-UPSTART_ACTIVITY
-fi
-
-service reddit-activity restart
-
+# TODO PORT
 ###############################################################################
 # geoip service
 ###############################################################################
-if [ ! -f /etc/gunicorn.d/geoip.conf ]; then
-    cat > /etc/gunicorn.d/geoip.conf <<GEOIP
-CONFIG = {
-    "mode": "wsgi",
-    "working_dir": "$REDDIT_SRC/reddit/scripts",
-    "user": "$REDDIT_USER",
-    "group": "$REDDIT_USER",
-    "args": (
-        "--bind=127.0.0.1:5000",
-        "--workers=1",
-         "--limit-request-line=8190",
-         "geoip_service:application",
-    ),
-}
-GEOIP
-fi
+# if [ ! -f /etc/gunicorn.d/geoip.conf ]; then
+#     cat > /etc/gunicorn.d/geoip.conf <<GEOIP
+# CONFIG = {
+#     "mode": "wsgi",
+#     "working_dir": "$REDDIT_SRC/reddit/scripts",
+#     "user": "$REDDIT_USER",
+#     "group": "$REDDIT_USER",
+#     "args": (
+#         "--bind=127.0.0.1:5000",
+#         "--workers=1",
+#          "--limit-request-line=8190",
+#          "geoip_service:application",
+#     ),
+# }
+# GEOIP
+# fi
 
-service gunicorn start
+# service gunicorn start
+
+
 
 ###############################################################################
 # Job Environment
@@ -613,6 +588,7 @@ CONSUMER_CONFIG_ROOT=$REDDIT_HOME/consumer-count.d
 
 if [ ! -f /etc/default/reddit ]; then
     cat > /etc/default/reddit <<DEFAULT
+export REDDIT_SRC=$REDDIT_SRC
 export REDDIT_ROOT=$REDDIT_SRC/reddit/r2
 export REDDIT_INI=$REDDIT_SRC/reddit/r2/run.ini
 export REDDIT_USER=$REDDIT_USER
@@ -669,12 +645,15 @@ done
 reddit-run -c 'print "ok done"'
 
 # ok, now start everything else up
-initctl emit reddit-stop
-initctl emit reddit-start
+sudo systemctl enable mcrouter
+sudo systemctl enable reddit
+sudo systemctl start reddit
+
 
 ###############################################################################
 # Cron Jobs
 ###############################################################################
+# TODO PORT - /sbin/start does not exist
 if [ ! -f /etc/cron.d/reddit ]; then
     cat > /etc/cron.d/reddit <<CRON
 0    3 * * * root /sbin/start --quiet reddit-job-update_sr_names

@@ -48,6 +48,7 @@ root = os.environ.get("REDDIT_ROOT", "/opt/reddit/lib/public/r2")
 os.chdir(root)
 
 # configure syslog
+# TODO PORT
 job_name = os.environ.get("UPSTART_JOB", "-".join(sys.argv[1:]))
 if job_name.startswith(CONSUMER_PREFIX):
     # consumers are a bit different from crons, while crons want an
