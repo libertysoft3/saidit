@@ -62,7 +62,6 @@ python-pylons
 python-boto
 python-tz
 python-crypto
-python-babel
 python-numpy
 python-dateutil
 cython
@@ -124,6 +123,8 @@ libiberty-dev
 liblz4-dev
 liblzma-dev
 libsnappy-dev
+libxml2-dev
+libxslt1-dev
 zlib1g-dev
 binutils-dev
 libjemalloc-dev

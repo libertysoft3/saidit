@@ -60,7 +60,7 @@ setup(
         "Pylons",
         "Routes",
         "mako>=0.5",
-        "boto >= 2.0",
+        "boto>=2.0",
         "pytz",
         "pycrypto",
         "Babel>=1.0",

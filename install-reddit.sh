@@ -40,7 +40,6 @@ NEEDED=(
     "install_npm.sh"
     "install_pip.sh"
     "install_services.sh"
-    "install_source.sh"
     "install_zookeeper.sh"
     "reddit.sh"
     "setup_cassandra.sh"

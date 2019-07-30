@@ -77,20 +77,6 @@ if [[ "2000000" -gt $(awk '/MemTotal/{print $2}' /proc/meminfo) ]]; then
     fi
 fi
 
-REDDIT_AVAILABLE_PLUGINS=""
-for plugin in $REDDIT_PLUGINS; do
-    if [ -d $REDDIT_SRC/$plugin ]; then
-        if [[ -z "$REDDIT_PLUGINS" ]]; then
-            REDDIT_AVAILABLE_PLUGINS+="$plugin"
-        else
-            REDDIT_AVAILABLE_PLUGINS+=" $plugin"
-        fi
-        echo "plugin $plugin found"
-    else
-        echo "plugin $plugin not found"
-    fi
-done
-
 ###############################################################################
 # Install prerequisites
 ###############################################################################
@@ -101,9 +87,6 @@ $RUNDIR/install_apt.sh
 # TODO PORT is 'less' covered by 'node-less'?
 # install npm packages
 # $RUNDIR/install_npm.sh
-
-# install from git repos
-$RUNDIR/install_source.sh
 
 # install from pip
 $RUNDIR/install_pip.sh
@@ -116,6 +99,33 @@ $RUNDIR/install_zookeeper.sh
 
 # install services (rabbitmq, postgres, memcached, etc.)
 $RUNDIR/install_services.sh
+
+###############################################################################
+# thrift
+###############################################################################
+if ! type "thrift" > /dev/null; then
+    sudo -u $REDDIT_USER git clone https://github.com/apache/thrift.git $REDDIT_SRC/thrift
+    pushd $REDDIT_SRC/thrift
+    sudo -u $REDDIT_USER git checkout v0.12.0
+    sudo -u $REDDIT_USER ./bootstrap.sh
+    sudo -u $REDDIT_USER ./configure
+    sudo -u $REDDIT_USER make
+    sudo make install
+    popd
+fi
+
+###############################################################################
+# baseplate - required by reddit-service-activity
+###############################################################################
+if ! type "baseplate-serve" > /dev/null; then
+    sudo -u $REDDIT_USER git clone https://github.com/reddit/baseplate.git $REDDIT_SRC/baseplate
+    pushd $REDDIT_SRC/baseplate
+    sudo -u $REDDIT_USER git checkout v0.30.3
+    sudo -u $REDDIT_USER make
+    sudo -u $REDDIT_USER python setup.py build
+    python setup.py develop --no-deps
+    popd
+fi
 
 ###############################################################################
 # Install the reddit source repositories
@@ -145,20 +155,26 @@ function clone_reddit_repo {
     if [ ! -d $destination ]; then
         sudo -u $REDDIT_USER -H git clone $repository_url $destination
     fi
-
-    copy_service $destination
 }
 
 function clone_reddit_service_repo {
     clone_reddit_repo $1 reddit-archive/reddit-service-$1
 }
 
+function clone_reddit_plugin_repo {
+    clone_reddit_repo $1 reddit-archive/reddit-plugin-$1
+}
+
 clone_reddit_repo l2cs kemitche/l2cs
 clone_reddit_repo reddit libertysoft3/saidit
 clone_reddit_repo i18n libertysoft3/reddit-i18n
+clone_reddit_repo snudown libertysoft3/snudown
 clone_reddit_service_repo websockets
 clone_reddit_service_repo activity
-clone_reddit_repo snudown libertysoft3/snudown
+
+# $REDDIT_PLUGINS repos
+clone_reddit_plugin_repo gold
+clone_reddit_plugin_repo liveupdate
 
 ###############################################################################
 # Configure Services
@@ -181,6 +197,7 @@ $RUNDIR/setup_rabbitmq.sh
 ###############################################################################
 function install_reddit_repo {
     pushd $REDDIT_SRC/$1
+    copy_service $REDDIT_SRC/$1
     sudo -u $REDDIT_USER python setup.py build
     python setup.py develop --no-deps
     popd
@@ -188,10 +205,24 @@ function install_reddit_repo {
 
 install_reddit_repo reddit/r2
 install_reddit_repo i18n
+
+REDDIT_AVAILABLE_PLUGINS=""
+for plugin in $REDDIT_PLUGINS; do
+    if [ -d $REDDIT_SRC/$plugin ]; then
+        if [[ -z "$REDDIT_PLUGINS" ]]; then
+            REDDIT_AVAILABLE_PLUGINS+="$plugin"
+        else
+            REDDIT_AVAILABLE_PLUGINS+=" $plugin"
+        fi
+        echo "plugin $plugin found"
+    else
+        echo "plugin $plugin not found"
+    fi
+done
 for plugin in $REDDIT_AVAILABLE_PLUGINS; do
-    copy_service $REDDIT_SRC/$plugin
     install_reddit_repo $plugin
 done
+
 install_reddit_repo websockets
 install_reddit_repo activity
 install_reddit_repo snudown
@@ -579,8 +610,6 @@ service haproxy restart
 
 # service gunicorn start
 
-
-
 ###############################################################################
 # Job Environment
 ###############################################################################
@@ -629,6 +658,7 @@ chown -R $REDDIT_USER:$REDDIT_GROUP $CONSUMER_CONFIG_ROOT/
 ###############################################################################
 # Complete plugin setup, if setup.sh exists
 ###############################################################################
+# TODO PORT - reddit-plugin-liveupdate and gold both have an upstart folder
 for plugin in $REDDIT_AVAILABLE_PLUGINS; do
     if [ -x $REDDIT_SRC/$plugin/setup.sh ]; then
         echo "Found setup.sh for $plugin; running setup script"
@@ -645,7 +675,6 @@ done
 reddit-run -c 'print "ok done"'
 
 # ok, now start everything else up
-sudo systemctl enable mcrouter
 sudo systemctl enable reddit
 sudo systemctl start reddit
 

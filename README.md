@@ -456,14 +456,12 @@ WARNING: this currently breaks Cython dependencies in reddit PPAs/repos, so `ins
 #### Rebuild reddit open source
 
     $ sudo reddit-stop
-    $ sudo reddit-flush
-    $ sudo apt-get install python-dev libxml2-dev libxslt1-dev zlib1g-dev
     $ cd ~/src/reddit/r2
     $ python setup.py build
-    $ sudo python setup.py develop
+    $ sudo python setup.py develop --no-deps
     $ make clean
     $ make
-    $ sudo reddit-start
+    $ sudo reddit-start && sudo reddit-flush
 
 ### Application server tuning
 
