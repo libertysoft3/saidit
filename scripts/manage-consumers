@@ -1,5 +1,7 @@
 #!/bin/bash
 # TODO PORT
+service=$1
+echo "!!! got service $command" >> /home/reddit/log.log
 command=${UPSTART_JOB#reddit-consumers-}
 for consumerpath in $REDDIT_CONSUMER_CONFIG/*; do
     consumer=$(basename $consumerpath)
@@ -20,7 +22,13 @@ for consumerpath in $REDDIT_CONSUMER_CONFIG/*; do
         type_=$(basename $typepath)
 
         for i in $(seq 1 "$instance_count"); do
-            "/sbin/$command" "reddit-consumer-$consumer" "type=$type_" "x=$i"
+            # command: start, stop, or restart
+            # consumer:
+            # type: consumer name like author_query_q, butler_q, scraper_q
+            # "/sbin/$command" "reddit-consumer-$consumer" "type=$type_" "x=$i"
+            echo "!!! type is $type_" >> /home/reddit/log.log
+            echo "!!! running systemctl start $service@$i" >> /home/reddit/log.log
+            "systemctl start" "$service@$i"
         done
     done
 done

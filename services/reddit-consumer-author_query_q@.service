@@ -1,1 +1,2 @@
-reddit-consumer-author_query_q@.service
+[Unit]
+Description=author_query_q instance %i

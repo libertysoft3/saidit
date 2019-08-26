@@ -110,7 +110,10 @@ if ! type "thrift" > /dev/null; then
     sudo -u $REDDIT_USER ./bootstrap.sh
     sudo -u $REDDIT_USER ./configure
     sudo -u $REDDIT_USER make
-    sudo make install
+    make install
+    cd lib/py
+    sudo -u $REDDIT_USER python setup.py build
+    python setup.py develop --no-deps
     popd
 fi
 
@@ -120,7 +123,7 @@ fi
 if ! type "baseplate-serve" > /dev/null; then
     sudo -u $REDDIT_USER git clone https://github.com/reddit/baseplate.git $REDDIT_SRC/baseplate
     pushd $REDDIT_SRC/baseplate
-    sudo -u $REDDIT_USER git checkout v0.30.3
+    sudo -u $REDDIT_USER git checkout v0.30.6
     sudo -u $REDDIT_USER make
     sudo -u $REDDIT_USER python setup.py build
     python setup.py develop --no-deps
@@ -157,6 +160,15 @@ function clone_reddit_repo {
     fi
 }
 
+function clone_reddit_repo_branch {
+    local destination=$REDDIT_SRC/${1}
+    local repository_url=https://github.com/${2}.git
+
+    if [ ! -d $destination ]; then
+        sudo -u $REDDIT_USER -H git clone -b ${3} $repository_url $destination
+    fi
+}
+
 function clone_reddit_service_repo {
     clone_reddit_repo $1 reddit-archive/reddit-service-$1
 }
@@ -166,7 +178,7 @@ function clone_reddit_plugin_repo {
 }
 
 clone_reddit_repo l2cs kemitche/l2cs
-clone_reddit_repo reddit libertysoft3/saidit
+clone_reddit_repo_branch reddit libertysoft3/saidit ubuntu18
 clone_reddit_repo i18n libertysoft3/reddit-i18n
 clone_reddit_repo snudown libertysoft3/snudown
 clone_reddit_service_repo websockets
@@ -174,7 +186,6 @@ clone_reddit_service_repo activity
 
 # $REDDIT_PLUGINS repos
 clone_reddit_plugin_repo gold
-clone_reddit_plugin_repo liveupdate
 
 ###############################################################################
 # Configure Services
@@ -195,17 +206,6 @@ $RUNDIR/setup_rabbitmq.sh
 ###############################################################################
 # Install and configure the reddit code
 ###############################################################################
-function install_reddit_repo {
-    pushd $REDDIT_SRC/$1
-    copy_service $REDDIT_SRC/$1
-    sudo -u $REDDIT_USER python setup.py build
-    python setup.py develop --no-deps
-    popd
-}
-
-install_reddit_repo reddit/r2
-install_reddit_repo i18n
-
 REDDIT_AVAILABLE_PLUGINS=""
 for plugin in $REDDIT_PLUGINS; do
     if [ -d $REDDIT_SRC/$plugin ]; then
@@ -219,13 +219,28 @@ for plugin in $REDDIT_PLUGINS; do
         echo "plugin $plugin not found"
     fi
 done
+
+# TODO PORT - reddit-plugin-gold has an upstart folder, need 'services'
+function install_reddit_repo {
+    pushd $REDDIT_SRC/$1
+    copy_service $REDDIT_SRC/$1
+    sudo -u $REDDIT_USER python setup.py build
+    python setup.py develop --no-deps
+    popd
+}
+
+install_reddit_repo l2cs
+install_reddit_repo reddit/r2
+install_reddit_repo i18n
 for plugin in $REDDIT_AVAILABLE_PLUGINS; do
     install_reddit_repo $plugin
 done
-
 install_reddit_repo websockets
 install_reddit_repo activity
 install_reddit_repo snudown
+
+# $REDDIT_PLUGINS repos
+install_reddit_repo gold
 
 # generate binary translation files from source
 sudo -u $REDDIT_USER make -C $REDDIT_SRC/i18n clean all
@@ -333,16 +348,19 @@ helper-script /usr/local/bin/reddit-shell <<REDDITSHELL
 exec paster --plugin=r2 shell $REDDIT_SRC/reddit/r2/run.ini
 REDDITSHELL
 
+# TODO - systemd
 helper-script /usr/local/bin/reddit-start <<REDDITSTART
 #!/bin/bash
 initctl emit reddit-start
 REDDITSTART
 
+# TODO - systemd
 helper-script /usr/local/bin/reddit-stop <<REDDITSTOP
 #!/bin/bash
 initctl emit reddit-stop
 REDDITSTOP
 
+# TODO - systemd
 helper-script /usr/local/bin/reddit-restart <<REDDITRESTART
 #!/bin/bash
 initctl emit reddit-restart TARGET=${1:-all}
@@ -658,7 +676,6 @@ chown -R $REDDIT_USER:$REDDIT_GROUP $CONSUMER_CONFIG_ROOT/
 ###############################################################################
 # Complete plugin setup, if setup.sh exists
 ###############################################################################
-# TODO PORT - reddit-plugin-liveupdate and gold both have an upstart folder
 for plugin in $REDDIT_AVAILABLE_PLUGINS; do
     if [ -x $REDDIT_SRC/$plugin/setup.sh ]; then
         echo "Found setup.sh for $plugin; running setup script"
@@ -675,6 +692,7 @@ done
 reddit-run -c 'print "ok done"'
 
 # ok, now start everything else up
+# sudo systemctl daemon-reload
 sudo systemctl enable reddit
 sudo systemctl start reddit
 

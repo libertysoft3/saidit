@@ -1,1 +1,15 @@
-reddit-consumer-author_query_q.service
+[Unit]
+Description=author_query_q instance manager
+After=network.target remote-fs.target nss-lookup.target reddit.service
+PartOf=reddit.service
+
+[Service]
+Type=simple
+User=reddit
+Group=reddit
+EnvironmentFile=/etc/default/reddit
+ExecStart=manage-consumers reddit-consumer-author_query_q
+RemainAfterExit=yes
+
+[Install]
+WantedBy=reddit.service
