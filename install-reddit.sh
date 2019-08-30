@@ -37,7 +37,7 @@ NEEDED=(
     "done.sh"
     "install_apt.sh"
     "install_cassandra.sh"
-    "install_npm.sh"
+    "install_pip.sh"
     "install_services.sh"
     "install_zookeeper.sh"
     "reddit.sh"

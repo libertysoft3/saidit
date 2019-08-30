@@ -47,6 +47,7 @@ os.setuid(uid)
 root = os.environ.get("REDDIT_ROOT", "/opt/reddit/lib/public/r2")
 os.chdir(root)
 
+# TODO PORT
 # configure syslog
 job_name = os.environ.get("UPSTART_JOB", "-".join(sys.argv[1:]))
 if job_name.startswith(CONSUMER_PREFIX):
