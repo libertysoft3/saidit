@@ -1628,6 +1628,20 @@ class MyredditsController(ListingController):
     def title(self):
         return _('%s: my %s: %s' % (g.brander_site, g.brander_community_plural, self.where))
 
+    # show non-discoverable subreddits and items
+    def keep_fn(self):
+        def keep(item):
+            wouldkeep = item.keep_item(item)
+            if isinstance(c.site, FriendsSR):
+                if item.author._deleted or item.author._spam:
+                    return False
+            if getattr(item, "promoted", None) is not None:
+                return False
+            if item._deleted and not c.user_is_admin:
+                return False
+            return wouldkeep
+        return keep
+
     def builder_wrapper(self, thing):
         w = ListingController.builder_wrapper(thing)
         if self.where == 'moderator':
