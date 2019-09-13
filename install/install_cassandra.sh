@@ -30,11 +30,6 @@ if [ ! -e $CASSANDRA_SOURCES_LIST ]; then
     $RUNDIR/install_apt.sh
 fi
 
-pushd $REDDIT_SRC
-wget http://archive.ubuntu.com/ubuntu/pool/universe/p/python-support/python-support_1.0.15_all.deb
-sudo apt-get install $APTITUDE_OPTIONS ./python-support_1.0.15_all.deb
-popd
-
 # install cassandra
 sudo apt-get install $APTITUDE_OPTIONS cassandra=1.2.19
 

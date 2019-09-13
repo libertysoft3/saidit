@@ -104,14 +104,15 @@ if [ ! -d $REDDIT_SRC ]; then
     chown $REDDIT_USER $REDDIT_SRC
 fi
 
-# TODO PORT - check all dl'ed repos for 'upstart' folders, port to systemd, then remove this function
 function copy_upstart {
     if [ -d ${1}/upstart ]; then
         cp ${1}/upstart/* /etc/init/
     fi
 }
 
-function copy_service {
+# TODO PORT - check all dl'ed repos for '/upstart' folders, fork and port to systemd
+# equivalent to copy_upstart()
+function install_services {
     if [ -d ${1}/services ]; then
         cp ${1}/services/* /etc/systemd/system
     fi
@@ -125,7 +126,7 @@ function clone_reddit_repo {
         sudo -u $REDDIT_USER -H git clone $repository_url $destination
     fi
 
-    copy_upstart $destination
+    install_services $destination
 }
 
 function clone_reddit_repo_branch {
@@ -190,7 +191,7 @@ done
 
 function install_reddit_repo {
     pushd $REDDIT_SRC/$1
-    copy_service $REDDIT_SRC/$1
+    install_services $REDDIT_SRC/$1
     sudo -u $REDDIT_USER python setup.py build
     python setup.py develop --no-deps
     popd
@@ -202,7 +203,7 @@ install_reddit_repo i18n
 
 # TODO PORT - reddit-plugin-gold has an upstart folder, need 'services'
 for plugin in $REDDIT_AVAILABLE_PLUGINS; do
-    copy_upstart $REDDIT_SRC/$plugin
+    install_services $REDDIT_SRC/$plugin
     install_reddit_repo $plugin
 done
 install_reddit_repo websockets

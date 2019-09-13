@@ -130,7 +130,7 @@ python-cffi
 mcrouter
 PACKAGES
 
-# fbthrift
+# fbthrift dependencies
 cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
 cmake
 autoconf
@@ -152,7 +152,19 @@ binutils-dev
 libjemalloc-dev
 PACKAGES
 
+# cassandra
+pushd $REDDIT_SRC
+wget -nc http://archive.ubuntu.com/ubuntu/pool/universe/p/python-support/python-support_1.0.15_all.deb
+apt-get install $APTITUDE_OPTIONS ./python-support_1.0.15_all.deb
+popd
 
+# pycassa
+# 'apt-get install python-pycassa' will remove python-fbthrift and install
+# python-thrift which is currently incompatible.
+pushd $REDDIT_SRC
+wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/python-pycassa_1.11.0-1~trusty1reddit3_all.deb
+apt-get install $APTITUDE_OPTIONS ./python-pycassa_1.11.0-1~trusty1reddit3_all.deb
+popd
 
 ###############################################################################
 # thrift
@@ -175,17 +187,17 @@ if ! type "thrift1" > /dev/null; then
     # add-apt-repository ppa:mhier/libboost-latest
     # apt update
     # apt install $APTITUDE_OPTIONS libboost1.54
-    wget http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu52_52.1-3_amd64.deb
-    wget http://launchpadlibrarian.net/160798973/libboost-context1.54.0_1.54.0-4ubuntu3_amd64.deb
-    wget http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-system1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    wget http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-filesystem1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    wget http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-program-options1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    wget http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-regex1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    wget http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-thread1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    wget http://archive.ubuntu.com/ubuntu/pool/main/libe/libevent/libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb
-    wget http://archive.ubuntu.com/ubuntu/pool/main/g/gflags/libgflags2_2.0-1.1ubuntu1_amd64.deb
-    wget http://launchpadlibrarian.net/138839004/libgoogle-glog0_0.3.3-1_amd64.deb
-    wget http://archive.ubuntu.com/ubuntu/pool/main/s/snappy/libsnappy1_1.1.0-1ubuntu1_amd64.deb
+    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu52_52.1-3_amd64.deb
+    wget -nc http://launchpadlibrarian.net/160798973/libboost-context1.54.0_1.54.0-4ubuntu3_amd64.deb
+    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-system1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-filesystem1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-program-options1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-regex1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-thread1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/libe/libevent/libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb
+    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/g/gflags/libgflags2_2.0-1.1ubuntu1_amd64.deb
+    wget -nc http://launchpadlibrarian.net/138839004/libgoogle-glog0_0.3.3-1_amd64.deb
+    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/s/snappy/libsnappy1_1.1.0-1ubuntu1_amd64.deb
 
     apt-get install $APTITUDE_OPTIONS ./libicu52_52.1-3_amd64.deb
     apt-get install $APTITUDE_OPTIONS ./libboost-system1.54.0_1.54.0-4ubuntu3.1_amd64.deb
@@ -199,11 +211,11 @@ if ! type "thrift1" > /dev/null; then
     apt-get install $APTITUDE_OPTIONS ./libsnappy1_1.1.0-1ubuntu1_amd64.deb
 
     # folly
-    wget https://launchpad.net/~reddit/+archive/ubuntu/ppa/+build/8320028/+files/libfolly55_0.55.0-0reddit1_amd64.deb
+    wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+build/8320028/+files/libfolly55_0.55.0-0reddit1_amd64.deb
     apt-get install $APTITUDE_OPTIONS ./libfolly55_0.55.0-0reddit1_amd64.deb
 
     # yarpl
-    # TODO - this is wrong
+    # TODO PORT - this is wrong
     # git clone https://github.com/yschimke/reactive-streams-cpp
     # TODO - start over here
     # TODO - or bail and do the manual .debs!?!
@@ -215,8 +227,8 @@ if ! type "thrift1" > /dev/null; then
     # cmake ..
     # make
     # sudo make install
-    wget https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/fbthrift-compiler_0.31.0-0reddit8_amd64.deb
-    wget https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/python-fbthrift_0.31.0-0reddit8_amd64.deb
+    wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/fbthrift-compiler_0.31.0-0reddit8_amd64.deb
+    wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/python-fbthrift_0.31.0-0reddit8_amd64.deb
     apt-get install $APTITUDE_OPTIONS ./fbthrift-compiler_0.31.0-0reddit8_amd64.deb
     apt-get install $APTITUDE_OPTIONS ./python-fbthrift_0.31.0-0reddit8_amd64.deb
     popd
@@ -227,19 +239,13 @@ fi
 ###############################################################################
 if ! type "baseplate-serve2" > /dev/null; then
     pushd $REDDIT_SRC
+    # TODO PORT
     # sudo -u $REDDIT_USER git clone https://github.com/reddit/baseplate.git $REDDIT_SRC/baseplate
-    # 
     # sudo -u $REDDIT_USER git checkout v0.28.6
     # sudo -u $REDDIT_USER make
     # sudo -u $REDDIT_USER python setup.py build
     # python setup.py develop --no-deps
-
-    wget https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/python-baseplate_0.28.6_amd64.deb
+    wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/python-baseplate_0.28.6_amd64.deb
     apt-get install $APTITUDE_OPTIONS ./python-baseplate_0.28.6_amd64.deb
     popd
 fi
-
-# python-pycassa depends python-thrift (>= 0.5.0)
-cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
-python-pycassa
-PACKAGES
