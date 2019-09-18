@@ -30,8 +30,8 @@ RUNDIR=$(dirname $0)
 source $RUNDIR/install.cfg
 
 # install prerequisites
+# mcrouter - want old version or fbthrift dependencies ruined, see install_apt.sh
 cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
-mcrouter
 memcached
 postgresql
 postgresql-client

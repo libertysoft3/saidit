@@ -34,11 +34,13 @@ echo deb http://debian.datastax.com/community stable main | \
 wget -qO- -L https://debian.datastax.com/debian/repo_key | \
     sudo apt-key add -
 
-echo deb https://facebook.github.io/mcrouter/debrepo/bionic bionic contrib | \
-    sudo tee $FACEBOOK_SOURCES_LIST
+# TODO PORT
+# echo deb https://facebook.github.io/mcrouter/debrepo/bionic bionic contrib | \
+#    sudo tee $FACEBOOK_SOURCES_LIST
 
-wget -qO- -L https://facebook.github.io/mcrouter/debrepo/bionic/PUBLIC.KEY | \
-    sudo apt-key add -
+# TODO PORT
+# wget -qO- -L https://facebook.github.io/mcrouter/debrepo/bionic/PUBLIC.KEY | \
+#    sudo apt-key add -
 
 # grab the new ppas' package listings
 # run an aptitude update to make sure python-software-properties
@@ -51,6 +53,9 @@ apt-get remove $APTITUDE_OPTIONS $(dpkg-query  -W -f='${binary:Package}\n' | gre
 apt-get autoremove $APTITUDE_OPTIONS
 
 # install prerequisites
+# TODO PORT delete des commetns
+# python-snappy conflicts libsnappy1_1.1.0
+# mcrouter installed later
 cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
 software-properties-common
 netcat-openbsd
@@ -74,7 +79,6 @@ python-psycopg2
 python-pil
 python-amqplib
 python-bcrypt
-python-snappy
 gperf
 
 python-lxml
@@ -113,8 +117,6 @@ automake
 pkg-config
 libevent-dev
 libdouble-conversion-dev
-libgoogle-glog-dev
-libgflags-dev
 libiberty-dev
 liblz4-dev
 liblzma-dev
@@ -127,10 +129,16 @@ libjemalloc-dev
 libzstd-dev
 libffi-dev
 python-cffi
-mcrouter
 PACKAGES
 
 # fbthrift dependencies
+# TODO PORT
+# libgoogle-glog-dev conflicts libgflags2 (old version for fbthrift or something?)
+# libgflags-dev conflicts libgflags2
+# libgoogle-glog-dev conflicts libgoogle-glog0
+# libgflags2.2 conflicts libgflags2_2.0-1.1ubuntu1_amd64.deb
+# libgoogle-glog0v5 conflicts libgoogle-glog0
+# libsnappy-dev conflicts libsnappy1_1.1.0
 cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
 cmake
 autoconf
@@ -140,11 +148,9 @@ libevent-dev
 flex
 bison
 libbison-dev
-libgoogle-glog-dev
 libdouble-conversion-dev
 scons
 libkrb5-dev
-libsnappy-dev
 liblz4-dev
 libiberty-dev
 liblzma-dev
@@ -164,6 +170,25 @@ popd
 pushd $REDDIT_SRC
 wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/python-pycassa_1.11.0-1~trusty1reddit3_all.deb
 apt-get install $APTITUDE_OPTIONS ./python-pycassa_1.11.0-1~trusty1reddit3_all.deb
+popd
+
+# mcrouter
+pushd $REDDIT_SRC
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/i/insserv/insserv_1.14.0-5ubuntu3_amd64.deb
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/s/sysvinit/sysv-rc_2.88dsf-59.3ubuntu2_all.deb
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/s/snappy/libsnappy1_1.1.0-1ubuntu1_amd64.deb
+wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+build/8320028/+files/libfolly55_0.55.0-0reddit1_amd64.deb
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/g/gflags/libgflags2_2.0-1.1ubuntu1_amd64.deb
+wget -nc http://launchpadlibrarian.net/138839004/libgoogle-glog0_0.3.3-1_amd64.deb
+wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/mcrouter_0.10.0-0reddit1_amd64.deb
+
+apt-get install $APTITUDE_OPTIONS ./insserv_1.14.0-5ubuntu3_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./sysv-rc_2.88dsf-59.3ubuntu2_all.deb
+apt-get install $APTITUDE_OPTIONS ./libsnappy1_1.1.0-1ubuntu1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libgflags2_2.0-1.1ubuntu1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libgoogle-glog0_0.3.3-1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libfolly55_0.55.0-0reddit1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./mcrouter_0.10.0-0reddit1_amd64.deb
 popd
 
 ###############################################################################
@@ -195,9 +220,7 @@ if ! type "thrift1" > /dev/null; then
     wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-regex1.54.0_1.54.0-4ubuntu3.1_amd64.deb
     wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-thread1.54.0_1.54.0-4ubuntu3.1_amd64.deb
     wget -nc http://archive.ubuntu.com/ubuntu/pool/main/libe/libevent/libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb
-    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/g/gflags/libgflags2_2.0-1.1ubuntu1_amd64.deb
-    wget -nc http://launchpadlibrarian.net/138839004/libgoogle-glog0_0.3.3-1_amd64.deb
-    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/s/snappy/libsnappy1_1.1.0-1ubuntu1_amd64.deb
+    
 
     apt-get install $APTITUDE_OPTIONS ./libicu52_52.1-3_amd64.deb
     apt-get install $APTITUDE_OPTIONS ./libboost-system1.54.0_1.54.0-4ubuntu3.1_amd64.deb
@@ -206,13 +229,6 @@ if ! type "thrift1" > /dev/null; then
     apt-get install $APTITUDE_OPTIONS ./libboost-regex1.54.0_1.54.0-4ubuntu3.1_amd64.deb
     apt-get install $APTITUDE_OPTIONS ./libboost-thread1.54.0_1.54.0-4ubuntu3.1_amd64.deb
     apt-get install $APTITUDE_OPTIONS ./libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb
-    apt-get install $APTITUDE_OPTIONS ./libgflags2_2.0-1.1ubuntu1_amd64.deb
-    apt-get install $APTITUDE_OPTIONS ./libgoogle-glog0_0.3.3-1_amd64.deb
-    apt-get install $APTITUDE_OPTIONS ./libsnappy1_1.1.0-1ubuntu1_amd64.deb
-
-    # folly
-    wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+build/8320028/+files/libfolly55_0.55.0-0reddit1_amd64.deb
-    apt-get install $APTITUDE_OPTIONS ./libfolly55_0.55.0-0reddit1_amd64.deb
 
     # yarpl
     # TODO PORT - this is wrong
@@ -231,6 +247,10 @@ if ! type "thrift1" > /dev/null; then
     wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/python-fbthrift_0.31.0-0reddit8_amd64.deb
     apt-get install $APTITUDE_OPTIONS ./fbthrift-compiler_0.31.0-0reddit8_amd64.deb
     apt-get install $APTITUDE_OPTIONS ./python-fbthrift_0.31.0-0reddit8_amd64.deb
+
+    # TODO PORT
+    # apt-mark hold fbthrift-compiler || true
+    # apt-mark hold python-fbthrift || true
     popd
 fi
 

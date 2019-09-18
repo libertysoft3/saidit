@@ -14,7 +14,6 @@ tinycss2
 httpagentparser
 haigha
 PyJWT
-posix_ipc
 Babel
 py-bcrypt
 whoosh
