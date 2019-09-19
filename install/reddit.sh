@@ -80,6 +80,10 @@ fi
 ###############################################################################
 # Install prerequisites
 ###############################################################################
+if [ ! -d $REDDIT_SRC ]; then
+    mkdir -p $REDDIT_SRC
+    chown $REDDIT_USER $REDDIT_SRC
+fi
 
 # install primary packages
 $RUNDIR/install_apt.sh
@@ -99,11 +103,6 @@ $RUNDIR/install_services.sh
 ###############################################################################
 # Install the reddit source repositories
 ###############################################################################
-if [ ! -d $REDDIT_SRC ]; then
-    mkdir -p $REDDIT_SRC
-    chown $REDDIT_USER $REDDIT_SRC
-fi
-
 function copy_upstart {
     if [ -d ${1}/upstart ]; then
         cp ${1}/upstart/* /etc/init/
@@ -355,6 +354,9 @@ mkdir -p /srv/www/pixel
 chown $REDDIT_USER:$REDDIT_GROUP /srv/www/pixel
 cp $REDDIT_SRC/reddit/r2/r2/public/static/pixel.png /srv/www/pixel
 
+if [ ! -d /etc/gunicorn.d ]; then
+    mkdir -p /etc/gunicorn.d
+fi
 if [ ! -f /etc/gunicorn.d/click.conf ]; then
     cat > /etc/gunicorn.d/click.conf <<CLICK
 CONFIG = {

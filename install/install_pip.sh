@@ -17,7 +17,6 @@ PyJWT
 Babel
 py-bcrypt
 whoosh
-PyCAPTCHA
 PACKAGES
 
 # alternative https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/python-pycaptcha_0.4-1_all.deb

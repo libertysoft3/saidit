@@ -48,9 +48,10 @@ wget -qO- -L https://debian.datastax.com/debian/repo_key | \
 apt-get update
 apt-get $APTITUDE_OPTIONS upgrade
 
+# TODO PORT
 # travis gives us a stock libmemcached.  We have to remove that
-apt-get remove $APTITUDE_OPTIONS $(dpkg-query  -W -f='${binary:Package}\n' | grep libmemcached | tr '\n' ' ')
-apt-get autoremove $APTITUDE_OPTIONS
+# apt-get remove $APTITUDE_OPTIONS $(dpkg-query  -W -f='${binary:Package}\n' | grep libmemcached | tr '\n' ' ')
+# apt-get autoremove $APTITUDE_OPTIONS
 
 # install prerequisites
 # TODO PORT delete des commetns
@@ -120,7 +121,6 @@ libdouble-conversion-dev
 libiberty-dev
 liblz4-dev
 liblzma-dev
-libsnappy-dev
 libxml2-dev
 libxslt1-dev
 zlib1g-dev
@@ -164,30 +164,48 @@ wget -nc http://archive.ubuntu.com/ubuntu/pool/universe/p/python-support/python-
 apt-get install $APTITUDE_OPTIONS ./python-support_1.0.15_all.deb
 popd
 
-# pycassa
-# 'apt-get install python-pycassa' will remove python-fbthrift and install
-# python-thrift which is currently incompatible.
+# boost
+# TODO PORT
+# add-apt-repository ppa:mhier/libboost-latest
+# apt install $APTITUDE_OPTIONS libboost1.54
 pushd $REDDIT_SRC
-wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/python-pycassa_1.11.0-1~trusty1reddit3_all.deb
-apt-get install $APTITUDE_OPTIONS ./python-pycassa_1.11.0-1~trusty1reddit3_all.deb
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu52_52.1-3_amd64.deb
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-system1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+wget -nc http://launchpadlibrarian.net/160798973/libboost-context1.54.0_1.54.0-4ubuntu3_amd64.deb
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-filesystem1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-program-options1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-regex1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-thread1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/libe/libevent/libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libicu52_52.1-3_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libboost-system1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libboost-context1.54.0_1.54.0-4ubuntu3_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libboost-filesystem1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libboost-program-options1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libboost-regex1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libboost-thread1.54.0_1.54.0-4ubuntu3.1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb
+popd
+
+# folly
+pushd $REDDIT_SRC
+wget -nc http://archive.ubuntu.com/ubuntu/pool/main/s/snappy/libsnappy1_1.1.0-1ubuntu1_amd64.deb
+wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+build/8320028/+files/libfolly55_0.55.0-0reddit1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libsnappy1_1.1.0-1ubuntu1_amd64.deb
+apt-get install $APTITUDE_OPTIONS ./libfolly55_0.55.0-0reddit1_amd64.deb
 popd
 
 # mcrouter
 pushd $REDDIT_SRC
 wget -nc http://archive.ubuntu.com/ubuntu/pool/main/i/insserv/insserv_1.14.0-5ubuntu3_amd64.deb
 wget -nc http://archive.ubuntu.com/ubuntu/pool/main/s/sysvinit/sysv-rc_2.88dsf-59.3ubuntu2_all.deb
-wget -nc http://archive.ubuntu.com/ubuntu/pool/main/s/snappy/libsnappy1_1.1.0-1ubuntu1_amd64.deb
-wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+build/8320028/+files/libfolly55_0.55.0-0reddit1_amd64.deb
 wget -nc http://archive.ubuntu.com/ubuntu/pool/main/g/gflags/libgflags2_2.0-1.1ubuntu1_amd64.deb
 wget -nc http://launchpadlibrarian.net/138839004/libgoogle-glog0_0.3.3-1_amd64.deb
 wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/mcrouter_0.10.0-0reddit1_amd64.deb
-
 apt-get install $APTITUDE_OPTIONS ./insserv_1.14.0-5ubuntu3_amd64.deb
 apt-get install $APTITUDE_OPTIONS ./sysv-rc_2.88dsf-59.3ubuntu2_all.deb
-apt-get install $APTITUDE_OPTIONS ./libsnappy1_1.1.0-1ubuntu1_amd64.deb
 apt-get install $APTITUDE_OPTIONS ./libgflags2_2.0-1.1ubuntu1_amd64.deb
 apt-get install $APTITUDE_OPTIONS ./libgoogle-glog0_0.3.3-1_amd64.deb
-apt-get install $APTITUDE_OPTIONS ./libfolly55_0.55.0-0reddit1_amd64.deb
 apt-get install $APTITUDE_OPTIONS ./mcrouter_0.10.0-0reddit1_amd64.deb
 popd
 
@@ -206,29 +224,6 @@ popd
 #     python setup.py develop --no-deps
 if ! type "thrift1" > /dev/null; then
     pushd $REDDIT_SRC
-
-    # TODO: add Ubuntu 14 and 16 repos instead?
-    # boost
-    # add-apt-repository ppa:mhier/libboost-latest
-    # apt update
-    # apt install $APTITUDE_OPTIONS libboost1.54
-    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu52_52.1-3_amd64.deb
-    wget -nc http://launchpadlibrarian.net/160798973/libboost-context1.54.0_1.54.0-4ubuntu3_amd64.deb
-    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-system1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-filesystem1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-program-options1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-regex1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.54/libboost-thread1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    wget -nc http://archive.ubuntu.com/ubuntu/pool/main/libe/libevent/libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb
-    
-
-    apt-get install $APTITUDE_OPTIONS ./libicu52_52.1-3_amd64.deb
-    apt-get install $APTITUDE_OPTIONS ./libboost-system1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    apt-get install $APTITUDE_OPTIONS ./libboost-context1.54.0_1.54.0-4ubuntu3_amd64.deb
-    apt-get install $APTITUDE_OPTIONS ./libboost-program-options1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    apt-get install $APTITUDE_OPTIONS ./libboost-regex1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    apt-get install $APTITUDE_OPTIONS ./libboost-thread1.54.0_1.54.0-4ubuntu3.1_amd64.deb
-    apt-get install $APTITUDE_OPTIONS ./libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb
 
     # yarpl
     # TODO PORT - this is wrong
@@ -251,6 +246,11 @@ if ! type "thrift1" > /dev/null; then
     # TODO PORT
     # apt-mark hold fbthrift-compiler || true
     # apt-mark hold python-fbthrift || true
+
+    # pycassa - depends fbthrift
+    # 'apt-get install python-pycassa' will remove python-fbthrift and install python-thrift
+    wget -nc https://launchpad.net/~reddit/+archive/ubuntu/ppa/+files/python-pycassa_1.11.0-1~trusty1reddit3_all.deb
+    apt-get install $APTITUDE_OPTIONS ./python-pycassa_1.11.0-1~trusty1reddit3_all.deb
     popd
 fi
 
