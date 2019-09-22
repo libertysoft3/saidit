@@ -120,14 +120,12 @@ python-concurrent.futures
 PACKAGES
 
 # reddit
-# WARNING: python-thrift maybe needs to be the
-# facebook version. python-pycassa installs it. 
 cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
 cython
 gperf
 python-psycopg2
 python-contextlib2
-python-pycassa
-python-thrift
+python-kazoo
+python-pil
 PACKAGES
 

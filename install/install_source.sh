@@ -119,10 +119,16 @@ popd
 # WARNING: installing python-pycassa doesn't see this and installs
 # python-thrift anyway
 # WARNING: some syntax errors are shown on the 'setup.py install' step. TAsyncioServer.py, asyncio.py, inspect.py.
-# pushd fbthrift/thrift/lib/py
-# sudo -u $REDDIT_USER python setup.py build
-# python setup.py install
-# popd
+pushd fbthrift/thrift/lib/py
+
+# hack to make other python packages think this is
+# python-thrift 0.9.3. Apparently facebook never bumped
+# the python-thrift version up from 0.1.
+sed -i "s/version = '0.1',/version = '0.9.3',/g" setup.py
+
+sudo -u $REDDIT_USER python setup.py build
+python setup.py install
+popd
 
 # baseplate
 # verify halfway working with: $ baseplate-healthcheck
