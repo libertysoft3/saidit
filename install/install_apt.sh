@@ -25,11 +25,6 @@
 RUNDIR=$(dirname $0)
 source $RUNDIR/install.cfg
 
-# run an aptitude update to make sure python-software-properties
-# dependencies are found
-apt-get update
-apt-get -y upgrade
-
 # add the datastax cassandra repos (NB: this is required for
 # install_cassandra.sh to work correctly, and the non-existence of this
 # file will trigger install_cassandra.sh to rerun this script)
@@ -39,86 +34,100 @@ echo deb http://debian.datastax.com/community stable main | \
 wget -qO- -L https://debian.datastax.com/debian/repo_key | \
     sudo apt-key add -
 
+# facebook mcrouter repo
+echo deb https://facebook.github.io/mcrouter/debrepo/bionic bionic contrib | \
+    sudo tee $MCROUTER_SOURCES_LIST
+
+wget -qO- -L https://facebook.github.io/mcrouter/debrepo/bionic/PUBLIC.KEY | \
+    sudo apt-key add -
+
+# run an aptitude update to make sure python-software-properties
+# dependencies are found
+apt-get update
+apt-get -y upgrade
+
 # add the reddit ppa for some custom packages
-apt-get install $APTITUDE_OPTIONS python-software-properties
-apt-add-repository -y ppa:reddit/ppa
+# apt-get install $APTITUDE_OPTIONS python-software-properties
+# apt-add-repository -y ppa:reddit/ppa
 
 # pin the ppa -- packages present in the ppa will take precedence over
 # ones in other repositories (unless further pinning is done)
-cat <<HERE > /etc/apt/preferences.d/reddit
-Package: *
-Pin: release o=LP-PPA-reddit
-Pin-Priority: 600
-HERE
+# cat <<HERE > /etc/apt/preferences.d/reddit
+# Package: *
+# Pin: release o=LP-PPA-reddit
+# Pin-Priority: 600
+# HERE
 
 # grab the new ppas' package listings
-apt-get update
+# apt-get update
 
 # travis gives us a stock libmemcached.  We have to remove that
-apt-get remove $APTITUDE_OPTIONS $(dpkg-query  -W -f='${binary:Package}\n' | grep libmemcached | tr '\n' ' ')
-apt-get autoremove $APTITUDE_OPTIONS
+# apt-get remove $APTITUDE_OPTIONS $(dpkg-query  -W -f='${binary:Package}\n' | grep libmemcached | tr '\n' ' ')
+# apt-get autoremove $APTITUDE_OPTIONS
 
 # install prerequisites
 cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
-netcat-openbsd
-git-core
-
+libssl1.0-dev
+build-essential
+python
 python-dev
 python-setuptools
-python-routes
-python-pylons
-python-boto
-python-tz
-python-crypto
-python-babel
-python-numpy
-python-dateutil
-cython
-python-sqlalchemy
-python-beautifulsoup
-python-chardet
-python-psycopg2
-python-pycassa
-python-imaging
-python-pycaptcha
-python-pylibmc=1.2.2-1~trusty5
-python-amqplib
-python-bcrypt
+cmake
+flex
+libmstch-dev
+libzstd-dev
+zlib1g-dev
+libgflags2.2
+libgflags-dev
+libgoogle-glog-dev
+libsnappy-dev
 python-snappy
-gperf
-
-python-l2cs
-python-lxml
-python-kazoo
-python-stripe
-python-tinycss2
-python-unidecode
-python-mock
-python-yaml
-python-httpagentparser
-
-python-baseplate
-
-python-flask
-geoip-bin
-geoip-database
-python-geoip
-
-nodejs
-node-less
-node-uglify
+libsodium-dev
+libdouble-conversion-dev
+libevent-dev
+libtool
+ragel
 gettext
-make
-optipng
-jpegoptim
-
-libpcre3-dev
-
-python-gevent
-python-gevent-websocket
-python-haigha
-
-python-redis
-python-pyramid
-python-raven
 PACKAGES
+
+# bison
+cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
+autoconf
+autopoint
+texinfo
+help2man
+PACKAGES
+
+# folly
+cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
+libboost-dev
+libboost-filesystem-dev
+libboost-thread-dev
+libboost-context-dev
+libboost-program-options-dev
+libboost-regex-dev
+libboost-python-dev
+PACKAGES
+
+# baseplate
+cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
+python-jwt
+python-posix-ipc
+python-gevent
+python-future
+python-typing
+python-concurrent.futures
+PACKAGES
+
+# reddit
+# WARNING: python-thrift maybe needs to be the
+# facebook version. python-pycassa installs it. 
+cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
+cython
+gperf
+python-psycopg2
+python-contextlib2
+python-pycassa
+python-thrift
+PACKAGES
+

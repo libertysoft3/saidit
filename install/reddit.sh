@@ -60,12 +60,12 @@ END
 fi
 
 # seriously! these checks are here for a reason. the packages from the
-# reddit ppa aren't built for anything but trusty (14.04) right now, so
+# reddit ppa aren't built for anything but ubuntu 18.04 right now, so
 # if you try and use this install script on another release you're gonna
 # have a bad time.
 source /etc/lsb-release
-if [ "$DISTRIB_ID" != "Ubuntu" -o "$DISTRIB_RELEASE" != "14.04" ]; then
-    echo "ERROR: Only Ubuntu 14.04 is supported."
+if [ "$DISTRIB_ID" != "Ubuntu" -o "$DISTRIB_RELEASE" != "18.04" ]; then
+    echo "ERROR: Only Ubuntu 18.04 is supported."
     exit 1
 fi
 
@@ -78,29 +78,33 @@ if [[ "2000000" -gt $(awk '/MemTotal/{print $2}' /proc/meminfo) ]]; then
     fi
 fi
 
-REDDIT_AVAILABLE_PLUGINS=""
-for plugin in $REDDIT_PLUGINS; do
-    if [ -d $REDDIT_SRC/$plugin ]; then
-        if [[ -z "$REDDIT_PLUGINS" ]]; then
-            REDDIT_AVAILABLE_PLUGINS+="$plugin"
-        else
-            REDDIT_AVAILABLE_PLUGINS+=" $plugin"
-        fi
-        echo "plugin $plugin found"
-    else
-        echo "plugin $plugin not found"
-    fi
-done
+# REDDIT_AVAILABLE_PLUGINS=""
+# for plugin in $REDDIT_PLUGINS; do
+#     if [ -d $REDDIT_SRC/$plugin ]; then
+#         if [[ -z "$REDDIT_PLUGINS" ]]; then
+#             REDDIT_AVAILABLE_PLUGINS+="$plugin"
+#         else
+#             REDDIT_AVAILABLE_PLUGINS+=" $plugin"
+#         fi
+#         echo "plugin $plugin found"
+#     else
+#         echo "plugin $plugin not found"
+#     fi
+# done
 
 ###############################################################################
 # Install prerequisites
 ###############################################################################
+if [ ! -d $REDDIT_SRC ]; then
+    mkdir -p $REDDIT_SRC
+    chown $REDDIT_USER $REDDIT_SRC
+fi
 
 # install primary packages
 $RUNDIR/install_apt.sh
 
-# install npm packages
-$RUNDIR/install_npm.sh
+# install packages from source
+$RUNDIR/install_source.sh
 
 # install cassandra from datastax
 $RUNDIR/install_cassandra.sh
@@ -114,14 +118,17 @@ $RUNDIR/install_services.sh
 ###############################################################################
 # Install the reddit source repositories
 ###############################################################################
-if [ ! -d $REDDIT_SRC ]; then
-    mkdir -p $REDDIT_SRC
-    chown $REDDIT_USER $REDDIT_SRC
-fi
-
 function copy_upstart {
     if [ -d ${1}/upstart ]; then
         cp ${1}/upstart/* /etc/init/
+    fi
+}
+
+# TODO PORT - check all dl'ed repos for '/upstart' folders, fork and port to systemd
+# equivalent to copy_upstart()
+function install_services {
+    if [ -d ${1}/services ]; then
+        cp ${1}/services/* /etc/systemd/system
     fi
 }
 
@@ -133,18 +140,34 @@ function clone_reddit_repo {
         sudo -u $REDDIT_USER -H git clone $repository_url $destination
     fi
 
-    copy_upstart $destination
+    install_services $destination
+}
+
+function clone_reddit_repo_branch {
+    local destination=$REDDIT_SRC/${1}
+    local repository_url=https://github.com/${2}.git
+
+    if [ ! -d $destination ]; then
+        sudo -u $REDDIT_USER -H git clone -b ${3} $repository_url $destination
+    fi
 }
 
 function clone_reddit_service_repo {
     clone_reddit_repo $1 reddit-archive/reddit-service-$1
 }
 
-clone_reddit_repo reddit libertysoft3/saidit
+function clone_reddit_plugin_repo {
+    clone_reddit_repo $1 reddit-archive/reddit-plugin-$1
+}
+
+clone_reddit_repo_branch reddit libertysoft3/saidit ubuntu18v4
 clone_reddit_repo i18n libertysoft3/reddit-i18n
 clone_reddit_service_repo websockets
 clone_reddit_service_repo activity
 clone_reddit_repo snudown libertysoft3/snudown
+
+# $REDDIT_PLUGINS repos
+clone_reddit_plugin_repo gold
 
 ###############################################################################
 # Configure Services
@@ -165,8 +188,23 @@ $RUNDIR/setup_rabbitmq.sh
 ###############################################################################
 # Install and configure the reddit code
 ###############################################################################
+REDDIT_AVAILABLE_PLUGINS=""
+for plugin in $REDDIT_PLUGINS; do
+    if [ -d $REDDIT_SRC/$plugin ]; then
+        if [[ -z "$REDDIT_PLUGINS" ]]; then
+            REDDIT_AVAILABLE_PLUGINS+="$plugin"
+        else
+            REDDIT_AVAILABLE_PLUGINS+=" $plugin"
+        fi
+        echo "plugin $plugin found"
+    else
+        echo "plugin $plugin not found"
+    fi
+done
+
 function install_reddit_repo {
     pushd $REDDIT_SRC/$1
+    install_services $REDDIT_SRC/$1
     sudo -u $REDDIT_USER python setup.py build
     python setup.py develop --no-deps
     popd
@@ -175,12 +213,15 @@ function install_reddit_repo {
 install_reddit_repo reddit/r2
 install_reddit_repo i18n
 for plugin in $REDDIT_AVAILABLE_PLUGINS; do
-    copy_upstart $REDDIT_SRC/$plugin
+    install_services $REDDIT_SRC/$plugin
     install_reddit_repo $plugin
 done
 install_reddit_repo websockets
 install_reddit_repo activity
 install_reddit_repo snudown
+
+# $REDDIT_PLUGINS repos
+install_reddit_repo gold
 
 # generate binary translation files from source
 sudo -u $REDDIT_USER make -C $REDDIT_SRC/i18n clean all
@@ -323,6 +364,9 @@ mkdir -p /srv/www/pixel
 chown $REDDIT_USER:$REDDIT_GROUP /srv/www/pixel
 cp $REDDIT_SRC/reddit/r2/r2/public/static/pixel.png /srv/www/pixel
 
+if [ ! -d /etc/gunicorn.d ]; then
+    mkdir -p /etc/gunicorn.d
+fi
 if [ ! -f /etc/gunicorn.d/click.conf ]; then
     cat > /etc/gunicorn.d/click.conf <<CLICK
 CONFIG = {
@@ -407,9 +451,9 @@ server {
     ssl_dhparam /etc/nginx/dhparam.pem;
 
     # Support TLSv1 for Android 4.3 (Samsung Galaxy S3) https://www.ssllabs.com/ssltest/viewClient.html?name=Android&version=4.3&key=61
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
     # ciphers from https://cipherli.st legacy / old list
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA128:DHE-RSA-AES128-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA128:ECDHE-RSA-AES128-SHA384:ECDHE-RSA-AES128-SHA128:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA384:AES128-GCM-SHA128:AES128-SHA128:AES128-SHA128:AES128-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
+    # ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA128:DHE-RSA-AES128-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA128:ECDHE-RSA-AES128-SHA384:ECDHE-RSA-AES128-SHA128:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA384:AES128-GCM-SHA128:AES128-SHA128:AES128-SHA128:AES128-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:1m;
     ssl_stapling on;
@@ -613,6 +657,7 @@ CONSUMER_CONFIG_ROOT=$REDDIT_HOME/consumer-count.d
 
 if [ ! -f /etc/default/reddit ]; then
     cat > /etc/default/reddit <<DEFAULT
+export REDDIT_SRC=$REDDIT_SRC
 export REDDIT_ROOT=$REDDIT_SRC/reddit/r2
 export REDDIT_INI=$REDDIT_SRC/reddit/r2/run.ini
 export REDDIT_USER=$REDDIT_USER
@@ -661,18 +706,6 @@ for plugin in $REDDIT_AVAILABLE_PLUGINS; do
 done
 
 ###############################################################################
-# Start everything up
-###############################################################################
-
-# the initial database setup should be done by one process rather than a bunch
-# vying with eachother to get there first
-reddit-run -c 'print "ok done"'
-
-# ok, now start everything else up
-initctl emit reddit-stop
-initctl emit reddit-start
-
-###############################################################################
 # Cron Jobs
 ###############################################################################
 if [ ! -f /etc/cron.d/reddit ]; then
@@ -709,6 +742,21 @@ PGPASSWORD=password
 */5 * * * * root /sbin/start --quiet reddit-job-solr_links
 CRON
 fi
+
+###############################################################################
+# Start everything up
+###############################################################################
+
+# the initial database setup should be done by one process rather than a bunch
+# vying with eachother to get there first
+reddit-run -c 'print "ok done"'
+
+# ok, now start everything else up
+# initctl emit reddit-stop
+# initctl emit reddit-start
+systemctl daemon-reload
+systemctl start reddit
+systemctl enable reddit
 
 ###############################################################################
 # Finished with install script

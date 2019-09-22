@@ -105,8 +105,9 @@ def _load_spritable_images(css_filename):
 
             image_filename, should_stretch, pixel_ratio = _extract_css_info(m)
             image = Image.open(os.path.join(css_location, image_filename))
-            image_hash = hashlib.md5(image.convert("RGBA").tostring()).hexdigest()
-
+            # ubuntu 18
+            # image_hash = hashlib.md5(image.convert("RGBA").tostring()).hexdigest()
+            image_hash = hashlib.md5(image.convert("RGBA").tobytes()).hexdigest()
             if image_hash not in images:
                 images[image_hash] = SpritableImage(image, should_stretch)
             else:

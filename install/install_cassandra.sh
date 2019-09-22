@@ -30,6 +30,12 @@ if [ ! -e $CASSANDRA_SOURCES_LIST ]; then
     $RUNDIR/install_apt.sh
 fi
 
+# cassandra 1.2.19 dependency
+pushd $REDDIT_SRC
+sudo -u $REDDIT_USER wget -nc http://archive.ubuntu.com/ubuntu/pool/universe/p/python-support/python-support_1.0.15_all.deb
+apt-get install $APTITUDE_OPTIONS ./python-support_1.0.15_all.deb
+popd
+
 # install cassandra
 sudo apt-get install $APTITUDE_OPTIONS cassandra=1.2.19
 
@@ -37,7 +43,7 @@ sudo apt-get install $APTITUDE_OPTIONS cassandra=1.2.19
 apt-mark hold cassandra || true
 
 # cassandra doesn't auto-start after install
-sudo service cassandra start
+sudo systemctl start cassandra
 
 # check each port for connectivity
 echo "Waiting for cassandra to be available..."

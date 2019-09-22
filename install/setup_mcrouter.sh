@@ -24,6 +24,10 @@
 ###############################################################################
 # Configure mcrouter
 ###############################################################################
+# load configuration
+RUNDIR=$(dirname $0)
+source $RUNDIR/install.cfg
+
 if [ ! -d /etc/mcrouter ]; then
     mkdir -p /etc/mcrouter
 fi
@@ -95,14 +99,28 @@ if [ ! -f /etc/mcrouter/global.conf ]; then
 MCROUTER
 fi
 
-# this file is sourced by the default mcrouter upstart config, see
-# /etc/init/mcrouter.conf
-cat > /etc/default/mcrouter <<MCROUTER_DEFAULT
+# this file is sourced by the default mcrouter service, see
+# /etc/systemd/system/mcrouter.conf
+if [ ! -f /etc/default/mcrouter ]; then
+  cat > /etc/default/mcrouter <<MCROUTER_DEFAULT
 MCROUTER_FLAGS="-f /etc/mcrouter/global.conf -L /var/log/mcrouter/mcrouter.log -p 5050 -R /././ --stats-root=/var/mcrouter/stats"
 MCROUTER_DEFAULT
+fi
 
+# add user 'mcrouter' for the service
+if ! id -u mcrouter > /dev/null 2>&1; then
+  useradd -r -s /sbin/nologin mcrouter
+fi
+
+# install service
+pushd $REDDIT_SRC/reddit/systemd
+cp mcrouter.service /etc/systemd/system
+systemctl daemon-reload
+systemctl enable mcrouter
+popd
+
+# TODO PORT: make mcrouter start when main reddit service starts
 # set an upstart override so mcrouter starts when reddit starts
-echo "start on networking or reddit-start" > /etc/init/mcrouter.override
+# echo "start on networking or reddit-start" > /etc/init/mcrouter.override
 
-# restart mcrouter to read the updated config
-service mcrouter restart
+sudo systemctl start mcrouter

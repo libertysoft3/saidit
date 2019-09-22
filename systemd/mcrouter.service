@@ -1,0 +1,16 @@
+[Unit]
+Description=mcrouter proxy
+After=network.target remote-fs.target nss-lookup.target
+# reddit.service
+# PartOf=reddit.service
+
+[Service]
+Type=simple
+User=mcrouter
+Group=mcrouter
+EnvironmentFile=/etc/default/mcrouter
+ExecStart=/usr/bin/mcrouter $MCROUTER_FLAGS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
