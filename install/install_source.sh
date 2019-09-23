@@ -5,10 +5,10 @@
 RUNDIR=$(dirname $0)
 source $RUNDIR/install.cfg
 
-
 pushd $REDDIT_SRC
 
 # bison
+# need 3.1+ rather than packaged 3.0.4
 if [ ! -d bison ]; then
     sudo -u $REDDIT_USER git clone https://github.com/akimd/bison.git
 fi
@@ -22,7 +22,7 @@ make install
 popd
 
 # folly
-# why fpic flag: https://stackoverflow.com/questions/13812185/how-to-recompile-with-fpic/13812368#13812368
+# why -fPIC flag: https://stackoverflow.com/questions/13812185/how-to-recompile-with-fpic/13812368#13812368
 if [ ! -d folly ]; then
     sudo -u $REDDIT_USER git clone https://github.com/facebook/folly.git
 fi
@@ -53,6 +53,7 @@ popd
 popd
 
 # fmt
+# had problems with version 6.0.0
 if [ ! -d fmt ]; then
     sudo -u $REDDIT_USER git clone https://github.com/fmtlib/fmt
 fi
@@ -114,17 +115,20 @@ make install
 popd
 popd
 
-# python-(fb)thrift
-# TODO PORT
-# WARNING: installing python-pycassa doesn't see this and installs
-# python-thrift anyway
-# WARNING: some syntax errors are shown on the 'setup.py install' step. TAsyncioServer.py, asyncio.py, inspect.py.
+# python-thrift
+# WARNING: some syntax errors are shown on the 'setup.py install' step, 
+# for TAsyncioServer.py, asyncio.py, and inspect.py.
 pushd fbthrift/thrift/lib/py
 
-# hack to make other python packages think this is
-# python-thrift 0.9.3. Apparently facebook never bumped
-# the python-thrift version up from 0.1.
-sed -i "s/version = '0.1',/version = '0.9.3',/g" setup.py
+# WARNING: nasty hack, bump the python thrift module version 
+# up from 0.1 to 0.9.3 for pycassa compatibility.
+# python-pycassa installs python-thrift
+# and easy install pycassa installs thrift
+# 0.9.3. Apparently facebook 
+# never bumped the python-thrift version up from 0.1.
+# Alternatives: try building pycassa from source after
+# fbthrift's python-thrift is built and installed.
+sudo -u $REDDIT_USER sed -i "s/version = '0.1',/version = '0.9.3',/g" setup.py
 
 sudo -u $REDDIT_USER python setup.py build
 python setup.py install
@@ -139,6 +143,17 @@ pushd baseplate.py
 sudo -u $REDDIT_USER git checkout v0.28.7
 sudo -u $REDDIT_USER python setup.py build
 python setup.py install
+
+# pycaptcha
+# resolve "ImportError: No module named Image" in
+# PyCAPTCHA-0.4-py2.7.egg
+if [ ! -d PyCAPTCHA ]; then
+    sudo -u $REDDIT_USER git clone https://github.com/yinpeng/PyCAPTCHA
+fi
+pushd PyCAPTCHA
+sudo -u $REDDIT_USER python setup.py build
+python setup.py install
+popd
 
 # done, pop pushd $REDDIT_SRC
 popd

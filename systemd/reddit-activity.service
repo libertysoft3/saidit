@@ -1,0 +1,14 @@
+[Unit]
+Description=reddit activity service
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=simple
+User=reddit
+Group=reddit
+EnvironmentFile=/etc/default/reddit
+ExecStart=/usr/local/bin/baseplate-serve --bind localhost:9002 $REDDIT_SRC/activity/example.ini
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

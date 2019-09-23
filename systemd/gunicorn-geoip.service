@@ -1,0 +1,14 @@
+[Unit]
+Description=reddit geoip gunicorn daemon
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=simple
+User=reddit
+Group=reddit
+WorkingDirectory=/home/reddit/src/reddit/scripts
+ExecStart=/usr/bin/gunicorn --bind=127.0.0.1:5000 --workers=1 --limit-request-line=8190 geoip_service:application
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=reddit click gunicorn daemon
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=simple
+User=reddit
+Group=reddit
+WorkingDirectory=/home/reddit/src/reddit/scripts
+ExecStart=/usr/bin/gunicorn --bind=unix:/var/opt/reddit/click.sock --workers=1 tracker:application
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

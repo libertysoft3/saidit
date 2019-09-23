@@ -117,6 +117,7 @@ python-gevent
 python-future
 python-typing
 python-concurrent.futures
+python-redis
 PACKAGES
 
 # reddit
@@ -127,5 +128,6 @@ python-psycopg2
 python-contextlib2
 python-kazoo
 python-pil
+python-dateutil
 PACKAGES
 

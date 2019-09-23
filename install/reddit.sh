@@ -139,8 +139,6 @@ function clone_reddit_repo {
     if [ ! -d $destination ]; then
         sudo -u $REDDIT_USER -H git clone $repository_url $destination
     fi
-
-    install_services $destination
 }
 
 function clone_reddit_repo_branch {
@@ -206,9 +204,18 @@ function install_reddit_repo {
     pushd $REDDIT_SRC/$1
     install_services $REDDIT_SRC/$1
     sudo -u $REDDIT_USER python setup.py build
-    python setup.py develop --no-deps
+    # python setup.py develop --no-deps
+    python setup.py develop
     popd
 }
+
+# TODO HACKS!!
+# now that baseplate is installed, remove python-cryptography
+# which was installed due to baseplate wanting 'python-concurrent.futures'.
+# we want the newer easy_install version cryptography-2.7, because:
+# cryptography>=2.3 is required by set(['pyOpenSSL']).
+# alternative: maybe python-cryptoography-dev exists or something
+apt-get remove $APTITUDE_OPTIONS python-cryptography
 
 install_reddit_repo reddit/r2
 install_reddit_repo i18n
@@ -329,19 +336,22 @@ helper-script /usr/local/bin/reddit-shell <<REDDITSHELL
 exec paster --plugin=r2 shell $REDDIT_SRC/reddit/r2/run.ini
 REDDITSHELL
 
+# TODO PORT
 helper-script /usr/local/bin/reddit-start <<REDDITSTART
 #!/bin/bash
-initctl emit reddit-start
+# initctl emit reddit-start
 REDDITSTART
 
+# TODO PORT
 helper-script /usr/local/bin/reddit-stop <<REDDITSTOP
 #!/bin/bash
-initctl emit reddit-stop
+# initctl emit reddit-stop
 REDDITSTOP
 
+# TODO PORT
 helper-script /usr/local/bin/reddit-restart <<REDDITRESTART
 #!/bin/bash
-initctl emit reddit-restart TARGET=${1:-all}
+# initctl emit reddit-restart TARGET=${1:-all}
 REDDITRESTART
 
 helper-script /usr/local/bin/reddit-flush <<REDDITFLUSH
@@ -364,26 +374,37 @@ mkdir -p /srv/www/pixel
 chown $REDDIT_USER:$REDDIT_GROUP /srv/www/pixel
 cp $REDDIT_SRC/reddit/r2/r2/public/static/pixel.png /srv/www/pixel
 
-if [ ! -d /etc/gunicorn.d ]; then
-    mkdir -p /etc/gunicorn.d
-fi
-if [ ! -f /etc/gunicorn.d/click.conf ]; then
-    cat > /etc/gunicorn.d/click.conf <<CLICK
-CONFIG = {
-    "mode": "wsgi",
-    "working_dir": "$REDDIT_SRC/reddit/scripts",
-    "user": "$REDDIT_USER",
-    "group": "$REDDIT_USER",
-    "args": (
-        "--bind=unix:/var/opt/reddit/click.sock",
-        "--workers=1",
-        "tracker:application",
-    ),
-}
-CLICK
-fi
+# if [ ! -d /etc/gunicorn.d ]; then
+#     mkdir -p /etc/gunicorn.d
+# fi
+# if [ ! -f /etc/gunicorn.d/click.conf ]; then
+#     cat > /etc/gunicorn.d/click.conf <<CLICK
+# CONFIG = {
+#     "mode": "wsgi",
+#     "working_dir": "$REDDIT_SRC/reddit/scripts",
+#     "user": "$REDDIT_USER",
+#     "group": "$REDDIT_USER",
+#     "args": (
+#         "--bind=unix:/var/opt/reddit/click.sock",
+#         "--workers=1",
+#         "tracker:application",
+#     ),
+# }
+# CLICK
+# fi
 
-service gunicorn start
+# install Flask click tracker service
+pushd $REDDIT_SRC/reddit/systemd
+cp gunicorn-click.service /etc/systemd/system
+systemctl daemon-reload
+systemctl enable gunicorn-click
+popd
+
+# link the ini file for the Flask click tracker
+ln -nsf $REDDIT_SRC/reddit/r2/development.ini $REDDIT_SRC/reddit/scripts/production.ini
+
+# start the Flask click tracker
+systemctl start gunicorn-click
 
 ###############################################################################
 # nginx
@@ -491,9 +512,6 @@ ln -nsf /etc/nginx/sites-available/reddit-ssl /etc/nginx/sites-enabled/
 # make the pixel log directory
 mkdir -p /var/log/nginx/traffic
 
-# link the ini file for the Flask click tracker
-ln -nsf $REDDIT_SRC/reddit/r2/development.ini $REDDIT_SRC/reddit/scripts/production.ini
-
 service nginx restart
 
 ###############################################################################
@@ -582,73 +600,97 @@ backend pixel
 HAPROXY
 
 # this will start it even if currently stopped
-service haproxy restart
+systemctl restart haproxy
 
 ###############################################################################
 # websocket service
 ###############################################################################
 
-if [ ! -f /etc/init/reddit-websockets.conf ]; then
-    cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
-description "websockets service"
+# if [ ! -f /etc/init/reddit-websockets.conf ]; then
+#     cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
+# description "websockets service"
 
-stop on runlevel [!2345] or reddit-restart all or reddit-restart websockets
-start on runlevel [2345] or reddit-restart all or reddit-restart websockets
+# stop on runlevel [!2345] or reddit-restart all or reddit-restart websockets
+# start on runlevel [2345] or reddit-restart all or reddit-restart websockets
 
-respawn
-respawn limit 10 5
-kill timeout 15
+# respawn
+# respawn limit 10 5
+# kill timeout 15
 
-limit nofile 65535 65535
+# limit nofile 65535 65535
 
-exec baseplate-serve2 --bind localhost:9001 $REDDIT_SRC/websockets/example.ini
-UPSTART_WEBSOCKETS
-fi
+# exec baseplate-serve2 --bind localhost:9001 $REDDIT_SRC/websockets/example.ini
+# UPSTART_WEBSOCKETS
+# fi
 
-service reddit-websockets restart
+pushd $REDDIT_SRC/reddit/systemd
+cp reddit-websockets.service /etc/systemd/system
+systemctl daemon-reload
+systemctl enable reddit-websockets
+popd
+
+systemctl restart reddit-websockets
 
 ###############################################################################
 # activity service
 ###############################################################################
 
-if [ ! -f /etc/init/reddit-activity.conf ]; then
-    cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
-description "activity service"
+# if [ ! -f /etc/init/reddit-activity.conf ]; then
+#     cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
+# description "activity service"
 
-stop on runlevel [!2345] or reddit-restart all or reddit-restart activity
-start on runlevel [2345] or reddit-restart all or reddit-restart activity
+# stop on runlevel [!2345] or reddit-restart all or reddit-restart activity
+# start on runlevel [2345] or reddit-restart all or reddit-restart activity
 
-respawn
-respawn limit 10 5
-kill timeout 15
+# respawn
+# respawn limit 10 5
+# kill timeout 15
 
-exec baseplate-serve2 --bind localhost:9002 $REDDIT_SRC/activity/example.ini
-UPSTART_ACTIVITY
-fi
+# exec baseplate-serve2 --bind localhost:9002 $REDDIT_SRC/activity/example.ini
+# UPSTART_ACTIVITY
+# fi
 
-service reddit-activity restart
+# service reddit-activity restart
+
+pushd $REDDIT_SRC/reddit/systemd
+cp reddit-activity.service /etc/systemd/system
+systemctl daemon-reload
+systemctl enable reddit-activity
+popd
+
+systemctl restart reddit-activity
 
 ###############################################################################
 # geoip service
 ###############################################################################
-if [ ! -f /etc/gunicorn.d/geoip.conf ]; then
-    cat > /etc/gunicorn.d/geoip.conf <<GEOIP
-CONFIG = {
-    "mode": "wsgi",
-    "working_dir": "$REDDIT_SRC/reddit/scripts",
-    "user": "$REDDIT_USER",
-    "group": "$REDDIT_USER",
-    "args": (
-        "--bind=127.0.0.1:5000",
-        "--workers=1",
-         "--limit-request-line=8190",
-         "geoip_service:application",
-    ),
-}
-GEOIP
-fi
+# TODO PORT - upstart/reddit-job-update_geoip.conf restarts this service, test
 
-service gunicorn start
+# if [ ! -f /etc/gunicorn.d/geoip.conf ]; then
+#     cat > /etc/gunicorn.d/geoip.conf <<GEOIP
+# CONFIG = {
+#     "mode": "wsgi",
+#     "working_dir": "$REDDIT_SRC/reddit/scripts",
+#     "user": "$REDDIT_USER",
+#     "group": "$REDDIT_USER",
+#     "args": (
+#         "--bind=127.0.0.1:5000",
+#         "--workers=1",
+#          "--limit-request-line=8190",
+#          "geoip_service:application",
+#     ),
+# }
+# GEOIP
+# fi
+
+# install Flask geoip service
+pushd $REDDIT_SRC/reddit/systemd
+cp gunicorn-geoip.service /etc/systemd/system
+systemctl daemon-reload
+systemctl enable gunicorn-geoip
+popd
+
+# start the Flask geoip service
+systemctl start gunicorn-geoip
 
 ###############################################################################
 # Job Environment
@@ -755,8 +797,9 @@ reddit-run -c 'print "ok done"'
 # initctl emit reddit-stop
 # initctl emit reddit-start
 systemctl daemon-reload
-systemctl start reddit
-systemctl enable reddit
+# TODO PORT
+# systemctl start reddit
+# systemctl enable reddit
 
 ###############################################################################
 # Finished with install script
