@@ -195,8 +195,11 @@ def _clean_url(url):
     url = ''.join(urllib.quote(c) if ord(c) >= 127 else c for c in url)
     return url
 
-
+# TODO: add configurable proxy server support, don't expose server ip
 def _initialize_request(url, referer, gzip=False):
+    if g.disable_remote_fetch:
+        return
+
     url = _clean_url(url)
 
     if not url.startswith(("http://", "https://")):
@@ -651,6 +654,9 @@ class MediaEmbed(object):
 class Scraper(object):
     @classmethod
     def for_url(cls, url, autoplay=False, maxwidth=600, use_youtube_scraper=False):
+        if g.disable_remote_fetch:
+            return _ThumbnailOnlyScraper(url)
+
         scraper = hooks.get_hook("scraper.factory").call_until_return(url=url)
         if scraper:
             return scraper

@@ -42,6 +42,8 @@ MAX_IPS_PER_GROUP = 500
 GEOIP_CACHE_TIME = datetime.timedelta(days=7).total_seconds()
 
 def _location_by_ips(ips):
+    if g.disable_geoip_service:
+        return {}
     if not hasattr(g, 'geoip_location'):
         g.log.warning("g.geoip_location not set. skipping GeoIP lookup.")
         return {}
@@ -67,6 +69,9 @@ def _location_by_ips(ips):
 
 
 def _organization_by_ips(ips):
+    if g.disable_geoip_service:
+        return {}
+
     if not hasattr(g, 'geoip_location'):
         g.log.warning("g.geoip_location not set. skipping GeoIP lookup.")
         return {}

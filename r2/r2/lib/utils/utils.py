@@ -253,6 +253,9 @@ def path_component(s):
     return (res and res[0]) or s
 
 def get_title(url):
+    if g.disable_remote_fetch:
+        return None
+
     """Fetch the contents of url and try to extract the page's title."""
     if not url or not url.startswith(('http://', 'https://')):
         return None

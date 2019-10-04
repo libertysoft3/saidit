@@ -266,6 +266,8 @@ class Globals(object):
             'RL_SITEWIDE_ENABLED',
             'RL_OAUTH_SITEWIDE_ENABLED',
             'enable_loggedout_experiments',
+            'disable_geoip_service',
+            'disable_remote_fetch',
         ],
 
         ConfigValue.tuple: [
