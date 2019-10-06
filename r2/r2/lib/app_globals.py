@@ -271,6 +271,7 @@ class Globals(object):
             'disable_geoip_service',
             'disable_remote_fetch',
             'disable_newsletter',
+            'remote_fetch_proxy_enabled',
         ],
 
         ConfigValue.tuple: [
@@ -323,6 +324,7 @@ class Globals(object):
             'events_collector_url',
             'events_collector_test_url',
             'search_provider',
+            'remote_fetch_proxy_url',
         ],
 
         ConfigValue.choice(ONE=CL_ONE, QUORUM=CL_QUORUM): [

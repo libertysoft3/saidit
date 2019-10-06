@@ -262,6 +262,9 @@ def get_title(url):
 
     try:
         req = Request(url)
+
+        if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+            os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
         if g.useragent:
             req.add_header('User-Agent', g.useragent)
         opener = urlopen(req, timeout=15)
@@ -284,6 +287,9 @@ def get_title(url):
             if not title:
                 data += reader.read(10000240)
                 title = extract_title(data)
+
+        if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+            os.environ["HTTPS_PROXY"] = ""
 
         return title
 

@@ -195,7 +195,6 @@ def _clean_url(url):
     url = ''.join(urllib.quote(c) if ord(c) >= 127 else c for c in url)
     return url
 
-# TODO: add configurable proxy server support, don't expose server ip
 def _initialize_request(url, referer, gzip=False):
     if g.disable_remote_fetch:
         return
@@ -219,6 +218,10 @@ def _fetch_url(url, referer=None):
     request = _initialize_request(url, referer=referer, gzip=True)
     if not request:
         return None, None
+
+    if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+        os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
+
     response = urllib2.urlopen(request)
     response_data = response.read()
     content_encoding = response.info().get("Content-Encoding")
@@ -226,7 +229,12 @@ def _fetch_url(url, referer=None):
         buf = cStringIO.StringIO(response_data)
         f = gzip.GzipFile(fileobj=buf)
         response_data = f.read()
-    return response.headers.get("Content-Type"), response_data
+    content_type = response.headers.get("Content-Type")
+
+    if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+            os.environ["HTTPS_PROXY"] = ""
+
+    return content_type, response_data
 
 
 @memoize('media.fetch_size', time=3600)
@@ -240,6 +248,9 @@ def _fetch_image_size(url, referer):
     parser = ImageFile.Parser()
     response = None
     try:
+        if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+            os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
+
         response = urllib2.urlopen(request)
 
         while True:
@@ -249,7 +260,13 @@ def _fetch_image_size(url, referer):
 
             parser.feed(chunk)
             if parser.image:
+                if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+                    os.environ["HTTPS_PROXY"] = ""
                 return parser.image.size
+
+        if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+            os.environ["HTTPS_PROXY"] = ""
+
     except urllib2.URLError:
         return None
     finally:
