@@ -109,9 +109,7 @@
         </%call>
       %endif
       %if register and not g.disable_captcha:
-        <div class="spacer">
-          ${thing.captcha}
-        </div>
+        ${thing.captcha}
       %endif
       <div class="c-checkbox">
         <input type="checkbox" name="rem" id="rem_${op}" tabindex="${tabindex}">
