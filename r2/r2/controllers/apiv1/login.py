@@ -34,6 +34,7 @@ from r2.lib.validator import (
     VSigned,
     VThrottledLogin,
     VUname,
+    VCaptcha,
 )
 
 
@@ -46,6 +47,7 @@ class APIv1LoginController(RedditController):
 
     @csrf_exempt
     @json_validate(
+        VCaptcha(),
         VRatelimit(rate_ip=True, prefix="rate_register_"),
         signature=VSigned(),
         name=VUname(['user']),

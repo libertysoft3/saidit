@@ -652,6 +652,7 @@ class ApiController(RedditController):
     @csrf_exempt
     @cross_domain(allow_credentials=True)
     @validatedForm(
+        VCaptcha(),
         VRatelimit(rate_ip=True, prefix="rate_register_"),
         name=VUname(['user']),
         email=ValidEmail("email"),

@@ -1743,7 +1743,10 @@ class FormsController(RedditController):
         if (c.user_is_loggedin and
             not request.environ.get('extension') == 'embed'):
             return self.redirect(dest)
-        return RegisterPage(dest=dest).render()
+
+        captcha = Captcha() if c.user.needs_captcha() else None
+
+        return RegisterPage(dest=dest, captcha=captcha).render()
 
     @validate(VUser(),
               VModhash(),

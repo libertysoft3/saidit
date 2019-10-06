@@ -30,7 +30,6 @@
  %>
 <%namespace file="captcha.html" import="captchagen"/>
 <%namespace file="utils.html" import="error_field, img_link, form_group, text_with_links"/>
-
 ## default content 
 %if c.user_is_loggedin:
   <p class="error">${_("You are logged in. Go use the site!")}</p>
@@ -108,6 +107,9 @@
                  data-validate-on="change blur">
         </%call>
       %endif
+      %if register and not g.disable_captcha:
+        ${thing.captcha}
+      %endif
       <div class="c-checkbox">
         <input type="checkbox" name="rem" id="rem_${op}" tabindex="${tabindex}">
         <label for="rem_${op}">
@@ -117,8 +119,7 @@
           <a href="/password" class="c-pull-right">${_('reset password')}</a>
         %endif
       </div>
-      %if false:
-      ## %if register:
+      %if register and not g.disable_newsletter:
       <div class="c-checkbox">
         <input type="checkbox" name="newsletter_subscribe" id="newsletter_subscribe" tabindex="${tabindex}"
           data-validate-url="/api/check_email.json"
@@ -126,7 +127,7 @@
           data-validate-with="email"
         >
         <label for="newsletter_subscribe">
-          ${_('get the best of reddit emailed to you once a week.')}&#32;
+          ${_('get the best of %s emailed to you once a week.') % g.brander_site}&#32;
           <a href="/newsletter" target="_blank">${_('learn more')}</a>
         </label>
       </div>

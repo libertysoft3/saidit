@@ -31,17 +31,17 @@ from Captcha.Visual import Text, Backgrounds, Distortions, ImageCaptcha
 
 
 IDEN_LENGTH = 32
-SOL_LENGTH = 6
 
 class RandCaptcha(ImageCaptcha):
     defaultSize = (120, 50)
-    fontFactory = Text.FontFactory(18, "vera/VeraBd.ttf")
+    fontFactory = Text.FontFactory(g.captcha_font_size, "vera/VeraBd.ttf")
 
     def getLayers(self, solution="blah"):
         self.addSolution(solution)
         return ((Backgrounds.Grid(size=8, foreground="white"),
                  Distortions.SineWarp(amplitudeRange=(5,9))),
                 (Text.TextLayer(solution,
+                               alignment = (0.5,0.5),
                                textColor = 'white',
                                fontFactory = self.fontFactory),
                  Distortions.SineWarp()))
@@ -50,7 +50,7 @@ def get_iden():
     return randomIdentifier(length=IDEN_LENGTH)
 
 def make_solution():
-    return randomIdentifier(alphabet=string.ascii_letters, length = SOL_LENGTH).upper()
+    return randomIdentifier(alphabet=string.ascii_letters, length = g.captcha_sol_length).upper()
 
 def get_image(iden):
     key = "captcha:%s" % iden
@@ -67,7 +67,7 @@ def valid_solution(iden, solution):
     if (not iden or
             not solution or
             len(iden) != IDEN_LENGTH or
-            len(solution) != SOL_LENGTH or
+            len(solution) != g.captcha_sol_length or
             solution.upper() != g.gencache.get(key)):
         # the guess was wrong so make a new solution for the next attempt--the
         # client will need to refresh the image before guessing again

@@ -46,9 +46,9 @@ ${rounded_captcha()}
 </%def>
 
 <%def name="rounded_captcha()">
-<%utils:round_field title="${_('are you human?')}" description="${_('(sorry)')}" css_class="captcha">
+<%utils:round_field title="${_('are you human?')}" description="" css_class="captcha c-form-group">
     ${captcha_basics()}
-    <input name="captcha" class="captcha" type="text" />
+    <input name="captcha" class="captcha c-form-control" type="text" placeholder="${_('type the letters shown above')}" />
     ${error_field("BAD_CAPTCHA", "captcha")}
   </%utils:round_field>
 </%def>

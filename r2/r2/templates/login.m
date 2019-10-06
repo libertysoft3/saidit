@@ -108,6 +108,11 @@
                  data-validate-on="change blur">
         </%call>
       %endif
+      %if register and not g.disable_captcha:
+        <div class="spacer">
+          ${thing.captcha}
+        </div>
+      %endif
       <div class="c-checkbox">
         <input type="checkbox" name="rem" id="rem_${op}" tabindex="${tabindex}">
         <label for="rem_${op}">
@@ -117,8 +122,7 @@
           <a href="/password" class="c-pull-right">${_('reset password')}</a>
         %endif
       </div>
-      %if false:
-      ## %if register:
+      %if register and not g.disable_newsletter:
       <div class="c-checkbox">
         <input type="checkbox" name="newsletter_subscribe" id="newsletter_subscribe" tabindex="${tabindex}"
           data-validate-url="/api/check_email.json"
@@ -126,7 +130,7 @@
           data-validate-with="email"
         >
         <label for="newsletter_subscribe">
-          ${_('get the best of reddit emailed to you once a week.')}&#32;
+          ${_('get the best of %s emailed to you once a week.') % g.brander_site}&#32;
           <a href="/newsletter" target="_blank">${_('learn more')}</a>
         </label>
       </div>

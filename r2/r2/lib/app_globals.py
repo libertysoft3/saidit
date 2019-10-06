@@ -225,6 +225,8 @@ class Globals(object):
             'frequency_cap_min',
             'frequency_cap_default',
             'eu_cookie_max_attempts',
+            'captcha_sol_length',
+            'captcha_font_size',
         ],
 
         ConfigValue.float: [
@@ -268,6 +270,7 @@ class Globals(object):
             'enable_loggedout_experiments',
             'disable_geoip_service',
             'disable_remote_fetch',
+            'disable_newsletter',
         ],
 
         ConfigValue.tuple: [
