@@ -2024,7 +2024,23 @@ class LinkInfoPage(Reddit):
 
         if self.show_promote_button:
             buttons.append(NavButton(menu.promote, 'promoted', sr_path=False))
+        buttons.append(NamedButton('hot', dest='', aliases=['/hot'], sr_path=True))
+        buttons.append(NamedButton('new', sr_path=True))
+        buttons.append(NamedButton(g.voting_upvote_path, sr_path=True))
+        buttons.append(NamedButton(g.voting_controversial_path, sr_path=True))
+        buttons.append(NamedButton('top', sr_path=True))
 
+        if feature.is_enabled('sr_comments_tab'):
+            buttons.append(NamedButton('comments', sr_path=True))
+
+        mod = False
+        if c.user_is_loggedin:
+            mod = bool(c.user_is_admin
+                       or c.site.is_moderator_with_perms(c.user, 'wiki'))
+        if c.site._should_wiki and (c.site.wikimode != 'disabled' or mod):
+            if not g.disable_wiki:
+                buttons.append(NavButton('wiki', 'wiki', sr_path=True))
+        
         toolbar = [NavMenu(buttons, base_path = "", type="tabmenu")]
 
         if not isinstance(c.site, DefaultSR):
