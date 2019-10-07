@@ -2024,15 +2024,20 @@ class LinkInfoPage(Reddit):
 
         if self.show_promote_button:
             buttons.append(NavButton(menu.promote, 'promoted', sr_path=False))
+        
+        # Add 'hot', 'new', insightful', 'fun' and 'top' nav buttons to
+        # submissions comment page
         buttons.append(NamedButton('hot', dest='', aliases=['/hot'], sr_path=True))
         buttons.append(NamedButton('new', sr_path=True))
         buttons.append(NamedButton(g.voting_upvote_path, sr_path=True))
         buttons.append(NamedButton(g.voting_controversial_path, sr_path=True))
         buttons.append(NamedButton('top', sr_path=True))
-
+        
+        # Add 'comments' nav button to submissions comment page if enabled
         if feature.is_enabled('sr_comments_tab'):
             buttons.append(NamedButton('comments', sr_path=True))
-
+            
+        # Add 'wiki' nav button to submissions comment page if mod or enabled
         mod = False
         if c.user_is_loggedin:
             mod = bool(c.user_is_admin
