@@ -100,7 +100,13 @@ r.login.ui = {
                 new r.ui.RegisterForm(el)
             })
 
-            this.popup = new r.ui.LoginPopup();
+            // SaidIt: defer creating LoginPopup until click, unless we're on /login or /register.
+            // Every guest page view should not request a captcha image.
+            if ($('#login-popup').length) {
+                this.popup = {}
+            } else {
+                this.popup = new r.ui.LoginPopup();
+            }
 
             $(document).delegate('.login-required', 'click', $.proxy(this, 'loginRequiredAction'))
         }
@@ -185,6 +191,12 @@ r.login.ui = {
         if (r.config.logged) {
             return true
         } else {
+
+            // SaidIt: if LoginPopup loading this was deferred, load it now
+            if ($('#login-popup').length) {
+                this.popup = new r.ui.LoginPopup();
+            }
+
             var el = $(e.target);
             var href = el.attr('href');
             var actionDetails = this._getActionDetails(el);
