@@ -2011,28 +2011,27 @@ class LinkInfoPage(Reddit):
         base_path = _force_utf8(base_path)
 
 
-        def info_button(name, **fmt_args):
+        def info_button(name, css_class, **fmt_args):
             return NamedButton(name, dest = '/%s%s' % (name, base_path),
                                aliases = ['/%s/%s' % (name, self.link._id36)],
-                               fmt_args = fmt_args)
+                               css_class = css_class, fmt_args = fmt_args)
         buttons = []
         if not self.disable_comments:
-            buttons.append(info_button('comments'))
+            buttons.append(info_button('comments', css_class='post-comments'))
 
             if self.num_duplicates > 0:
-                buttons.append(info_button('duplicates', num=self.num_duplicates))
+                buttons.append(info_button('duplicates', css_class='duplicates', num=self.num_duplicates))
 
         if self.show_promote_button:
-            buttons.append(NavButton(menu.promote, 'promoted', sr_path=False))
+            buttons.append(NavButton(menu.promote, 'promoted', sr_path=False, css_class='promoted'))
 
-        buttons.append(NamedButton('hot', css_class='commentpage-toggle', dest='', aliases=['/hot'], sr_path=True))
-        buttons.append(NamedButton('new', css_class='commentpage-toggle', sr_path=True))
-        buttons.append(NamedButton(g.voting_upvote_path, css_class='commentpage-toggle', sr_path=True))
-        buttons.append(NamedButton(g.voting_controversial_path, css_class='commentpage-toggle', sr_path=True))
-        buttons.append(NamedButton('top', css_class='commentpage-toggle', sr_path=True))
-        
+        buttons.append(NamedButton('hot', css_class='hot c-hidden', dest='/', sr_path=True))
+        buttons.append(NamedButton('new', css_class='new c-hidden', sr_path=True))
+        buttons.append(NamedButton(g.voting_upvote_path, css_class='upvote c-hidden', sr_path=True))
+        buttons.append(NamedButton(g.voting_controversial_path, css_class='controversial c-hidden', sr_path=True))
+        buttons.append(NamedButton('top', css_class='top c-hidden', sr_path=True))
         if feature.is_enabled('sr_comments_tab'):
-            buttons.append(NamedButton('comments', css_class='commentpage-toggle', sr_path=True))
+            buttons.append(NamedButton('comments', css_class='sr-comments c-hidden', sr_path=True))
 
         mod = False
         if c.user_is_loggedin:
@@ -2040,7 +2039,7 @@ class LinkInfoPage(Reddit):
                        or c.site.is_moderator_with_perms(c.user, 'wiki'))
         if c.site._should_wiki and (c.site.wikimode != 'disabled' or mod):
             if not g.disable_wiki:
-                buttons.append(NavButton('wiki', 'wiki', css_class='commentpage-toggle', sr_path=True))
+                buttons.append(NavButton('wiki', 'wiki', css_class='wiki c-hidden', sr_path=True))
             
         toolbar = [NavMenu(buttons, base_path = "", type="tabmenu")]
 
