@@ -62,7 +62,8 @@ string_dict = dict(
     points_label = _("%(num)d %(point)s"),
 
     # this accomodates asian languages which don't use spaces
-    points_dual = _("%(ups)d %(pointups)s - %(downs)d %(pointdowns)s"),
+    # points_dual = _("%(ups)d %(pointups)s - %(downs)d %(pointdowns)s"),
+    points_dual = _("<span class='ups'>%(ups)d</span>&nbsp;<span class='upvote'>%(pointups)s</span>&nbsp;-&nbsp;<span class='downs'>%(downs)d</span>&nbsp;<span class='controversial'>%(pointdowns)s</span>"),
 
     # this accomodates asian languages which don't use spaces
     time_label = _("%(num)d %(time)s"),

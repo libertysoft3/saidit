@@ -144,7 +144,7 @@ There is a 2 week delay to create a sub after creating an account. Also there is
                            is_archived)}
       %endif
 
-      %if g.gold_gilding_enabled == 'true':
+      %if g.gold_gilding_enabled:
         <% is_gold_restricted = thing.site and thing.site.type == 'gold_restricted' %>
         %if c.user_is_admin or is_gold_restricted:
           ${utils.radio_type('type', "gold_restricted", _("gold restricted"),
@@ -160,7 +160,7 @@ There is a 2 week delay to create a sub after creating an account. Also there is
                            is_employees_only)}
       %endif
 
-      %if g.gold_gilding_enabled == 'true':
+      %if g.gold_gilding_enabled:
         <%
             is_gold_only = thing.site and thing.site.type == 'gold_only'
             can_set_gold_only = (is_gold_only or c.user_is_admin or

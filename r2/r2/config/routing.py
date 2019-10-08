@@ -100,7 +100,7 @@ def make_map(config):
     mc('/subs/search', controller='front', action='search_reddits')
     mc('/subs/login', controller='forms', action='login')
 
-    if config['pylons.app_globals'].gold_gilding_enabled == 'true':
+    if config['pylons.app_globals'].gold_gilding_enabled:
       mc('/subs/:where', controller='reddits', action='listing',
         where='popular', conditions={'function':not_in_sr},
         requirements=dict(where="popular|new|banned|employee|gold|default|"
@@ -154,7 +154,7 @@ def make_map(config):
     mc('/admin/awards/:awardcn/:action', controller='awards',
        requirements=dict(action="give|winners"))
 
-    if config['pylons.app_globals'].gold_gilding_enabled == 'true':
+    if config['pylons.app_globals'].gold_gilding_enabled:
       mc('/admin/creddits', controller='admintool', action='creddits')
       mc('/admin/gold', controller='admintool', action='gold')
 
@@ -319,7 +319,7 @@ def make_map(config):
     mc('/thanks', controller='forms', action="claim", secret='')
     mc('/thanks/:secret', controller='forms', action="claim")
 
-    if config['pylons.app_globals'].gold_gilding_enabled == 'true':
+    if config['pylons.app_globals'].gold_gilding_enabled:
       mc('/gold', controller='forms', action="gold", is_payment=False)
       mc('/gold/payment', controller='forms', action="gold", is_payment=True)
       mc('/gold/creditgild/:passthrough', controller='forms', action='creditgild')
@@ -334,7 +334,7 @@ def make_map(config):
     mc('/:action', controller='embed',
        requirements=dict(action="blog"))
 
-    if config['pylons.app_globals'].gold_gilding_enabled == 'true':
+    if config['pylons.app_globals'].gold_gilding_enabled:
       mc('/help/gold', controller='redirect', action='redirect',
         dest='/gold/about')
 
@@ -395,7 +395,7 @@ def make_map(config):
     mc('/api', controller='redirect', action='redirect', dest='/dev/api')
     mc('/api/distinguish/:how', controller='api', action="distinguish")
 
-    if config['pylons.app_globals'].gold_gilding_enabled == 'true':
+    if config['pylons.app_globals'].gold_gilding_enabled:
       mc('/api/spendcreddits', controller='ipn', action="spendcreddits")
       mc('/api/stripecharge/gold', controller='stripe', action='goldcharge')
       mc('/api/modify_subscription', controller='stripe',
@@ -470,7 +470,7 @@ def make_map(config):
     mc("/api/v1/me/:action", controller="apiv1user")
     mc("/api/v1/me/:action/:username", controller="apiv1user")
 
-    if config['pylons.app_globals'].gold_gilding_enabled == 'true':
+    if config['pylons.app_globals'].gold_gilding_enabled:
       mc("/api/v1/gold/gild/:fullname", controller="apiv1gold", action="gild")
       mc("/api/v1/gold/give/:username", controller="apiv1gold", action="give")
 

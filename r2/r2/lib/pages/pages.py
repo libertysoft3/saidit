@@ -1053,26 +1053,28 @@ class Reddit(Templated):
         is a list of menus which will be rendered in order and
         displayed at the top of the Reddit."""
         if c.site == Friends:
-            main_buttons = [NamedButton('new', dest='', aliases=['/hot']),
-                            NamedButton('comments'),
-                            NamedButton('gilded'),
+            main_buttons = [NamedButton('new', dest='', aliases=['/hot'], css_class='new'),
+                            NamedButton('comments', css_class='sr-comments'),
                             ]
+            if g.gold_gilding_enabled:
+                main_buttons.append(NamedButton('gilded', css_class='gilded'))
         else:
             is_sr_path = not c.site.is_homepage
-            main_buttons = [NamedButton('hot', dest='', aliases=['/hot'], sr_path=is_sr_path),
-                            NamedButton('new', sr_path=is_sr_path),
-                            # NamedButton('rising', sr_path=is_sr_path),
-                            NamedButton(g.voting_upvote_path, sr_path=is_sr_path),
-                            NamedButton(g.voting_controversial_path, sr_path=is_sr_path),
-                            NamedButton('top', sr_path=is_sr_path),
+            main_buttons = [NamedButton('hot', dest='', aliases=['/hot'], sr_path=is_sr_path, css_class='hot'),
+                            NamedButton('new', sr_path=is_sr_path, css_class='new'),
+                            # TODO 'rising' should be configurable
+                            # NamedButton('rising', sr_path=is_sr_path, css_class='rising'),
+                            NamedButton(g.voting_upvote_path, sr_path=is_sr_path, css_class='upvote'),
+                            NamedButton(g.voting_controversial_path, sr_path=is_sr_path, css_class='controversial'),
+                            NamedButton('top', sr_path=is_sr_path, css_class='top'),
                             ]
 
-            if g.gold_gilding_enabled == 'true' and c.site.allow_gilding:
+            if g.gold_gilding_enabled and c.site.allow_gilding:
                 main_buttons.append(NamedButton('gilded',
-                                                aliases=['/comments/gilded']))
+                                                aliases=['/comments/gilded'], css_class='gilded'))
 
             if feature.is_enabled('sr_comments_tab'):
-                main_buttons.append(NamedButton('comments', sr_path=is_sr_path))
+                main_buttons.append(NamedButton('comments', sr_path=is_sr_path, css_class='sr-comments'))
 
             mod = False
             if c.user_is_loggedin:
@@ -1080,12 +1082,12 @@ class Reddit(Templated):
                            or c.site.is_moderator_with_perms(c.user, 'wiki'))
             if c.site._should_wiki and (c.site.wikimode != 'disabled' or mod):
                 if not g.disable_wiki:
-                    main_buttons.append(NavButton('wiki', 'wiki', sr_path=is_sr_path))
+                    main_buttons.append(NavButton('wiki', 'wiki', sr_path=is_sr_path, css_class='wiki'))
 
             if g.ads_promos_enabled == 'true':
                 if (isinstance(c.site, (Subreddit, DefaultSR, MultiReddit)) and
                     c.site.allow_ads):
-                    main_buttons.append(NavButton(menu.promoted, 'ads', sr_path=is_sr_path))
+                    main_buttons.append(NavButton(menu.promoted, 'ads', sr_path=is_sr_path, css_class='ads'))
 
         more_buttons = []
 

@@ -272,6 +272,7 @@ class Globals(object):
             'disable_remote_fetch',
             'disable_newsletter',
             'remote_fetch_proxy_enabled',
+            'gold_gilding_enabled',
         ],
 
         ConfigValue.tuple: [
