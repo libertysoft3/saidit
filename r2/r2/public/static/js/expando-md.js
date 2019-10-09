@@ -32,7 +32,7 @@
     var reDTube = /^https?\:\/\/d\.tube\/(#\!\/)*v\/.+\/\w+/i;
     var reVimeo = /^https?\:\/\/(player\.)*vimeo\.com\/((.+\/.+\/)|(video\/))*(\d+)(#.+)*/i;
     var reSoundCloud = /^https?\:\/\/(www\.)*soundcloud.com\/.+\/.+/i;
-    var reImgur = /^https?\:\/\/(www\.)*imgur.com\/(gallery|t\/\w+|user\/\w+\/favorites|a)\/(\w+)$/i;
+    var reImgur = /^https?\:\/\/(www\.|m\.)*imgur.com\/(gallery|t\/\w+|user\/\w+\/favorites|a)\/(\w+)$/i;
 
     function initMdExpandosByThingId(thingId) {
       $('#' + thingId + ' > .entry .md a').each(function() {
