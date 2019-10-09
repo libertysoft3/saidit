@@ -1455,7 +1455,7 @@ class _SoundCloudScraper(Scraper):
 
 # not an iframe
 class _ImgurScraper(_ThumbnailOnlyScraper):
-    URL_MATCH = re.compile(r"^https?\:\/\/(www\.)*imgur.com\/(gallery|t\/\w+|user\/\w+\/favorites|a)\/(\w+)$", re.IGNORECASE)
+    URL_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.)*imgur.com\/(gallery|t\/\w+|user\/\w+\/favorites|a)\/(\w+)$", re.IGNORECASE)
 
     def __init__(self, url, maxwidth):
         self.url = url
