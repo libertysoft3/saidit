@@ -50,7 +50,8 @@ inline_script_tag = '<script type="text/javascript">{content}</script>'
 class Uglify(object):
     def compile(self, data, dest):
         process = subprocess.Popen(
-            ["/usr/bin/uglifyjs", "-nc"],
+            # TODO: had to remove the -n option, what did it do?
+            ["/usr/bin/uglifyjs", "-c"],
             stdin=subprocess.PIPE,
             stdout=dest,
         )

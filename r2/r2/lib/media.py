@@ -134,6 +134,9 @@ def _apply_exif_orientation(image):
     except AttributeError:
         # image format with no EXIF tags
         return image
+    except SyntaxError:
+        # image with corrupt EXIF data? https://github.com/python-pillow/Pillow/issues/2043
+        return image
 
     # constant from EXIF spec
     ORIENTATION_TAG_ID = 0x0112
@@ -1455,7 +1458,7 @@ class _SoundCloudScraper(Scraper):
 
 # not an iframe
 class _ImgurScraper(_ThumbnailOnlyScraper):
-    URL_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.)*imgur.com\/(gallery|t\/\w+|user\/\w+\/favorites|a)\/(\w+)$", re.IGNORECASE)
+    URL_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.)*imgur.com\/((gallery|t\/\w+|user\/\w+\/favorites|a)\/)*(\w+)$", re.IGNORECASE)
 
     def __init__(self, url, maxwidth):
         self.url = url
@@ -1496,11 +1499,16 @@ class _ImgurScraper(_ThumbnailOnlyScraper):
         thumbnail = _prepare_image(image)
 
         match = self.URL_MATCH.match(self.url)
-        if match and match.group(3):
-            self.url = match.group(3)
+
+        # urls like https://imgur.com/yJj3UFc cannot embed with 'a/ID' as data-id
+        if match and match.group(4):
+            self.url = match.group(4)
+            embed_data_id = 'a/' + self.url
+            if not match.group(3):
+                embed_data_id = self.url
 
         oembed = {
-            'html': '<blockquote class="imgur-embed-pub" lang="en" data-id="a/' + self.url + '"><a href="//imgur.com/' + self.url + '"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>',
+            'html': '<blockquote class="imgur-embed-pub" lang="en" data-id="' + embed_data_id + '"><a href="//imgur.com/' + self.url + '"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>',
             'thumbnail_url': thumbnail_url
         }
         media_object = self._make_media_object(oembed)

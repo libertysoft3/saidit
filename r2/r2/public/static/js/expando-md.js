@@ -32,7 +32,7 @@
     var reDTube = /^https?\:\/\/d\.tube\/(#\!\/)*v\/.+\/\w+/i;
     var reVimeo = /^https?\:\/\/(player\.)*vimeo\.com\/((.+\/.+\/)|(video\/))*(\d+)(#.+)*/i;
     var reSoundCloud = /^https?\:\/\/(www\.)*soundcloud.com\/.+\/.+/i;
-    var reImgur = /^https?\:\/\/(www\.|m\.)*imgur.com\/(gallery|t\/\w+|user\/\w+\/favorites|a)\/(\w+)$/i;
+    var reImgur = /^https?\:\/\/(www\.|m\.)*imgur.com\/((gallery|t\/\w+|user\/\w+\/favorites|a)\/)*(\w+)$/i;
 
     function initMdExpandosByThingId(thingId) {
       $('#' + thingId + ' > .entry .md a').each(function() {
@@ -144,7 +144,7 @@
           $button.after('<div class="md-expando"><audio controls preload="auto" src="' + $button.prev().attr('href') + '"></audio></div>');
           break;
         case 'imgur':
-          var html  = '<blockquote class="imgur-embed-pub" lang="en" data-id="a/' + $button.data('embed-id') + '"><a href="//imgur.com/' + $button.data('embed-id') + '"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>';
+          var html  = '<blockquote class="imgur-embed-pub" lang="en" data-id="' + $button.data('embed-id') + '"><a href="//imgur.com/' + $button.data('embed-id') + '"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>';
           $button.after('<div class="md-expando">' + html + '</div>');
           break;
         case 'youtube':
@@ -213,10 +213,14 @@
       return allowed[extIndex].toUpperCase();
     }
 
+    // urls like https://imgur.com/yJj3UFc cannot embed with 'a/ID' as data-id
     function getEmbedIdImgur(href) {
       var match = reImgur.exec(href);
-      if (match && match[3]) {
-        return match[3];
+      if (match && match[4]) {
+        if (match[3]) {
+          return 'a/' + match[4];
+        }
+        return match[4];
       }
       return false;
     }
