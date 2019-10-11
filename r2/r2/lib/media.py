@@ -1556,6 +1556,8 @@ class _NeatClipScraper(_ThumbnailOnlyScraper):
     def __init__(self, url, maxwidth):
         self.url = url
         self.maxwidth = maxwidth
+        self.protocol = UrlParser(url).scheme
+        
     @classmethod
     def matches(cls, url):
     
@@ -1656,13 +1658,14 @@ class _NeatClipScraper(_ThumbnailOnlyScraper):
         )
         
         
-class _StreamableScraper(Scraper):
+class _StreamableScraper(_ThumbnailOnlyScraper):
     OEMBED_ENDPOINT = "https://api.streamable.com/oembed.json"
     URL_MATCH = re.compile(r"^https?\:\/\/(www\.)*streamable\.com\/(\w+).*$", re.IGNORECASE)
 
     def __init__(self, url, maxwidth):
         self.url = url
         self.maxwidth = maxwidth
+        self.protocol = UrlParser(url).scheme
     @classmethod
     def matches(cls, url):
         return cls.URL_MATCH.match(url)
@@ -1690,15 +1693,15 @@ class _StreamableScraper(Scraper):
             return None, None, None, None
             
         thumbnail_url = oembed.get("thumbnail_url")
-        # urllib2 won't process urls that start with '//'
+
         if thumbnail_url.startswith('//'):
             thumbnail_url = coerce_url_to_protocol(thumbnail_url, self.protocol)
-            
         if not thumbnail_url:
             return None, None, None, None
-            
         _, content = _fetch_url(thumbnail_url, referer=self.url)
-
+        if not content:
+            return None, None, None, None
+            
         uid = _filename_from_content(content)
         image = str_to_image(content)
         storage_url = upload_media(image, category='previews')
@@ -1744,7 +1747,7 @@ class _StreamableScraper(Scraper):
             public_thumbnail_url=public_thumbnail_url,
         )
 
-class _TwitchScraper(Scraper):
+class _TwitchScraper(_ThumbnailOnlyScraper):
     CLIP_URL = 'https://clips.twitch.tv/embed?'
     CHANNEL_VIDEO_URL = 'https://player.twitch.tv?'
     URL_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.|clips\.|)?twitch\.tv\/.*$", re.IGNORECASE)
@@ -1755,9 +1758,9 @@ class _TwitchScraper(Scraper):
     def __init__(self, url, maxwidth):
         self.url = url
         self.maxwidth = maxwidth
+        self.protocol = UrlParser(url).scheme
     @classmethod
     def matches(cls, url):
-    
         return cls.URL_MATCH.match(url)
         
     def _make_media_object(self, oembed):
@@ -1771,28 +1774,39 @@ class _TwitchScraper(Scraper):
         video_match = self.VIDEO_MATCH.match(self.url)
         clip_match = self.CLIP_MATCH.match(self.url)
 
+        if (channel_match or video_match or clip_match):
+            thumbnail_url, image_data = self._find_thumbnail_image()
+        if not thumbnail_url:
+            thumbnail_url = 'https://www.twitch.tv'
+            
+        _, image_data = _fetch_url(thumbnail_url, referer=self.url)
+        
+        if thumbnail_url.startswith('//'):
+            thumbnail_url = coerce_url_to_protocol(thumbnail_url, self.protocol)
+        if not image_data:
+            _, image_data = _fetch_url(thumbnail_url, referer=self.url)
+        if not image_data:
+            return None, None, None, None
+        
         if channel_match and channel_match.group(2):
-            self.url = self.CHANNEL_ENDPOINT + 'channel=' + channel_match.group(2)
+            self.url = self.CHANNEL_VIDEO_URL + 'channel=' + channel_match.group(2) + '&muted=false'
         elif video_match and video_match.group(2):
-            self.url = self.CHANNEL_ENDPOINT + 'video=' + video_match.group(2)
+            self.url = self.CHANNEL_VIDEO_URL + 'video=' + video_match.group(2)
             if video_match.group(3) and video_match.group(4):
                 time_stamp = video_match.group(4)
             else:
                 time_stamp = '00h00m00s'
-            self.url = self.url + '&time=' + time_stamp
+            self.url = self.url + '&time=' + time_stamp + '&muted=false'
         elif clip_match and clip_match.group(2):
-            self.url = self.CLIP_URL + 'clip=' + clip_match.group(2)
+            self.url = self.CLIP_URL + 'clip=' + clip_match.group(2) + '&muted=false'
         else:
             return None, None, None, None
             
-        thumbnail_url = 'https://i.imgur.com/eeOpKGz.png'
-        
-        _, image_data = _fetch_url(thumbnail_url, referer=self.url)
         uid = _filename_from_content(image_data)
         image = str_to_image(image_data)
         storage_url = upload_media(image, category='previews')
         width, height = image.size
-        
+
         preview_object = {
             'uid': uid,
             'url': storage_url,
