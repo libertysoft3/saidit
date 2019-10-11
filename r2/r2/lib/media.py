@@ -1657,7 +1657,6 @@ class _NeatClipScraper(_ThumbnailOnlyScraper):
             public_thumbnail_url=public_thumbnail_url,
         )
         
-        
 class _StreamableScraper(_ThumbnailOnlyScraper):
     OEMBED_ENDPOINT = "https://api.streamable.com/oembed.json"
     URL_MATCH = re.compile(r"^https?\:\/\/(www\.)*streamable\.com\/(\w+).*$", re.IGNORECASE)
@@ -1666,6 +1665,7 @@ class _StreamableScraper(_ThumbnailOnlyScraper):
         self.url = url
         self.maxwidth = maxwidth
         self.protocol = UrlParser(url).scheme
+        
     @classmethod
     def matches(cls, url):
         return cls.URL_MATCH.match(url)
@@ -1759,6 +1759,7 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
         self.url = url
         self.maxwidth = maxwidth
         self.protocol = UrlParser(url).scheme
+        
     @classmethod
     def matches(cls, url):
         return cls.URL_MATCH.match(url)
