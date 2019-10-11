@@ -77,7 +77,7 @@ automatically_created_pages = {
 
 # Pages which have a special length restrictions (In bytes)
 special_length_restrictions_bytes = {
-    'config/stylesheet': 128*1024,
+    'config/stylesheet': g.wiki_max_config_stylesheet_length_bytes,
     'config/submit_text': 1024,
     'config/sidebar': 5120,
     'config/description': 500,

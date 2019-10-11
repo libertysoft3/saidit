@@ -42,7 +42,7 @@ from pylons.i18n import N_
 
 from r2.lib.contrib import rcssmin
 from r2.lib.utils import tup
-
+from pylons import app_globals as g
 
 __all__ = ["validate_css"]
 
@@ -383,7 +383,7 @@ ERROR_MESSAGES = {
 }
 
 
-MAX_SIZE_KIB = 100
+MAX_SIZE_KIB = g.wiki_max_config_stylesheet_length_bytes / 1024
 SUBREDDIT_IMAGE_URL_PLACEHOLDER = re.compile(r"\A%%([a-zA-Z0-9\-]+)%%\Z")
 
 

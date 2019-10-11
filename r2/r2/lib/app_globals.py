@@ -209,6 +209,7 @@ class Globals(object):
             'thumbnail_hidpi_scaling',
             'wiki_keep_recent_days',
             'wiki_max_page_length_bytes',
+            'wiki_max_config_stylesheet_length_bytes',
             'wiki_max_page_name_length',
             'wiki_max_page_separators',
             'RL_RESET_MINUTES',
