@@ -40,7 +40,7 @@ fi
 
 sudo -u postgres psql reddit <<FUNCTIONSQL
 create or replace function hot(ups integer, downs integer, date timestamp with time zone) returns numeric as \$\$
-    select round(cast(log(greatest(abs((\$1 * 2) + \$2), 1)) * sign((\$1 * 2) + \$2) + (date_part('epoch', \$3) - 1134028003) / 180000.0 as numeric), 7)
+    select round(cast(log(greatest(abs((\$1 * 2) + \$2), 1)) * sign((\$1 * 2) + \$2) + (date_part('epoch', \$3) - 1134028003) / 90000.0 as numeric), 7)
 \$\$ language sql immutable;
 
 create or replace function upvotes(ups integer) returns integer as \$\$

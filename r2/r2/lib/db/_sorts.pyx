@@ -28,8 +28,6 @@ from pylons import app_globals as g
 cdef extern from "math.h":
     double log10(double)
     double sqrt(double)
-    # CUSTOM
-    double log2(double)
 
 epoch = datetime(1970, 1, 1, tzinfo = g.tz)
 
@@ -63,9 +61,9 @@ cpdef double _hot(long ups, long downs, double date):
     else:
         sign = 0
     seconds = date - 1134028003
-    # CUSTOM: divide into 50h periods, not 12.5h, increase by 4x
+    # CUSTOM: divide into 25h periods, a 2x hot slowdown compared to the default 12.5h
     # return round(sign * order + seconds / 45000, 7)
-    return round(sign * order + seconds / 180000, 7)
+    return round(sign * order + seconds / 90000, 7)
 
 cpdef long upvotes(long ups):
     return ups
