@@ -1751,9 +1751,9 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
     CLIP_URL = 'https://clips.twitch.tv/embed?'
     CHANNEL_VIDEO_URL = 'https://player.twitch.tv?'
     URL_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.|clips\.|)?twitch\.tv\/.*$", re.IGNORECASE)
-    CHANNEL_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.)?twitch\.tv\/(\w+)$", re.IGNORECASE)
+    CHANNEL_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.)?twitch\.tv\/(\w+)\/?$", re.IGNORECASE)
     VIDEO_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.|)?twitch\.tv\/videos\/(\w+)(.*t\=)?(\w+).*$", re.IGNORECASE)
-    CLIP_MATCH = re.compile(r"^https?\:\/\/(clips\.)twitch\.tv\/(\w+).*$", re.IGNORECASE)
+    CLIP_MATCH = re.compile(r"^https?\:\/\/(clips\.)twitch\.tv\/(\w+)\/?.*$", re.IGNORECASE)
     
     def __init__(self, url, maxwidth):
         self.url = url
@@ -1769,26 +1769,44 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
             "type": "twitch",
             "oembed": oembed,
         }
-    
+        
+    def _fetch_image_from_twitch(self, thumbnail_url):
+        resp = requests.get(thumbnail_url)
+        content_type, content = (resp.headers.get('Content-Type'), resp.content)
+        
+        # 'binary/octet-stream' is showing as the Content-Type in some 
+        # images from: https://clips-media-assetsX.twitch.tv/xxxxxxxx.jpg
+        if content_type and content and ("image" in content_type or 'binary' in content_type):
+            return content
+        else:
+            return None
+            
     def scrape(self):
         channel_match = self.CHANNEL_MATCH.match(self.url)
         video_match = self.VIDEO_MATCH.match(self.url)
         clip_match = self.CLIP_MATCH.match(self.url)
 
+        # Fetch the correct thumbnail from orginal url. If no thumbnail
+        # is found, fetch default thumbnail from Twitch front page.
         if (channel_match or video_match or clip_match):
             thumbnail_url, image_data = self._find_thumbnail_image()
         if not thumbnail_url:
-            thumbnail_url = 'https://www.twitch.tv'
-            
-        _, image_data = _fetch_url(thumbnail_url, referer=self.url)
-        
+            _ = self.url
+            self.url = 'https://www.twitch.tv'
+            thumbnail_url, image_data = self._find_thumbnail_image()
+            self.url = _
+        if not thumbnail_url:
+            return None, None, None, None
+
+        if thumbnail_url.endswith('/'):
+            thumbnail_url = thumbnail_url[:-1]
         if thumbnail_url.startswith('//'):
             thumbnail_url = coerce_url_to_protocol(thumbnail_url, self.protocol)
         if not image_data:
-            _, image_data = _fetch_url(thumbnail_url, referer=self.url)
+            image_data = self._fetch_image_from_twitch(thumbnail_url)
         if not image_data:
             return None, None, None, None
-        
+
         if channel_match and channel_match.group(2):
             self.url = self.CHANNEL_VIDEO_URL + 'channel=' + channel_match.group(2) + '&muted=false'
         elif video_match and video_match.group(2):
