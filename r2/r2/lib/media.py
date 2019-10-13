@@ -650,6 +650,8 @@ def get_media_embed(media_object):
             return _TwitterScraper.media_embed(media_object)
         elif media_object.get("type") == "strawpoll":
             return _StrawpollScraper.media_embed(media_object)
+        elif media_object.get("type") == "instagram":
+            return _InstagramScraper.media_embed(media_object)
         
         return _EmbedlyScraper.media_embed(media_object)
 
@@ -735,6 +737,8 @@ class Scraper(object):
             return _TwitterScraper(url, maxwidth=maxwidth)
         elif _StrawpollScraper.matches(url):
             return _StrawpollScraper(url, maxwidth=maxwidth)
+        elif _InstagramScraper.matches(url):
+            return _InstagramScraper(url, maxwidth=maxwidth)
         
         return _ThumbnailOnlyScraper(url)
 
@@ -2043,6 +2047,91 @@ class _StrawpollScraper(_ThumbnailOnlyScraper):
         public_thumbnail_url = oembed.get('thumbnail_url')
         if not (html and width and height):
             return
+        return MediaEmbed(
+            width=width,
+            height=height,
+            content=html,
+            public_thumbnail_url=public_thumbnail_url,
+        )
+
+class _InstagramScraper(_ThumbnailOnlyScraper):
+    URL_MATCH = re.compile(r"^https?\:\/\/(www\.)?(instagram\.com\/|instagr\.am\/)p\/(\w+).*$", re.IGNORECASE)
+    OEMBED_ENDPOINT = 'https://api.instagram.com/oembed'
+    
+    def __init__(self, url, maxwidth):
+        self.url = url
+        self.maxwidth = maxwidth
+        self.protocol = UrlParser(url).scheme
+        
+    @classmethod
+    def matches(cls, url):
+        return cls.URL_MATCH.match(url)
+        
+    def _make_media_object(self, oembed):
+        return {
+            "type": "instagram",
+            "oembed": oembed,
+        }
+        
+    def _fetch_from_instagram(self):
+        # Thread and media hidden to prevent size issues
+        # Full length tweets should fit in MediaEmbed height set at 300px
+        params = {
+            "url": self.url,
+            "maxwidth": 400,
+            "hidecaption": True,
+            "omitscript": False,
+        }
+        content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
+        return json.loads(content)
+        
+    def scrape(self):
+        oembed = self._fetch_from_instagram()
+        if not oembed:
+            return None, None, None, None
+            
+        thumbnail_url = oembed.get('thumbnail_url')
+        print(thumbnail_url)
+        if not thumbnail_url:
+            return None, None, None, None
+        if thumbnail_url.startswith('//'):
+            thumbnail_url = coerce_url_to_protocol(thumbnail_url, self.protocol)
+        _, image_data = _fetch_url(thumbnail_url, referer=self.url)
+        if not image_data:
+            return None, None, None, None
+
+        uid = _filename_from_content(image_data)
+        image = str_to_image(image_data)
+        storage_url = upload_media(image, category='previews')
+        width, height = image.size
+        
+        preview_object = {
+            'uid': uid,
+            'url': storage_url,
+            'width': width,
+            'height': height,
+        }
+        
+        thumbnail = _prepare_image(image)
+        media_object = self._make_media_object(oembed)
+        
+        return (
+            thumbnail,
+            preview_object,
+            media_object,
+            media_object,
+        )
+        
+    @classmethod
+    def media_embed(cls, media_object):
+        oembed = media_object["oembed"]
+        html = oembed.get("html")
+        width = oembed.get("width")
+        height = 700
+        public_thumbnail_url = oembed.get('thumbnail_url')
+        if not (html and width and height):
+            return
+            
         return MediaEmbed(
             width=width,
             height=height,
