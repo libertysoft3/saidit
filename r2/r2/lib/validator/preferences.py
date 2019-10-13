@@ -135,13 +135,16 @@ def set_prefs(user, prefs):
                 g.log.warning("Could not find beta subreddit '%s'. It may "
                               "need to be created." % g.beta_sr)
 
-        # CUSTOM: mass unsubscribe
-        # TODO: create Subreddit.unsubscribe_multiple(cls, user, sr_ids)
+        # CUSTOM: reset subscriptions
         elif k == 'pref_subscriptions_unsubscribe' and v == 'subs_reset_subscriptions':
+            # unsubscribe from all
             subscriber_srs = Subreddit.user_subreddits(user, ids=False, limit=None)
             for sub in subscriber_srs:
                 sub.remove_subscriber(user)
-            # we don't need to setattr()
+            # resubscribe to the default srs
+            default_srs = Subreddit.user_subreddits(user=None, ids=False, limit=None)
+            Subreddit.subscribe_multiple(user, default_srs)
+            # don't want to setattr()
             continue
 
         # CUSTOM: refuse empty IRC nick

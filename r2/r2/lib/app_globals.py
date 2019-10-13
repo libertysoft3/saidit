@@ -327,6 +327,8 @@ class Globals(object):
             'events_collector_test_url',
             'search_provider',
             'remote_fetch_proxy_url',
+            'brander_community',
+            'brander_community_plural',
         ],
 
         ConfigValue.choice(ONE=CL_ONE, QUORUM=CL_QUORUM): [
