@@ -90,12 +90,12 @@ string_dict = dict(
 
     sr_messages = dict(
         empty =  _('you have not subscribed to any subs.'),
-        subscriber =  _('below are the subs you have subscribed to. you can [unsubscribe from all %(community_plural)s](%(unsubscribe_link)s).'),
+        subscriber =  _('below are the subs that you have subscribed to. you can [reset your subscriptions](%(unsubscribe_link)s) in your [preferences](%(prefs_link)s).'),
         contributor =  _('below are the subs that you are an approved submitter on.'),
         moderator = _('below are the subs that you have moderator access to.')
         ),
 
-    sr_subscribe =  _('click \'subscribe\' and \'unsubscribe\' to choose which %(community_plural)s appear on your %(subscribed_name)s page. you can [unsubscribe from all %(community_plural)s](%(unsubscribe_link)s).'),
+    sr_subscribe =  _('click \'subscribe\' and \'unsubscribe\' to choose which %(community_plural)s appear on your [%(subscribed_name)s](%(subscribed_link)s) page. you can [reset your subscriptions](%(unsubscribe_link)s) in your [preferences](%(prefs_link)s).'),
 
     searching_a_reddit = _('you\'re searching within the [%(reddit_name)s](%(reddit_link)s) sub. '+
                            'you can also search within [all subreddits](%(all_reddits_link)s)'),

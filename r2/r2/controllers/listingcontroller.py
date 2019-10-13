@@ -1680,6 +1680,7 @@ class MyredditsController(ListingController):
             message = strings.sr_messages.get(self.where) % {
                     'community_plural': g.brander_community_plural,
                     'unsubscribe_link': '/prefs#subscriptions',
+                    'prefs_link': '/prefs',
                 }
 
         stack = PaneStack()

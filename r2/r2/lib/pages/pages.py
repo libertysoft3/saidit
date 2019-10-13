@@ -2416,7 +2416,9 @@ class SubredditsPage(Reddit):
         message = strings.sr_subscribe % {
                 'community_plural': g.brander_community_plural,
                 'subscribed_name': g.front_name,
+                'subscribed_link': g.front_path,
                 'unsubscribe_link': '/prefs#subscriptions',
+                'prefs_link': '/prefs',
             }
         self.sr_infobar = InfoBar(message = message)
         self.interestbar = InterestBar(True) if show_interestbar else None
