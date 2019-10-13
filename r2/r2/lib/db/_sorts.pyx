@@ -61,9 +61,9 @@ cpdef double _hot(long ups, long downs, double date):
     else:
         sign = 0
     seconds = date - 1134028003
-    # CUSTOM: divide into 25h periods, a 2x hot slowdown compared to the default 12.5h
+    # CUSTOM: divide into 36h periods, a ~3x hot slowdown compared to the default 12.5h
     # return round(sign * order + seconds / 45000, 7)
-    return round(sign * order + seconds / 90000, 7)
+    return round(sign * order + seconds / 129600, 7)
 
 cpdef long upvotes(long ups):
     return ups

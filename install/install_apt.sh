@@ -121,4 +121,9 @@ python-haigha
 python-redis
 python-pyramid
 python-raven
+
+libssl-dev
+libffi-dev
+python-pyasn1
+python-openssl
 PACKAGES
