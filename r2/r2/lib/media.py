@@ -239,6 +239,15 @@ def _fetch_url(url, referer=None):
 
     return content_type, response_data
 
+def _fetch_url_requests(url, params=None):
+    if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+        os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
+        
+    response = requests.get(url, params)
+    
+    if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+            os.environ["HTTPS_PROXY"] = ""
+    return response
 
 @memoize('media.fetch_size', time=3600)
 def _fetch_image_size(url, referer):
@@ -882,7 +891,7 @@ class _EmbedlyScraper(Scraper):
 
         timer = g.stats.get_timer("providers.embedly.oembed")
         timer.start()
-        content = requests.get(self.EMBEDLY_API_URL + "?" + params).content
+        content = _fetch_url_requests(self.EMBEDLY_API_URL, params).content
         timer.stop()
 
         return json.loads(content)
@@ -987,7 +996,7 @@ class _YouTubeScraper(Scraper):
         }
 
         with g.stats.get_timer("providers.youtube.oembed"):
-            content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+            content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
 
         return json.loads(content)
 
@@ -1065,7 +1074,7 @@ class _InvidiousScraper(_YouTubeScraper):
         }
 
         with g.stats.get_timer("providers.youtube.oembed"):
-            content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+            content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
 
         return json.loads(content)
     
@@ -1262,7 +1271,7 @@ class _DTubeScraper(Scraper):
             "url": self.url,
         }
         with g.stats.get_timer("providers.dtube.oembed"):
-            content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+            content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
 
         return json.loads(content)
 
@@ -1418,7 +1427,7 @@ class _SoundCloudScraper(Scraper):
             "format": "json"
         }
         with g.stats.get_timer("providers.soundcloud.oembed"):
-            content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+            content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
 
         return json.loads(content)
 
@@ -1578,7 +1587,7 @@ class _NeatClipScraper(_ThumbnailOnlyScraper):
         }
 
     def _fetch_url_from_neatclip(self):
-        resp = requests.get(self.url)     
+        resp = _fetch_url_requests(self.url)
         content_type, content = (resp.headers.get('Content-Type'), resp.content)
         
         if content_type and "html" in content_type and content:
@@ -1594,7 +1603,7 @@ class _NeatClipScraper(_ThumbnailOnlyScraper):
         return None, None
 
     def _fetch_image_from_neatclip(self, thumbnail_url):
-        resp = requests.get(thumbnail_url)
+        resp = _fetch_url_requests(thumbnail_url)
         content_type, content = (resp.headers.get('Content-Type'), resp.content)
                 
         if content_type and "image" in content_type and content:
@@ -1683,7 +1692,7 @@ class _StreamableScraper(_ThumbnailOnlyScraper):
         params = {
             "url": self.url,
         }
-        content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+        content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
         return json.loads(content)
             
     def _make_media_object(self, oembed):
@@ -1779,7 +1788,7 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
         }
         
     def _fetch_image_from_twitch(self, thumbnail_url):
-        resp = requests.get(thumbnail_url)
+        resp = _fetch_url_requests(thumbnail_url)
         content_type, content = (resp.headers.get('Content-Type'), resp.content)
         
         # 'binary/octet-stream' is showing as the Content-Type in some 
@@ -1900,7 +1909,7 @@ class _TwitterScraper(_ThumbnailOnlyScraper):
             "hide_thread": True,
             "hide_media": True,
         }
-        content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+        content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
         return json.loads(content)
         
     def scrape(self):
@@ -2043,7 +2052,7 @@ class _StrawpollScraper(_ThumbnailOnlyScraper):
 
 @memoize("media.embedly_services2", time=3600)
 def _fetch_embedly_service_data():
-    resp = requests.get("https://api.embed.ly/1/services/python")
+    resp = _fetch_url_requests("https://api.embed.ly/1/services/python")
     return get_requests_resp_json(resp)
 
 
