@@ -244,6 +244,9 @@ automoderator_account = automoderator
 
 [server:main]
 port = 8001
+# production gunicorn settings, see /etc/init/reddit-paster.conf
+# set to # of CPU cores for handling max traffic
+# workers = 2
 
 [live_config]
 # Specify global admins and permissions, each user should have one of admin, sponsor, or employee as their permission level

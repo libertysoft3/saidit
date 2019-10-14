@@ -391,6 +391,7 @@ SaidIt
   - uncompressedJS = false
   - db_pass = not-password, and update it in /etc/cron.d/reddit as well
   - Change the `[secrets]` section
+- Use the gunicorn application server not paster. Lets you easily set the # of processes that you want. Edit `/etc/init/reddit-paster.conf` and `workers` in `development.update`. Run `$ sudo service reddit-paster stop` before changing the service and `$ sudo initctl reload-configuration` after.
 - Change the password for installer created users `saidit` and `automoderator` (default password is 'password')
 - If you want email, install something like postfix and enable `reddit-job-email` in `/etc/cron.d/reddit`
 
@@ -464,31 +465,6 @@ WARNING: this currently breaks Cython dependencies in reddit PPAs/repos, so `ins
     $ make clean
     $ make
     $ sudo reddit-start
-
-### Application server tuning
-
-Out of the box, reddit open source runs the 'paste' uwsgi server, a single process with threads that can't execute concurrently. You can effectively only utilize a single CPU core. The following example shows you how to add another paster server process for a dual core processor.
-
-Add these lines to your `development.update`, section `[server:main]` and then run `make ini`:
-
-    threadpool_workers = 1
-    threadpool_spawn_if_under = 0
-
-Then setup additional app server processes:
-
-    $ sudo nano /etc/default/reddit
-    # add line: export REDDIT_INI2=/home/reddit/src/reddit/r2/development2.ini
-    $ sudo cp /etc/init/reddit-paster.conf /etc/init/reddit-paster2.conf
-    $ sudo nano /etc/init/reddit-paster2.conf
-    # change $REDDIT_INI to $REDDIT_INI2
-    $ sudo nano /etc/haproxy/haproxy.cfg
-    # in 'backend reddit' add: server app2 localhost:8002 maxconn 30
-
-Repeat this process until you have (number of cores) to (number of coresx2) paster application server processes running. `Makefile` and `make ini` are modified to support this configuration. Finally:
-
-    $ sudo reddit-stop
-    $ sudo reddit-start
-    $ sudo service haproxy restart
 
 ---
 
