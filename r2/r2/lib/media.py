@@ -1964,7 +1964,7 @@ class _TwitterScraper(_ThumbnailOnlyScraper):
 
 class _StrawpollScraper(_ThumbnailOnlyScraper):
     URL_MATCH = re.compile(r"^https?\:\/\/(www\.)?strawpoll\.me\/(\w+)\/?.*$", re.IGNORECASE)
-    EMBED_ENDPOINT = 'http://www.strawpoll.me/embed_1/'
+    EMBED_ENDPOINT = 'https://www.strawpoll.me/embed_1/'
     
     def __init__(self, url, maxwidth):
         self.url = url
