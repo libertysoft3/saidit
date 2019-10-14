@@ -239,6 +239,15 @@ def _fetch_url(url, referer=None):
 
     return content_type, response_data
 
+def _fetch_url_requests(url, params=None):
+    if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+        os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
+        
+    response = requests.get(url, params)
+    
+    if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+            os.environ["HTTPS_PROXY"] = ""
+    return response
 
 @memoize('media.fetch_size', time=3600)
 def _fetch_image_size(url, referer):
@@ -637,7 +646,13 @@ def get_media_embed(media_object):
             return _StreamableScraper.media_embed(media_object)
         elif media_object.get("type") == "twitch":
             return _TwitchScraper.media_embed(media_object)
-
+        elif media_object.get("type") == "twitter":
+            return _TwitterScraper.media_embed(media_object)
+        elif media_object.get("type") == "strawpoll":
+            return _StrawpollScraper.media_embed(media_object)
+        elif media_object.get("type") == "instagram":
+            return _InstagramScraper.media_embed(media_object)
+        
         return _EmbedlyScraper.media_embed(media_object)
 
 
@@ -718,7 +733,13 @@ class Scraper(object):
             return _StreamableScraper(url, maxwidth=maxwidth)
         elif _TwitchScraper.matches(url):
             return _TwitchScraper(url, maxwidth=maxwidth)
-
+        elif _TwitterScraper.matches(url):
+            return _TwitterScraper(url, maxwidth=maxwidth)
+        elif _StrawpollScraper.matches(url):
+            return _StrawpollScraper(url, maxwidth=maxwidth)
+        elif _InstagramScraper.matches(url):
+            return _InstagramScraper(url, maxwidth=maxwidth)
+        
         return _ThumbnailOnlyScraper(url)
 
     def scrape(self):
@@ -874,7 +895,7 @@ class _EmbedlyScraper(Scraper):
 
         timer = g.stats.get_timer("providers.embedly.oembed")
         timer.start()
-        content = requests.get(self.EMBEDLY_API_URL + "?" + params).content
+        content = _fetch_url_requests(self.EMBEDLY_API_URL, params).content
         timer.stop()
 
         return json.loads(content)
@@ -979,7 +1000,7 @@ class _YouTubeScraper(Scraper):
         }
 
         with g.stats.get_timer("providers.youtube.oembed"):
-            content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+            content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
 
         return json.loads(content)
 
@@ -1057,7 +1078,7 @@ class _InvidiousScraper(_YouTubeScraper):
         }
 
         with g.stats.get_timer("providers.youtube.oembed"):
-            content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+            content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
 
         return json.loads(content)
     
@@ -1254,7 +1275,7 @@ class _DTubeScraper(Scraper):
             "url": self.url,
         }
         with g.stats.get_timer("providers.dtube.oembed"):
-            content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+            content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
 
         return json.loads(content)
 
@@ -1410,7 +1431,7 @@ class _SoundCloudScraper(Scraper):
             "format": "json"
         }
         with g.stats.get_timer("providers.soundcloud.oembed"):
-            content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+            content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
 
         return json.loads(content)
 
@@ -1570,7 +1591,7 @@ class _NeatClipScraper(_ThumbnailOnlyScraper):
         }
 
     def _fetch_url_from_neatclip(self):
-        resp = requests.get(self.url)     
+        resp = _fetch_url_requests(self.url)
         content_type, content = (resp.headers.get('Content-Type'), resp.content)
         
         if content_type and "html" in content_type and content:
@@ -1586,7 +1607,7 @@ class _NeatClipScraper(_ThumbnailOnlyScraper):
         return None, None
 
     def _fetch_image_from_neatclip(self, thumbnail_url):
-        resp = requests.get(thumbnail_url)
+        resp = _fetch_url_requests(thumbnail_url)
         content_type, content = (resp.headers.get('Content-Type'), resp.content)
                 
         if content_type and "image" in content_type and content:
@@ -1626,9 +1647,7 @@ class _NeatClipScraper(_ThumbnailOnlyScraper):
         thumbnail = _prepare_image(image)
 
         oembed = {
-            'html': '<iframe width="600" height="338" src="' + self.url + '" scrolling="no" allow="autoplay; fullscreen" allowfullscreen="true" frameborder="0"></iframe>',
-            'width': 600,
-            'height': 338,
+            'html': '<iframe width="600" height="350" style="max-width:600px;width:100%;height:350px;" src="' + self.url + '" scrolling="no" allow="autoplay; fullscreen" allowfullscreen="true" frameborder="0"></iframe>',
             'thumbnail_url': thumbnail_url
         }
 
@@ -1645,16 +1664,13 @@ class _NeatClipScraper(_ThumbnailOnlyScraper):
     def media_embed(cls, media_object):
         oembed = media_object["oembed"]
         html = oembed.get("html")
-        width = oembed.get("width")
-        height = oembed.get("height")
         public_thumbnail_url = oembed.get('thumbnail_url')
-        if not (html and width and height):
-            return
         return MediaEmbed(
-            width=width,
-            height=height,
+            width=1,
+            height=1,
             content=html,
             public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
         )
         
 class _StreamableScraper(_ThumbnailOnlyScraper):
@@ -1675,10 +1691,15 @@ class _StreamableScraper(_ThumbnailOnlyScraper):
         params = {
             "url": self.url,
         }
-        content = requests.get(self.OEMBED_ENDPOINT, params=params).content
+        content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
         return json.loads(content)
             
     def _make_media_object(self, oembed):
+        soup = BeautifulSoup.BeautifulSoup(oembed.get("html"))
+        soup.find('iframe')['width'] = '600'
+        soup.find('iframe')['height'] = '350'
+        soup.find('iframe')['style'] = 'max-width:600px;width:100%;height:350px;'
+        oembed['html'] = str(soup)
         if oembed.get("type") == "video":
             return {
                 "type": "streamable",
@@ -1725,26 +1746,15 @@ class _StreamableScraper(_ThumbnailOnlyScraper):
     @classmethod
     def media_embed(cls, media_object):
         oembed = media_object["oembed"]
-        
-        # Width\Height are too large causing display issues.
-        # Set to '100%' to fit parent frame
-        soup = BeautifulSoup.BeautifulSoup(oembed.get("html"))
-        soup.find('iframe')['width'] = '600'
-        soup.find('iframe')['height'] = '338'
-        
-        html = str(soup)
-        width = 600
-        height = 338
+        html = oembed.get('html')
         public_thumbnail_url = oembed.get('thumbnail_url')
-        
-        if not (html and width and height):
-            return
             
         return MediaEmbed(
-            width=width,
-            height=height,
+            width=1,
+            height=1,
             content=html,
             public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
         )
 
 class _TwitchScraper(_ThumbnailOnlyScraper):
@@ -1754,6 +1764,7 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
     CHANNEL_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.)?twitch\.tv\/(\w+)\/?$", re.IGNORECASE)
     VIDEO_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.|)?twitch\.tv\/videos\/(\w+)(.*t\=)?(\w+).*$", re.IGNORECASE)
     CLIP_MATCH = re.compile(r"^https?\:\/\/(clips\.)twitch\.tv\/(\w+)\/?.*$", re.IGNORECASE)
+    CLIP_CHANNEL_MATCH = re.compile(r"^https?\:\/\/(www\.)?twitch\.tv\/\w+\/clip\/(\w+)\/?.*$", re.IGNORECASE)
     
     def __init__(self, url, maxwidth):
         self.url = url
@@ -1771,7 +1782,7 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
         }
         
     def _fetch_image_from_twitch(self, thumbnail_url):
-        resp = requests.get(thumbnail_url)
+        resp = _fetch_url_requests(thumbnail_url)
         content_type, content = (resp.headers.get('Content-Type'), resp.content)
         
         # 'binary/octet-stream' is showing as the Content-Type in some 
@@ -1785,11 +1796,14 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
         channel_match = self.CHANNEL_MATCH.match(self.url)
         video_match = self.VIDEO_MATCH.match(self.url)
         clip_match = self.CLIP_MATCH.match(self.url)
-
+        clip_channel_match = self.CLIP_CHANNEL_MATCH.match(self.url)
+        
         # Fetch the correct thumbnail from orginal url. If no thumbnail
         # is found, fetch default thumbnail from Twitch front page.
         if (channel_match or video_match or clip_match):
             thumbnail_url, image_data = self._find_thumbnail_image()
+        else:
+            return None, None, None, None
         if not thumbnail_url:
             _ = self.url
             self.url = 'https://www.twitch.tv'
@@ -1818,6 +1832,8 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
             self.url = self.url + '&time=' + time_stamp + '&muted=false'
         elif clip_match and clip_match.group(2):
             self.url = self.CLIP_URL + 'clip=' + clip_match.group(2) + '&muted=false'
+        elif clip_channel_match and clip_channel_match.group(2):
+            self.url = self.CLIP_URL + 'clip=' + clip_channel_match.group(2) + '&muted=false'
         else:
             return None, None, None, None
             
@@ -1835,9 +1851,7 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
         
         thumbnail = _prepare_image(image)
         oembed = {
-            'html': '<iframe width="600" height="338" src="' + self.url + '" scrolling="no" allow="autoplay; fullscreen" allowfullscreen="true" frameborder="0"></iframe>',
-            'width': 600,
-            'height': 338,
+            'html': '<iframe style="max-width:600px;width:100%;height:350px;" src="' + self.url + '" scrolling="no" allow="autoplay; fullscreen" allowfullscreen="true" frameborder="0"></iframe>',
             'thumbnail_url': thumbnail_url
         }
         media_object = self._make_media_object(oembed)
@@ -1853,21 +1867,255 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
     def media_embed(cls, media_object):
         oembed = media_object["oembed"]
         html = oembed.get("html")
-        width = oembed.get("width")
-        height = oembed.get("height")
         public_thumbnail_url = oembed.get('thumbnail_url')
-        if not (html and width and height):
-            return
         return MediaEmbed(
-            width=width,
-            height=height,
+            width=1,
+            height=1,
             content=html,
             public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
+        )
+    
+class _TwitterScraper(_ThumbnailOnlyScraper):
+    URL_MATCH = re.compile(r"^https?\:\/\/(www\.|mobile\.)?(twitter\.com\/\w+\/status\/\w+).*$", re.IGNORECASE)
+    OEMBED_ENDPOINT = 'https://publish.twitter.com/oembed'
+    
+    def __init__(self, url, maxwidth):
+        self.url = url
+        self.maxwidth = maxwidth
+        self.protocol = UrlParser(url).scheme
+        
+    @classmethod
+    def matches(cls, url):
+        return cls.URL_MATCH.match(url)
+        
+    def _make_media_object(self, oembed):
+        return {
+            "type": "twitter",
+            "oembed": oembed,
+        }
+        
+    def _fetch_from_twitter(self):
+        params = {
+            "url": self.url,
+            "hide_thread": False,
+            "hide_media": False,
+        }
+        content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
+        return json.loads(content)
+        
+    def scrape(self):
+        match = self.URL_MATCH.match(self.url)
+        if match and match.group(2):
+            self.url = 'https://' + match.group(2)
+            
+        oembed = self._fetch_from_twitter()
+        if not oembed:
+            return None, None, None, None
+            
+        thumbnail_url, image_data = self._find_thumbnail_image()
+        if not thumbnail_url:
+            return None, None, None, None
+            
+        if thumbnail_url.startswith('//'):
+            thumbnail_url = coerce_url_to_protocol(thumbnail_url, self.protocol)
+        if not image_data:
+            _, image_data = _fetch_url(thumbnail_url, referer=self.url)
+        if not image_data:
+            return None, None, None, None
+
+        uid = _filename_from_content(image_data)
+        image = str_to_image(image_data)
+        storage_url = upload_media(image, category='previews')
+        width, height = image.size
+        
+        preview_object = {
+            'uid': uid,
+            'url': storage_url,
+            'width': width,
+            'height': height,
+        }
+        
+        thumbnail = _prepare_image(image)
+        media_object = self._make_media_object(oembed)
+        
+        return (
+            thumbnail,
+            preview_object,
+            media_object,
+            media_object,
+        )
+        
+    @classmethod
+    def media_embed(cls, media_object):
+        oembed = media_object["oembed"]
+        html = oembed.get("html")
+        public_thumbnail_url = oembed.get('thumbnail_url')
+            
+        return MediaEmbed(
+            width=1,
+            height=1,
+            content=html,
+            public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
+        )
+
+class _StrawpollScraper(_ThumbnailOnlyScraper):
+    URL_MATCH = re.compile(r"^https?\:\/\/(www\.)?strawpoll\.me\/(\w+)\/?.*$", re.IGNORECASE)
+    EMBED_ENDPOINT = 'http://www.strawpoll.me/embed_1/'
+    
+    def __init__(self, url, maxwidth):
+        self.url = url
+        self.maxwidth = maxwidth
+        self.protocol = UrlParser(url).scheme
+        
+    @classmethod
+    def matches(cls, url):
+        return cls.URL_MATCH.match(url)
+        
+    def _make_media_object(self, oembed):
+        return {
+            "type": "strawpoll",
+            "oembed": oembed,
+        }
+        
+    def scrape(self):
+        thumbnail_url, image_data = self._find_thumbnail_image()
+        if not thumbnail_url:
+            return None, None, None, None
+        if thumbnail_url.startswith('//'):
+            thumbnail_url = coerce_url_to_protocol(thumbnail_url, self.protocol)
+        if not image_data:
+            _, image_data = _fetch_url(thumbnail_url, referer=self.url)
+        if not image_data:
+            return None, None, None, None
+    
+        uid = _filename_from_content(image_data)
+        image = str_to_image(image_data)
+        storage_url = upload_media(image, category='previews')
+        width, height = image.size
+        thumbnail = _prepare_image(image)
+        
+        preview_object = {
+            'uid': uid,
+            'url': storage_url,
+            'width': width,
+            'height': height,
+        }
+
+        match = self.URL_MATCH.match(self.url)
+        if match and match.group(2):
+            self.url = self.EMBED_ENDPOINT + match.group(2)
+
+        oembed = {
+            'html': '<iframe src="'+ self.url +'" style="max-width:500px;width:100%;height:600px;" scrolling="yes">Loading poll...</iframe>',
+            'thumbnail_url': thumbnail_url
+        }
+        media_object = self._make_media_object(oembed)
+
+        return (
+            thumbnail,
+            preview_object,
+            media_object,
+            media_object,
+        )
+        
+    @classmethod
+    def media_embed(cls, media_object):
+        oembed = media_object["oembed"]
+        html = oembed.get("html")
+        public_thumbnail_url = oembed.get('thumbnail_url')
+        return MediaEmbed(
+            width=1,
+            height=1,
+            content=html,
+            public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
+        )
+
+class _InstagramScraper(_ThumbnailOnlyScraper):
+    URL_MATCH = re.compile(r"^https?\:\/\/(www\.)?(instagram\.com\/|instagr\.am\/)p\/(\w+).*$", re.IGNORECASE)
+    OEMBED_ENDPOINT = 'https://api.instagram.com/oembed'
+    
+    def __init__(self, url, maxwidth):
+        self.url = url
+        self.maxwidth = maxwidth
+        self.protocol = UrlParser(url).scheme
+        
+    @classmethod
+    def matches(cls, url):
+        return cls.URL_MATCH.match(url)
+        
+    def _make_media_object(self, oembed):
+        return {
+            "type": "instagram",
+            "oembed": oembed,
+        }
+        
+    def _fetch_from_instagram(self):
+        params = {
+            "url": self.url,
+            "maxwidth": 400,
+            "hidecaption": False,
+            "omitscript": False,
+        }
+        content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
+        return json.loads(content)
+        
+    def scrape(self):
+        oembed = self._fetch_from_instagram()
+        if not oembed:
+            return None, None, None, None
+            
+        thumbnail_url = oembed.get('thumbnail_url')
+        print(thumbnail_url)
+        if not thumbnail_url:
+            return None, None, None, None
+        if thumbnail_url.startswith('//'):
+            thumbnail_url = coerce_url_to_protocol(thumbnail_url, self.protocol)
+        _, image_data = _fetch_url(thumbnail_url, referer=self.url)
+        if not image_data:
+            return None, None, None, None
+
+        uid = _filename_from_content(image_data)
+        image = str_to_image(image_data)
+        storage_url = upload_media(image, category='previews')
+        width, height = image.size
+        
+        preview_object = {
+            'uid': uid,
+            'url': storage_url,
+            'width': width,
+            'height': height,
+        }
+        
+        thumbnail = _prepare_image(image)
+        media_object = self._make_media_object(oembed)
+        
+        return (
+            thumbnail,
+            preview_object,
+            media_object,
+            media_object,
+        )
+        
+    @classmethod
+    def media_embed(cls, media_object):
+        oembed = media_object["oembed"]
+        html = oembed.get("html")
+        public_thumbnail_url = oembed.get('thumbnail_url')
+            
+        return MediaEmbed(
+            width=1,
+            height=1,
+            content=html,
+            public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
         )
 
 @memoize("media.embedly_services2", time=3600)
 def _fetch_embedly_service_data():
-    resp = requests.get("https://api.embed.ly/1/services/python")
+    resp = _fetch_url_requests("https://api.embed.ly/1/services/python")
     return get_requests_resp_json(resp)
 
 
