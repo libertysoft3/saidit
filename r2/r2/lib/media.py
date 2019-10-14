@@ -1764,6 +1764,7 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
     CHANNEL_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.)?twitch\.tv\/(\w+)\/?$", re.IGNORECASE)
     VIDEO_MATCH = re.compile(r"^https?\:\/\/(www\.|m\.|)?twitch\.tv\/videos\/(\w+)(.*t\=)?(\w+).*$", re.IGNORECASE)
     CLIP_MATCH = re.compile(r"^https?\:\/\/(clips\.)twitch\.tv\/(\w+)\/?.*$", re.IGNORECASE)
+    CLIP_CHANNEL_MATCH = re.compile(r"^https?\:\/\/(www\.)?twitch\.tv\/\w+\/clip\/(\w+)\/?.*$", re.IGNORECASE)
     
     def __init__(self, url, maxwidth):
         self.url = url
@@ -1795,11 +1796,14 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
         channel_match = self.CHANNEL_MATCH.match(self.url)
         video_match = self.VIDEO_MATCH.match(self.url)
         clip_match = self.CLIP_MATCH.match(self.url)
-
+        clip_channel_match = self.CLIP_CHANNEL_MATCH.match(self.url)
+        
         # Fetch the correct thumbnail from orginal url. If no thumbnail
         # is found, fetch default thumbnail from Twitch front page.
         if (channel_match or video_match or clip_match):
             thumbnail_url, image_data = self._find_thumbnail_image()
+        else:
+            return None, None, None, None
         if not thumbnail_url:
             _ = self.url
             self.url = 'https://www.twitch.tv'
@@ -1828,6 +1832,8 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
             self.url = self.url + '&time=' + time_stamp + '&muted=false'
         elif clip_match and clip_match.group(2):
             self.url = self.CLIP_URL + 'clip=' + clip_match.group(2) + '&muted=false'
+        elif clip_channel_match and clip_channel_match.group(2):
+            self.url = self.CLIP_URL + 'clip=' + clip_channel_match.group(2) + '&muted=false'
         else:
             return None, None, None, None
             
