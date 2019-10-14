@@ -1647,9 +1647,7 @@ class _NeatClipScraper(_ThumbnailOnlyScraper):
         thumbnail = _prepare_image(image)
 
         oembed = {
-            'html': '<iframe width="600" height="338" src="' + self.url + '" scrolling="no" allow="autoplay; fullscreen" allowfullscreen="true" frameborder="0"></iframe>',
-            'width': 600,
-            'height': 338,
+            'html': '<iframe width="600" height="350" style="max-width:600px;width:100%;height:350px;" src="' + self.url + '" scrolling="no" allow="autoplay; fullscreen" allowfullscreen="true" frameborder="0"></iframe>',
             'thumbnail_url': thumbnail_url
         }
 
@@ -1666,16 +1664,13 @@ class _NeatClipScraper(_ThumbnailOnlyScraper):
     def media_embed(cls, media_object):
         oembed = media_object["oembed"]
         html = oembed.get("html")
-        width = oembed.get("width")
-        height = oembed.get("height")
         public_thumbnail_url = oembed.get('thumbnail_url')
-        if not (html and width and height):
-            return
         return MediaEmbed(
-            width=width,
-            height=height,
+            width=1,
+            height=1,
             content=html,
             public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
         )
         
 class _StreamableScraper(_ThumbnailOnlyScraper):
@@ -1700,6 +1695,11 @@ class _StreamableScraper(_ThumbnailOnlyScraper):
         return json.loads(content)
             
     def _make_media_object(self, oembed):
+        soup = BeautifulSoup.BeautifulSoup(oembed.get("html"))
+        soup.find('iframe')['width'] = '600'
+        soup.find('iframe')['height'] = '350'
+        soup.find('iframe')['style'] = 'max-width:600px;width:100%;height:350px;'
+        oembed['html'] = str(soup)
         if oembed.get("type") == "video":
             return {
                 "type": "streamable",
@@ -1746,26 +1746,15 @@ class _StreamableScraper(_ThumbnailOnlyScraper):
     @classmethod
     def media_embed(cls, media_object):
         oembed = media_object["oembed"]
-        
-        # Width\Height are too large causing display issues.
-        # Set to '100%' to fit parent frame
-        soup = BeautifulSoup.BeautifulSoup(oembed.get("html"))
-        soup.find('iframe')['width'] = '600'
-        soup.find('iframe')['height'] = '338'
-        
-        html = str(soup)
-        width = 600
-        height = 338
+        html = oembed.get('html')
         public_thumbnail_url = oembed.get('thumbnail_url')
-        
-        if not (html and width and height):
-            return
             
         return MediaEmbed(
-            width=width,
-            height=height,
+            width=1,
+            height=1,
             content=html,
             public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
         )
 
 class _TwitchScraper(_ThumbnailOnlyScraper):
@@ -1856,9 +1845,7 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
         
         thumbnail = _prepare_image(image)
         oembed = {
-            'html': '<iframe width="600" height="338" src="' + self.url + '" scrolling="no" allow="autoplay; fullscreen" allowfullscreen="true" frameborder="0"></iframe>',
-            'width': 600,
-            'height': 338,
+            'html': '<iframe style="max-width:600px;width:100%;height:350px;" src="' + self.url + '" scrolling="no" allow="autoplay; fullscreen" allowfullscreen="true" frameborder="0"></iframe>',
             'thumbnail_url': thumbnail_url
         }
         media_object = self._make_media_object(oembed)
@@ -1874,16 +1861,13 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
     def media_embed(cls, media_object):
         oembed = media_object["oembed"]
         html = oembed.get("html")
-        width = oembed.get("width")
-        height = oembed.get("height")
         public_thumbnail_url = oembed.get('thumbnail_url')
-        if not (html and width and height):
-            return
         return MediaEmbed(
-            width=width,
-            height=height,
+            width=1,
+            height=1,
             content=html,
             public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
         )
     
 class _TwitterScraper(_ThumbnailOnlyScraper):
@@ -1906,12 +1890,10 @@ class _TwitterScraper(_ThumbnailOnlyScraper):
         }
         
     def _fetch_from_twitter(self):
-        # Thread and media hidden to prevent size issues
-        # Full length tweets should fit in MediaEmbed height set at 300px
         params = {
             "url": self.url,
-            "hide_thread": True,
-            "hide_media": True,
+            "hide_thread": False,
+            "hide_media": False,
         }
         content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
         return json.loads(content)
@@ -1962,18 +1944,14 @@ class _TwitterScraper(_ThumbnailOnlyScraper):
     def media_embed(cls, media_object):
         oembed = media_object["oembed"]
         html = oembed.get("html")
-        width = oembed.get("width")
-        height = 300
         public_thumbnail_url = oembed.get('thumbnail_url')
-        
-        if not (html and width and height):
-            return
             
         return MediaEmbed(
-            width=width,
-            height=height,
+            width=1,
+            height=1,
             content=html,
             public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
         )
 
 class _StrawpollScraper(_ThumbnailOnlyScraper):
@@ -2024,9 +2002,7 @@ class _StrawpollScraper(_ThumbnailOnlyScraper):
             self.url = self.EMBED_ENDPOINT + match.group(2)
 
         oembed = {
-            'html': '<iframe src="'+ self.url +'" style="width:100%;height:450px;border:0;">Loading poll...</iframe>',
-            'width': 400,
-            'height': 450,
+            'html': '<iframe src="'+ self.url +'" style="max-width:500px;width:100%;height:600px;" scrolling="yes">Loading poll...</iframe>',
             'thumbnail_url': thumbnail_url
         }
         media_object = self._make_media_object(oembed)
@@ -2042,16 +2018,13 @@ class _StrawpollScraper(_ThumbnailOnlyScraper):
     def media_embed(cls, media_object):
         oembed = media_object["oembed"]
         html = oembed.get("html")
-        width = oembed.get("width")
-        height = oembed.get("height")
         public_thumbnail_url = oembed.get('thumbnail_url')
-        if not (html and width and height):
-            return
         return MediaEmbed(
-            width=width,
-            height=height,
+            width=1,
+            height=1,
             content=html,
             public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
         )
 
 class _InstagramScraper(_ThumbnailOnlyScraper):
@@ -2074,12 +2047,10 @@ class _InstagramScraper(_ThumbnailOnlyScraper):
         }
         
     def _fetch_from_instagram(self):
-        # Thread and media hidden to prevent size issues
-        # Full length tweets should fit in MediaEmbed height set at 300px
         params = {
             "url": self.url,
             "maxwidth": 400,
-            "hidecaption": True,
+            "hidecaption": False,
             "omitscript": False,
         }
         content = _fetch_url_requests(self.OEMBED_ENDPOINT, params=params).content
@@ -2126,17 +2097,14 @@ class _InstagramScraper(_ThumbnailOnlyScraper):
     def media_embed(cls, media_object):
         oembed = media_object["oembed"]
         html = oembed.get("html")
-        width = oembed.get("width")
-        height = 700
         public_thumbnail_url = oembed.get('thumbnail_url')
-        if not (html and width and height):
-            return
             
         return MediaEmbed(
-            width=width,
-            height=height,
+            width=1,
+            height=1,
             content=html,
             public_thumbnail_url=public_thumbnail_url,
+            direct_embed=True,
         )
 
 @memoize("media.embedly_services2", time=3600)
