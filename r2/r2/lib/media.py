@@ -222,7 +222,10 @@ def _fetch_url(url, referer=None):
     if not request:
         return None, None
 
+    last_https_proxy = ''
     if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+        if "HTTPS_PROXY" in os.environ:
+            last_https_proxy = os.environ["HTTPS_PROXY"]
         os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
 
     response = urllib2.urlopen(request)
@@ -235,18 +238,17 @@ def _fetch_url(url, referer=None):
     content_type = response.headers.get("Content-Type")
 
     if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-            os.environ["HTTPS_PROXY"] = ""
+            os.environ["HTTPS_PROXY"] = last_https_proxy
 
     return content_type, response_data
 
 def _fetch_url_requests(url, params=None):
+    proxies = None
     if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-        os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
-        
-    response = requests.get(url, params)
-    
-    if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-            os.environ["HTTPS_PROXY"] = ""
+        proxies = {"http": g.remote_fetch_proxy_url, "https": g.remote_fetch_proxy_url}
+
+    response = requests.get(url, params=params, proxies=proxies)
+
     return response
 
 @memoize('media.fetch_size', time=3600)

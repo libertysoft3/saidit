@@ -428,6 +428,8 @@ server {
         proxy_set_header Host \$http_host;
         proxy_http_version 1.1;
         proxy_set_header X-Forwarded-For \$remote_addr;
+        # if CloudFlare instead set
+        # proxy_set_header X-Forwarded-For \$http_cf_connecting_ip;
         proxy_pass_header Server;
 
         # allow websockets through if desired
