@@ -329,6 +329,7 @@ class Globals(object):
             'remote_fetch_proxy_url',
             'brander_community',
             'brander_community_plural',
+            'imgur_client_id',
         ],
 
         ConfigValue.choice(ONE=CL_ONE, QUORUM=CL_QUORUM): [

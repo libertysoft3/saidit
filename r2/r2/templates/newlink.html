@@ -25,6 +25,7 @@
    from r2.lib.pages import SubredditSelector, UserText
    from r2.lib.template_helpers import add_sr, _wsf, format_html
    from r2.lib.filters import safemarkdown
+   from pylons import app_globals as g
 %>
 
 <%namespace file="utils.html" import="error_field, submit_form, _a_buffered, text_with_links"/>
@@ -90,8 +91,11 @@ function countChars(countfrom,displayto) {
     ${error_field("NO_SELFS", "sr")}
 
     <div id="suggest-title">
-      <span class="title-status"></span>
+      <div class="title-status"></div>
       <button type="button" tabindex="100" onclick="fetch_title()" onmouseup="countChars('title_text','charcount');" onmousemove="countChars('title_text','charcount');">${_("suggest title")}</button>
+      %if g.imgur_client_id:
+        <input id="imgur-upload" type="file" class="btn imgur-upload" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.xcf,.webp,.mp4,.mov"/>
+      %endif
     </div>
   </%utils:round_field>
 </div>

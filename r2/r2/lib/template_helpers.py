@@ -213,7 +213,11 @@ def js_config(extra_config=None):
         events_collector_key = g.secrets['events_collector_js_key']
         events_collector_secret = g.secrets['events_collector_js_secret']
 
+    # CUSTOM
     brander_community_abbr = g.brander_community_abbr
+    imgur_client_id = ''
+    if len(g.imgur_client_id):
+        imgur_client_id = g.imgur_client_id
 
     config = {
         # is the user logged in?
@@ -292,6 +296,7 @@ def js_config(extra_config=None):
         # CUSTOM
         "brander_community_abbr": g.brander_community_abbr,
         "chat_client_url": g.chat_client_url,
+        "imgur_client_id": imgur_client_id,
     }
 
     if g.tracker_url:

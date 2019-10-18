@@ -650,6 +650,7 @@ module["reddit"] = LocalizedModule("reddit.js",
     "reddit-hook.js",
     "link-click-tracking.js",
     "warn-on-unload.js",
+    "imgur-upload.js",
     PermissionsDataSource({
         "moderator": ModeratorPermissionSet,
         "moderator_invite": ModeratorPermissionSet,
