@@ -1752,6 +1752,7 @@ class FriendsSR(FakeSubreddit):
         return get_gilded_users(friends)
 
 # SaidIt: swap home pages with a user preference
+# 'site_index_home' is deprecated and replaced by 'site_index_all'
 class DynamicSR(FakeSubreddit):
     analytics_name = ''
     name = ''
@@ -1759,13 +1760,12 @@ class DynamicSR(FakeSubreddit):
     title = g.brander_index_page_title
     header_title = ''
 
-    def __init__(self, default_sr, friends_sr, mod_sr, all_sr, random_sr, home_sr):
+    def __init__(self, default_sr, friends_sr, mod_sr, all_sr, random_sr):
         self.default_sr = default_sr
         self.friends_sr = friends_sr
         self.mod_sr = mod_sr
         self.all_sr = all_sr
         self.random_sr = random_sr
-        self.home_sr = home_sr
 
     # c.user.pref_site_index is only available later in the request, not in set_subreddit() or DynamicSR __init__
     def init_via_user_pref(self):
@@ -1774,16 +1774,11 @@ class DynamicSR(FakeSubreddit):
             self.name = g.front_name
             self.path = g.front_path
             self.header_title = g.front_header_title
-        elif c.user.pref_site_index == 'site_index_all':
+        elif c.user.pref_site_index == 'site_index_all' or c.user.pref_site_index == 'site_index_home':
             self.analytics_name = g.all_name
             self.name = g.all_name
             self.path = g.all_path
             self.header_title = g.all_header_title
-        elif c.user.pref_site_index == 'site_index_home':
-            self.analytics_name = g.home_name
-            self.name = g.home_name
-            self.path = g.home_path
-            self.header_title = g.home_name
 
     def keep_for_rising(self, sr_id):
         return True
@@ -1792,28 +1787,22 @@ class DynamicSR(FakeSubreddit):
         self.init_via_user_pref()
         if c.user.pref_site_index == 'site_index_front':
             return self.default_sr.get_links(sort, time)
-        elif c.user.pref_site_index == 'site_index_all':
+        elif c.user.pref_site_index == 'site_index_all' or c.user.pref_site_index == 'site_index_home':
             return self.all_sr.get_links(sort, time)
-        elif c.user.pref_site_index == 'site_index_home':
-            return self.home_sr.get_links(sort, time)
 
     def get_all_comments(self):
         self.init_via_user_pref()
         if c.user.pref_site_index == 'site_index_front':
             return self.default_sr.get_all_comments()
-        elif c.user.pref_site_index == 'site_index_all':
+        elif c.user.pref_site_index == 'site_index_all' or c.user.pref_site_index == 'site_index_home':
             return self.all_sr.get_all_comments()
-        elif c.user.pref_site_index == 'site_index_home':
-            return self.home_sr.get_all_comments()
 
     def get_gilded(self):
         self.init_via_user_pref()
         if c.user.pref_site_index == 'site_index_front':
             return self.default_sr.get_gilded()
-        elif c.user.pref_site_index == 'site_index_all':
+        elif c.user.pref_site_index == 'site_index_all' or c.user.pref_site_index == 'site_index_home':
             return self.all_sr.get_gilded()
-        elif c.user.pref_site_index == 'site_index_home':
-            return self.home_sr.get_gilded()
 
     @property
     def is_homepage(self):
@@ -1907,79 +1896,6 @@ class AllMinus(AllSR):
         from r2.lib.db.operators import not_
         q = AllSR.get_links(self, sort, time)
         # CUSTOM: degolding
-        if self.exclude_sr_ids:
-            q._filter(not_(Link.c.sr_id.in_(self.exclude_sr_ids)))
-        return q
-
-# SaidIt: HomeSR is a filtered All (like AllMinus), according to g.home_exclude_sr_names
-# TODO: add a filtered get_all_comments()
-class HomeSR(AllSR):
-    analytics_name = g.home_name
-    name = g.home_name
-    path = g.home_path
-    title = g.home_page_title
-    header_title = g.home_name
-
-    def __init__(self):
-        AllSR.__init__(self)
-        name_filter = lambda name: Subreddit.is_valid_name(name, allow_language_srs=True)
-        sr_names = filter(name_filter, g.live_config['home_exclude_sr_names'].split(','))
-        exclude_srs = Subreddit._by_name(sr_names, stale=True)
-        self.exclude_sr_ids = [sr._id for sr in exclude_srs.itervalues() if not isinstance(sr, FakeSubreddit)]
-
-    @property
-    def _should_wiki(self):
-        if g.site_index_user_configurable != 'true' and g.site_index == g.home_name:
-            return True
-        return False
-
-    def keep_for_rising(self, sr_id):
-        return sr_id not in self.exclude_sr_ids
-
-    def get_links(self, sort, time):
-        from r2.models import Link
-        from r2.lib.db.operators import not_
-        q = AllSR.get_links(self, sort, time)
-        if self.exclude_sr_ids:
-            q._filter(not_(Link.c.sr_id.in_(self.exclude_sr_ids)))
-        return q
-    @property
-    def is_homepage(self):
-        if g.site_index_user_configurable != 'true' and g.site_index == g.home_name:
-            return True
-        return False
-
-class HomeMinus(HomeSR):
-    analytics_name = g.home_name
-    name = _("%s (filtered)") % g.home_name
-
-    def __init__(self, srs):
-        HomeSR.__init__(self)
-
-        # not including HomeSR's excluded subs in name or path
-        self.exclude_srs = srs
-        self.exclude_sr_ids = [sr._id for sr in srs]
-
-        # but do exclude HomeSR's excluded subs in addition to url supplied subs
-        name_filter = lambda name: Subreddit.is_valid_name(name, allow_language_srs=True)
-        sr_names = filter(name_filter, g.live_config['home_exclude_sr_names'].split(','))
-        home_excluded_srs = Subreddit._by_name(sr_names, stale=True)
-        self.exclude_sr_ids.extend(sr._id for sr in home_excluded_srs.itervalues() if not isinstance(sr, FakeSubreddit))
-        self.exclude_sr_ids = list(set(self.exclude_sr_ids))
-
-    @property
-    def title(self):
-        sr_names = ', '.join(sr.name for sr in self.exclude_srs)
-        return g.home_minus_page_title + ' ' + sr_names
-
-    @property
-    def path(self):
-        return '/%s/%s-' % (g.brander_community_abbr, g.home_name) + '-'.join(sr.name for sr in self.exclude_srs)
-
-    def get_links(self, sort, time):
-        from r2.models import Link
-        from r2.lib.db.operators import not_
-        q = AllSR.get_links(self, sort, time)
         if self.exclude_sr_ids:
             q._filter(not_(Link.c.sr_id.in_(self.exclude_sr_ids)))
         return q
@@ -2937,8 +2853,7 @@ All = AllSR()
 Random = RandomReddit()
 RandomNSFW = RandomNSFWReddit()
 RandomSubscription = RandomSubscriptionReddit()
-Home = HomeSR()
-Dynamic = DynamicSR(Frontpage, Friends, Mod, All, Random, Home)
+Dynamic = DynamicSR(Frontpage, Friends, Mod, All, Random)
 
 # add to _specials so they can be retrieved with Subreddit._by_name, e.g.
 # Subreddit._by_name("all")
@@ -2951,8 +2866,6 @@ Subreddit._specials.update({
         Contrib,
         All,
         Frontpage,
-        # CUSTOM: lets you use route /s/home in addition to /
-        Home,
     )
 })
 

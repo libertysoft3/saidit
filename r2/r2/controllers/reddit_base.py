@@ -138,9 +138,6 @@ from r2.models import (
 
     # CUSTOM
     AllSR,
-    HomeSR,
-    Home,
-    HomeMinus,
     DynamicSR,
     Dynamic
 )
@@ -313,8 +310,6 @@ def set_subreddit():
     c.site = Frontpage
     if g.site_index == 'all':
         c.site = All
-    elif g.site_index == 'home':
-        c.site = Home
     elif g.site_index == 'friends':
         c.site = Friends
     elif g.site_index == 'mod':
@@ -330,7 +325,7 @@ def set_subreddit():
         #check for cnames
         cname = request.environ.get('legacy-cname')
         if cname:
-            sr = Subreddit._by_domain(cname) or Home
+            sr = Subreddit._by_domain(cname) or c.site
             domain = g.domain
             if g.domain_prefix:
                 domain = ".".join((g.domain_prefix, domain))
@@ -375,11 +370,6 @@ def set_subreddit():
                 c.site = ModMinus(exclude_srs)
             else:
                 c.site = Mod
-        elif base_sr == Home:
-            if exclude_srs:
-                c.site = HomeMinus(exclude_srs)
-            else:
-                c.site = Home
         else:
             path = "/subs/search?q=%s" % sr_name
             abort(302, location=BaseController.format_output_url(path))

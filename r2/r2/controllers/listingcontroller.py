@@ -203,7 +203,7 @@ class ListingController(RedditController):
 
             # SaidIt: support alternate home pages
             # Distinguish between subs and links when checking discoverable
-            if isinstance(c.site, (HomeSR, AllSR)) or (isinstance(c.site, DynamicSR) and (c.site.name == g.home_name or c.site.name == g.all_name)):
+            if isinstance(c.site, AllSR) or (isinstance(c.site, DynamicSR) and c.site.name == g.all_name):
                 if hasattr(item, 'subreddit') and not item.subreddit.discoverable:
                     return False
                 elif hasattr(item, 'discoverable') and not item.discoverable:
@@ -497,7 +497,6 @@ class HotController(ListingWithPromos):
     show_organic = True
 
     def query(self):
-
         if isinstance(c.site, DefaultSR):
             sr_ids = Subreddit.user_subreddits(c.user)
             return normalized_hot(sr_ids)
@@ -638,7 +637,7 @@ class BrowseController(ListingWithPromos):
         if self.time != 'all' and c.default_sr:
             oldest = utils.timeago('1 %s' % (str(self.time),))
             def keep(item):
-                if isinstance(c.site, (HomeSR, AllSR)) or (isinstance(c.site, DynamicSR) and (c.site.name == g.home_name or c.site.name == g.all_name)):
+                if isinstance(c.site, AllSR) or (isinstance(c.site, DynamicSR) and c.site.name == g.all_name):
                     if not item.subreddit.discoverable:
                         return False
                 return item._date > oldest and item.keep_item(item)

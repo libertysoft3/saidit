@@ -31,9 +31,7 @@ from r2.lib.filters import _force_unicode
 from r2.lib.strings import StringHandler, plurals
 from r2.lib.utils import  class_property, query_string, timeago
 from r2.lib.wrapped import Styled
-
-# CUSTOM: Add HomeSR support
-from r2.models.subreddit import DefaultSR, AllSR, HomeSR, DynamicSR
+from r2.models.subreddit import DefaultSR, AllSR, DynamicSR
 
 class MenuHandler(StringHandler):
     """Bastard child of StringHandler and plurals.  Menus are
@@ -218,7 +216,6 @@ menu =   MenuHandler(hot          = _('hot'),
                      subs_reset_subscriptions       = _('yes (danger)'),
                      theme_nightmode                = _('Night mode'),
                      theme_daymode                  = _('Day mode'),
-                     site_index_home                = _(g.home_name.title()),
                      site_index_front               = _(g.front_name.title()),
                      site_index_all                 = _(g.all_name.title()),
                      )
@@ -449,7 +446,7 @@ class OffsiteButton(NavButton):
 
 
 class SubredditButton(NavButton):
-    from r2.models.subreddit import Frontpage, Mod, All, Random, RandomSubscription, HomeSR, DefaultSR, AllSR
+    from r2.models.subreddit import Frontpage, Mod, All, Random, RandomSubscription, DefaultSR, AllSR
     # TRANSLATORS: This refers to /r/mod
     name_overrides = {Mod: N_("mod"),
     # TRANSLATORS: This refers to the user's front page
@@ -766,8 +763,7 @@ class SiteThemeMenu(SortMenu):
         'theme_daymode')
 
 class SiteIndexMenu(SortMenu):
-    _default = 'site_index_home'
+    _default = 'site_index_front'
     _options = (
-        'site_index_home',
         'site_index_front',
         'site_index_all')

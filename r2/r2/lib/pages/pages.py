@@ -70,8 +70,6 @@ from r2.models import (
     make_feedurl,
 
     # CUSTOM
-    HomeSR,
-    Home,
     DynamicSR,
 )
 from r2.models.bidding import Bid
@@ -307,8 +305,6 @@ class Reddit(Templated):
         if feature.is_enabled('chat') and c.user.pref_chat_enabled:
             if isinstance(c.site, Subreddit) and c.site.chat_enabled:
                 self.show_sidebar_chat = True
-            elif isinstance(c.site, HomeSR) and g.live_config['chat_home'] == 'true':
-                self.show_sidebar_chat = True
             elif isinstance(c.site, AllSR) and g.live_config['chat_all'] == 'true':
                 self.show_sidebar_chat = True
             elif isinstance(c.site, DefaultSR) and g.live_config['chat_front'] == 'true':
@@ -317,8 +313,6 @@ class Reddit(Templated):
                 if c.site.name == g.front_name and g.live_config['chat_front'] == 'true':
                     self.show_sidebar_chat = True
                 elif c.site.name == g.all_name and g.live_config['chat_all'] == 'true':
-                    self.show_sidebar_chat = True
-                elif c.site.name == g.home_name and g.live_config['chat_home'] == 'true':
                     self.show_sidebar_chat = True
 
         # generate a canonical link for google
@@ -444,7 +438,7 @@ class Reddit(Templated):
             c.render_style == "html" and
             c.user_is_loggedin and
             (
-                isinstance(c.site, (DefaultSR, AllSR, HomeSR, ModSR, LabeledMulti, DynamicSR)) or
+                isinstance(c.site, (DefaultSR, AllSR, ModSR, LabeledMulti, DynamicSR)) or
                 c.site.name == g.live_config["listing_chooser_explore_sr"]
             )
         )
@@ -693,14 +687,14 @@ class Reddit(Templated):
         if self.searchbox:
             ps.append(SearchForm())
 
-        # SaidIt: HomeSR, DynamicSR
+        # SaidIt: DynamicSR
         sidebar_message = g.live_config.get("sidebar_message")
-        if sidebar_message and isinstance(c.site, (DefaultSR, AllSR, HomeSR, DynamicSR)):
+        if sidebar_message and isinstance(c.site, (DefaultSR, AllSR, DynamicSR)):
             ps.append(SidebarMessage(sidebar_message[0]))
 
         gold_sidebar_message = g.live_config.get("gold_sidebar_message")
         if (c.user_is_loggedin and c.user.gold and
-                gold_sidebar_message and isinstance(c.site, (HomeSR, AllSR, DefaultSR, DynamicSR))):
+                gold_sidebar_message and isinstance(c.site, (AllSR, DefaultSR, DynamicSR))):
             ps.append(SidebarMessage(gold_sidebar_message[0],
                                      extra_class="gold"))
 
@@ -724,8 +718,6 @@ class Reddit(Templated):
         if (isinstance(c.site, Filtered) and not
             (isinstance(c.site, AllSR) and not c.user.gold)):
             ps.append(FilteredInfoBar())
-        elif isinstance(c.site, HomeSR):
-            pass
         elif isinstance(c.site, DynamicSR):
             pass
         elif isinstance(c.site, AllSR):
@@ -857,16 +849,11 @@ class Reddit(Templated):
                            show_cover = True))
 
         # SaidIt: sidebar Chat
-        # WARNING: HomeSR extends AllSR, first on purpose
         if feature.is_enabled('chat') and c.user.pref_chat_enabled:
             from r2.lib.pages.chat import SidebarChat
             if isinstance(c.site, Subreddit):
                 if c.site.chat_enabled:
                     notebar = SidebarChat('subreddit', c.site.name)
-                    ps.append(notebar)
-            elif isinstance(c.site, HomeSR):
-                if g.live_config['chat_home'] == 'true':
-                    notebar = SidebarChat('subreddit', g.chat_home_channel)
                     ps.append(notebar)
             elif isinstance(c.site, AllSR):
                 if g.live_config['chat_all'] == 'true':
@@ -882,9 +869,6 @@ class Reddit(Templated):
                     ps.append(notebar)
                 elif c.site.name == g.all_name and g.live_config['chat_all'] == 'true':
                     notebar = SidebarChat('subreddit', g.chat_all_channel)
-                    ps.append(notebar)
-                elif c.site.name == g.home_name and g.live_config['chat_home'] == 'true':
-                    notebar = SidebarChat('subreddit', g.chat_home_channel)
                     ps.append(notebar)
 
         # don't show the subreddit info bar on cnames unless the option is set
@@ -1112,7 +1096,7 @@ class Reddit(Templated):
         func = 'subreddit'
         if isinstance(c.site, DomainSR):
             func = 'domain'
-        elif isinstance(c.site, (HomeSR, AllSR, DefaultSR, DynamicSR)):
+        elif isinstance(c.site, (AllSR, DefaultSR, DynamicSR)):
             func = 'subredditheadertitle'
             if c.site.is_homepage:
                 func = 'subredditnositelink'
@@ -1437,6 +1421,10 @@ class PrefOptions(Templated):
                     theme.checked = True
 
         feature_autoexpand_media_previews = feature.is_enabled("autoexpand_media_previews")
+
+        # SaidIt: site_index_home deprecation
+        if c.user.pref_site_index == 'site_index_home':
+            c.user.pref_site_index = 'site_index_all'
         Templated.__init__(self, done=done,
                 error_style_override=error_style_override,
                 feature_autoexpand_media_previews=feature_autoexpand_media_previews,
@@ -1591,7 +1579,7 @@ class BoringPage(Reddit):
         Reddit.__init__(self, **context)
 
     def build_toolbars(self):
-        if isinstance(c.site, (HomeSR, DynamicSR)):
+        if isinstance(c.site, DynamicSR):
             return [PageNameNav('nomenu', title = self.pagename)]
         elif isinstance(c.site, (AllSR)):
             return [PageNameNav('subredditnositelink', title = self.pagename)]
@@ -3043,6 +3031,7 @@ class SubredditTopBar(CachedTemplate):
                        RandomSubscription: "gold"}
 
         # SaidIt: configurable home page
+        # 'site_index_home' is deprecated and replaced by 'site_index_all'
         reddits = []
         if g.site_index_user_configurable == 'true':
             if c.user.pref_site_index == 'site_index_front':
@@ -3050,25 +3039,12 @@ class SubredditTopBar(CachedTemplate):
                     reddits.append(Frontpage)
                 if g.menu_show_all == 'true':
                     reddits.append(All)
-                if g.menu_show_home == 'true':
-                    reddits.append(Home)
-            elif c.user.pref_site_index == 'site_index_all':
+            elif c.user.pref_site_index == 'site_index_all' or c.user.pref_site_index == 'site_index_home':
                 if g.menu_show_all == 'true':
                     reddits.append(All)
                 if g.menu_show_front == 'true':
                     reddits.append(Frontpage)
-                if g.menu_show_home == 'true':
-                    reddits.append(Home)
-            elif c.user.pref_site_index == 'site_index_home':
-                if g.menu_show_home == 'true':
-                    reddits.append(Home)
-                if g.menu_show_front == 'true':
-                    reddits.append(Frontpage)
-                if g.menu_show_all == 'true':
-                    reddits.append(All)
         else:
-            if g.menu_show_home == 'true':
-                reddits.append(Home)
             if g.menu_show_front == 'true':
                 reddits.append(Frontpage)
             if g.menu_show_all == 'true':

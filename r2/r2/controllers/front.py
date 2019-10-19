@@ -1148,7 +1148,7 @@ class FrontController(RedditController):
         else:
             site = c.site
 
-        has_query = query or not isinstance(site, (DefaultSR, AllSR, HomeSR, DynamicSR))
+        has_query = query or not isinstance(site, (DefaultSR, AllSR, DynamicSR))
 
         if not syntax:
             syntax = g.search.SearchQuery.default_syntax

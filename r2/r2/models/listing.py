@@ -24,7 +24,7 @@ from account import *
 from link import *
 from vote import *
 from report import *
-from subreddit import DefaultSR, AllSR, HomeSR, Frontpage, Subreddit
+from subreddit import DefaultSR, AllSR, Frontpage, Subreddit
 from pylons import i18n, request
 from pylons import app_globals as g
 from pylons.i18n import _
@@ -397,7 +397,7 @@ class SpotlightListing(Listing):
                                  for keyword in keywords])
         self.navigable = kw.get('navigable', True)
         self.things = kw.get('organic_links', [])
-        self.show_placeholder = isinstance(c.site, (DefaultSR, AllSR, HomeSR, DynamicSR))
+        self.show_placeholder = isinstance(c.site, (DefaultSR, AllSR, DynamicSR))
 
     def get_items(self):
         from r2.lib.template_helpers import replace_render

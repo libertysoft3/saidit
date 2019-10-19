@@ -57,7 +57,6 @@ from subreddit import (
 
     # CUSTOM
     AllSR,
-    HomeSR,
     DynamicSR,
 )
 from printable import Printable
@@ -679,7 +678,7 @@ class Link(Thing, Printable):
                     show_media = True
 
             # CUSTOM
-            elif feature.is_enabled('force_show_media_front') and pref_media != 'off' and isinstance(site, (AllSR, DefaultSR, HomeSR, DynamicSR)):
+            elif feature.is_enabled('force_show_media_front') and pref_media != 'off' and isinstance(site, (AllSR, DefaultSR, DynamicSR)):
                 show_media = True
 
             show_media_preview = False
