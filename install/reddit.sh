@@ -219,6 +219,8 @@ uncompressedJS = true
 sqlprinting = false
 profile_directory =
 
+short_description = open source is awesome
+
 disable_ads = true
 disable_captcha = true
 disable_ratelimit = true

@@ -476,7 +476,7 @@
   ## CUSTOM: subscriptions, mass unsubscribe
   <%def name="unsubscribe_actions_options()">
     <% menu = SubscriptionsSubscribeMenu() %>
-    <select id="subscription-unsubsribe" name="subscriptions_unsubscribe" onchange="if ($(this).val() != 'subs_do_nothing') { if (!confirm('really unsubscribe from all subs?')){$(this).val('subs_do_nothing')}}">
+    <select id="subscription-unsubsribe" name="subscriptions_unsubscribe" onchange="if ($(this).val() != 'subs_do_nothing') { if (!confirm('really reset your subscriptions and go back to the default ${_(g.brander_community_plural)}? this action cannot be undone.')){$(this).val('subs_do_nothing')}}">
           %for sort in menu._options:
           <option ${'selected="selected"' if sort == c.user.pref_subscriptions_unsubscribe else ""}
                   value="${sort}">
@@ -491,7 +491,7 @@
       <tr>
       <td class="prefright">
         <p>
-          ${_wsf("unsubscribe from all subs %(sort)s", sort=unsafe(capture(unsubscribe_actions_options)))}
+          ${_wsf("reset subscriptions %(sort)s", sort=unsafe(capture(unsubscribe_actions_options)))}
         </p>
     </td>
     </tr>
