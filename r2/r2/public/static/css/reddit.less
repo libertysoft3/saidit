@@ -11555,7 +11555,7 @@ body:not(.loggedin) .report-button {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	min-height: 15px;
+	min-height: 23px;
 	background: transparent url(../footer-banner.jpg) repeat-x bottom left;
 }
 
@@ -11567,6 +11567,7 @@ body:not(.loggedin) .report-button {
 	background-repeat: no-repeat;
 	min-height: 83px; /* can fine tune and hide top of banner */
 	border-color: #000000;
+        background-attachment: fixed;
 }
 #header-img.default-header {
 	display: block;
@@ -11600,6 +11601,9 @@ body:not(.loggedin) .report-button {
 	.user a:hover {
 		text-decoration: underline;
 	}
+        .user, .choice, .logout a {
+          text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 1px #000, 0px -1px #000, 1px 0px #000, -1px 0px #000;
+        }
 }
 #sr-header-area {
 	border-bottom: none;
