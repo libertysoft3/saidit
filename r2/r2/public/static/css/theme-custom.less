@@ -1,4 +1,5 @@
 /* SaidIt styles, day or night mode */
+#sr-header-area { font-size: 94%; } /* a tad bigger for text shadow legibility */
 #sr-more-link { 
   background: none;
   font-weight: normal;
@@ -15,6 +16,7 @@
 }
 .dropdown.srdrop .selected { margin-right: 0; }
 .bottommenu { margin-bottom: 8px; }
+.thumbnail { margin-right: 10px; }
 
 /* Dark theme/night mode theme, the default */
 .drop-choices {
@@ -170,6 +172,8 @@
     }
     #header-bottom-right, .theme-daymode #header-bottom-right {
         top: 15px;
+        left: 2px;
+        right: auto;
         bottom: auto;
         border-top-left-radius: 0;
     }
@@ -187,6 +191,7 @@
     }
     .thumbnail {
         width: 50px;
+        margin-right: 5px;
     }
     .thumbnail img {
         width: 50px;
@@ -204,6 +209,7 @@
     .searchpane {
         margin: 5px;
         padding-left: 10px;
+        background: none;
     }
     #search input[type=text] {
         width: 100%;
