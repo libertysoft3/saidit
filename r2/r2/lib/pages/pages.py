@@ -1198,6 +1198,7 @@ class Reddit(Templated):
         # could also check c.site.is_homepage. don't trample
         # '#header { background-image: url; }'.
         if g.banner_variants > 0 and c.site.stylesheet_url == '':
+            classes.add('banner-variant')
             classes.add('banner-' + str(random.randint(1, g.banner_variants)))
 
         return classes
