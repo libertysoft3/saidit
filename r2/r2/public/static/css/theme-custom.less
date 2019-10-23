@@ -1,8 +1,18 @@
-/* SaidIt styles, day or night mode */
-#sr-header-area { font-size: 94%; } /* a tad bigger for text shadow legibility */
+/* misc styles for all themes */
+.thumbnail {
+    margin-right: 10px;
+}
+.searchpane, .infobar {
+  margin-right: 5px;
+  overflow: hidden;
+}
+.flair, .linkflairlabel {
+    margin: 0 3px;
+}
 #sr-more-link { 
   background: none;
   font-weight: normal;
+  padding-left: 5px;
 }
 .tabmenu li a {
   color: #369;
@@ -11,88 +21,150 @@
   text-decoration: none;
   color: #369;
 }
+
+/* header */
+#header {
+    background-color: #000000;
+    background-image: url(../header-banner-85.jpg);
+    background-position: top left;
+    background-repeat: no-repeat;
+    min-height: 83px; /* can fine tune and hide top of banner */
+    border-color: #000000;
+    background-attachment: fixed;
+}
+#header-img.default-header {
+    display: block;
+    background-position: 450px 4px; /* logo position */
+    margin: 0; /* fine tune vertical position */
+    background-repeat: no-repeat;
+}
+#sr-header-area {
+    font-size: 94%; /* a tad bigger for text shadow legibility */
+    border-bottom: none;
+    background: none;
+}
 #sr-header-area .dropdown span, #sr-header-area .sr-list a {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 1px #000, 0px -1px #000, 1px 0px #000, -1px 0px #000;
 }
-.dropdown.srdrop .selected { margin-right: 0; }
-.bottommenu { margin-bottom: 8px; }
-.thumbnail { margin-right: 10px; }
-
-/* Dark theme/night mode theme, the default */
-.drop-choices {
-	background-color: #2f2f2f;
-	a.choice {
-		padding: 2px 5px;
-		color: #78bbec;	
-	}
-	a.choice:hover {
-		background-color: #000000;
-	}
+.dropdown.srdrop .selected {
+    margin-right: 0;
+    color: #ffffff;
 }
-.pref-lang, .user .userkarma {
-    font-weight: normal;
+#sr-header-area .drop-choices {
+    width:50%;
+    white-space: pre-wrap;
+    padding: 3px 0 5px 0;
+    a.choice {
+        display: inline-block;
+        padding: 2px 5px;
+    }
+    a.bottom-option {
+        border: none;
+    }
 }
-.theme-nightmode #header-bottom-right .user a {
-    font-weight: bold;
+#sr-more-link, .sr-bar a {
+    color: #ffffff;
 }
-.loggedin.theme-nightmode #header-bottom-right .user a {
-    font-weight: normal;
+#header-bottom-right {
+    background: none;
+    a, .user, .separator {
+        color: #ffffff;
+    }
+    .user a:hover {
+        text-decoration: underline;
+    }
+    .user, .choice, .logout a {
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 1px #000, 0px -1px #000, 1px 0px #000, -1px 0px #000;
+    }
 }
-.loggedin.theme-nightmode #header-bottom-right .user a:hover {
-    text-decoration: underline;
-}
-
-/* Lightswitch */
 .pref-lightswitch {
-	display: inline-block;
-	position: relative;
-	overflow: hidden;
-	margin-bottom: -6px;
-	top: -2px;
-	text-indent: -9999px;
-	width: 16px;
-	height: 16px;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: -6px;
+    top: -2px;
+    text-indent: -9999px;
+    width: 16px;
+    height: 16px;
 }
 .pref-lightswitch-on {
-	background-image: url(../lightswitch-light.png); /* SPRITE */
+    background-image: url(../lightswitch-light.png); /* SPRITE */
 }
 .pref-lightswitch-off {
-	background-image: url(../lightswitch-dark.png); /* SPRITE */
+    background-image: url(../lightswitch-dark.png); /* SPRITE */
+}
+.pagename, .pagename a {
+    color: #ffffff;
+}
+.bottommenu { margin-bottom: 8px; }
+
+/* banner variants */
+.banner-1 #header { background-image: url(../banners/saiditbanner1.jpg); }
+.banner-2 #header { background-image: url(../banners/saiditbanner2.jpg); }
+.banner-3 #header { background-image: url(../banners/saiditbanner3.jpg); }
+.banner-4 #header { background-image: url(../banners/saiditbanner4.jpg); }
+.banner-5 #header { background-image: url(../banners/saiditbanner5.jpg); }
+.banner-6 #header { background-image: url(../banners/saiditbanner6.jpg); }
+.banner-7 #header { background-image: url(../banners/saiditbanner7.jpg); }
+.banner-8 #header { background-image: url(../banners/saiditbanner8.jpg); }
+.banner-9 #header { background-image: url(../banners/saiditbanner9.jpg); }
+.banner-10 #header { background-image: url(../banners/saiditbanner10.jpg); }
+.banner-11 #header { background-image: url(../banners/saiditbanner11.jpg); }
+.banner-12 #header { background-image: url(../banners/saiditbanner12.jpg); }
+.banner-13 #header { background-image: url(../banners/saiditbanner13.jpg); }
+.banner-14 #header { background-image: url(../banners/saiditbanner14.jpg); }
+.banner-15 #header { background-image: url(../banners/saiditbanner15.jpg); }
+.banner-16 #header { background-image: url(../banners/saiditbanner16.jpg); }
+.banner-17 #header { background-image: url(../banners/saiditbanner17.jpg); }
+.banner-18 #header { background-image: url(../banners/saiditbanner18.jpg); }
+.banner-19 #header { background-image: url(../banners/saiditbanner19.jpg); }
+.banner-20 #header { background-image: url(../banners/saiditbanner20.jpg); }
+.banner-21 #header { background-image: url(../banners/saiditbanner21.jpg); }
+.banner-22 #header { background-image: url(../banners/saiditbanner22.jpg); }
+
+/* sidebar */
+#search input[type=text] {
+    border-radius: 20px;
+    outline: none;
 }
 
-/* Voting model */
+/* footer */
+.footer-banner {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    min-height: 23px;
+    background: transparent url(../footer-banner.jpg) repeat-x bottom left;
+}
+
+/* vote buttons */
 .arrow .score {
-	display: inline;
-	padding-left: 19px;
-	position: relative;
-	top: 5px;
+    display: inline;
+    padding-left: 19px;
+    position: relative;
+    top: 5px;
 }
 .score.likesdislikes {
-	display: none;
+    display: none;
 }
 .likes.dislikes {
     .score.likesdislikes {
-    	display: inline;
+        display: inline;
     }
     .score.likes, .score.dislikes {
-    	display: none;
+        display: none;
     }
 }
-.upmod .score, .downmod .score {
-}
 .gadget .midcol {
-	margin-right: 5px;
+    margin-right: 5px;
 }
-
 .tabmenu {
-	margin-top: 6px;
+    margin-top: 6px;
 }
-
-/* optional comment button scores, remove to match link buttons */
+/* custom css feature */
 .comment .arrow .score, .was-comment .arrow .score {
     display: none;
 }
-
 .tagline a.author, .thing .parent .author {
     margin-right: 0;
 }
@@ -113,12 +185,7 @@
   }
 }
 
-#search input[type=text] {
-    border-radius: 20px;
-    outline: none;
-}
-
-/* imgur upload */
+/* imgur uploads */
 #url-field {
     #suggest-title {
         text-align: left;
@@ -129,25 +196,32 @@
     }
 }
 
-/* 'my subs' top left dropdown menu */
-#sr-header-area .drop-choices {
-    width:50%;
-    white-space: pre-wrap;
-    padding: 3px 0 5px 0;
-    a.choice {
-        display: inline-block;
-    }
-    a.bottom-option {
-        border: none;
-    }
+
+/* DARK THEME */
+.drop-choices {
+	background-color: #2f2f2f;
+	a.choice {
+		color: #78bbec;
+	}
+	a.choice:hover {
+		background-color: #000000;
+	}
+}
+.pref-lang, .user .userkarma {
+    font-weight: normal;
+}
+.theme-nightmode #header-bottom-right .user a {
+    font-weight: bold;
+}
+.loggedin.theme-nightmode #header-bottom-right .user a {
+    font-weight: normal;
+}
+.loggedin.theme-nightmode #header-bottom-right .user a:hover {
+    text-decoration: underline;
 }
 
-/* misc */
-.flair, .linkflairlabel {
-    margin: 0 3px;
-}
 
-/* Mobile Styles */
+/* MOBILE STYLES */
 @media only screen and (max-width: 600px) {
     #sr-header-area .drop-choices {
         width: 97%
@@ -185,9 +259,6 @@
     }
     .link .midcol {
         width: 55px;
-    }
-    .arrow {
-        
     }
     .thumbnail {
         width: 50px;
@@ -242,7 +313,6 @@
     .wiki-page .wiki-page-content {
         margin-right: 15px !important;
     }
-
     /* Media, expandos */
     .expando iframe {
         max-width: 100%;

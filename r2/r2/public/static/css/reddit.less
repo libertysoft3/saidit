@@ -11546,69 +11546,6 @@ body:not(.loggedin) .report-button {
     }
 }
 
-
-
-
-/* SAIDIT CUSTOM */
-/* TODO: transition all of these to theme-custom.less, test spritesheet generation if used there */
-.footer-banner {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	min-height: 23px;
-	background: transparent url(../footer-banner.jpg) repeat-x bottom left;
-}
-
-/* header: background image, centered large logo */
-#header {
-	background-color: #000000;
-	background-image: url(../header-banner-85.jpg);
-	background-position: top left;
-	background-repeat: no-repeat;
-	min-height: 83px; /* can fine tune and hide top of banner */
-	border-color: #000000;
-        background-attachment: fixed;
-}
-#header-img.default-header {
-	display: block;
-	margin: 0px 0 0px 0; /* can fine tune vertical posittion */
- 	
-	/* NOTE: you can only set these styles because the logo has been removed from the sprite image */
-	background-position: 450px 4px;
-	background-repeat: no-repeat;
-}
-.pagename, .pagename a {
-	color: #ffffff;
-}
-
-
-/* header: transparent header */
-#sr-header-area, #sr-more-link {
-	background: none;
-}
-#sr-more-link, .sr-bar a, .dropdown.srdrop .selected {
-	color: #ffffff;
-}
-#sr-more-link {
-	background-color: rgba(0,0,0,0.5);
-	padding-left: 5px;
-}
-#header-bottom-right {
-	background: none;
-	a, .user, .separator {
-		color: #ffffff;
-	}
-	.user a:hover {
-		text-decoration: underline;
-	}
-        .user, .choice, .logout a {
-          text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 1px #000, 0px -1px #000, 1px 0px #000, -1px 0px #000;
-        }
-}
-#sr-header-area {
-	border-bottom: none;
-}
-
 /* CUSTOM: See more custom imports at top of file */
 @import "expando-md.less";
 @import "theme-custom.less";

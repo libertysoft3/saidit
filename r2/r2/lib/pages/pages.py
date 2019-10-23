@@ -1191,9 +1191,14 @@ class Reddit(Templated):
             classes.update(self.extra_page_classes)
         if self.supplied_page_classes:
             classes.update(self.supplied_page_classes)
-        
+
         # CUSTOM: site theme
         classes.add(c.user.pref_site_theme.replace('_','-'))
+        # random class for banners unless sub has any custom css.
+        # could also check c.site.is_homepage. don't trample
+        # '#header { background-image: url; }'.
+        if g.banner_variants > 0 and c.site.stylesheet_url == '':
+            classes.add('banner-' + str(random.randint(1, g.banner_variants)))
 
         return classes
 

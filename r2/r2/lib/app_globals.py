@@ -228,6 +228,7 @@ class Globals(object):
             'eu_cookie_max_attempts',
             'captcha_sol_length',
             'captcha_font_size',
+            'banner_variants',
         ],
 
         ConfigValue.float: [
