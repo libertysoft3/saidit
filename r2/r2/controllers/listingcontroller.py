@@ -1619,8 +1619,10 @@ class MyredditsController(ListingController):
     def menus(self):
         buttons = (NavButton(plurals.subscriber,  'subscriber', sr_path=False),
                     NavButton(getattr(plurals, "approved submitter"), 'contributor', sr_path=False),
-                    NavButton(plurals.moderator,   'moderator', sr_path=False),
-                    NavButton(plurals.muted,   'muted', sr_path=False))
+                    NavButton(plurals.moderator,   'moderator', sr_path=False))
+
+        if g.sub_muting_enabled:
+            buttons = buttons + (NavButton(plurals.muted, 'muted', sr_path=False),)
 
         return [NavMenu(buttons, base_path = '/subs/mine/',
                         default = 'subscriber', type = "flatlist")]

@@ -1530,7 +1530,7 @@ class Comment(Thing, Printable):
             if wrapped.author_id in c.user.enemies:
                 return False
             # CUSTOM: sub muting for Comments
-            if g.sub_muting_enabled and wrapped.hidden:
+            if g.sub_muting_enabled and hasattr(wrapped, 'hidden') and wrapped.hidden:
                 return False
 
         return True
