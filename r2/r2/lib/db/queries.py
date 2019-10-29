@@ -670,6 +670,11 @@ def get_hidden_links(user_id):
 def get_hidden(user):
     return get_hidden_links(user)
 
+# CUSTOM: sub muting
+@cached_query(UserQueryCache)
+def get_muted_subreddits(user_id):
+    return FakeQuery(sort=[desc("action_date")])
+
 @cached_query(UserQueryCache)
 def get_categorized_saved_links(user_id, sr_id, category):
     return FakeQuery(sort=[desc("action_date")])

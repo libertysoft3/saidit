@@ -654,6 +654,17 @@ class Link(Thing, Printable):
         else:
             is_moderator_srids = set()
 
+        # CUSTOM: sub muting for Links
+        srs_mutes_by_account = {}
+        sub_muting_hide_eligible = False
+        if user_is_loggedin and g.sub_muting_enabled:
+            if isinstance(site, AllSR) or (isinstance(site, DynamicSR) and site.name == g.all_name):
+                sub_muting_hide_eligible = True
+            try:
+                srs_mutes_by_account = SubredditMutesByAccount.fast_query(user, srs)
+            except tdb_cassandra.TRANSIENT_EXCEPTIONS as e:
+                g.log.warning("Cassandra muted lookup failed: %r", e)
+
         # set the nofollow state where needed
         cls.update_nofollow(user, wrapped)
 
@@ -746,7 +757,6 @@ class Link(Thing, Printable):
                 item.saved = (user, item) in saved
                 item.hidden = (user, item) in hidden
                 item.visited = (user, item) in visited
-
             else:
                 item.user_gilded = False
                 item.saved = item.hidden = item.visited = False
@@ -825,6 +835,13 @@ class Link(Thing, Printable):
 
             item.user_is_moderator = item.sr_id in is_moderator_srids
 
+            # CUSTOM: sub muting for Links
+            item.muted = False
+            if g.sub_muting_enabled and user_is_loggedin and (user, item.subreddit) in srs_mutes_by_account:
+                item.muted = True
+                if sub_muting_hide_eligible and not item.is_author and not item.user_is_moderator and not user_is_admin:
+                    item.hidden = True
+
             # do we hide the score?
             if user_is_admin:
                 item.hide_score = False
@@ -868,7 +885,8 @@ class Link(Thing, Printable):
                                   item.visited,
                                   item.hidden,
                                   item._deleted,
-                                  item._spam))
+                                  item._spam,
+                                  item.muted))
 
             # bits that we will render stubs (to make the cached
             # version more flexible)
@@ -1511,6 +1529,9 @@ class Comment(Thing, Printable):
                 return True
             if wrapped.author_id in c.user.enemies:
                 return False
+            # CUSTOM: sub muting for Comments
+            if g.sub_muting_enabled and wrapped.hidden:
+                return False
 
         return True
 
@@ -1630,6 +1651,17 @@ class Comment(Thing, Printable):
                 cm.sr_id = links[cm.link_id].sr_id
 
         subreddits = {item.subreddit for item in wrapped}
+
+        # CUSTOM: sub muting for Comments
+        srs_mutes_by_account = {}
+        sub_muting_hide_eligible = False
+        if g.sub_muting_enabled and c.user_is_loggedin:
+            if isinstance(c.site, AllSR) or (isinstance(c.site, DynamicSR) and c.site.name == g.all_name):
+                sub_muting_hide_eligible = True
+            try:
+                srs_mutes_by_account = SubredditMutesByAccount.fast_query(user, subreddits)
+            except tdb_cassandra.TRANSIENT_EXCEPTIONS as e:
+                g.log.warning("Cassandra subreddit muted lookup failed: %r", e)
 
         if c.user_is_loggedin:
             is_moderator_subreddits = {
@@ -1890,6 +1922,13 @@ class Comment(Thing, Printable):
 
             #will seem less horrible when add_props is in pages.py
             from r2.lib.pages import UserText
+
+            # CUSTOM - sub muting for Comments
+            item.muted = item.hidden = False
+            if g.sub_muting_enabled and (user, item.subreddit) in srs_mutes_by_account:
+                item.muted = True
+                if sub_muting_hide_eligible and not item.is_author and not item.user_is_moderator:
+                    item.hidden = True
 
             # CUSTOM - Chat widgets in comments
             is_chat_post = False
@@ -2431,7 +2470,7 @@ class Message(Thing, Printable):
 
                 if sent_by_sr:
                     if item.sr_id in blocked_srids:
-                        item.subject = _('[message from blocked subreddit]')
+                        item.subject = _('[message from blocked %s]' % g.brander_community)
                         item.sr_blocked = True
                         item.is_collapsed = True
 
@@ -2722,6 +2761,25 @@ class LinkHidesByAccount(_ThingHidesByAccount):
     def _cached_queries(cls, user, thing):
         from r2.lib.db import queries
         return [queries.get_hidden_links(user)]
+
+# CUSTOM: sub muting
+class SubredditMutesByAccount(_SaveHideByAccount):
+    _use_db = True
+    _last_modified_name = 'SubredditHide'
+    _views = []
+
+    @classmethod
+    def _cached_queries(cls, user, thing):
+        from r2.lib.db import queries
+        return [queries.get_muted_subreddits(user)]
+
+    @classmethod
+    def _mute(cls, user, things):
+        cls._savehide(user, things)
+
+    @classmethod
+    def _unmute(cls, user, things):
+        cls._unsavehide(user, things)
 
 class LinkVisitsByAccount(_SaveHideByAccount):
     _use_db = True

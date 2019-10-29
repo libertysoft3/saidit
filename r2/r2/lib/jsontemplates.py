@@ -838,6 +838,7 @@ class LinkJsonTemplate(ThingTemplate):
             "title": item.title,
             "ups": item.score,
             "url": item.url,
+            "muted": item.muted,
         })
 
         if hasattr(item, "action_type"):
@@ -961,6 +962,7 @@ class CommentJsonTemplate(ThingTemplate):
             "ups": item.score,
             "replies": cls.render_child(item),
             "parent_id": cls.get_parent_id(item),
+            "muted": item.muted,
         })
 
         if feature.is_enabled('sticky_comments'):

@@ -1234,13 +1234,12 @@ class Subreddit(Thing, Printable, BaseSite):
         # if no explicit limit was passed
         if limit is Subreddit.DEFAULT_LIMIT:
             if user and user.gold:
-
                 # CUSTOM: configurable limit, 50 maybe not enough
-		# Goldies get extra subreddits
-		limit = g.gold_limit
+                # Goldies get extra subreddits
+                limit = g.gold_limit
             else:
-		# CUSTOM: configurable limit, 100 maybe not enough
-		limit = g.sr_limit
+                # CUSTOM: configurable limit, 100 maybe not enough
+                limit = g.sr_limit
 
         # note: for user not logged in, the fake user account has
         # has_subscribed == False by default.
@@ -1459,7 +1458,10 @@ class Subreddit(Thing, Printable, BaseSite):
         # XXX: have to work with a copy of the list instead of modifying
         #   it directly, because it doesn't get marked as "dirty" and
         #   saved properly unless we assign a new list to the attr
-        sticky_fullnames = self.sticky_fullnames[:]
+        try:
+            sticky_fullnames = self.sticky_fullnames[:]
+        except TypeError:
+            return
         try:
             sticky_fullnames.remove(link._fullname)
         except ValueError:
@@ -1896,6 +1898,7 @@ class AllMinus(AllSR):
         from r2.lib.db.operators import not_
         q = AllSR.get_links(self, sort, time)
         # CUSTOM: degolding
+        # if c.user.gold and self.exclude_sr_ids:
         if self.exclude_sr_ids:
             q._filter(not_(Link.c.sr_id.in_(self.exclude_sr_ids)))
         return q

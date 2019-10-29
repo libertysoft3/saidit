@@ -114,7 +114,8 @@ def store_keys(key, maxes):
     userrel_fns = dict(liked = queries.get_liked,
                        disliked = queries.get_disliked,
                        saved = queries.get_saved,
-                       hidden = queries.get_hidden)
+                       hidden = queries.get_hidden,
+                       mutedsrs = queries.get_muted_subreddits)
 
     if key.startswith('user-'):
         acc_str, keytype, account_id = key.split('-')

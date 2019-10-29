@@ -115,7 +115,7 @@ def make_map(config):
     mc('/' + config['pylons.app_globals'].brander_community_abbr, controller='redirect', action='redirect', dest='/subs')
     mc('/subs/mine/:where', controller='myreddits', action='listing',
        where='subscriber', conditions={'function':not_in_sr},
-       requirements=dict(where='subscriber|contributor|moderator'))
+       requirements=dict(where='subscriber|contributor|moderator|muted'))
 
     # These routes are kept for backwards-compatibility reasons
     # Using the above /subreddits/ ones instead is preferable
@@ -128,7 +128,7 @@ def make_map(config):
 
     mc('/subreddits/mine/:where', controller='myreddits', action='listing',
        where='subscriber', conditions={'function':not_in_sr},
-       requirements=dict(where='subscriber|contributor|moderator'))
+       requirements=dict(where='subscriber|contributor|moderator|muted'))
 
     mc('/buttons', controller='buttons', action='button_demo_page')
 

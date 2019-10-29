@@ -30,7 +30,7 @@ from r2.lib.menus import (
 )
 from r2.lib.wrapped import Wrapped
 from r2.models import Comment, LinkListing, Link, Message, PromotedLink, Report
-from r2.models import IDBuilder, Thing
+from r2.models import IDBuilder, Thing, AllSR, DynamicSR
 from r2.lib.utils import tup
 from r2.lib.strings import Score
 from r2.lib.promote import *
@@ -53,6 +53,7 @@ class PrintableButtons(Styled):
                  show_unmarknsfw = False, is_link=False,
                  show_flair=False, show_rescrape=False,
                  show_givegold=False, show_sticky_comment=False,
+                 show_subreddit_mute = False,
                  **kw):
         show_ignore = thing.show_reports
         approval_checkmark = getattr(thing, "approval_checkmark", None)
@@ -77,8 +78,9 @@ class PrintableButtons(Styled):
                         show_marknsfw = show_marknsfw,
                         show_unmarknsfw = show_unmarknsfw,
                         show_flair = show_flair,
-                        show_rescrape=show_rescrape,
-                        show_givegold=show_givegold,
+                        show_rescrape = show_rescrape,
+                        show_givegold = show_givegold,
+                        show_subreddit_mute = show_subreddit_mute,
                         **kw)
         
 class BanButtons(PrintableButtons):
@@ -139,24 +141,28 @@ class LinkButtons(PrintableButtons):
                              c.user_special_distinguish)
                             and getattr(thing, "expand_children", False))
 
-	# CUSTOM - "Open chat in new tab" link for Posts
+        # CUSTOM: sub muting
+        show_subreddit_mute = False
+        if c.user_is_loggedin and g.sub_muting_enabled:
+            if (isinstance(c.site, AllSR) or (isinstance(c.site, DynamicSR) and c.site.name == g.all_name)) and not thing.subreddit.is_moderator(c.user):
+                show_subreddit_mute = True
+
+        # CUSTOM - "Open chat in new tab" link for Posts
         # Note: Shown to all users if sub has chat enabled
         show_chat_link = False
         chat_popout_url = ''
         if feature.is_enabled('chat') and thing.subreddit.chat_enabled and thing.selftext == g.live_config['chat_enabling_post_content']:
-          show_chat_link = True
-          chat_client = g.live_config['chat_client']
-          chat_client_url = g.chat_client_url
-          chat_user = c.user.pref_chat_user
-          chat_client_user = c.user.pref_chat_client_user
-          chat_client_password = c.user.pref_chat_client_password
-            
-          irc_sanitized_post_title = re.sub('\-+', '-', re.sub(r'[^a-zA-Z0-9]','-', thing.title)).strip(' -')
-          chat_channels = g.live_config['chat_channel_name_prefix'] + thing.subreddit.name + g.live_config['chat_channel_topic_separator'] + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
-          chat_channels = quote(chat_channels)
-
-          # Note: Omitting nofocus param
-          chat_popout_url 
+            show_chat_link = True
+            chat_client = g.live_config['chat_client']
+            chat_client_url = g.chat_client_url
+            chat_user = c.user.pref_chat_user
+            chat_client_user = c.user.pref_chat_client_user
+            chat_client_password = c.user.pref_chat_client_password
+            irc_sanitized_post_title = re.sub('\-+', '-', re.sub(r'[^a-zA-Z0-9]','-', thing.title)).strip(' -')
+            chat_channels = g.live_config['chat_channel_name_prefix'] + thing.subreddit.name + g.live_config['chat_channel_topic_separator'] + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
+            chat_channels = quote(chat_channels)
+            # Note: Omitting nofocus param
+            # TODO: chat_popout_url
         
         permalink = thing.permalink
 
@@ -216,6 +222,8 @@ class LinkButtons(PrintableButtons):
                                   # CUSTOM
                                   show_chat_link = show_chat_link,
                                   chat_popout_url = chat_popout_url,
+                                  show_subreddit_mute = show_subreddit_mute,
+                                  muted = thing.muted,
                                   **kw)
 
 class CommentButtons(PrintableButtons):
@@ -265,7 +273,13 @@ class CommentButtons(PrintableButtons):
 
             embed_button.build()
 
-	# CUSTOM - "Open chat in new tab" link for Comments
+        # CUSTOM: sub muting
+        show_subreddit_mute = False
+        if c.user_is_loggedin and g.sub_muting_enabled:
+            if (isinstance(c.site, AllSR) or (isinstance(c.site, DynamicSR) and c.site.name == g.all_name)) and not thing.subreddit.is_moderator(c.user):
+                show_subreddit_mute = True
+
+        # CUSTOM - "Open chat in new tab" link for Comments
         # Note: Shown to all users if sub has chat enabled
         show_chat_link = False
         chat_popout_url = ''
@@ -314,6 +328,8 @@ class CommentButtons(PrintableButtons):
                                   # CUSTOM
                                   show_chat_link = show_chat_link,
                                   chat_popout_url = chat_popout_url,
+                                  show_subreddit_mute = show_subreddit_mute,
+                                  muted = thing.muted,
         )
 
 class MessageButtons(PrintableButtons):

@@ -275,6 +275,7 @@ class Globals(object):
             'disable_newsletter',
             'remote_fetch_proxy_enabled',
             'gold_gilding_enabled',
+            'sub_muting_enabled',
         ],
 
         ConfigValue.tuple: [
@@ -384,6 +385,7 @@ class Globals(object):
             'precomputed_comment_sort_min_comments',
             'comment_vote_update_threshold',
             'comment_vote_update_period',
+            'create_sr_ratelimit_once_per_days',
         ],
         ConfigValue.float: [
             'cflag_lower_bound',

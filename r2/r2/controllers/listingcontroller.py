@@ -1619,7 +1619,8 @@ class MyredditsController(ListingController):
     def menus(self):
         buttons = (NavButton(plurals.subscriber,  'subscriber', sr_path=False),
                     NavButton(getattr(plurals, "approved submitter"), 'contributor', sr_path=False),
-                    NavButton(plurals.moderator,   'moderator', sr_path=False))
+                    NavButton(plurals.moderator,   'moderator', sr_path=False),
+                    NavButton(plurals.muted,   'muted', sr_path=False))
 
         return [NavMenu(buttons, base_path = '/subs/mine/',
                         default = 'subscriber', type = "flatlist")]
@@ -1655,6 +1656,9 @@ class MyredditsController(ListingController):
 
         if self.where == "subscriber":
             sr_ids = Subreddit.subscribed_ids_by_user(c.user)
+        # CUSTOM: sub muting
+        elif self.where == "muted":
+            return list(queries.get_muted_subreddits(c.user))
         else:
             q = SRMember._simple_query(
                 ["_thing1_id"],
@@ -1719,7 +1723,7 @@ class MyredditsController(ListingController):
     @validate(VUser())
     @listing_api_doc(section=api_section.subreddits,
                      uri='/subs/mine/{where}',
-                     uri_variants=['/subs/mine/subscriber', '/subs/mine/contributor', '/subs/mine/moderator'])
+                     uri_variants=['/subs/mine/subscriber', '/subs/mine/contributor', '/subs/mine/moderator', '/subs/mine/muted'])
     def GET_listing(self, where='subscriber', **env):
         """Get subreddits the user has a relationship with.
 
@@ -1728,6 +1732,7 @@ class MyredditsController(ListingController):
         * `subscriber` - subreddits the user is subscribed to
         * `contributor` - subreddits the user is an approved submitter in
         * `moderator` - subreddits the user is a moderator of
+        * `muted` - subreddits the user has chosen to remove from their /s/all feed
 
         See also: [/api/subscribe](#POST_api_subscribe),
         [/api/friend](#POST_api_friend), and

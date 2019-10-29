@@ -55,6 +55,8 @@ from r2.models.modaction import ModAction
 from r2.models.trylater import TryLater
 from r2.models.globalban import GlobalBan
 
+from pycassa.cassandra.ttypes import NotFoundException
+
 trylater_hooks = hooks.HookRegistrar()
 COOKIE_TIMESTAMP_FORMAT = '%Y-%m-%dT%H:%M:%S'
 

@@ -1880,6 +1880,30 @@ class ApiController(RedditController):
             BlockedSubredditsByAccount.unblock(c.user, sr)
             return
 
+    @require_oauth2_scope("save")
+    @noresponse(
+        VUser(),
+        VModhash(),
+        thing=VByName('id', thing_cls=Subreddit))
+    @api_doc(api_section.subreddits)
+    def POST_mute_subreddit(self, thing):
+        if thing and g.sub_muting_enabled and not isinstance(thing, FakeSubreddit) and not thing.is_moderator(c.user):
+            SubredditMutesByAccount._mute(c.user, [thing])
+            return
+        return abort(400)
+
+    @require_oauth2_scope("save")
+    @noresponse(
+        VUser(),
+        VModhash(),
+        thing=VByName('id', thing_cls=Subreddit))
+    @api_doc(api_section.subreddits)
+    def POST_unmute_subreddit(self, thing):
+        if thing and g.sub_muting_enabled and not isinstance(thing, FakeSubreddit):
+            SubredditMutesByAccount._unmute(c.user, [thing])
+            return
+        return abort(400)
+
     @require_oauth2_scope("modcontributors")
     @noresponse(
         VUser(),

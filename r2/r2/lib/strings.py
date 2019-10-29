@@ -92,7 +92,8 @@ string_dict = dict(
         empty =  _('you have not subscribed to any subs.'),
         subscriber =  _('below are the subs that you have subscribed to. you can [reset your subscriptions](%(unsubscribe_link)s) in your [preferences](%(prefs_link)s).'),
         contributor =  _('below are the subs that you are an approved submitter on.'),
-        moderator = _('below are the subs that you have moderator access to.')
+        moderator = _('below are the subs that you have moderator access to.'),
+        muted = _('below are the subs that you have hidden from your /s/all feed. to unmute, visit a muted sub and click "unmute sub" on any post.')
         ),
 
     sr_subscribe =  _('click \'subscribe\' and \'unsubscribe\' to choose which %(community_plural)s appear on your [%(subscribed_name)s](%(subscribed_link)s) page. you can [reset your subscriptions](%(unsubscribe_link)s) in your [preferences](%(prefs_link)s).'),
@@ -270,6 +271,7 @@ plurals = PluralManager([P_("comment",     "comments"),
                          P_("approved submitter", "approved submitters"),
                          P_("moderator",   "moderators"),
                          P_("user here now",   "users here now"),
+                         P_("muted",   "muted"),
 
                          # time words
                          P_("milliseconds","milliseconds"),
