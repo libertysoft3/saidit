@@ -27,7 +27,7 @@
     background-color: #000000;
     background-image: url(../header-banner-85.jpg);
     background-position: top left;
-    background-repeat: no-repeat;
+    background-repeat: repeat-x;
     min-height: 83px; /* can fine tune and hide top of banner */
     border-color: #000000;
     background-attachment: fixed;
@@ -43,7 +43,7 @@
     border-bottom: none;
     background: none;
 }
-#sr-header-area .dropdown span, #sr-header-area .sr-list a {
+#sr-header-area .dropdown span, #sr-header-area .sr-list a, #header-bottom-left .pagename {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 1px #000, 0px -1px #000, 1px 0px #000, -1px 0px #000;
 }
 .dropdown.srdrop .selected {
@@ -99,7 +99,7 @@
 .bottommenu { margin-bottom: 8px; }
 
 /* banner variants */
-.banner-variant #header { background-position: top -64px left 0; }
+.banner-variant #header { background-position: top -30px left 0; }
 .banner-1 #header { background-image: url(../banners/saiditbanner1.jpg); }
 .banner-2 #header { background-image: url(../banners/saiditbanner2.jpg); }
 .banner-3 #header { background-image: url(../banners/saiditbanner3.jpg); }
@@ -122,6 +122,12 @@
 .banner-20 #header { background-image: url(../banners/saiditbanner20.jpg); }
 .banner-21 #header { background-image: url(../banners/saiditbanner21.jpg); }
 .banner-22 #header { background-image: url(../banners/saiditbanner22.jpg); }
+.banner-23 #header { background-image: url(../banners/saiditbanner23.jpg); }
+.banner-24 #header { background-image: url(../banners/saiditbanner24.jpg); }
+.banner-25 #header { background-image: url(../banners/saiditbanner25.jpg); }
+.banner-26 #header { background-image: url(../banners/saiditbanner26.jpg); }
+.banner-27 #header { background-image: url(../banners/saiditbanner27.jpg); }
+.banner-28 #header { background-image: url(../banners/saiditbanner28.jpg); }
 
 /* sidebar */
 #search input[type=text] {
@@ -224,6 +230,7 @@
 
 /* MOBILE STYLES */
 @media only screen and (max-width: 600px) {
+    .banner-variant #header { background-position-y: -32px; }
     #sr-header-area .drop-choices {
         width: 97%
     }
@@ -314,8 +321,13 @@
     .wiki-page .wiki-page-content {
         margin-right: 15px !important;
     }
-    /* Media, expandos */
     .expando iframe {
         max-width: 100%;
+    }
+    .thumbnail.nsfw {
+        background-position-x: -20px;
+    }
+    .thumbnail.self {
+        background-position-x: -7px;
     }
 }
