@@ -1200,6 +1200,16 @@ class Reddit(Templated):
         if g.banner_variants > 0 and c.site.stylesheet_url == '':
             classes.add('banner-variant')
             classes.add('banner-' + str(random.randint(1, g.banner_variants)))
+            
+            # Try 1:
+            # epoch_time = int(time.time())
+            # epoch_time = int(math.floor(epoch_time / 10))
+            # banner_choice = int(epoch_time % g.banner_variants)
+            # classes.add('banner-' + str(banner_choice))
+            
+            # Try 2:
+            # classes.add('banner-' + str((datetime.datetime.now(g.tz).hours % g.banner_variants) + 1))
+            
 
         return classes
 
@@ -3009,6 +3019,19 @@ class SubredditTopBar(CachedTemplate):
                                            sr_path = False,
                                            css_class = 'bottom-option',
                                            dest = '/subs/mine/'))
+
+        drop_down_buttons.append(NavButton(menu.find_popularsubs,
+                                           sr_path = False,
+                                           css_class = 'bottom-option',
+                                           dest = '/subs/popular/'))
+
+        drop_down_buttons.append(NavButton(menu.find_newsubs,
+                                           sr_path = False,
+                                           css_class = 'bottom-option',
+                                           dest = '/subs/new/'))
+
+    
+
         return SubredditMenu(drop_down_buttons,
                              title = _('my subs'),
                              type = 'srdrop')

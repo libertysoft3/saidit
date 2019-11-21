@@ -194,12 +194,12 @@
     <th>${_("media")}</th>
     <td class="prefright">
       %if thing.feature_autoexpand_media_previews:
-        <h6>${_("thumbnails")}</h6>
+        <h6>${_("show thumbnails next to links?")}</h6>
       %endif
       %if not c.user.pref_compress:
-        ${media_radio("on", _("show thumbnails next to links"))}
-        ${media_radio("off", _("don't show thumbnails next to links"))}
-        ${media_radio("subreddit", _("show thumbnails based on that sub's media preferences"))}
+        ${media_radio("on", _("yes"))}
+        ${media_radio("off", _("no"))}
+        ${media_radio("subreddit", _("use each sub's media preferences"))}
       %else:
         <p class="error">${_("to enable thumbnails, disable compressed link display")}</p>
         <input type="hidden" name="media" value="${c.user.pref_media}"/>
@@ -207,10 +207,10 @@
       %if thing.feature_autoexpand_media_previews:
         <br>
 
-        <h6>${_("media previews")}</h6>
-        ${media_preview_radio("on", _("auto-expand media previews"))}
-        ${media_preview_radio("off", _("don't auto-expand media previews on comments pages"))}
-        ${media_preview_radio("subreddit", _("expand media previews based on that sub's media preferences"))}
+        <h6>${_("Auto-expand media previews?")}</h6>
+        ${media_preview_radio("on", _("yes"))}
+        ${media_preview_radio("off", _("no"))}
+        ${media_preview_radio("subreddit", _("use each sub's media preferences"))}
         <br>
 
         <h6>${_("NSFW content")}</h6>
@@ -356,7 +356,7 @@
       
       ## CUSTOM: Site theme
       <p>
-        ${_wsf("theme %(sort)s", sort=unsafe(capture(site_theme_sort_options)))}
+        ${_wsf("default theme %(sort)s", sort=unsafe(capture(site_theme_sort_options)))}
       </p>
 
       ${checkbox(_("allow subs to show me custom themes"), "show_stylesheets")}
@@ -391,7 +391,7 @@
       ${checkbox(_("I am over eighteen years old and willing to view adult content"), "over_18")}
       &#32;<span class="details">(${_("required to view some subs")})</span>
       <br/>
-        ${checkbox(_("label posts that are not safe for work (NSFW)"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "(requires not 'safer for work' mode)")}
+        ${checkbox(_("label posts that are not safe for work (NSFW)"), "label_nsfw", disabled = c.user.pref_no_profanity, disabled_text = "")}
       <br/>
  <!--        ${checkbox(_("enable private RSS feeds"), "private_feeds")}
        &#32;<span class="details">
@@ -499,7 +499,7 @@
 
   %if c.user.gold:
   <tr class="gold-accent">
-    <th>${_("gold options")}</th>
+    <th>${_("experimental options")}</th>
     <td class="prefright">
         ${checkbox(_("hide ads"), "hide_ads")}
         <br>
@@ -522,7 +522,7 @@
   </tr>
   %elif c.user.is_moderator_somewhere:
   <tr class="gold-accent">
-    <th>${_("gold options")}</th>
+    <th>${_("experimental options")}</th>
     <td class="prefright">
       ${checkbox(_("highlight new comments"), "highlight_new_comments")}
       <% gold_link = unsafe('&#32;<a href="/gold/about">' + _("gold system") + '</a>') %>
