@@ -34,7 +34,7 @@
 }
 #header-img.default-header {
     display: block;
-    background-position: 450px 4px; /* logo position */
+    background-position: 623px 4px; /* logo position */
     margin: 0; /* fine tune vertical position */
     background-repeat: no-repeat;
 }
@@ -43,8 +43,11 @@
     border-bottom: none;
     background: none;
 }
+#sr-header-area .sr-list{
+    padding-left: 3px;
+}
 #sr-header-area .dropdown span, #sr-header-area .sr-list a, #header-bottom-left .pagename {
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 1px #000, 0px -1px #000, 1px 0px #000, -1px 0px #000;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 1px #000, 0px -1px #000, 1px 0px #000, -1px 0px #000, -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000, 0px 0.5px #000, 0px -0.5px #000, 0.5px 0px #000, -0.5px 0px #000; /* added half-pixels which increases quality at high zooms */
 }
 .dropdown.srdrop .selected {
     margin-right: 0;
@@ -74,7 +77,7 @@
         text-decoration: underline;
     }
     .user, .choice, .logout a {
-      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 1px #000, 0px -1px #000, 1px 0px #000, -1px 0px #000;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 1px #000, 0px -1px #000, 1px 0px #000, -1px 0px #000, -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000, 0px 0.5px #000, 0px -0.5px #000, 0.5px 0px #000, -0.5px 0px #000; /* added half-pixels which increases quality at high zooms */;
     }
 }
 .pref-lightswitch {
@@ -99,7 +102,7 @@
 .bottommenu { margin-bottom: 8px; }
 
 /* banner variants */
-.banner-variant #header { background-position: top -30px left 0; }
+.banner-variant #header { background-position: top -30px left 37%; }
 .banner-1 #header { background-image: url(../banners/saiditbanner1.jpg); }
 .banner-2 #header { background-image: url(../banners/saiditbanner2.jpg); }
 .banner-3 #header { background-image: url(../banners/saiditbanner3.jpg); }
@@ -137,11 +140,13 @@
 
 /* footer */
 .footer-banner {
+	border-top: 1px solid #000000;
     position: absolute;
     bottom: 0;
     width: 100%;
     min-height: 23px;
     background: transparent url(../footer-banner.jpg) repeat-x bottom left;
+    background-attachment: fixed;
 }
 
 /* vote buttons */
@@ -229,14 +234,33 @@
 
 
 /* MOBILE STYLES */
+@media only screen and (max-width: 1400px) {
+	#header-img.default-header {
+		background-position: center;
+	}
+}
+
+@media only screen and (max-width: 800px) {
+    #header-bottom-right, .theme-daymode #header-bottom-right {
+        top: 15px;
+        left: 2px;
+        right: auto;
+        bottom: auto;
+        border-top-left-radius: 0;
+    }
+
+    #header-img.default-header {
+        background-position: bottom center;
+        margin-top: 15px;
+    }
+}
+
+
+
 @media only screen and (max-width: 600px) {
-    .banner-variant #header { background-position-y: -32px; }
+    
     #sr-header-area .drop-choices {
         width: 97%
-    }
-    .side {
-        float: none;
-        width: auto;
     }
     .morelink .nub {
         display: none;
@@ -248,17 +272,14 @@
     .panestack-title {
         margin-right: 0;
     }
-    #header-img.default-header {
-        background-position: bottom center;
-        margin-top: 15px;
-    }
-    #header-bottom-right, .theme-daymode #header-bottom-right {
-        top: 15px;
-        left: 2px;
-        right: auto;
-        bottom: auto;
-        border-top-left-radius: 0;
-    }
+ 	.side {
+	        float: none;
+	        width: auto;
+	    }
+	.side .spacer {
+	    margin: 3px 15px 3px 50px;
+	}
+	
     .login-form-side .submit {
         float: left;
     }
@@ -296,9 +317,7 @@
     .footer-parent {
         overflow: hidden;
     }
-    #sr-more-link {
-        display: none;
-    }
+  
     .side-chat .chat-link {
         float: none;
     }

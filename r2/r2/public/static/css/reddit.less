@@ -516,7 +516,7 @@ ul.flat-vert {text-align: left;}
 .side {
     float: right; 
     background-color: #2f2f2f; 
-    margin: 0px 5px 0 5px;
+    margin: 0px 10px 0 30px;
     width: 300px;
     color: wheat;
 }
@@ -812,12 +812,10 @@ ul.flat-vert {text-align: left;}
 }
 .arrow.up { 
     background-image: url(../nightmode_insightful_unvoted.png);  
-    background-color: #2f2f2f;
     background-repeat: no-repeat;
 }
 .arrow.down { 
     background-image: url(../nightmode_funny_unvoted.png);  
-    background-color: #2f2f2f;
     background-repeat: no-repeat;
 }
 
@@ -1100,7 +1098,7 @@ a.banned-user { color: red; }
     overflow: hidden;
 }
 
-.thing .title:visited, .thing.visited .title { color: #62659b; }
+.thing .title:visited, .thing.visited .title { color: #62719b; }
 
 .thing.stickied.link a.title {
   font-weight: bold;
@@ -1293,7 +1291,7 @@ body.with-listing-chooser.explore-page #header .pagename {
     margin-left: 22px;
 }
 
-.sitetable { color: #a6a6a6; list-style-type: none; margin-top: 16px;}
+.sitetable { color: #a6a6a6; list-style-type: none; margin-top: 32px;}
 .ajaxhook { position: absolute; top: -1000px; left: 0px; }
 
 .nextprev, .next-suggestions {
@@ -1331,7 +1329,7 @@ body.with-listing-chooser.explore-page #header .pagename {
     margin-left: 0.75em;
 
     a {
-        background: none;
+        
         font-weight: normal;
         margin-left: .5em;
     }
@@ -2092,7 +2090,7 @@ a.star { text-decoration: none; color: #ff8b60 }
 .thing .stub { display: none; }
 .link.last-clicked { border: 1px dashed gray; overflow: hidden; }
 
-.link { margin: 0; margin-bottom: 18px; padding-left: 9px; margin-top: 18px;}
+.link { margin: 0; margin-bottom: 7px; padding-left: 9px; margin-top: 4px; margin-left: 20px; margin-right: 30px; overflow: auto; border: solid; border-radius: 12px; padding: 14px; padding-left: 21px; padding-right: 20px; background-color: #292929; border-color: #292929; border-bottom-color: #272727; border-right-color: #292929;}
 .link .score {text-align: center; }
 .link .title {font-size:medium; font-weight: normal; margin-bottom: 1px;}
 
@@ -4315,7 +4313,7 @@ form input[type=radio] {margin: 2px .5em 0 0; }
 
 /*submit*/
 
-#url-field #suggest-title { text-align: right; }
+#url-field #suggest-title {  }
 #url-field button {margin: 10px 0 0 5px;}
 #url-field .title-status { color: red; font-size: small}
 
@@ -4325,6 +4323,7 @@ form input[type=radio] {margin: 2px .5em 0 0; }
     padding: 9px;
     margin-bottom: 12px;
     font-size: larger;
+    width: 275px;
 }
 
 .content.submit .info-notice a {
@@ -4845,6 +4844,7 @@ ul#image-preview-list .description pre {
 
 .srdrop .choice.bottom-option {
     font-style: italic;
+    font-weight: bold;
     border-top: 1px dotted #369;
 }
 
@@ -5032,9 +5032,10 @@ ul#image-preview-list .description pre {
 /*** new menu shit ***/
 
 .formtabs-content {
-    width: 520px;
+    width: 60%;
     border-top: 4px solid #5f99cf;
     padding-top: 10px;
+    text-align: center;
 }
 
 .formtabs-content .infobar {
@@ -5288,11 +5289,11 @@ ul.tabmenu.formtab {
 .usertext-edit {
     margin-top: 5px;
     padding: 0 1px; /* so the border of help/textbox don't get chopped off */
-    width: 500px;
+    width: 90%;
 }
 
 .usertext-edit textarea {
-    width: 500px;
+    width: 90%;
     height: 100px;
 }
 
@@ -5346,9 +5347,9 @@ ul.tabmenu.formtab {
 
 /*** roundfield stuff *******/
 .roundfield {
-    width: 500px;
-    background-color: #050505;
-    border-radius: 4px;
+    
+    background-color: #212121;
+    border-radius: 12px;
     padding: 5px 10px 10px 10px;
     font-size: large;
 }
@@ -5367,7 +5368,7 @@ ul.tabmenu.formtab {
 }
 
 .roundfield .usertext-edit {
-    width: 500px;
+    width: 90%;
 }
 
 .roundfield textarea,
@@ -5377,7 +5378,7 @@ ul.tabmenu.formtab {
 .roundfield input[type=number],
 #compose-message .roundfield select {
     font-size: 100%;
-    width: 492px;
+    width: 90%;
     margin: 0;
     border: 1px solid gray;
 }
@@ -10363,7 +10364,7 @@ body.with-listing-chooser {
 
 #adminnotes-form {
     textarea {
-        width: 285px;
+        width: 255px;
     }
 
     .notes-button {
