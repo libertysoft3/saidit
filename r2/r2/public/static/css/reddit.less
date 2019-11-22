@@ -1291,7 +1291,7 @@ body.with-listing-chooser.explore-page #header .pagename {
     margin-left: 22px;
 }
 
-.sitetable { color: #a6a6a6; list-style-type: none; margin-top: 32px;}
+.sitetable { color: #a6a6a6; list-style-type: none; margin-top: 16px;}
 .ajaxhook { position: absolute; top: -1000px; left: 0px; }
 
 .nextprev, .next-suggestions {
@@ -2090,7 +2090,7 @@ a.star { text-decoration: none; color: #ff8b60 }
 .thing .stub { display: none; }
 .link.last-clicked { border: 1px dashed gray; overflow: hidden; }
 
-.link { margin: 0; margin-bottom: 7px; padding-left: 9px; margin-top: 4px; margin-left: 20px; margin-right: 30px; overflow: auto; border: solid; border-radius: 12px; padding: 14px; padding-left: 21px; padding-right: 20px; background-color: #292929; border-color: #292929; border-bottom-color: #272727; border-right-color: #292929;}
+.link { margin: 0; margin-bottom: 7px; padding-left: 9px; margin-top: 4px; margin-left: 20px; margin-right: 30px; overflow: auto; border: solid; border-radius: 12px; padding: 12px; padding-left: 21px; padding-right: 20px; background-color: #292929; border-color: #292929; border-bottom-color: #272727; border-right-color: #292929;}
 .link .score {text-align: center; }
 .link .title {font-size:medium; font-weight: normal; margin-bottom: 1px;}
 
@@ -2519,6 +2519,7 @@ textarea.gray { color: gray; }
     max-width: 60em;
     margin: 3px 10px; 
 }
+
 
 .message .subject .correspondent {
     background-color:#EFF7FF;
@@ -3093,6 +3094,8 @@ body.newsletter {
     .upvoted-gradient {
         display: none;
     }
+
+    
 }
 
 /* search */
@@ -4324,6 +4327,9 @@ form input[type=radio] {margin: 2px .5em 0 0; }
     margin-bottom: 12px;
     font-size: larger;
     width: 275px;
+    position: absolute;
+    right: 38%;
+
 }
 
 .content.submit .info-notice a {
@@ -5036,6 +5042,7 @@ ul#image-preview-list .description pre {
     border-top: 4px solid #5f99cf;
     padding-top: 10px;
     text-align: center;
+    padding-left: 25px;
 }
 
 .formtabs-content .infobar {
@@ -5289,7 +5296,7 @@ ul.tabmenu.formtab {
 .usertext-edit {
     margin-top: 5px;
     padding: 0 1px; /* so the border of help/textbox don't get chopped off */
-    width: 90%;
+    
 }
 
 .usertext-edit textarea {
@@ -5368,7 +5375,7 @@ ul.tabmenu.formtab {
 }
 
 .roundfield .usertext-edit {
-    width: 90%;
+    
 }
 
 .roundfield textarea,
@@ -10961,6 +10968,23 @@ body.with-listing-chooser {
     }
   }
 }
+
+
+@media screen and (max-width: 905px) {
+.formtabs-content {
+    width: 42%;
+    border-top: 4px solid #5f99cf;
+    padding-top: 10px;
+    text-align: center;
+    padding-left: 1px;
+    padding-right: 1px;
+}
+}
+
+@media screen and (max-width: 660px) {
+.content.submit .info-notice {
+    right: 3%;}
+    }
 
 /* Page level logic for gold pages, outside of gold-wrap so we can use body classes. */
 .gold-page.creddits-purchase,

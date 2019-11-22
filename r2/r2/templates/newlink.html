@@ -92,9 +92,9 @@ function countChars(countfrom,displayto) {
 
     <div id="suggest-title">
       <div class="title-status"></div>
-      <button type="button" tabindex="100" onclick="fetch_title()" onmouseup="countChars('title_text','charcount');" onmousemove="countChars('title_text','charcount');">${_("suggest title")}</button>
+      <button type="button" tabindex="100" style="padding: 7px;" onclick="fetch_title()" onmouseup="countChars('title_text','charcount');" onmousemove="countChars('title_text','charcount');">${_("suggest title")}</button>
       %if g.imgur_client_id:
-        <input id="imgur-upload" type="file" class="btn imgur-upload" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.xcf,.webp,.mp4,.mov"/>
+        <input id="imgur-upload" type="file" class="btn imgur-upload" style="padding: 7px; padding-left: 20px;" accept=".jpg,.jpeg,.png,.gif,.apng,.tiff,.tif,.bmp,.xcf,.webp,.mp4,.mov"/>
       %endif
     </div>
   </%utils:round_field>
@@ -157,8 +157,8 @@ ${thing.captcha}
 </div>
 
 <input name="resubmit" value="${thing.resubmit}" type="hidden"/>
-<div class="spacer">
-  <button class="btn" name="submit" value="form" type="submit" onmousemove="countChars('title_text','charcount');">${_("submit")}</button>
+<div class="spacer" style="position: absolute; left: 5%;">
+  <button class="btn" name="submit" value="form" type="submit" style="padding: 7px;" onmousemove="countChars('title_text','charcount');">${_("submit")}</button>
   <span class="status"></span>
   ${error_field("RATELIMIT", "ratelimit")}
   ${error_field("INVALID_OPTION", "sr")}
