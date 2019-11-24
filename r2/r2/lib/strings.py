@@ -164,7 +164,7 @@ apps below.
     traffic_help_email = _("Questions? Email self serve support: %(email)s"),
 
     traffic_subreddit_explanation = _("""
-Below are the traffic statistics for your sub. Each graph represents one of the following over the interval specified.
+WARNING, THIS PAGE IS NON-OPERATIONAL ON SAIDIT. IT MAY BE FIXED SOMEDAY IF THERE IS DEMAND. Below are the traffic statistics for your sub. Each graph represents one of the following over the interval specified.
 
 * **pageviews** are all hits to %(subreddit)s, including both listing pages and comment pages.
 * **uniques** are the total number of unique visitors (determined by a combination of their IP address and User Agent string) that generate the above pageviews. This is independent of whether or not they are signed in.

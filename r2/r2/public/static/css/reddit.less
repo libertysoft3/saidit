@@ -489,7 +489,7 @@ ul.flat-vert {text-align: left;}
 .tabmenu li.selected a{
     color: orangered;
     background-color: #2f2f2f;
-    border: 1px solid #000;
+    border: 1px solid #505050;
     border-bottom: 1px solid #2f2f2f;
     z-index: 100;
 }
@@ -499,7 +499,7 @@ ul.flat-vert {text-align: left;}
     border-top-right-radius: 8px;
 }
 
-.tabpane-content { border: 1px solid #5f99cf; padding: 4px 4px 4px 4px; }
+.tabpane-content { border: 1px solid #5f99cf; padding: 4px 4px 4px 4px; overflow: auto; }
 
 .content {
     z-index: 1;
@@ -515,10 +515,17 @@ ul.flat-vert {text-align: left;}
 
 .side {
     float: right; 
-    background-color: #2f2f2f; 
-    margin: 0px 10px 0 30px;
-    width: 300px;
+    background-color: #333333; 
+    margin: 9px 10px 5px 30px;
+    width: 260px;
     color: wheat;
+    padding: 5px 15px;
+    border: solid;
+    border-radius: 12px;
+    border-color: #333333;
+    border-bottom-color: #2d2d2d;
+    border-right-color: #2d2d2d;
+    border-left-color: #2d2d2d;
 }
 
 .side .spacer {
@@ -578,7 +585,7 @@ ul.flat-vert {text-align: left;}
     position: relative;
 
     border: 1px solid #c4dbf1;
-
+    border-radius: 30px;
     background: white none repeat-x scroll center left;
     background-image: url(../gradient-button.png);  /* SPRITE stretch-x */
 
@@ -592,6 +599,7 @@ ul.flat-vert {text-align: left;}
 
 .morelink:hover, .mlh {
     border-color: #879eb4;
+    background-color: #879eb4; 
     background-image: url(../gradient-button-hover.png);  /* SPRITE stretch-x */
 }
 
@@ -614,7 +622,7 @@ ul.flat-vert {text-align: left;}
     right: -1px;
     height: 31px;
     width: 24px;
-    background: #2f2f2f none no-repeat scroll center left;
+    background: #333333 none no-repeat scroll center left;
     background-image: url(../gradient-nub.png);  /* SPRITE */
 }
 
@@ -836,6 +844,8 @@ body > .content .link.compressed .midcol {
     overflow: hidden; 
     margin-left: 3px;
     opacity: 1;
+    min-width: 149px;
+    margin-top: 3px;
 }
 .domain { color: #888; font-size:x-small; white-space: nowrap; }
 .domain a {
@@ -858,6 +868,8 @@ body > .content .link.compressed .midcol {
     color: #ff4444;
     font-size:x-small;
 }
+
+
 
 @moderator-color: #228822;
 @admin-color: #ff0011;
@@ -1291,16 +1303,18 @@ body.with-listing-chooser.explore-page #header .pagename {
     margin-left: 22px;
 }
 
-.sitetable { color: #a6a6a6; list-style-type: none; margin-top: 16px;}
+.sitetable { color: #a6a6a6; list-style-type: none; margin-top: 9px; margin-right: 1px; margin-bottom: 0px;}
 .ajaxhook { position: absolute; top: -1000px; left: 0px; }
+
 
 .nextprev, .next-suggestions {
     color: gray;
     font-size: larger;
     margin-top: 10px;
+    margin-left: 35px;
 
     a {
-        padding: 1px 4px;
+        padding: 3px 6px;
         background: #f3f3f3;
         border: 1px solid #807f7f;
         border-radius: 3px;
@@ -1310,6 +1324,7 @@ body.with-listing-chooser.explore-page #header .pagename {
     a:hover {
         background: #f0f0f0;
         border: 1px solid #82A6C9;
+        transition: 200ms; 
     }
 
     a:active {
@@ -1332,6 +1347,7 @@ body.with-listing-chooser.explore-page #header .pagename {
         
         font-weight: normal;
         margin-left: .5em;
+        padding: 3px 6px;
     }
 }
 
@@ -1360,6 +1376,48 @@ body.with-listing-chooser.explore-page #header .pagename {
     padding: 5px 10px 10px 10px;
     overflow:hidden;
  }
+
+
+ /* CUSTOM SAIDIT CODE */
+
+ .commentarea { padding-left: 12px; padding-right: 20px; }
+
+ .commentarea .comment a.expand { 
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 6px 3px 5px 4px;
+    height: 100%;
+    opacity: .3;
+    box-sizing: border-box;
+    transition: 250ms;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    color: white;
+
+}
+
+ .commentarea .comment a.expand:hover { 
+    opacity: .3;
+    color: white;
+    background-color: #5ba2fd;
+    text-decoration: none;
+}
+
+ .comment .expand:hover { 
+    opacity: .3;
+    color: white;
+    background-color: #5ba2fd;
+    text-decoration: none;
+
+
+}
+
+.commentarea .thing {
+    position: relative;
+    overflow: hidden;
+}
+
 
 .help p, .help form { margin: 5px; font-size:110%; }
 .help form { display: inline; }
@@ -1783,7 +1841,7 @@ body.with-listing-chooser.explore-page #header .pagename {
 .menuarea .spacer {display: inline; margin-right: 15px}
 
 .panestack-title {
-    margin: 10px 310px 0px 10px;
+    margin: 10px 358px 0px 10px;
     padding-bottom: 3px;
     border-bottom: 1px dotted gray;
 }
@@ -2090,7 +2148,7 @@ a.star { text-decoration: none; color: #ff8b60 }
 .thing .stub { display: none; }
 .link.last-clicked { border: 1px dashed gray; overflow: hidden; }
 
-.link { margin: 0; margin-bottom: 7px; padding-left: 9px; margin-top: 4px; margin-left: 20px; margin-right: 30px; overflow: auto; border: solid; border-radius: 12px; padding: 12px; padding-left: 21px; padding-right: 20px; background-color: #292929; border-color: #292929; border-bottom-color: #272727; border-right-color: #292929;}
+.link { margin: 0; margin-bottom: 7px; padding-left: 9px; margin-top: 4px; margin-left: 20px; margin-right: 30px; overflow: auto; border: solid; border-radius: 12px; padding: 12px; padding-left: 21px; padding-right: 20px; background-color: #333333; border-color: #333333; border-bottom-color: #2d2d2d; border-right-color: #2d2d2d; border-left-color: #2d2d2d;}
 .link .score {text-align: center; }
 .link .title {font-size:medium; font-weight: normal; margin-bottom: 1px;}
 
@@ -2202,8 +2260,8 @@ a.star { text-decoration: none; color: #ff8b60 }
 /* comments */
 
 .comment, .content .details { 
-	margin-left: 10px;
-	margin-top: 18px;
+	margin-left: 8px;
+	margin-top: 11px;
 	color: #888;
  }
 
@@ -2245,7 +2303,7 @@ body.show-controversial .comment.controversial > .entry .score:after {
     }
 
     .tagline, .tagline a {
-        color: gray;
+        
 
         :not(.expand) {
             font-style: italic;
@@ -2273,16 +2331,20 @@ body.show-controversial .comment.controversial > .entry .score:after {
     }
 }
 
+.comment { position: relative; }
+
 .comment {
     .midcol {
-        margin-left: 0px;
-        margin-right: 8px;
+        margin-left: 28px;
+        margin-right: 4px;
         width: 31px;
     }
 
     .title {
         font-size: small;
         margin-top: 10px;
+        margin-left: 27px;
+        display: inline-block;
     }
 
     .author {
@@ -2292,12 +2354,25 @@ body.show-controversial .comment.controversial > .entry .score:after {
     .expand {
         margin-right: 3px;
         padding: 1px;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 7px 3px 5px 4px;
+        height: 100%;
+        opacity: 0.3;
+        box-sizing: border-box;
+        transition: 250ms;
+        border-top-left-radius: 12px;
+        border-bottom-left-radius: 12px;
+        color: white;
+
     }
 
     .child, .showreplies {
         margin-top: 10px; 
         margin-left: 15px; 
-        border-left: 1px dotted #DDF;
+        
     }
 
     &.collapsed-for-reason {
@@ -2618,6 +2693,8 @@ textarea.gray { color: gray; }
         margin: 0 auto;
     }
 
+
+
     .usertext-buttons {
         text-align: left;
     }
@@ -2916,7 +2993,7 @@ textarea.gray { color: gray; }
 .buygold { color: #9A7D2E; font-weight: bold; }
 .line-through { text-decoration: line-through }
 
-#noresults { margin-right: 310px;  }
+#noresults { margin-right: 310px;  margin-left: 31px; }
 
 #ad-frame, #ad_main {
     border: 0px;
@@ -3213,7 +3290,7 @@ label + #moresearchinfo {
     font-size: 13px;
     font-family: verdana; /* Override Chrome's defaults. */
 	color: white;
-    width: 300px;
+    width: 260px;
     .box-sizing(border-box);
     padding: 6px;
     padding-right: 25px; /* 13px image + 6px right margin + 6px left margin */
@@ -4697,7 +4774,7 @@ ul#image-preview-list .description pre {
 .sheets { margin-right: 315px; }
 .sheets .col { width: 100%; }
 .sheets .col > div { margin: 0 5px; }
-.sheets .col textarea { width: 100% }
+.sheets .col textarea { width: 81% }
 .sheets .buttons { margin-left: 5px }
 .sheets .btn { margin-left: 0px; margin-right: 5px; }
 .sheets .btn.right { float: right; margin-right: 3px;}
@@ -5055,6 +5132,7 @@ ul.tabmenu.formtab {
     display: block;
     padding-left: 10px;
     font-size: larger;
+    padding-top: 12px;
 }
 
 .tabmenu.formtab li {
@@ -5300,7 +5378,7 @@ ul.tabmenu.formtab {
 }
 
 .usertext-edit textarea {
-    width: 90%;
+    width: 97%;
     height: 100px;
 }
 
@@ -7867,7 +7945,7 @@ dd { margin-left: 20px;  }
 }
 
 .sidecontentbox .more a { 
-    color: gray; 
+    color: #5a90c5; 
 }
 
 .sidecontentbox .title h1 {
@@ -8243,8 +8321,7 @@ a.pretty-button:hover { text-decoration: none !important }
 .gold-accent {
     margin-top: 10px;
     padding: 0 10px 5px;
-    background-color: #fffdcc;
-    border: solid 1px #e1b000;
+    background-color: #505f5f;
     color: #9a7d2e;
     display: inline-block;
 }
@@ -8450,7 +8527,7 @@ form#banned textarea {
 }
 
 .gold-accent.comment-visits-box {
-    color: #583800;
+    color: #c5c5c5;
     margin: 0px 5px 15px;
     padding: 7px 10px 7px 7px;
     max-width: 35%;
@@ -8712,10 +8789,11 @@ form#banned textarea {
 }
 
 .new-comment .usertext-body {
-    background-color: #4c4c4c;
+    background-color: #505f5f;
     border: solid 1px #4e4e4e;
-    margin: -1px 0;
-    padding: 0 4px;
+    margin: -2px 0;
+    padding: 0 7px;
+    border-radius: 16px;
 }
 
 .role {
@@ -11111,7 +11189,7 @@ body.with-listing-chooser {
 
     .tabmenu li.selected a {
       background-color: #2f2f2f;
-      border-color: #000;
+      border-color: #8c8c8c;
       border-bottom-color: #2f2f2f;
     }
 

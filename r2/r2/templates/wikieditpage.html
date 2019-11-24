@@ -42,7 +42,7 @@
 </div>
 
 <form method="post" id="editform" onsubmit="r.wiki.submitEdit(event)">
-    <textarea name="content" rows="20" cols="20" style="width: 97%" id="wiki_page_content">${keep_space(thing.page_content)}</textarea>
+    <textarea name="content" rows="20" cols="20" style="width: 95%" id="wiki_page_content">${keep_space(thing.page_content)}</textarea>
     ${toggle_button("help-toggle", _("formatting help"), _("hide help"), "r.wiki.helpon", "r.wiki.helpoff")}
     ${markhelp()}
     <br/><br/>

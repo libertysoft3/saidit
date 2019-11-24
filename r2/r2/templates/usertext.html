@@ -202,7 +202,7 @@
   %if thing.editable or thing.creating:
     ##keep this on one line so we don't add extra spaces
     <div class="usertext-edit md-container"
-         style="${"" if thing.creating else 'display: none'}">
+         style="${"" if thing.creating else 'display: none'} ">
       <div class="md">
         <textarea rows="1" cols="1"
                   name="${thing.name}"

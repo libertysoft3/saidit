@@ -55,19 +55,62 @@
     background-image: url(../daymode_funny_unvoted.png);  /* SPRITE */
 }
 
+#header {
+    
+    border-color: #8c8c8c;
+    
+}
+
+ .commentarea .comment a.expand { 
+
+    color: gray;
+
+}
+
+
+.comment.collapsed {
+    .tagline, .tagline a {
+            }
+}
+
+.comment.collapsed {
+    .tagline, .tagline a:hover {
+           }
+}
+
+ .commentarea .comment a.expand:hover { 
+
+    color: white;
+
+}
+
+ .comment .expand:hover { 
+
+    color: white;
+
+}
+
+.sidecontentbox .more a { 
+    color: #336699; 
+}
+
+
+
 .link {  background-color: white; border-color: #ffffff; border-bottom-color: #f3f3f3; border-right-color: #f7f7f7;}
 
 .link .midcol {font-size: small; text-align: center; width: 62px;}
 
     .tabmenu li a { background-color: #F8F8F8; }
-    .tabmenu li.selected a { border-color:  #000000; border-bottom-color: white; }
+    .tabmenu li.selected a { border-color:  #8c8c8c; border-bottom-color: white; }
     .content, .sitetable, .menuarea, .comment, .content .details,
     .message.message-parent.recipient > .entry .head,
     .message .subject, .login-form-side #remember-me *,
     .instructions, .formtabs-content .infobar, .titlebox,
     .titlebox h1 a, .titlebox h1 { color: black; }
     .titlebox .karma { color: black; }
-    .side, .morelink .nub, .sidebox .spacer, .titlebox form.toggle, .leavemoderator, .icon-menu a { background-color: #F8F8F8; color: black;}
+    .sidebox .spacer, .titlebox form.toggle, .leavemoderator, .icon-menu a { background-color: #F8F8F8; color: black;}
+    .side, .morelink .nub { background-color: #ffffff; }
+    .side { border-color: #ffffff; border-bottom-color: #f3f3f3; border-right-color: #f7f7f7; }
     .sidebox .subtitle { color: dimgray; }
     .tagline .submitter { color: #0055df; }
     .thing .title, .subscription-box .title { color: #004cbf; }
@@ -78,6 +121,11 @@
 
             background: #eee;
             border-color: #ddd;
+        }
+
+        a:hover {
+        border: 1px solid #82A6C9;
+        transition: 200ms; 
         }
     }
     .message.message-parent > .entry, .message.message-reply  > .entry {
@@ -100,14 +148,23 @@
     .usertext.border .usertext-body { background-color: #ffc; }
     .roundfield, .linefield { background-color: #f8f8f8; }
     .trophy-area .content { background-color: #f5f5f5; }
-    .linkinfo { border-color: #5f99cf; background-color: #F8F8F8; }
-    .new-comment .usertext-body { background-color: #e5efff; border-color: #cddaf3; }
+    .linkinfo { border-color: #ffffff; background-color: #ffffff; }
+    .new-comment .usertext-body { background-color: #fffdcc; border-color: #fffdcc;}
     .gold-wrap {
         input[type=text], input[type=email], textarea {
             color: #686868;
             background-color: #fff;
         }
     }
+
+    .gold-accent {
+        background-color: #fffdcc;
+    }
+
+    .gold-accent.comment-visits-box {
+    color: #583800;
+}
+
     .gold-only #header .tabmenu li.selected a {
         background-color: #ffffff;
           border-color: #9a7d2e;;

@@ -673,8 +673,8 @@ function show_edit_usertext(form) {
     var textarea = edit.find('div > textarea');
 
     //max of the height of the content or the min values from the css.
-    var body_width = Math.max(body.children(".md").width(), 500);
-    var body_height = Math.max(body.children(".md").height(), 100);
+    //var body_width = Math.max(body.children(".md").width(), 500);
+    //var body_height = Math.max(body.children(".md").height(), 100);
 
     //we need to show the textbox first so it has dimensions
     body.hide();
@@ -682,19 +682,20 @@ function show_edit_usertext(form) {
 
     //restore original (?) css width/height. I can't explain why, but
     //this is important.
-    textarea.css('width', '');
-    textarea.css('height', '');
+    //textarea.css('width', '');
+    //textarea.css('height', '');
 
     //if there would be scroll bars, expand the textarea to the size
     //of the rendered body text
-    if (textarea.get(0).scrollHeight > textarea.height()) {
-        var new_width = Math.max(body_width - 5, textarea.width());
-        textarea.width(new_width);
-        edit.width(new_width);
+    
+    //if (textarea.get(0).scrollHeight > textarea.height()) {
+        //var new_width = Math.max(body_width - 5, textarea.width());
+        //textarea.width(new_width);
+        //edit.width(new_width);
 
-        var new_height = Math.max(body_height, textarea.height());
-        textarea.height(new_height);
-    }
+        //var new_height = Math.max(body_height, textarea.height());
+        //textarea.height(new_height);
+    //}
 
     form
         .find(".cancel, .save").show().end()

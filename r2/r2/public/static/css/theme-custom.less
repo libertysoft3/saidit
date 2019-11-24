@@ -29,7 +29,7 @@
     background-position: top left;
     background-repeat: repeat-x;
     min-height: 83px; /* can fine tune and hide top of banner */
-    border-color: #000000;
+    border-color: #505050;
     background-attachment: fixed;
 }
 #header-img.default-header {
@@ -148,6 +148,52 @@
     background: transparent url(../footer-banner.jpg) repeat-x bottom left;
     background-attachment: fixed;
 }
+
+
+/* alternating colors for comment boxes */
+ .theme-daymode .comments-page .commentarea .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment {
+     background: #fff !important;
+     border-radius: 12px;
+}
+ .theme-daymode .comments-page .commentarea .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment {
+     background-color: #f8f8f8 !important;
+     border-radius: 12px;
+}
+
+
+.commentarea .comment .comment,
+.commentarea .comment .comment .comment .comment,
+.commentarea .comment .comment .comment .comment .comment .comment,
+.commentarea .comment .comment .comment .comment .comment .comment .comment .comment,
+.commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment {
+  background: #f8f8f8 !important; border-radius: 12px;}
+
+
+.commentarea .comment,
+.commentarea .comment .comment .comment,
+.commentarea .comment .comment .comment .comment .comment,
+.commentarea .comment .comment .comment .comment .comment .comment .comment,
+.commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment,
+.commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment {
+  background: #fff !important; border-radius: 12px;}
+
+
+
+.theme-nightmode .commentarea .comment .comment,
+.theme-nightmode .commentarea .comment .comment .comment .comment,
+.theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment,
+.theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment .comment .comment,
+.theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment {
+  background: #2f2f2f !important; border-radius: 12px;}
+
+.theme-nightmode .commentarea .comment,
+.theme-nightmode .commentarea .comment .comment .comment,
+.theme-nightmode .commentarea .comment .comment .comment .comment .comment,
+.theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment .comment,
+.theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment,
+.theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment {
+  background: #353535 !important; border-radius: 12px;}
+
 
 /* vote buttons */
 .arrow .score {
@@ -275,16 +321,21 @@
  	.side {
 	        float: none;
 	        width: auto;
+	        margin: 9px 9px 5px 9px;
 	    }
 	.side .spacer {
-	    margin: 3px 15px 3px 50px;
+	    
 	}
 	
     .login-form-side .submit {
         float: left;
     }
     .link {
-        padding-left: 0;
+        padding-left: 5px;
+        padding-top: 5px;
+        margin-left: 1px;
+        margin-right: 1px;
+        padding-right: 0px;
     }
     .link .midcol {
         width: 55px;
@@ -302,6 +353,10 @@
     }
     .commentarea > .usertext {
         margin: 0;
+    }
+    .commentarea{
+    	padding-left: 0px;
+    	padding-right: 0px;
     }
     .infobar {
         margin: 5px;
@@ -322,14 +377,14 @@
         float: none;
     }
     .usertext-edit, .usertext-edit textarea, .formtabs-content {
-        width: 100%;
+        width: 98%;
     }
     .comment .midcol {
         width: 25px;
     }
     .comment .child {
-        margin-left: 10px;
-        margin-right: 5px;
+        margin-left: 8px;
+        
     }
     .roundfield {
         width: 95%;
