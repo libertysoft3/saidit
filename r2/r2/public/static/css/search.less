@@ -39,8 +39,6 @@
       @color: @color-unsubscribe;
       @color2: darken(@color, 10%);
 
-      background: @color;
-      border-color: @color2;
 
       &:active {
         background: @color2;
@@ -51,8 +49,6 @@
       @color: @color-subscribe;
       @color2: darken(@color, 10%);
 
-      background: @color;
-      border-color: @color2;
 
       &:active {
         background: @color2;
@@ -131,7 +127,7 @@
     border-radius: 2px;
     box-sizing: border-box;
     max-width: @max-width;
-    min-width: @max-width / 2;
+    min-width: 63px;
     padding: @margin-x-small * 1px;
     padding-left: @margin-small * 1px;
     padding-right: @margin-x-large * 1px;
@@ -199,13 +195,13 @@
 
   :link {
     &, > mark {
-      color: @color-link;
+      /* default color is best */
     }
   }
 
   :visited {
     &, > mark {
-      color: @color-link-visited;
+      /* default color is best */
     }
   }
 
@@ -214,6 +210,7 @@
 
     > * {
       .flex(1 1);
+      overflow: auto;
     }
 
     > .thumbnail {
@@ -312,7 +309,7 @@
       position: absolute;
       width: 100%;
 
-      .linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+      .linear-gradient(rgba(47, 47, 47, 0), rgba(47, 47, 47, 1));
     }
   }
 }
@@ -348,7 +345,6 @@
 
 .search-result-group {
   max-width: @max-width;
-  min-width: @min-width;
   padding-left: @margin-xx-large * 1px;
   padding-right: @margin-large * 1px;
 
@@ -369,7 +365,7 @@
 }
 
 .search-result-group-header {
-  border-bottom: 2px solid @color-group-header-border;
+  border-bottom: 2px solid #a0a0a0;
   color: @color-dark-grey;
   margin-bottom: @margin-large * 1px;
   margin-top: @margin-xx-large * 1px;
@@ -393,14 +389,12 @@
 .search-result-icon {
   background-position: center;
   background-repeat: no-repeat;
-  display: inline-block;
   height: 15px;
   vertical-align: middle;
   width: 16px;
 }
 
 .search-result-icon-score {
-  background-image: data-uri('../ambivote-icon.png');
   background-size: 10px 14px;
 }
 
