@@ -41,6 +41,13 @@
 %if c.show_admin_bar:
   <div id="admin-bar" ${classes('admin' if c.user_is_admin else None, 'debug' if g.debug else None)}>
     <div class="status-bar">
+      <span class="controls">
+        %if c.user_is_admin:
+          ${admin_menu()}
+        %endif
+        <span class="timings-button"><span class="state">-</span>${_('timings')}</span>
+        <span class="hide-button">${_('hide')}</span>
+      </span>
       <span class="caption">${_('status')}</span>
       ${indicator('admin', _('admin mode enabled'), c.user_is_admin)}
       %if c.user_is_admin:
@@ -53,13 +60,6 @@
       ${indicator('disabled', _('ads disabled'), g.disable_ads)}
       ${indicator('disabled', _('captcha disabled'), g.disable_captcha)}
       ${indicator('disabled', _('ratelimit disabled'), g.disable_ratelimit)}
-      <span class="controls">
-        %if c.user_is_admin:
-          ${admin_menu()}
-        %endif
-        <span class="timings-button"><span class="state">-</span>${_('timings')}</span>
-        <span class="hide-button">${_('hide')}</span>
-      </span>
     </div>
     <div class="timings-bar">
       <div class="expand-button">+</div>

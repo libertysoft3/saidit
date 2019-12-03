@@ -15,7 +15,7 @@
   padding-left: 5px;
 }
 .tabmenu li a {
-  color: #72b7e9;
+  color: #7fc3f5;
 }
 .tagline a {
   text-decoration: none;
@@ -285,23 +285,26 @@
 	}
 
 .banner-variant #header2 { 
-	background-position: top -30px left 0px; 
+	background-position: top -30px left 17%; 
 	/* background-image: url(../banners/saiditbanner10.jpg); */
 	width: 5000px;
 	height: 100%;
 	z-index: -1;
 	display: block;
 	position: absolute;
-	animation-delay: 5s;
+	background-repeat: repeat-x;
+	/* ADD THE FOLLOWING BACK IN FOR SMOOTH-SCROLLING BANNERS */
+
+	/* animation-delay: 5s;
 	transition-duration: 7200s;
 	-webkit-animation-duration: 7200s;
 	transition-property: all;
 	transition-property: transform;
 	-webkit-animation-name: MOVE-BG-TRANSLATE;
 	-webkit-animation-timing-function: linear; 
-	-webkit-animation-iteration-count: infinite;
-	background-repeat: repeat-x;
-	/* background-attachment: fixed; */
+	-webkit-animation-iteration-count: infinite; */
+	
+	background-attachment: fixed; /* comment out if using smooth scrolling */
 
 
 	}
@@ -403,10 +406,9 @@
 /* vote buttons */
 .arrow .score {
     display: inline;
-    padding-left: 19px;
-    margin-left: 8px;
     position: relative;
-    top: 5px;
+    top: 28px;
+    left: 0px;
 }
 .score.likesdislikes {
     display: none;
