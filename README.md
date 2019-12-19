@@ -1,5 +1,9 @@
 # SaidIt
 
+![Image of Saidit logo](https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWA5A1rZZJu_oFjSkUk42Ds5-UDm6c9HNkwSngMYAtvc_Dybkt)
+
+
+
 SaidIt is a [reddit open source](https://github.com/reddit-archive/reddit) continuation and fork with:
 
 * critical configurations restored
