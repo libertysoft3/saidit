@@ -2431,7 +2431,7 @@ textarea.gray { color: gray; }
     margin: 5px 0 0 5px;
 }
 
-.deepthread a { font-size: larger; color: #336699 }
+.deepthread a { font-size: larger; }
 .deepthread a:hover { text-decoration: underline}
 
 .morecomments {font-size: larger}
@@ -5402,8 +5402,10 @@ ul.tabmenu.formtab {
 .usertext-edit {
     margin-top: 5px;
     padding: 0 1px; /* so the border of help/textbox don't get chopped off */
-    margin-right: 397px; /* so the edit area fits next to the sidebar */
+    /* margin-right: 397px; so the edit area fits next to the sidebar */
     min-width: 300px;
+    max-width: 1100px;
+    overflow: auto;
     
 }
 
