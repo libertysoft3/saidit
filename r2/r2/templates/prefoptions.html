@@ -313,6 +313,10 @@
       &#32;
       ${_("the smaller the number, the faster your comments pages will load")}
     </span>
+## SaidIt: degolding, moved pref
+    <p>
+      ${checkbox(_("highlight new comments"), "highlight_new_comments")}
+    </p>
     </td>
   </tr>
 
@@ -520,17 +524,20 @@
         ${checkbox(_wsf("use a %(creddit_link)s to automatically renew my gold if it expires", creddit_link=creddit_link), "creddit_autorenew")}
     </td>
   </tr>
-  %elif c.user.is_moderator_somewhere:
-  <tr class="gold-accent">
-    <th>${_("experimental options")}</th>
-    <td class="prefright">
-      ${checkbox(_("highlight new comments"), "highlight_new_comments")}
-      <% gold_link = unsafe('&#32;<a href="/gold/about">' + _("gold system") + '</a>') %>
-      &#32;<span class="details">
-        (${_wsf("This a test feature, this will only apply in subs you moderate")})
-      </span>
-    </td>
-  </tr>
+
+## SaidIt: degolding
+##  %elif c.user.is_moderator_somewhere:
+##  <tr class="gold-accent">
+##    <th>${_("experimental options")}</th>
+##    <td class="prefright">
+##      ${checkbox(_("highlight new comments"), "highlight_new_comments")}
+##      <% gold_link = unsafe('&#32;<a href="/gold/about">' + _("gold system") + '</a>') %>
+##      &#32;<span class="details">
+##        (${_wsf("This a test feature, this will only apply in subs you moderate")})
+##      </span>
+##    </td>
+##  </tr>
+
   %endif
 
 

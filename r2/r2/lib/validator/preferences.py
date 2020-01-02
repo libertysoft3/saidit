@@ -195,8 +195,9 @@ def filter_prefs(prefs, user):
         del prefs['pref_hide_ads']
         del prefs['pref_show_gold_expiration']
 
-    if not (user.gold or user.is_moderator_somewhere):
-        prefs['pref_highlight_new_comments'] = True
+    # SAIDIT: degolding
+    # if not (user.gold or user.is_moderator_somewhere):
+    #     prefs['pref_highlight_new_comments'] = True
 
     # check stylesheet override
     if (feature.is_enabled('stylesheets_everywhere', user=user) and

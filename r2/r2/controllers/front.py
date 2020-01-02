@@ -302,7 +302,8 @@ class FrontController(RedditController):
         if comment:
             c.focal_comment = comment._id36
         elif (c.user_is_loggedin and
-                (c.user.gold or sr.is_moderator(c.user)) and
+                # SAIDIT: degolding
+                # (c.user.gold or sr.is_moderator(c.user)) and
                 c.user.pref_highlight_new_comments):
             timer = g.stats.get_timer("gold.comment_visits")
             timer.start()
