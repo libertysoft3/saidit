@@ -265,7 +265,7 @@ Configure anope:
       # set defaultsessionlimit = 50000, maxsessionlimit = 50000 (since everyone connects from localhost)
     $ cp example.conf services.conf
     $ nano services.conf
-      # set uplink::ssl to 'yes'
+      # note: not using SSL since connecting to localhost
       # set uplink::port to 6667
       # set uplink::password to 'my-services-password-1234'
       # set serverinfo::name to services.reddit.local
@@ -460,15 +460,16 @@ WARNING: this currently breaks Cython dependencies in reddit PPAs/repos, so `ins
 
 #### Rebuild reddit open source
 
-    $ sudo reddit-stop
-    $ sudo reddit-flush
     $ sudo apt-get install python-dev libxml2-dev libxslt1-dev zlib1g-dev
     $ cd ~/src/reddit/r2
+    $ sudo reddit-stop
     $ python setup.py build
     $ sudo python setup.py develop
     $ make clean
-    $ make
+    $ make build/mangle-buildstamp
+    $ make -j $(nproc)
     $ sudo reddit-start
+    $ sudo reddit-flush
 
 ---
 
