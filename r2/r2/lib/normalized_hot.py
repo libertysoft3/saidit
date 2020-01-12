@@ -30,10 +30,9 @@ from r2.config import feature
 from r2.lib.db.queries import _get_links, CachedResults
 from r2.lib.db.sorts import epoch_seconds
 
-
-MAX_PER_SUBREDDIT = 150
-MAX_LINKS = 1000
-
+# SaidIt: store over the default 1000 for the heavy sub muting use case
+MAX_PER_SUBREDDIT = g.hot_max_links_per_subreddit
+MAX_LINKS = g.precompute_limit
 
 def get_hot_tuples(sr_ids, ageweight=None):
     queries_by_sr_id = {sr_id: _get_links(sr_id, sort='hot', time='all')
@@ -48,7 +47,6 @@ def get_hot_tuples(sr_ids, ageweight=None):
             continue
 
         hot_factor = get_hot_factor(q.data[0], now_seconds, ageweight)
-
         for link_name, hot, timestamp in q.data[:MAX_PER_SUBREDDIT]:
             effective_hot = hot / hot_factor
             # heapq.merge sorts from smallest to largest so we need to flip
@@ -76,7 +74,7 @@ def get_hot_factor(qdata, now, ageweight):
     """
     ageweight = float(ageweight or 0.0)
     link_name, hot, timestamp = qdata
-    return max(hot + ((now - timestamp) * ageweight) / 45000.0, 1.0)
+    return max(hot + ((now - timestamp) * ageweight) / g.hot_period_seconds, 1.0)
 
 
 def normalized_hot(sr_ids, obey_age_limit=True, ageweight=None):

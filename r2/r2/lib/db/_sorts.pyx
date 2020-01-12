@@ -45,15 +45,10 @@ cpdef long score(long ups, long downs):
 cpdef double hot(long ups, long downs, date):
     return _hot(ups, downs, epoch_seconds(date))
 
-# CUSTOM: more score sensitive, less time sensitive
-# 45000 changed to 180000
 cpdef double _hot(long ups, long downs, double date):
     """The hot formula. Should match the equivalent function in postgres."""
     s = score(ups, downs)
     order = log10(max(abs(s), 1))
-    # CUSTOM: potential alternatives
-    # order = log2(max(abs(s), 1))
-    # order = max(abs(s), 1)
     if s > 0:
         sign = 1
     elif s < 0:
@@ -61,9 +56,7 @@ cpdef double _hot(long ups, long downs, double date):
     else:
         sign = 0
     seconds = date - 1134028003
-    # CUSTOM: divide into 36h periods, a ~3x hot slowdown compared to the default 12.5h
-    # return round(sign * order + seconds / 45000, 7)
-    return round(sign * order + seconds / 129600, 7)
+    return round(sign * order + seconds / g.hot_period_seconds, 7)
 
 cpdef long upvotes(long ups):
     return ups

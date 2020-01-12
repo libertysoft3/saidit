@@ -229,6 +229,8 @@ class Globals(object):
             'captcha_sol_length',
             'captcha_font_size',
             'banner_variants',
+            'precompute_limit',
+            'hot_max_links_per_subreddit',
         ],
 
         ConfigValue.float: [
@@ -240,6 +242,7 @@ class Globals(object):
             'RL_LOGIN_IP_AVG_PER_SEC',
             'RL_SHARE_AVG_PER_SEC',
             'tracing_sample_rate',
+            'hot_period_seconds',
         ],
 
         ConfigValue.bool: [

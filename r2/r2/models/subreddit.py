@@ -1829,7 +1829,10 @@ class AllSR(FakeSubreddit):
             write_cache=True,
             cache_time=60,
             data=True,
-            filter_primary_sort_only=True,
+            # SAIDIT: use False for small sites, otherwise insightful, fun, and top paging queries
+            # use '<' last sort-score filtering, omitting any links with duplicate sort-score values.
+            # False turns sort-score into a '<=' filter (and uses date). rebuild reddit to update.
+            filter_primary_sort_only=False,
         )
         if time != 'all':
             q._filter(queries.db_times[time])

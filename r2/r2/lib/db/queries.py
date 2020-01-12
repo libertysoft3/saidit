@@ -79,7 +79,7 @@ from r2.models.vote import Vote
 from r2.models.comment_tree import CommentTree
 
 
-precompute_limit = 1000
+precompute_limit = g.precompute_limit
 
 db_sorts = dict(hot = (desc, '_hot'),
                 new = (desc, '_date'),
@@ -1751,7 +1751,7 @@ def clear_reports(things, rels):
         for q, deletes in query_cache_deletes:
             m.delete(q, deletes)
 
-# CUSTOM: use *_results() functions
+# CUSTOM: use *_results() functions, add get_sr_comments(), add get_all_comments()
 def add_all_srs():
     """Recalculates every listing query for every subreddit. Very,
        very slow."""
@@ -1766,6 +1766,10 @@ def add_all_srs():
         get_spam_comments_results(sr).update()
         get_reported_links_results(sr).update()
         get_reported_comments_results(sr).update()
+        get_sr_comments(sr).update()
+
+    g.log.warning("permacache updating sr AllSR")
+    get_all_comments().update()
 
 # CUSTOM: use *_results functions, more get_submitted() and get_comments()
 def update_user(user):

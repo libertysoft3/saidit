@@ -170,7 +170,7 @@ def rel_listings(names, thing2_cls = Link):
                    make_fullname(thing2_cls, rel.thing2_id))
     mr_tools.mr_map(process)
 
-# CUSTOM: TODO: there are 4 vote directions now
+# SAIDIT TODO: there are 4 vote directions now
 def linkvote_listings():
     rel_listings({'1': 'liked',
                   '-1': 'disliked'})
@@ -220,6 +220,7 @@ def store_keys(key, maxes):
         insert_to_query(q, [tuple([item[-1]] + map(float, item[:-1]))
                             for item in maxes])
 
+# SAIDIT TODO: 1k is configurable with g.precompute_limit
 def top1k_writefiles(dirname):
     """Divide up the top 1k of each key into its own file to make
        restarting after a failure much easier. Pairs with
@@ -263,6 +264,7 @@ def top1k_writefiles(dirname):
     mr_tools.mr_reduce_max_per_key(lambda x: map(float, x[:-1]), num=1000,
                                    post=post)
 
+# SAIDIT TODO: 1k is configurable with g.precompute_limit
 def top1k_writepermacache(fd = sys.stdin):
     mr_tools.mr_reduce_max_per_key(lambda x: map(float, x[:-1]), num=1000,
                                    post=store_keys,
