@@ -1757,7 +1757,7 @@ def add_all_srs():
        very slow."""
     q = Subreddit._query(sort = asc('_date'))
     for sr in fetch_things2(q):
-        g.log.warning("permacache updating sr %s" % sr.name)
+        g.log.warning("permacache: updating sr %s" % sr.name)
         for q in all_queries(get_links, sr, ('hot', 'new'), ['all']):
             q.update()
         for q in all_queries(get_links, sr, time_filtered_sorts, db_times.keys()):
@@ -1768,7 +1768,7 @@ def add_all_srs():
         get_reported_comments_results(sr).update()
         get_sr_comments(sr).update()
 
-    g.log.warning("permacache updating sr AllSR")
+    g.log.warning("permacache: updating sr AllSR")
     get_all_comments().update()
 
 # CUSTOM: use *_results functions, more get_submitted() and get_comments()
@@ -1778,7 +1778,7 @@ def update_user(user):
     elif isinstance(user, int):
         user = Account._byID(user)
 
-    g.log.warning("permacache updating user %s" % user.name)
+    g.log.warning("permacache: updating user %s" % user.name)
     results = [get_inbox_messages_results(user),
                get_inbox_messages_results(user),
                get_inbox_selfreply_results(user),
@@ -1811,8 +1811,24 @@ def add_all_users():
 def add_all_comments():
     q = Link._query(sort = desc('_date'))
     for link in fetch_things2(q):
-        g.log.warning("permacache updating comments for link %s" % link._id)
+        g.log.warning("permacache: updating comments for link %s" % link._id)
         CommentTree.rebuild(link)
+
+# Rebuild permacache domain listings
+def add_all_domain_listings():
+    domains = set()
+    q = Link._query(sort = desc('_date'))
+    for link in fetch_things2(q):
+        for domain in utils.UrlParser(link.url).domain_permutations():
+            domains.add(domain)
+
+    for domain in domains:
+        g.log.warning("permacache: updating domain listings for %s" % domain)
+        get_domain_links(domain, 'new', "all").update()
+        get_domain_links(domain, 'hot', "all").update()
+        for sort in time_filtered_sorts:
+            for time in db_times.keys():
+                get_domain_links(domain, sort, time).update()
 
 # amqp queue processing functions
 

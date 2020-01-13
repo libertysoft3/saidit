@@ -153,7 +153,7 @@ def store_keys(key, maxes):
         q._insert_tuples([tuple([item[-1]] + map(float, item[:-1]))
                     for item in maxes])
 
-
+# SAIDIT TODO: 1k is configurable with g.precompute_limit
 def write_permacache(fd = sys.stdin):
     mr_tools.mr_reduce_max_per_key(lambda x: map(float, x[:-1]), num=1000,
                                    post=store_keys,
