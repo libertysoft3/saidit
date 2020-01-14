@@ -1751,11 +1751,12 @@ def clear_reports(things, rels):
         for q, deletes in query_cache_deletes:
             m.delete(q, deletes)
 
+# rebuild permacache sub listings
 # CUSTOM: use *_results() functions, add get_sr_comments(), add get_all_comments()
 def add_all_srs():
     """Recalculates every listing query for every subreddit. Very,
        very slow."""
-    q = Subreddit._query(sort = asc('_date'))
+    q = Subreddit._query(sort = desc('_date'))
     for sr in fetch_things2(q):
         g.log.warning("permacache: updating sr %s" % sr.name)
         for q in all_queries(get_links, sr, ('hot', 'new'), ['all']):
@@ -1802,19 +1803,20 @@ def update_user(user):
     for q in results:
         q.update()
 
+# rebuild permacache user pages
 def add_all_users():
-    q = Account._query(sort = asc('_date'))
+    q = Account._query(sort = desc('_date'))
     for user in fetch_things2(q):
         update_user(user)
 
-# Rebuild permacache comment trees for every link
+# rebuild permacache comment trees for every link
 def add_all_comments():
     q = Link._query(sort = desc('_date'))
     for link in fetch_things2(q):
         g.log.warning("permacache: updating comments for link %s" % link._id)
         CommentTree.rebuild(link)
 
-# Rebuild permacache domain listings
+# rebuild permacache domain listings
 def add_all_domain_listings():
     domains = set()
     q = Link._query(sort = desc('_date'))
