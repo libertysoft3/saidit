@@ -300,6 +300,7 @@ class Globals(object):
             'multi_icons',
             'hide_subscribers_srs',
             'mcrouter_addr',
+            'permacache_domain_priority',
         ],
 
         ConfigValue.tuple_of(ConfigValue.int): [

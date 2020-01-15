@@ -28,7 +28,7 @@ from functools import partial
 import hashlib
 import itertools
 import pytz
-from time import mktime
+from time import mktime, sleep
 
 from pylons import app_globals as g
 from pylons import tmpl_context as c
@@ -1817,20 +1817,35 @@ def add_all_comments():
         CommentTree.rebuild(link)
 
 # rebuild permacache domain listings
-def add_all_domain_listings():
+# use postgres_sleep to not hammer a live site too hard
+def add_all_domain_srs(postgres_sleep=False):
+    for domain in g.permacache_domain_priority:
+         _add_domain_sr(domain, postgres_sleep)
+
     domains = set()
     q = Link._query(sort = desc('_date'))
     for link in fetch_things2(q):
         for domain in utils.UrlParser(link.url).domain_permutations():
             domains.add(domain)
-
     for domain in domains:
+        if domain not in g.permacache_domain_priority:
+            _add_domain_sr(domain, postgres_sleep)
+
+def _add_domain_sr(domain="", postgres_sleep=False):
+    if domain:
         g.log.warning("permacache: updating domain listings for %s" % domain)
-        get_domain_links(domain, 'new', "all").update()
-        get_domain_links(domain, 'hot', "all").update()
+        get_domain_links(domain, 'new', 'all').update()
+        if postgres_sleep:
+            sleep(1)
+        get_domain_links(domain, 'hot', 'all').update()
+        if postgres_sleep:
+            sleep(1)
         for sort in time_filtered_sorts:
             for time in db_times.keys():
                 get_domain_links(domain, sort, time).update()
+                if postgres_sleep:
+                    sleep(1)
+
 
 # amqp queue processing functions
 
