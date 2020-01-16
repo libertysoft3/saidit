@@ -82,7 +82,7 @@ function countChars(countfrom,displayto) {
 <div class="spacer">
   <%utils:round_field title="${_('url')}" id="url-field">
     <input name="kind" value="link" type="hidden"/>
-    <input id="url" name="url" type="url" value="${thing.url}" required>
+    <input id="url" name="url" type="url" onfocusout="fetch_title_onpaste()" value="${thing.url}" required>
     ${error_field("NO_URL", "url", "div")}
     ${error_field("BAD_URL", "url", "div")}
     ${error_field("DOMAIN_BANNED", "url", "div")}

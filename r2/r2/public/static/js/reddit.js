@@ -615,6 +615,26 @@ function fetch_title() {
 }
 
 
+function fetch_title_onpaste() {
+    var url_field = $("#url-field");
+    var error = url_field.find(".NO_URL");
+    var status = url_field.find(".title-status");
+    var url = $("#url").val();
+    if (url) {
+        error.hide();
+        if ($('form#newlink textarea[name="title"]').val()) {
+                return;
+        }
+        status.show().text(r.config.status_msg.loading);
+        $.request("fetch_title", {url: url});
+    }
+    else {
+        status.hide();
+        error.show().text("a url is required");
+    }
+}
+
+
 
 function highlight_reddit(item) {
     $("#sr-drop-down").children('.sr-selected').removeClass('sr-selected');
