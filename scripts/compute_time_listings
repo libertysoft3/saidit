@@ -42,6 +42,10 @@ export INTERVAL="$2"
 # formatted as python tuple of strings: e.g. '("hour",)' or ("week", "all",) etc
 export TIMES="$3"
 
+# default 4
+# SAIDIT: 1 for single server performance, 4 cores are also serving web traffic
+WRITE_PERMACACHE_NPROC=1
+
 echo "Starting $THING_CLS processing"
 
 # enable reporting to sentry
@@ -138,6 +142,5 @@ cat $THING_DUMP $DATA_DUMP |
     reddit "join_things('$THING_CLS')" |
     reddit "time_listings($TIMES, '$THING_CLS')" |
     mrsort |
-    reddit -j4 "write_permacache()"
-
+    reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
 echo 'Done.'
