@@ -32,7 +32,7 @@ from r2.lib.db.sorts import epoch_seconds
 
 # SaidIt: store over the default 1000 for the heavy sub muting use case
 MAX_PER_SUBREDDIT = g.hot_max_links_per_subreddit
-MAX_LINKS = g.precompute_limit
+MAX_LINKS = g.precompute_limit_hot
 
 def get_hot_tuples(sr_ids, ageweight=None):
     queries_by_sr_id = {sr_id: _get_links(sr_id, sort='hot', time='all')

@@ -230,6 +230,7 @@ class Globals(object):
             'captcha_font_size',
             'banner_variants',
             'precompute_limit',
+            'precompute_limit_hot',
             'hot_max_links_per_subreddit',
         ],
 
