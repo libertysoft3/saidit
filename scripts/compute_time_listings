@@ -42,19 +42,20 @@ export INTERVAL="$2"
 # formatted as python tuple of strings: e.g. '("hour",)' or ("week", "all",) etc
 export TIMES="$3"
 
-# default 4
-# SAIDIT: 1 for single server performance, 4 cores are also serving web traffic
+# SAIDIT: single server performance, default is 4
 WRITE_PERMACACHE_NPROC=1
+WRITE_PERMACACHE_SLEEP=5
 
-echo "Starting $THING_CLS processing"
+echo "Starting $THING_CLS processing for interval $INTERVAL"
 
 # enable reporting to sentry
 export REDDIT_ERRORS_TO_SENTRY=1
 
 THING_DUMP=$TMPDIR/$THING_CLS-$INTERVAL-thing.dump
 DATA_DUMP=$TMPDIR/$THING_CLS-$INTERVAL-data.dump
+CACHE_DUMP=$TMPDIR/$THING_CLS-$INTERVAL-cache.dump
 function clean_up {
-    rm -f $THING_DUMP $DATA_DUMP
+    rm -f $THING_DUMP $DATA_DUMP $CACHE_DUMP
 }
 
 if [ -e $THING_DUMP ]; then
@@ -137,10 +138,28 @@ run_query "\\copy (SELECT thing_id, 'data', '$THING_CLS', key, value
                        thing_id >= $MINID
                   ) to $DATA_DUMP"
 
-cat $THING_DUMP $DATA_DUMP |
-    mrsort |
-    reddit "join_things('$THING_CLS')" |
-    reddit "time_listings($TIMES, '$THING_CLS')" |
-    mrsort |
+# SAIDIT: single server performance
+cat $THING_DUMP $DATA_DUMP | mrsort | reddit "join_things('$THING_CLS')" > $CACHE_DUMP
+
+# user listings
+cat $CACHE_DUMP |
+    reddit "time_listings($TIMES, '$THING_CLS', with_user=True, with_sr=False, with_domain=False)" |
+    { echo -n; sleep $WRITE_PERMACACHE_SLEEP; mrsort; } |
     reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
+sleep $WRITE_PERMACACHE_SLEEP
+
+# sub listings
+cat $CACHE_DUMP |
+    reddit "time_listings($TIMES, '$THING_CLS', with_user=False, with_sr=True, with_domain=False)" |
+    { echo -n; sleep $WRITE_PERMACACHE_SLEEP; mrsort; } |
+    reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
+sleep $WRITE_PERMACACHE_SLEEP
+
+# domain listings
+cat $CACHE_DUMP |
+    reddit "time_listings($TIMES, '$THING_CLS', with_user=False, with_sr=False, with_domain=True)" |
+    { echo -n; sleep $WRITE_PERMACACHE_SLEEP; mrsort; } |
+    reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
+sleep $WRITE_PERMACACHE_SLEEP
+
 echo 'Done.'
