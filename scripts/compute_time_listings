@@ -42,20 +42,23 @@ export INTERVAL="$2"
 # formatted as python tuple of strings: e.g. '("hour",)' or ("week", "all",) etc
 export TIMES="$3"
 
-# SAIDIT: single server performance, default is 4
+# SAIDIT: single server optimization
+# WRITE_PERMACACHE_NPROC=4
 WRITE_PERMACACHE_NPROC=1
-WRITE_PERMACACHE_SLEEP=5
+WRITE_PERMACACHE_BATCH_SIZE=15000
+TIME_LISTINGS_BATCH_SIZE=5000
 
-echo "Starting $THING_CLS processing for interval $INTERVAL"
+echo "Starting $THING_CLS processing"
 
 # enable reporting to sentry
 export REDDIT_ERRORS_TO_SENTRY=1
 
 THING_DUMP=$TMPDIR/$THING_CLS-$INTERVAL-thing.dump
 DATA_DUMP=$TMPDIR/$THING_CLS-$INTERVAL-data.dump
-CACHE_DUMP=$TMPDIR/$THING_CLS-$INTERVAL-cache.dump
+JOIN_DUMP=$TMPDIR/$THING_CLS-$INTERVAL-join.dump
+TIME_DUMP=$TMPDIR/$THING_CLS-$INTERVAL-time.dump
 function clean_up {
-    rm -f $THING_DUMP $DATA_DUMP $CACHE_DUMP
+    rm -f $THING_DUMP $DATA_DUMP $JOIN_DUMP $TIME_DUMP
 }
 
 if [ -e $THING_DUMP ]; then
@@ -138,28 +141,41 @@ run_query "\\copy (SELECT thing_id, 'data', '$THING_CLS', key, value
                        thing_id >= $MINID
                   ) to $DATA_DUMP"
 
-# SAIDIT: single server performance
-cat $THING_DUMP $DATA_DUMP | mrsort | reddit "join_things('$THING_CLS')" > $CACHE_DUMP
+# SaidIt: single server optimization
+cat $THING_DUMP $DATA_DUMP |
+    mrsort |
+    reddit "join_things('$THING_CLS')" > $JOIN_DUMP
 
-# user listings
-cat $CACHE_DUMP |
-    reddit "time_listings($TIMES, '$THING_CLS', with_user=True, with_sr=False, with_domain=False)" |
-    { echo -n; sleep $WRITE_PERMACACHE_SLEEP; mrsort; } |
-    reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
-sleep $WRITE_PERMACACHE_SLEEP
+# batch run time_listings()
+importBatch=()
+input=$JOIN_DUMP
+while IFS= read -r line
+do
+    importBatch+=( "$line" )
+    if [ ${#importBatch[@]} -ge $TIME_LISTINGS_BATCH_SIZE ]; then
+        printf '%s\n' "${importBatch[@]}" | reddit "time_listings($TIMES, '$THING_CLS')" | mrsort >> $TIME_DUMP
+        importBatch=()
+    fi
+done < "$input"
+if [ ${#importBatch[@]} -gt 0 ]; then
+    printf '%s\n' "${importBatch[@]}" | reddit "time_listings($TIMES, '$THING_CLS')" | mrsort >> $TIME_DUMP
+fi
 
-# sub listings
-cat $CACHE_DUMP |
-    reddit "time_listings($TIMES, '$THING_CLS', with_user=False, with_sr=True, with_domain=False)" |
-    { echo -n; sleep $WRITE_PERMACACHE_SLEEP; mrsort; } |
-    reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
-sleep $WRITE_PERMACACHE_SLEEP
-
-# domain listings
-cat $CACHE_DUMP |
-    reddit "time_listings($TIMES, '$THING_CLS', with_user=False, with_sr=False, with_domain=True)" |
-    { echo -n; sleep $WRITE_PERMACACHE_SLEEP; mrsort; } |
-    reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
-sleep $WRITE_PERMACACHE_SLEEP
+# batch run write_permacache()
+importBatch=()
+input=$TIME_DUMP
+while IFS= read -r line
+do
+    importBatch+=( "$line" )
+    if [ ${#importBatch[@]} -ge $WRITE_PERMACACHE_BATCH_SIZE ]; then
+        printf '%s\n' "${importBatch[@]}" |
+          reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
+        importBatch=()
+    fi
+done < "$input"
+if [ ${#importBatch[@]} -gt 0 ]; then
+    printf '%s\n' "${importBatch[@]}" |
+        reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
+fi
 
 echo 'Done.'

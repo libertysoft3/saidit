@@ -68,7 +68,7 @@ def _get_cutoffs(intervals):
     return cutoffs
 
 
-def time_listings(intervals, thing_type, with_user=True, with_sr=True, with_domain=True):
+def time_listings(intervals, thing_type):
     cutoff_by_interval = _get_cutoffs(intervals)
 
     @mr_tools.dataspec_m_thing(*data_fields_by_name[thing_type].items())
@@ -86,40 +86,37 @@ def time_listings(intervals, thing_type, with_user=True, with_sr=True, with_doma
             if thing.timestamp < cutoff:
                 continue
 
-            if with_user:
-                yield ("user/%s/top/%s/%d" % (thing.thing_type, interval, thing.author_id),
-                       thing_score, thing.timestamp, fname)
-                yield ("user/%s/%s/%s/%d" % (thing.thing_type, g.voting_upvote_path, interval, thing.author_id),
-                       thing_upvotes, thing.timestamp, fname)
-                yield ("user/%s/%s/%s/%d" % (thing.thing_type, g.voting_controversial_path, interval, thing.author_id),
-                       thing_controversy, thing.timestamp, fname)
+            yield ("user/%s/top/%s/%d" % (thing.thing_type, interval, thing.author_id),
+                   thing_score, thing.timestamp, fname)
+            yield ("user/%s/%s/%s/%d" % (thing.thing_type, g.voting_upvote_path, interval, thing.author_id),
+                   thing_upvotes, thing.timestamp, fname)
+            yield ("user/%s/%s/%s/%d" % (thing.thing_type, g.voting_controversial_path, interval, thing.author_id),
+                   thing_controversy, thing.timestamp, fname)
 
             if thing.spam:
                 continue
 
             if thing.thing_type == "link":
-                if with_sr:
-                    yield ("sr/link/top/%s/%d" % (interval, thing.sr_id),
-                           thing_score, thing.timestamp, fname)
-                    yield ("sr/link/%s/%s/%d" % (g.voting_upvote_path, interval, thing.sr_id),
-                           thing_upvotes, thing.timestamp, fname)
-                    yield ("sr/link/%s/%s/%d" % (g.voting_controversial_path, interval, thing.sr_id),
-                           thing_controversy, thing.timestamp, fname)
+                yield ("sr/link/top/%s/%d" % (interval, thing.sr_id),
+                       thing_score, thing.timestamp, fname)
+                yield ("sr/link/%s/%s/%d" % (g.voting_upvote_path, interval, thing.sr_id),
+                       thing_upvotes, thing.timestamp, fname)
+                yield ("sr/link/%s/%s/%d" % (g.voting_controversial_path, interval, thing.sr_id),
+                       thing_controversy, thing.timestamp, fname)
 
                 if thing.url:
-                    if with_domain:
-                        try:
-                            parsed = UrlParser(thing.url)
-                        except ValueError:
-                            continue
+                    try:
+                        parsed = UrlParser(thing.url)
+                    except ValueError:
+                        continue
 
-                        for domain in parsed.domain_permutations():
-                            yield ("domain/link/top/%s/%s" % (interval, domain),
-                                   thing_score, thing.timestamp, fname)
-                            yield ("domain/link/%s/%s/%s" % (g.voting_upvote_path, interval, domain),
-                                   thing_upvotes, thing.timestamp, fname)
-                            yield ("domain/link/%s/%s/%s" % (g.voting_controversial_path, interval, domain),
-                                   thing_controversy, thing.timestamp, fname)
+                    for domain in parsed.domain_permutations():
+                        yield ("domain/link/top/%s/%s" % (interval, domain),
+                               thing_score, thing.timestamp, fname)
+                        yield ("domain/link/%s/%s/%s" % (g.voting_upvote_path, interval, domain),
+                               thing_upvotes, thing.timestamp, fname)
+                        yield ("domain/link/%s/%s/%s" % (g.voting_controversial_path, interval, domain),
+                               thing_controversy, thing.timestamp, fname)
 
     mr_tools.mr_map(process)
 
