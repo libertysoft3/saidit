@@ -30,7 +30,8 @@ RUNDIR=$(dirname $0)
 source $RUNDIR/install.cfg
 
 # install prerequisites
-cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
 mcrouter
 memcached
 postgresql
@@ -42,6 +43,19 @@ gunicorn
 redis-server
 PACKAGES
 
+# skip: postgresql, postgresql-client
+elif [ "$INSTALL_PROFILE" = "app" ]; then
+    cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
+mcrouter
+memcached
+haproxy
+nginx
+gunicorn
+PACKAGES
+
+fi
+
+
 ###############################################################################
 # Wait for all the services to be up
 ###############################################################################
@@ -50,8 +64,14 @@ echo "Waiting for services to be available, see source for port meanings..."
 # 11211 - memcache
 # 5432 - postgres
 # 5672 - rabbitmq
-for port in 11211 5432 5672; do
-    while ! nc -vz localhost $port; do
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    for port in 11211 5432 5672; do
+        while ! nc -vz localhost $port; do
+            sleep 1
+        done
+    done
+elif [ "$INSTALL_PROFILE" = "app" ]; then
+    while ! nc -vz localhost 11211; do
         sleep 1
     done
-done
+fi

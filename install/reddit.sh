@@ -59,6 +59,16 @@ END
     exit 1
 fi
 
+if [[ -z "$INSTALL_PROFILE" ]]; then
+    # in a production install, you'd want the code to be owned by root and run
+    # by a less privileged user. this script is intended to build a development
+    # install, so we expect the owner to run the app and not be root.
+    cat <<END
+ERROR: You have not specified an installation profile.
+END
+    exit 1
+fi
+
 # seriously! these checks are here for a reason. the packages from the
 # reddit ppa aren't built for anything but trusty (14.04) right now, so
 # if you try and use this install script on another release you're gonna
@@ -103,7 +113,11 @@ $RUNDIR/install_apt.sh
 $RUNDIR/install_npm.sh
 
 # install cassandra from datastax
-$RUNDIR/install_cassandra.sh
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    $RUNDIR/install_cassandra.sh
+else
+    echo "install profile $INSTALL_PROFILE: skipping cassandra install"
+fi
 
 # install zookeeper
 $RUNDIR/install_zookeeper.sh
@@ -140,10 +154,24 @@ function clone_reddit_service_repo {
     clone_reddit_repo $1 reddit-archive/reddit-service-$1
 }
 
-clone_reddit_repo reddit libertysoft3/saidit
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    clone_reddit_repo reddit libertysoft3/saidit
+elif [ "$INSTALL_PROFILE" = "app" ]; then
+    destination=$REDDIT_SRC/reddit
+    if [ ! -d $destination ]; then
+        sudo -u $REDDIT_USER -H git clone https://github.com/libertysoft3/saidit.git $destination
+    fi
+    if [ -d $destination/upstart ]; then
+        cp $destination/upstart/reddit-boot.conf /etc/init/
+        cp $destination/upstart/reddit-paster.conf /etc/init/
+    fi
+fi
+
 clone_reddit_repo i18n libertysoft3/reddit-i18n
-clone_reddit_service_repo websockets
-clone_reddit_service_repo activity
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    clone_reddit_service_repo websockets
+    clone_reddit_service_repo activity
+fi
 clone_reddit_repo snudown libertysoft3/snudown
 
 ###############################################################################
@@ -151,16 +179,23 @@ clone_reddit_repo snudown libertysoft3/snudown
 ###############################################################################
 
 # Configure Cassandra
-$RUNDIR/setup_cassandra.sh
+
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    $RUNDIR/setup_cassandra.sh
+fi
 
 # Configure PostgreSQL
-$RUNDIR/setup_postgres.sh
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    $RUNDIR/setup_postgres.sh
+fi
 
 # Configure mcrouter
 $RUNDIR/setup_mcrouter.sh
 
 # Configure RabbitMQ
-$RUNDIR/setup_rabbitmq.sh
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    $RUNDIR/setup_rabbitmq.sh
+fi
 
 ###############################################################################
 # Install and configure the reddit code
@@ -168,7 +203,7 @@ $RUNDIR/setup_rabbitmq.sh
 function install_reddit_repo {
     pushd $REDDIT_SRC/$1
     sudo -u $REDDIT_USER python setup.py build
-    python setup.py develop --no-deps
+    python setup.py develop
     popd
 }
 
@@ -178,8 +213,10 @@ for plugin in $REDDIT_AVAILABLE_PLUGINS; do
     copy_upstart $REDDIT_SRC/$plugin
     install_reddit_repo $plugin
 done
-install_reddit_repo websockets
-install_reddit_repo activity
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    install_reddit_repo websockets
+    install_reddit_repo activity
+fi
 install_reddit_repo snudown
 
 # generate binary translation files from source
@@ -219,6 +256,12 @@ uncompressedJS = true
 sqlprinting = false
 profile_directory =
 
+db_user = reddit
+db_pass = password
+automoderator_account = automoderator
+system_user = reddit
+admin_message_acct = reddit
+
 short_description = open source is awesome
 
 disable_ads = true
@@ -234,15 +277,12 @@ plugins = $plugin_str
 
 media_provider = filesystem
 media_fs_root = /srv/www/media
-media_fs_base_url_http = http://%(domain)s/media/
+media_fs_base_url_http = https://%(domain)s/media/
 
 min_membership_create_community = 0
 
 # the default subreddit for submissions and wiki. created by inject_test_data.py
 default_sr = frontpage
-
-# account name that AutoModerator actions will be done by
-automoderator_account = automoderator
 
 [server:main]
 port = 8001
@@ -254,7 +294,7 @@ port = 8001
 
 [live_config]
 # Specify global admins and permissions, each user should have one of admin, sponsor, or employee as their permission level
-employees = saidit:admin
+employees = reddit:admin
 feature_force_https = on
 
 create_sr_account_age_days = 0
@@ -323,15 +363,16 @@ REDDITSERVE
 ###############################################################################
 # pixel and click server
 ###############################################################################
-mkdir -p /var/opt/reddit/
-chown $REDDIT_USER:$REDDIT_GROUP /var/opt/reddit/
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    mkdir -p /var/opt/reddit/
+    chown $REDDIT_USER:$REDDIT_GROUP /var/opt/reddit/
 
-mkdir -p /srv/www/pixel
-chown $REDDIT_USER:$REDDIT_GROUP /srv/www/pixel
-cp $REDDIT_SRC/reddit/r2/r2/public/static/pixel.png /srv/www/pixel
+    mkdir -p /srv/www/pixel
+    chown $REDDIT_USER:$REDDIT_GROUP /srv/www/pixel
+    cp $REDDIT_SRC/reddit/r2/r2/public/static/pixel.png /srv/www/pixel
 
-if [ ! -f /etc/gunicorn.d/click.conf ]; then
-    cat > /etc/gunicorn.d/click.conf <<CLICK
+    if [ ! -f /etc/gunicorn.d/click.conf ]; then
+        cat > /etc/gunicorn.d/click.conf <<CLICK
 CONFIG = {
     "mode": "wsgi",
     "working_dir": "$REDDIT_SRC/reddit/scripts",
@@ -344,9 +385,9 @@ CONFIG = {
     ),
 }
 CLICK
+    fi
+    service gunicorn start
 fi
-
-service gunicorn start
 
 ###############################################################################
 # nginx
@@ -444,7 +485,9 @@ server {
 SSL
 
 # SSL stuff
-openssl dhparam -out /etc/nginx/dhparam.pem 2048
+if [ ! -f /etc/nginx/dhparam.pem ]; then
+    openssl dhparam -out /etc/nginx/dhparam.pem 2048
+fi
 
 # remove the default nginx site that may conflict with haproxy
 rm -rf /etc/nginx/sites-enabled/default
@@ -552,9 +595,9 @@ service haproxy restart
 ###############################################################################
 # websocket service
 ###############################################################################
-
-if [ ! -f /etc/init/reddit-websockets.conf ]; then
-    cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    if [ ! -f /etc/init/reddit-websockets.conf ]; then
+        cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
 description "websockets service"
 
 stop on runlevel [!2345] or reddit-restart all or reddit-restart websockets
@@ -568,16 +611,16 @@ limit nofile 65535 65535
 
 exec baseplate-serve2 --bind localhost:9001 $REDDIT_SRC/websockets/example.ini
 UPSTART_WEBSOCKETS
+    fi
+    service reddit-websockets restart
 fi
-
-service reddit-websockets restart
 
 ###############################################################################
 # activity service
 ###############################################################################
-
-if [ ! -f /etc/init/reddit-activity.conf ]; then
-    cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    if [ ! -f /etc/init/reddit-activity.conf ]; then
+        cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
 description "activity service"
 
 stop on runlevel [!2345] or reddit-restart all or reddit-restart activity
@@ -589,15 +632,16 @@ kill timeout 15
 
 exec baseplate-serve2 --bind localhost:9002 $REDDIT_SRC/activity/example.ini
 UPSTART_ACTIVITY
+    fi
+    service reddit-activity restart
 fi
-
-service reddit-activity restart
 
 ###############################################################################
 # geoip service
 ###############################################################################
-if [ ! -f /etc/gunicorn.d/geoip.conf ]; then
-    cat > /etc/gunicorn.d/geoip.conf <<GEOIP
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    if [ ! -f /etc/gunicorn.d/geoip.conf ]; then
+        cat > /etc/gunicorn.d/geoip.conf <<GEOIP
 CONFIG = {
     "mode": "wsgi",
     "working_dir": "$REDDIT_SRC/reddit/scripts",
@@ -611,9 +655,9 @@ CONFIG = {
     ),
 }
 GEOIP
+    fi
+    service gunicorn restart
 fi
-
-service gunicorn start
 
 ###############################################################################
 # Job Environment
@@ -674,18 +718,24 @@ done
 ###############################################################################
 
 # the initial database setup should be done by one process rather than a bunch
-# vying with eachother to get there first
-reddit-run -c 'print "ok done"'
+# vying with eachother to get there first.
+# the 'app' install profile fails until 'cassandra_seeds', etc. are configured
+# so don't bother starting the app yet.
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    reddit-run -c 'print "ok done"'
 
-# ok, now start everything else up
-initctl emit reddit-stop
-initctl emit reddit-start
+    # ok, now start everything else up
+    initctl emit reddit-stop
+    initctl emit reddit-start
+fi
 
 ###############################################################################
 # Cron Jobs
 ###############################################################################
 if [ ! -f /etc/cron.d/reddit ]; then
-    cat > /etc/cron.d/reddit <<CRON
+    if [ "$INSTALL_PROFILE" = "all" ]; then
+        cat > /etc/cron.d/reddit <<CRON
+# install profile: all
 0    3 * * * root /sbin/start --quiet reddit-job-update_sr_names
 30  16 * * * root /sbin/start --quiet reddit-job-update_reddits
 0    * * * * root /sbin/start --quiet reddit-job-update_promos
@@ -715,9 +765,15 @@ PGPASSWORD=password
 #*/15  * * * * root /sbin/start reddit-job-update_trending_subreddits
 
 # solr search
-*/15  * * * * root /sbin/start --quiet reddit-job-solr_subreddits
-*/5 * * * * root /sbin/start --quiet reddit-job-solr_links
+0 * * * * root /sbin/start --quiet reddit-job-solr_subreddits
+*/15 * * * * root /sbin/start --quiet reddit-job-solr_links
 CRON
+    elif [ "$INSTALL_PROFILE" = "app" ]; then
+        cat > /etc/cron.d/reddit <<CRON
+# install profile: app
+CRON
+    fi
+
 fi
 
 ###############################################################################
@@ -726,3 +782,4 @@ fi
 # print this out here. if vagrant's involved, it's gonna do more steps
 # afterwards and then re-run this script but that's ok.
 $RUNDIR/done.sh
+

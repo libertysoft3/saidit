@@ -45,8 +45,6 @@ export TIMES="$3"
 # SAIDIT: single server optimization
 # WRITE_PERMACACHE_NPROC=4
 WRITE_PERMACACHE_NPROC=1
-WRITE_PERMACACHE_BATCH_SIZE=15000
-TIME_LISTINGS_BATCH_SIZE=5000
 
 echo "Starting $THING_CLS processing"
 
@@ -141,41 +139,11 @@ run_query "\\copy (SELECT thing_id, 'data', '$THING_CLS', key, value
                        thing_id >= $MINID
                   ) to $DATA_DUMP"
 
-# SaidIt: single server optimization
 cat $THING_DUMP $DATA_DUMP |
     mrsort |
-    reddit "join_things('$THING_CLS')" > $JOIN_DUMP
-
-# batch run time_listings()
-importBatch=()
-input=$JOIN_DUMP
-while IFS= read -r line
-do
-    importBatch+=( "$line" )
-    if [ ${#importBatch[@]} -ge $TIME_LISTINGS_BATCH_SIZE ]; then
-        printf '%s\n' "${importBatch[@]}" | reddit "time_listings($TIMES, '$THING_CLS')" | mrsort >> $TIME_DUMP
-        importBatch=()
-    fi
-done < "$input"
-if [ ${#importBatch[@]} -gt 0 ]; then
-    printf '%s\n' "${importBatch[@]}" | reddit "time_listings($TIMES, '$THING_CLS')" | mrsort >> $TIME_DUMP
-fi
-
-# batch run write_permacache()
-importBatch=()
-input=$TIME_DUMP
-while IFS= read -r line
-do
-    importBatch+=( "$line" )
-    if [ ${#importBatch[@]} -ge $WRITE_PERMACACHE_BATCH_SIZE ]; then
-        printf '%s\n' "${importBatch[@]}" |
-          reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
-        importBatch=()
-    fi
-done < "$input"
-if [ ${#importBatch[@]} -gt 0 ]; then
-    printf '%s\n' "${importBatch[@]}" |
-        reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
-fi
+    reddit "join_things('$THING_CLS')" |
+    reddit "time_listings($TIMES, '$THING_CLS')" |
+    mrsort |
+    reddit -j$WRITE_PERMACACHE_NPROC "write_permacache()"
 
 echo 'Done.'

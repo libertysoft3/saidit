@@ -91,17 +91,17 @@ Install SaidIt
     $ chmod +x install-reddit.sh
     $ sudo ./install-reddit.sh
 
-You should see success message "Congratulations! reddit is now installed." Do not proceed if installation failed with an error.
+You should see success message "Congratulations! reddit is now installed." Do not proceed if the installation failed with an error.
 
-Now install some default data including users "saidit" and "automoderator" (password is "password"), default subs, sample posts, sample comments, and sample users.
+Visit https://reddit.local and create accounts for users 'reddit' and 'automoderator'. Alternatively, you can install some default/sample data including users 'reddit' and 'automoderator' (with password 'password'), subs, posts, and comments with:
 
     $ reddit-run ~/src/reddit/scripts/inject_test_data.py -c 'inject_test_data()'
 
-SaidIt is now fully functional at https://reddit.local aside from chat and search. The [SaidIt Admin Guide](https://github.com/libertysoft3/saidit#saidit-admin-guide) has instructions for how to change your site configuration.
+SaidIt is now fully functional aside from search and optional chat. The [SaidIt Admin Guide](https://github.com/libertysoft3/saidit#saidit-admin-guide) has instructions for changing your site configuration.
 
 ---
 
-## Install Solr for search
+## Install search
 
 SaidIt comes pre-configured for Solr search, but Solr and Tomcat are not installed yet.
  
@@ -134,8 +134,7 @@ Setup Tomcat for Solr
       <Environment name="solr/home" type="java.lang.String" value="/usr/share/solr/example/solr" override="true" />
     </Context>
  
-    # have tomcat use port 8983 (see 'solr_port' in example.ini)
-    # port 8080 is taken by haproxy
+    # have tomcat use port 8983 ('solr_port' in example.ini), port 8080 is haproxy
     sudo nano /etc/tomcat7/server.xml
     # edit to set:
     <Connector port="8983" protocol="HTTP/1.1"
@@ -152,7 +151,7 @@ Setup Tomcat for Solr
 Start solr:
 
     $ sudo service tomcat7 restart
-    # any errors in here must be fixed
+    # any errors logged must be fixed
     $ sudo cat /var/log/tomcat7/catalina.out
     # verify working, these should return html pages:
     $ wget 127.0.0.1:8983
@@ -351,6 +350,57 @@ Set `profile_directory` in `development.update` to an absolute path and create t
 
     ps aux  | awk '{print $6/1024 " MB\t\t" $11}'  | sort -n
 
+### Installation profiles
+
+#### app
+
+    $ sudo INSTALL_PROFILE=app ./install/reddit.sh
+
+installs the web and application tiers, including: nginx, haproxy, gunicorn, mcrouter, memcached (for stalecaches), and r2. no cron jobs or app services run.
+
+app server(s) development.update configuration:
+
+    main_db =      reddit,   remote-ip, *,    *,    *,    *,    *
+    cassandra_seeds = remote-ip:9160
+    lockcaches = remote-ip:11211
+    permacache_memcaches = remote-ip:11211
+    stalecaches = 127.0.0.1:11211
+    hardcache_memcaches = remote-ip:11211
+    amqp_host = remote-ip:5672
+    activity_endpoint = remote-ip:9002
+    geoip_location = http://remote-ip:5000
+    solr_search_host = remote-ip
+    solr_doc_host = remote-ip
+    solr_subreddit_search_host = remote-ip
+    solr_subreddit_doc_host = remote-ip
+    # ensure these settings match the backend:
+    # precompute_limit, precompute_limit_hot, hot_period_seconds, hot_max_links_per_subreddit 
+
+app server(s) misc. configuration:
+
+* `/etc/mcrouter/global.conf` set your remote memcached server ip(s) in `servers`
+* `/etc/haproxy/haproxy.cfg` for `backend media` set `server nginx remote-ip:9000 maxconn 20`
+* `/etc/haproxy/haproxy.cfg` for `backend pixel` set `server nginx remote-ip:8082 maxconn 20`
+
+ensure backend server(s) development.update configuration:
+
+    cassandra_seeds = remote-interface-ip:9160
+    amqp_host = remote-interface-ip:5672
+    activity_endpoint = remote-interface-ip:9002
+    geoip_location = http://remote-interface-ip:5000
+
+ensure backend server(s) misc. configuration:
+
+* firewalls: open ports 5000/geoip, 5432/postgres, 5672/amqp/rabbitmq, 8082/pixel/click, 8983/solr, 9000/media, 9002/activity, 9160/cassandra, 11211/memcached as needed for trusted ips
+* /etc/postgresql/9.3/main/postgresql.conf `listen_addresses = '*'` to listen on all interfaces
+* /etc/cassandra/cassandra.yaml
+  * `- seeds: "remote-interface-ip"`
+  * `listen_address: remote-interface-ip`
+  * `rpc_address: 0.0.0.0` to listen on all interfaces
+* /etc/memcached.conf omit `-l` to listen on all interfaces
+* /etc/init/reddit-activity.conf `--bind remote-interface-ip:9002`
+* /etc/gunicorn.d/geoip.conf `--bind=remote-interface-ip:5000`
+
 ---
 
 ## SaidIt Admin Guide
@@ -382,22 +432,17 @@ For production environments where `uncompressedJS = false`
     LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
     exit()
 
-### Automoderator
-
-Create a user and set `automoderator_account` in `development.update`
-
 ### Production configuration
 
-SaidIt
+reddit open source
 
 - `development.update` settings
   - debug = false
   - uncompressedJS = false
   - db_pass = not-password, and update it in /etc/cron.d/reddit as well
   - Change the `[secrets]` section
-- Use the gunicorn application server not paster. Lets you easily set the # of processes that you want. Edit `/etc/init/reddit-paster.conf` and `workers` in `development.update`. Run `$ sudo service reddit-paster stop` before changing the service and `$ sudo initctl reload-configuration` after.
-- Change the password for installer created users `saidit` and `automoderator` (default password is 'password')
-- If you want email, install something like postfix and enable `reddit-job-email` in `/etc/cron.d/reddit`
+- Use the gunicorn application server not paster. Edit `/etc/init/reddit-paster.conf` and `workers` in `development.update`. Run `$ sudo service reddit-paster stop` before changing the service and `$ sudo initctl reload-configuration` after.
+- Change the password for installer created users `reddit` and `automoderator` (their default password is 'password')
 
 OS
 
@@ -405,6 +450,8 @@ OS
 - Make sure you OS file limits are high, want > 1024 for `$ ulimit -Hn` and `$ ulimit -Sn`
 - Configure fail2ban
 - Configure the firewall, need at least ports 22 and 443 open
+- If you want email, install something like postfix and enable `reddit-job-email` in `/etc/cron.d/reddit`
+- Make backups by adding a cron job for `scripts/saidit-backup.sh`
 
 ### Certbot/LetsEncrypt SSL Certificates
 
@@ -476,6 +523,7 @@ WARNING: this currently breaks Cython dependencies in reddit PPAs/repos, so `ins
 ## Additional documentation
 
 * https://github.com/libertysoft3/saidit/wiki
+* https://qconsf.com/sf2017/system/files/presentation-slides/qconsf-20171113-reddits-architecture.pdf
 * [r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
 * [r/redditdev](https://www.reddit.com/r/redditdev)
 

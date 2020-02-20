@@ -97,8 +97,9 @@ fi
 
 # this file is sourced by the default mcrouter upstart config, see
 # /etc/init/mcrouter.conf
+# set num-proxies to num CPU cores
 cat > /etc/default/mcrouter <<MCROUTER_DEFAULT
-MCROUTER_FLAGS="-f /etc/mcrouter/global.conf -L /var/log/mcrouter/mcrouter.log -p 5050 -R /././ --stats-root=/var/mcrouter/stats"
+MCROUTER_FLAGS="-f /etc/mcrouter/global.conf -L /var/log/mcrouter/mcrouter.log -p 5050 --num-proxies=1 -R /././ --stats-root=/var/mcrouter/stats"
 MCROUTER_DEFAULT
 
 # set an upstart override so mcrouter starts when reddit starts

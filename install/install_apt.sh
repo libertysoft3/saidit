@@ -126,4 +126,6 @@ libssl-dev
 libffi-dev
 python-pyasn1
 python-openssl
+
+ssl-cert
 PACKAGES

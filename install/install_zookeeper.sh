@@ -30,3 +30,4 @@ echo "Waiting for ZooKeeper to be available..."
 while ! nc -vz localhost 2181; do
     sleep 1
 done
+

@@ -1,1 +1,1 @@
-npm -g install less
+npm -g install less uglify-js
