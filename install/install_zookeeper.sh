@@ -26,6 +26,11 @@ source $RUNDIR/install.cfg
 
 sudo apt-get install $APTITUDE_OPTIONS zookeeperd
 
+if ( sudo initctl status zookeeper | grep start ); then
+  sudo initctl stop zookeeper
+fi
+sudo service zookeeper start
+
 echo "Waiting for ZooKeeper to be available..."
 while ! nc -vz localhost 2181; do
     sleep 1
