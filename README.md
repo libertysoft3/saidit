@@ -432,26 +432,9 @@ For production environments where `uncompressedJS = false`
     LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
     exit()
 
-### Production configuration
+### Use a custom domain
 
-reddit open source
-
-- `development.update` settings
-  - debug = false
-  - uncompressedJS = false
-  - db_pass = not-password, and update it in /etc/cron.d/reddit as well
-  - Change the `[secrets]` section
-- Use the gunicorn application server not paster. Edit `/etc/init/reddit-paster.conf` and `workers` in `development.update`. Run `$ sudo service reddit-paster stop` before changing the service and `$ sudo initctl reload-configuration` after.
-- Change the password for installer created users `reddit` and `automoderator` (their default password is 'password')
-
-OS
-
-- Ensure swap space is configured, check `$ free -h`
-- Make sure you OS file limits are high, want > 1024 for `$ ulimit -Hn` and `$ ulimit -Sn`
-- Configure fail2ban
-- Configure the firewall, need at least ports 22 and 443 open
-- If you want email, install something like postfix and enable `reddit-job-email` in `/etc/cron.d/reddit`
-- Make backups by adding a cron job for `scripts/saidit-backup.sh`
+Rather than accessing the site/app at https://reddit.local you can use your own domain. Change the configuration values for `domain` and `oauth_domain` in the main configuration file, `src/reddit/r2/development.update`. You should also update your SSL certificate accordingly, see the next section.
 
 ### Certbot/LetsEncrypt SSL Certificates
 
@@ -473,6 +456,32 @@ Re-configure your services for your new cert:
 Renew your cert every 90 days:
 
     $ sudo certbot renew
+    
+### Production configuration
+
+reddit open source
+
+- your `development.update` settings should look like:
+  - debug = false
+  - uncompressedJS = false
+  - domain = yourdomain.com
+  - oauth_domain = yourdomain.com`
+  - db_pass = not the default! set a new password in postgres, then copy it to here and `/etc/cron.d/reddit`
+  - Change the `[secrets]` section
+- Use the gunicorn application server not paster:
+  - edit `/etc/init/reddit-paster.conf`, comment out the `paster serve` line and uncomment the gunicorn line
+  - set `workers` in `development.update` and uncomment `max_requests` and `timeout`
+  - run `$ sudo service reddit-paster restart`
+- Change the password for installer created users `reddit` and `automoderator` (their default password is 'password')
+
+OS
+
+- Ensure swap space is configured, check `$ free -h`
+- Make sure you OS file limits are high, want > 1024 for `$ ulimit -Hn` and `$ ulimit -Sn`
+- Configure fail2ban
+- Configure the firewall, need at least ports 22 and 443 open
+- If you want email, install something like postfix and enable `reddit-job-email` in `/etc/cron.d/reddit`
+- Make backups by adding a cron job for `scripts/saidit-backup.sh`
 
 ### SSL upgrade, for improved "Suggest Title" compatibility
 
