@@ -838,8 +838,10 @@ class Reddit(Templated):
 
 
         if self.create_reddit_box and c.user_is_loggedin:
-            if (c.user._age.days >= g.min_membership_create_community and
-                    c.user.can_create_subreddit):
+            # SaidIt: show create button even if can't create due to 'create_sr_account_age_days'
+            # if (c.user._age.days >= g.min_membership_create_community and
+            #         c.user.can_create_subreddit):
+            if (c.user._age.days >= g.min_membership_create_community):
                 subtitles = get_funny_translated_string("create_subreddit", 2)
                 data_attrs = {'event-action': 'createsubreddit'}
                 ps.append(SideBox(_('Create your own sub'),
@@ -1260,6 +1262,7 @@ class RedditFooter(CachedTemplate):
                     OffsiteButton(_("open source code"), "https://github.com/libertysoft3/saidit", retain_extension=False),
                     OffsiteButton(_("apps & clients"), "https://saidit.net/s/SaidIt/wiki/index#wiki_apps_.26amp.3B_clients"),
                     OffsiteButton(_("mobile site"), "https://m.saidit.net"),
+                    OffsiteButton(_("notabug mirror"), "https://notabug.saidit.net"),
                 ],
                 title = _("tech"),
                 type = "flat_vert",

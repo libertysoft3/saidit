@@ -72,10 +72,24 @@ iframe.chat-iframe {
 */
 
 /* Mobile Styles */
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 720px) {
     .chat-iframe {
         display: none;
     }
+ 
+    .side.side-chat { order: 1; }
+    .footer-parent { order: 2; }
+    .side.chat_size_default, .side.chat_size_s, .side.chat_size_m,
+    .side.chat_size_l, .side.chat_size_xl, .side.chat_size_25,
+    .side.chat_size_33, .side.chat_size_40, .side.chat_size_50,
+    .side.chat_size_60 {
+        width: 260px;
+    }
+}
+
+/* Mobile Styles */
+@media only screen and (max-width: 664px) {
+
     .side.chat_size_default, .side.chat_size_s, .side.chat_size_m,
     .side.chat_size_l, .side.chat_size_xl, .side.chat_size_25,
     .side.chat_size_33, .side.chat_size_40, .side.chat_size_50,

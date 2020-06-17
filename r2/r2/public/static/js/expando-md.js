@@ -339,8 +339,9 @@
        })
       .mouseup(function(event) {
         // detect click not drag, goto link
+
         if (Math.abs(event.pageX - $link.data('startX') + event.pageY - $link.data('startY')) <= threshold) {
-          location.href = $link.attr('href');
+          if(event.button == 0) { location.href = $link.attr('href'); }
         }
         $link.data('dragging', false);
         $img.css('cursor', 'pointer');

@@ -5411,8 +5411,9 @@ ul.tabmenu.formtab {
 }
 
 .usertext-edit textarea {
-    width: 97%;
+    width: 96%;
     height: 100px;
+    margin-left: 6px;
 }
 
 /*permalinks*/
@@ -5429,7 +5430,7 @@ ul.tabmenu.formtab {
 }
 
 .usertext button {
-    margin: 5px 5px 10px 0;
+    margin: 5px 5px 10px 6px;
 }
 
 .usertext .help-toggle, .usertext a.reddiquette {
@@ -11095,6 +11096,11 @@ body.with-listing-chooser {
 @media screen and (max-width: 660px) {
 .content.submit .info-notice {
     right: 3%;}
+    }
+
+
+@media screen and (max-width: 664px) {
+   body { display: flex; flex-direction: column; }
     }
 
 /* Page level logic for gold pages, outside of gold-wrap so we can use body classes. */
