@@ -1838,6 +1838,8 @@ class _TwitchScraper(_ThumbnailOnlyScraper):
             self.url = self.CLIP_URL + 'clip=' + clip_channel_match.group(2) + '&muted=false'
         else:
             return None, None, None, None
+        
+        self.url += '&parent=' + g.domain
             
         uid = _filename_from_content(image_data)
         image = str_to_image(image_data)
