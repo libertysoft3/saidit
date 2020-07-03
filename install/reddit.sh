@@ -756,9 +756,8 @@ if [ ! -f /etc/cron.d/reddit ]; then
 # jobs that recalculate time-limited listings (e.g. top this year)
 # password must match 'db_pass' in development.update
 PGPASSWORD=password
-# */15 * * * * $REDDIT_USER $REDDIT_SRC/reddit/scripts/compute_time_listings link year "['hour', 'day', 'week', 'month', 'year']"
-# */15 * * * * $REDDIT_USER $REDDIT_SRC/reddit/scripts/compute_time_listings comment year "['hour', 'day', 'week', 'month', 'year']"
-*/15 * * * * $REDDIT_USER /bin/bash $REDDIT_SRC/reddit/scripts/time_listings.sh
+*/15 * * * * $REDDIT_USER $REDDIT_SRC/reddit/scripts/compute_time_listings link year "['hour', 'day', 'week', 'month', 'year']"
+*/15 * * * * $REDDIT_USER $REDDIT_SRC/reddit/scripts/compute_time_listings comment year "['hour', 'day', 'week', 'month', 'year']"
 
 # disabled by default, uncomment if you need these jobs
 #*    * * * * root /sbin/start --quiet reddit-job-email

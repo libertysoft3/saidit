@@ -1261,8 +1261,8 @@ class RedditFooter(CachedTemplate):
 
                     OffsiteButton(_("open source code"), "https://github.com/libertysoft3/saidit", retain_extension=False),
                     OffsiteButton(_("apps & clients"), "https://saidit.net/s/SaidIt/wiki/index#wiki_apps_.26amp.3B_clients"),
-                    OffsiteButton(_("mobile site"), "https://m.saidit.net"),
-                    OffsiteButton(_("notabug mirror"), "https://notabug.saidit.net"),
+                    OffsiteButton(_("NAB mirror of saidit"), "https://notabug.io/t/saidit.all"),
+                    OffsiteButton(_("saidit mirror of NAB"), "https://notabug.saidit.net"),
                 ],
                 title = _("tech"),
                 type = "flat_vert",
@@ -2566,14 +2566,14 @@ class ProfilePage(Reddit):
 
         public_multis = [m for m in multis if m.is_public()]
         if public_multis:
-            scb = SideContentBox(title=_("public multireddits"), content=[
+            scb = SideContentBox(title=_("public multisubs"), content=[
                 SidebarMultiList(public_multis)
             ])
             rb.push(scb)
 
         hidden_multis = [m for m in multis if m.is_hidden()]
         if c.user == self.user and hidden_multis:
-            scb = SideContentBox(title=_("hidden multireddits"), content=[
+            scb = SideContentBox(title=_("hidden multisubs"), content=[
                 SidebarMultiList(hidden_multis)
             ])
             rb.push(scb)

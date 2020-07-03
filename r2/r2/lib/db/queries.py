@@ -737,7 +737,7 @@ def get_inbox_comments(user):
     return rel_query(inbox_comment_rel, user, 'inbox')
 
 # CUSTOM
-def get_inbox_messages_results(user):
+def get_inbox_comments_results(user):
     q = rel_query(inbox_comment_rel, user._id, 'inbox')
     return make_results(q)
 
@@ -1781,7 +1781,7 @@ def update_user(user):
 
     g.log.warning("permacache: updating user %s" % user.name)
     results = [get_inbox_messages_results(user),
-               get_inbox_messages_results(user),
+               get_inbox_comments_results(user),
                get_inbox_selfreply_results(user),
                get_sent_results(user),
                # TODO: permacache update/reindex fails for user's liked and disliked links

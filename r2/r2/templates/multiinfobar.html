@@ -31,7 +31,7 @@
 <%namespace file="printablebuttons.html" import="ynbutton, state_button" />
 <div class="titlebox multi-details" data-path="${thing.multi.path}">
   <h1 class="hover redditname">
-    <a href="${thing.multi.path}">${_('%s subreddits') % thing.multi.name}</a><div class="throbber"></div>
+    <a href="${thing.multi.path}">${_('%s subs') % thing.multi.name}</a><div class="throbber"></div>
   </h1>
   <h2><a href="/user/${thing.multi.owner.name}">${_('curated by /u/%s') % thing.multi.owner.name}</a></h2>
   <div class="gray-buttons settings">
@@ -131,7 +131,7 @@
     %endif
 
     <span class="age">
-      ${_("a multireddit for")}&#32;${thing_timestamp(thing.multi)}
+      ${_("a multisub for")}&#32;${thing_timestamp(thing.multi)}
     </span>
   </div>
 
