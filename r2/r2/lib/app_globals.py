@@ -280,6 +280,7 @@ class Globals(object):
             'remote_fetch_proxy_enabled',
             'gold_gilding_enabled',
             'sub_muting_enabled',
+            'allsr_prefilter_allow_top',
         ],
 
         ConfigValue.tuple: [

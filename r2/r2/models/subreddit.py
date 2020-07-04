@@ -1836,8 +1836,48 @@ class AllSR(FakeSubreddit):
         )
         if time != 'all':
             q._filter(queries.db_times[time])
+
+        # SaidIt performance fix: filter out allow_top=False subs here, as soon as possible, like keep_item() and
+        # keep_fn() and .discoverable would have done anyway (unless you are the author). If one sub has allow_top=False
+        # and as many links as the rest of the site, it causes a ton of fetch_more() queries and sometimes even fails to
+        # build listings with enough links.
+        # NOTE: prevents your own posts to allow_top=False subs from being shown to you on /s/all
+        # NOTE: sr.allow_top does not affect or filter /s/all/new, in accordance with NewController keep_fn() which does
+        #       not check .discoverable.
+        filtered_sr_ids = set()
+        g.log.warning("!!! AllSR is admin? %s" % (c.user_is_loggedin and c.user_is_admin))
+        if g.allsr_prefilter_allow_top and sort != 'new' and not (c.user_is_loggedin and c.user_is_admin):
+            from r2.lib.utils import fetch_things2
+            q2 = Subreddit._query(Subreddit.c.allow_top==False,
+                                 read_cache=True,
+                                 write_cache=True,
+                                 cache_time=5 * 60,
+                                 data=False,
+                                 stale=True)
+            q2._sort = desc('_date')
+            for sr in fetch_things2(q2):
+                g.log.warning("!!! AllSR found allow_top=False sr: %s" % (sr._id))
+                filtered_sr_ids.add(sr._id)
+
+        # SaidIt sub muting: filter out muted subs, doing it later is not performant, similar to the allow_top change above
+        # NOTE: prevents your own posts to muted sub from being shown to you on /s/all
+        if g.sub_muting_enabled and c.user_is_loggedin and not c.user_is_admin:
+            try:
+                for fullname in list(queries.get_muted_subreddits(c.user)):
+                    real_type, thing_id = fullname.split('_')
+                    g.log.warning("!!! AllSR have user muted sr: %s" % (thing_id))
+                    filtered_sr_ids.add(long(thing_id))
+            except tdb_cassandra.TRANSIENT_EXCEPTIONS as e:
+                g.log.warning("Cassandra muted lookup failed: %r", e)
+
+        if filtered_sr_ids:
+            g.log.warning("!!! AllSR total filtered srs: %s" % (filtered_sr_ids))
+            q._filter(not_(Link.c.sr_id.in_(filtered_sr_ids)))
+
         return q
 
+    # SAIDIT TODO: needs sub muting filtering and maybe allow_top filtering
+    # the only filter that is working is single sub filtering, need 'in' filtering: q._filter(Comment.c.sr_id == 7)
     def get_all_comments(self):
         from r2.lib.db import queries
         return queries.get_all_comments()
