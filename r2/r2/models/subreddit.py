@@ -1845,7 +1845,6 @@ class AllSR(FakeSubreddit):
         # NOTE: sr.allow_top does not affect or filter /s/all/new, in accordance with NewController keep_fn() which does
         #       not check .discoverable.
         filtered_sr_ids = set()
-        g.log.warning("!!! AllSR is admin? %s" % (c.user_is_loggedin and c.user_is_admin))
         if g.allsr_prefilter_allow_top and sort != 'new' and not (c.user_is_loggedin and c.user_is_admin):
             from r2.lib.utils import fetch_things2
             q2 = Subreddit._query(Subreddit.c.allow_top==False,
@@ -1856,7 +1855,6 @@ class AllSR(FakeSubreddit):
                                  stale=True)
             q2._sort = desc('_date')
             for sr in fetch_things2(q2):
-                g.log.warning("!!! AllSR found allow_top=False sr: %s" % (sr._id))
                 filtered_sr_ids.add(sr._id)
 
         # SaidIt sub muting: filter out muted subs, doing it later is not performant, similar to the allow_top change above
@@ -1865,13 +1863,11 @@ class AllSR(FakeSubreddit):
             try:
                 for fullname in list(queries.get_muted_subreddits(c.user)):
                     real_type, thing_id = fullname.split('_')
-                    g.log.warning("!!! AllSR have user muted sr: %s" % (thing_id))
                     filtered_sr_ids.add(long(thing_id))
             except tdb_cassandra.TRANSIENT_EXCEPTIONS as e:
                 g.log.warning("Cassandra muted lookup failed: %r", e)
 
         if filtered_sr_ids:
-            g.log.warning("!!! AllSR total filtered srs: %s" % (filtered_sr_ids))
             q._filter(not_(Link.c.sr_id.in_(filtered_sr_ids)))
 
         return q
