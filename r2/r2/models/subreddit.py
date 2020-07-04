@@ -1863,7 +1863,7 @@ class AllSR(FakeSubreddit):
             try:
                 for fullname in list(queries.get_muted_subreddits(c.user)):
                     real_type, thing_id = fullname.split('_')
-                    filtered_sr_ids.add(long(thing_id))
+                    filtered_sr_ids.add(long(int(thing_id, 36)))
             except tdb_cassandra.TRANSIENT_EXCEPTIONS as e:
                 g.log.warning("Cassandra muted lookup failed: %r", e)
 
