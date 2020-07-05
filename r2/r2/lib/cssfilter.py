@@ -542,7 +542,7 @@ class StylesheetValidator(object):
 
         keyword = strip_vendor_prefix(rule.lower_at_keyword)
 
-        if keyword in ("media", "keyframes"):
+        if keyword in ("media", "keyframes", "supports"):
             rules = tinycss2.parse_rule_list(rule.content)
             rule_errors = self.validate_rule_list(rules)
         elif keyword == "page":
