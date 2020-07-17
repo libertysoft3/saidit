@@ -1523,6 +1523,8 @@ class Comment(Thing, Printable):
             return True
 
         if c.user_is_loggedin:
+            if c.user_is_admin:
+                return True
             if wrapped.subreddit.is_moderator(c.user):
                 return True
             if wrapped.author_id == c.user._id:
@@ -1532,6 +1534,10 @@ class Comment(Thing, Printable):
             # CUSTOM: sub muting for Comments
             if g.sub_muting_enabled and hasattr(wrapped, 'hidden') and wrapped.hidden:
                 return False
+
+        # CUSTOM: allow_top filtering for /s/all/comments
+        if g.allow_top_affects_new and not wrapped.subreddit.allow_top and (isinstance(c.site, AllSR) or (isinstance(c.site, DynamicSR) and c.site.name == g.all_name)):
+            return False
 
         return True
 
@@ -1927,7 +1933,7 @@ class Comment(Thing, Printable):
             item.muted = item.hidden = False
             if g.sub_muting_enabled and (user, item.subreddit) in srs_mutes_by_account:
                 item.muted = True
-                if sub_muting_hide_eligible and not item.is_author and not item.user_is_moderator:
+                if sub_muting_hide_eligible and not item.is_author and not item.user_is_moderator and not user_is_admin:
                     item.hidden = True
 
             # CUSTOM - Chat widgets in comments

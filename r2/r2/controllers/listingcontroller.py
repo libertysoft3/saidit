@@ -588,12 +588,21 @@ class NewController(ListingWithPromos):
     show_chooser = True
     next_suggestions_cls = ListingSuggestions
 
+    # SAIDIT: add allow_top_affects_new support
     def keep_fn(self):
         def keep(item):
+            wouldkeep = item.keep_item(item)
+            if g.allow_top_affects_new and (isinstance(c.site, AllSR) or (isinstance(c.site, DynamicSR) and c.site.name == g.all_name)):
+                if hasattr(item, 'subreddit') and not item.subreddit.discoverable:
+                    return False
+                elif hasattr(item, 'discoverable') and not item.discoverable:
+                    return False
+
             if item.promoted is not None:
                 return False
-            else:
-                return item.keep_item(item)
+
+            return wouldkeep
+
         return keep
 
     def query(self):

@@ -282,6 +282,7 @@ class Globals(object):
             'sub_muting_enabled',
             'allsr_prefilter_allow_top',
             'site_index_user_configurable',
+            'allow_top_affects_new',
         ],
 
         ConfigValue.tuple: [

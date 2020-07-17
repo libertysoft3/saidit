@@ -1845,17 +1845,18 @@ class AllSR(FakeSubreddit):
         # NOTE: sr.allow_top does not affect or filter /s/all/new, in accordance with NewController keep_fn() which does
         #       not check .discoverable.
         filtered_sr_ids = set()
-        if g.allsr_prefilter_allow_top and sort != 'new' and not (c.user_is_loggedin and c.user_is_admin):
-            from r2.lib.utils import fetch_things2
-            q2 = Subreddit._query(Subreddit.c.allow_top==False,
-                                 read_cache=True,
-                                 write_cache=True,
-                                 cache_time=5 * 60,
-                                 data=False,
-                                 stale=True)
-            q2._sort = desc('_date')
-            for sr in fetch_things2(q2):
-                filtered_sr_ids.add(sr._id)
+        if g.allsr_prefilter_allow_top and not (c.user_is_loggedin and c.user_is_admin):
+            if sort != 'new' or (sort == 'new' and g.allow_top_affects_new):
+                from r2.lib.utils import fetch_things2
+                q2 = Subreddit._query(Subreddit.c.allow_top==False,
+                                     read_cache=True,
+                                     write_cache=True,
+                                     cache_time=5 * 60,
+                                     data=False,
+                                     stale=True)
+                q2._sort = desc('_date')
+                for sr in fetch_things2(q2):
+                    filtered_sr_ids.add(sr._id)
 
         # SaidIt sub muting: filter out muted subs, doing it later is not performant, similar to the allow_top change above
         # NOTE: prevents your own posts to muted sub from being shown to you on /s/all
