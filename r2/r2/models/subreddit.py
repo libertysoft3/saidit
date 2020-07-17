@@ -1901,13 +1901,13 @@ class AllSR(FakeSubreddit):
 
     @property
     def _should_wiki(self):
-        if g.site_index_user_configurable != 'true' and g.site_index == g.all_name:
+        if not g.site_index_user_configurable and g.site_index == g.all_name:
             return True
         return False
 
     @property
     def is_homepage(self):
-        if g.site_index_user_configurable != 'true' and g.site_index == g.all_name:
+        if not g.site_index_user_configurable and g.site_index == g.all_name:
             return True
         return False
 
@@ -2025,7 +2025,7 @@ class DefaultSR(_DefaultSR):
 
     @property
     def _should_wiki(self):
-        if g.site_index_user_configurable != 'true' and g.site_index == g.front_name:
+        if not g.site_index_user_configurable and g.site_index == g.front_name:
             return True
         return False
 
@@ -2106,7 +2106,7 @@ class DefaultSR(_DefaultSR):
 
     @property
     def is_homepage(self):
-        if g.site_index_user_configurable != 'true' and g.site_index == g.front_name:
+        if not g.site_index_user_configurable and g.site_index == g.front_name:
             return True
         return False
 

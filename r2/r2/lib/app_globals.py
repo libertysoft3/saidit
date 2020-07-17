@@ -281,6 +281,7 @@ class Globals(object):
             'gold_gilding_enabled',
             'sub_muting_enabled',
             'allsr_prefilter_allow_top',
+            'site_index_user_configurable',
         ],
 
         ConfigValue.tuple: [

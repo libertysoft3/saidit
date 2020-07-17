@@ -3065,7 +3065,7 @@ class SubredditTopBar(CachedTemplate):
         # SaidIt: configurable home page
         # 'site_index_home' is deprecated and replaced by 'site_index_all'
         reddits = []
-        if g.site_index_user_configurable == 'true':
+        if g.site_index_user_configurable:
             if c.user.pref_site_index == 'site_index_front':
                 if g.menu_show_front == 'true':
                     reddits.append(Frontpage)

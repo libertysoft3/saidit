@@ -402,7 +402,7 @@
       </tr>
     <tr>
     <td class="prefright">
-      %if g.site_index_user_configurable == 'true':
+      %if g.site_index_user_configurable:
         <p>
           ${_wsf("home page %(sort)s", sort=unsafe(capture(site_index_sort_options)))}
         <p>

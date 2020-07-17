@@ -318,7 +318,7 @@ def set_subreddit():
         c.site = Random
 
     # SaidIt user configurable home page
-    if g.site_index_user_configurable == 'true':
+    if g.site_index_user_configurable:
         c.site = Dynamic
 
     if not sr_name:
@@ -387,7 +387,7 @@ def set_subreddit():
     #if we didn't find a subreddit, check for a domain listing
     if not sr_name and domain:
         tryForDomainSR = False
-        if g.site_index_user_configurable == 'true' and isinstance(c.site, DynamicSR):
+        if g.site_index_user_configurable and isinstance(c.site, DynamicSR):
             tryForDomainSR = True
         else:
             if g.site_index == c.site.name:
