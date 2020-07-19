@@ -532,7 +532,7 @@ WARNING: this currently breaks Cython dependencies in reddit PPAs/repos, so `ins
 ## Additional documentation
 
 * https://github.com/libertysoft3/saidit/wiki
-* https://qconsf.com/sf2017/system/files/presentation-slides/qconsf-20171113-reddits-architecture.pdf
+* https://web.archive.org/web/20191121131055/https://qconsf.com/sf2017/system/files/presentation-slides/qconsf-20171113-reddits-architecture.pdf
 * [r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
 * [r/redditdev](https://www.reddit.com/r/redditdev)
 
