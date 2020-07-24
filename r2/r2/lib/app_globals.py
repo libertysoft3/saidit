@@ -283,6 +283,8 @@ class Globals(object):
             'allsr_prefilter_allow_top',
             'site_index_user_configurable',
             'allow_top_affects_new',
+            'block_user_show_comments',
+            'block_user_show_links',
         ],
 
         ConfigValue.tuple: [

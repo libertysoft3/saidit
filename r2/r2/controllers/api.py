@@ -1837,6 +1837,12 @@ class ApiController(RedditController):
             and sr
             and sr.is_moderator_with_perms(c.user, 'mail'))
 
+        # SAIDIT: block user in comments and links
+        if g.block_user_show_comments and not is_modmail and isinstance(thing, Comment):
+            is_modmail = True
+        elif g.block_user_show_links and not is_modmail and isinstance(thing, Link):
+            is_modmail = True
+
         if not is_modmail:
             inbox_cls = Inbox.rel(Account, thing.__class__)
             rels = inbox_cls._fast_query(c.user, thing,

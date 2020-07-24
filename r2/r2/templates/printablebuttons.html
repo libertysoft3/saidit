@@ -360,6 +360,7 @@
          access_required=False, event_action="hide")}
     %endif
     </li>
+
     ## CUSTOM: sub muting
     %if g.sub_muting_enabled and thing.muted:
       <li>${ynbutton(_("unmute %s" % g.brander_community), _("unmuted"), "unmute_subreddit",
@@ -367,6 +368,14 @@
     %elif g.sub_muting_enabled and thing.show_subreddit_mute:
       <li>${ynbutton(_("mute %s" % g.brander_community), _("muted"), "mute_subreddit", "hide_thing",
         access_required=False, event_action="mute_subreddit", hidden_data=dict(id=thing.thing.subreddit._fullname))}</li>
+    %endif
+
+    ## SAIDIT: block user in links
+    %if thing.can_block:
+      <li class="block-user-button">
+            ${ynbutton(_("block user"), _("blocked"), "block", "hide_thing",
+                access_required=False, event_action="block_user")}
+      </li>
     %endif
   %endif
 
@@ -516,6 +525,14 @@
     %elif g.sub_muting_enabled and thing.show_subreddit_mute:
       <li>${ynbutton(_("mute %s" % g.brander_community), _("muted"), "mute_subreddit", "hide_thing",
         access_required=False, event_action="mute_subreddit", hidden_data=dict(id=thing.thing.subreddit._fullname))}</li>
+    %endif
+
+    ## SAIDIT: block user in comments
+    %if thing.can_block:
+      <li class="block-user-button">
+            ${ynbutton(_("block user"), _("blocked"), "block", "hide_thing",
+                access_required=False, event_action="block_user")}
+      </li>
     %endif
 
     ${self.banbuttons()}

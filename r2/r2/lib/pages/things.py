@@ -147,6 +147,12 @@ class LinkButtons(PrintableButtons):
             if (isinstance(c.site, AllSR) or (isinstance(c.site, DynamicSR) and c.site.name == g.all_name)) and not thing.subreddit.is_moderator(c.user):
                 show_subreddit_mute = True
 
+        # SAIDIT: block user in links
+        can_block = False
+        if c.user_is_loggedin and not c.user_is_admin and g.block_user_show_links:
+          if not is_author and not thing.subreddit.is_moderator(c.user) and not thing.author_id in c.user.enemies and not thing.author_id in c.user.friends:
+            can_block = True
+
         # CUSTOM - "Open chat in new tab" link for Posts
         # Note: Shown to all users if sub has chat enabled
         show_chat_link = False
@@ -224,6 +230,7 @@ class LinkButtons(PrintableButtons):
                                   chat_popout_url = chat_popout_url,
                                   show_subreddit_mute = show_subreddit_mute,
                                   muted = thing.muted,
+                                  can_block=can_block,
                                   **kw)
 
 class CommentButtons(PrintableButtons):
@@ -279,6 +286,12 @@ class CommentButtons(PrintableButtons):
             if (isinstance(c.site, AllSR) or (isinstance(c.site, DynamicSR) and c.site.name == g.all_name)) and not thing.subreddit.is_moderator(c.user):
                 show_subreddit_mute = True
 
+        # SAIDIT: block user in comments
+        can_block = False
+        if c.user_is_loggedin and not c.user_is_admin and g.block_user_show_comments:
+          if not is_author and not thing.subreddit.is_moderator(c.user) and not thing.author_id in c.user.enemies and not thing.author_id in c.user.friends:
+            can_block = True
+
         # CUSTOM - "Open chat in new tab" link for Comments
         # Note: Shown to all users if sub has chat enabled
         show_chat_link = False
@@ -330,6 +343,7 @@ class CommentButtons(PrintableButtons):
                                   chat_popout_url = chat_popout_url,
                                   show_subreddit_mute = show_subreddit_mute,
                                   muted = thing.muted,
+                                  can_block=can_block,
         )
 
 class MessageButtons(PrintableButtons):
