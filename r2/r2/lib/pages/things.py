@@ -148,18 +148,18 @@ class LinkButtons(PrintableButtons):
                 show_subreddit_mute = True
 
         # CUSTOM - "Open chat in new tab" link for Posts
-        # Note: Shown to all users if sub has chat enabled
+        # Note: Shown to all users if sub has chat enabled, doesn't check g.chat_guest_chat_enabled
         show_chat_link = False
         chat_popout_url = ''
-        if feature.is_enabled('chat') and thing.subreddit.chat_enabled and thing.selftext == g.live_config['chat_enabling_post_content']:
+        if feature.is_enabled('chat') and thing.subreddit.chat_enabled and thing.selftext == g.chat_enabling_post_content:
             show_chat_link = True
-            chat_client = g.live_config['chat_client']
+            chat_client = g.chat_client
             chat_client_url = g.chat_client_url
             chat_user = c.user.pref_chat_user
             chat_client_user = c.user.pref_chat_client_user
             chat_client_password = c.user.pref_chat_client_password
             irc_sanitized_post_title = re.sub('\-+', '-', re.sub(r'[^a-zA-Z0-9]','-', thing.title)).strip(' -')
-            chat_channels = g.live_config['chat_channel_name_prefix'] + thing.subreddit.name + g.live_config['chat_channel_topic_separator'] + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
+            chat_channels = g.chat_channel_name_prefix + thing.subreddit.name + g.chat_channel_topic_separator + irc_sanitized_post_title + g.chat_channel_name_suffix
             chat_channels = quote(chat_channels)
             # Note: Omitting nofocus param
             # TODO: chat_popout_url
@@ -281,13 +281,13 @@ class CommentButtons(PrintableButtons):
                 show_subreddit_mute = True
 
         # CUSTOM - "Open chat in new tab" link for Comments
-        # Note: Shown to all users if sub has chat enabled
+        # Note: Shown to all users if sub has chat enabled, doesn't check g.chat_guest_chat_enabled
         show_chat_link = False
         chat_popout_url = ''
-        chat_enabling_post_content = g.live_config['chat_enabling_post_content']
+        chat_enabling_post_content = g.chat_enabling_post_content
         if feature.is_enabled('chat') and thing.subreddit.chat_enabled and thing.body.find(chat_enabling_post_content) == 0:
           show_chat_link = True
-          chat_client = g.live_config['chat_client']
+          chat_client = g.chat_client
           chat_client_url = g.chat_client_url
           chat_user = c.user.pref_chat_user
           chat_client_user = c.user.pref_chat_client_user
@@ -295,7 +295,7 @@ class CommentButtons(PrintableButtons):
 
           irc_sanitized_post_title = thing.body.replace(chat_enabling_post_content,"")
           irc_sanitized_post_title = re.sub('\-+', '-', re.sub(r'[^a-zA-Z0-9]','-', irc_sanitized_post_title))[:15].strip(' -')
-          chat_channels = quote(g.live_config['chat_channel_name_prefix'] + thing.subreddit.name + '/' + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix'])
+          chat_channels = quote(g.chat_channel_name_prefix + thing.subreddit.name + '/' + irc_sanitized_post_title + g.chat_channel_name_suffix)
 
           # Note: Omitting nofocus param
           chat_popout_url = "{0}/?tls=true&lockchannel&autologin&user={1}&al-password={2}&autoconnect&join={3}&nick={4}&username={4}&realname={4}".format(chat_client_url, chat_client_user, chat_client_password, chat_channels, chat_user)

@@ -303,17 +303,18 @@ class Reddit(Templated):
         # SaidIt: chat
         self.show_sidebar_chat = False
         if feature.is_enabled('chat') and c.user.pref_chat_enabled:
-            if isinstance(c.site, Subreddit) and c.site.chat_enabled:
-                self.show_sidebar_chat = True
-            elif isinstance(c.site, AllSR) and g.live_config['chat_all'] == 'true':
-                self.show_sidebar_chat = True
-            elif isinstance(c.site, DefaultSR) and g.live_config['chat_front'] == 'true':
-                self.show_sidebar_chat = True
-            elif isinstance(c.site, DynamicSR):
-                if c.site.name == g.front_name and g.live_config['chat_front'] == 'true':
+            if c.user_is_loggedin or (not c.user_is_loggedin and g.chat_guest_chat_enabled):
+                if isinstance(c.site, Subreddit) and c.site.chat_enabled:
                     self.show_sidebar_chat = True
-                elif c.site.name == g.all_name and g.live_config['chat_all'] == 'true':
+                elif isinstance(c.site, AllSR) and g.chat_all:
                     self.show_sidebar_chat = True
+                elif isinstance(c.site, DefaultSR) and g.chat_front:
+                    self.show_sidebar_chat = True
+                elif isinstance(c.site, DynamicSR):
+                    if c.site.name == g.front_name and g.chat_front:
+                        self.show_sidebar_chat = True
+                    elif c.site.name == g.all_name and g.chat_all:
+                        self.show_sidebar_chat = True
 
         # generate a canonical link for google
         canonical_url = UrlParser(canonical_link or request.url)
@@ -852,26 +853,27 @@ class Reddit(Templated):
 
         # SaidIt: sidebar Chat
         if feature.is_enabled('chat') and c.user.pref_chat_enabled:
-            from r2.lib.pages.chat import SidebarChat
-            if isinstance(c.site, Subreddit):
-                if c.site.chat_enabled:
-                    notebar = SidebarChat('subreddit', c.site.name)
-                    ps.append(notebar)
-            elif isinstance(c.site, AllSR):
-                if g.live_config['chat_all'] == 'true':
-                    notebar = SidebarChat('subreddit', g.chat_all_channel)
-                    ps.append(notebar)
-            elif isinstance(c.site, DefaultSR):
-                if g.live_config['chat_front'] == 'true':
-                    notebar = SidebarChat('subreddit', g.chat_front_channel)
-                    ps.append(notebar)
-            elif isinstance(c.site, DynamicSR):
-                if c.site.name == g.front_name and g.live_config['chat_front'] == 'true':
-                    notebar = SidebarChat('subreddit', g.chat_front_channel)
-                    ps.append(notebar)
-                elif c.site.name == g.all_name and g.live_config['chat_all'] == 'true':
-                    notebar = SidebarChat('subreddit', g.chat_all_channel)
-                    ps.append(notebar)
+            if c.user_is_loggedin or (not c.user_is_loggedin and g.chat_guest_chat_enabled):
+                from r2.lib.pages.chat import SidebarChat
+                if isinstance(c.site, Subreddit):
+                    if c.site.chat_enabled:
+                        notebar = SidebarChat('subreddit', c.site.name)
+                        ps.append(notebar)
+                elif isinstance(c.site, AllSR):
+                    if g.chat_all:
+                        notebar = SidebarChat('subreddit', g.chat_all_channel)
+                        ps.append(notebar)
+                elif isinstance(c.site, DefaultSR):
+                    if g.chat_front:
+                        notebar = SidebarChat('subreddit', g.chat_front_channel)
+                        ps.append(notebar)
+                elif isinstance(c.site, DynamicSR):
+                    if c.site.name == g.front_name and g.chat_front:
+                        notebar = SidebarChat('subreddit', g.chat_front_channel)
+                        ps.append(notebar)
+                    elif c.site.name == g.all_name and g.chat_all:
+                        notebar = SidebarChat('subreddit', g.chat_all_channel)
+                        ps.append(notebar)
 
         # don't show the subreddit info bar on cnames unless the option is set
         if not isinstance(c.site, FakeSubreddit):
@@ -5145,10 +5147,11 @@ class SelfTextChild(LinkChild):
         chat_client = ''
         chat_client_url = ''
         chat_channel = ''
-        if feature.is_enabled('chat') and self.link.subreddit.chat_enabled and self.link.selftext == g.live_config['chat_enabling_post_content'] and not self.link.expunged:
+        if feature.is_enabled('chat') and c.user_is_loggedin or (not c.user_is_loggedin and g.chat_guest_chat_enabled):
+            if self.link.subreddit.chat_enabled and self.link.selftext == g.chat_enabling_post_content and not self.link.expunged:
                 is_chat_post = True
                 irc_sanitized_post_title = re.sub('\-+', '-', re.sub(r'[^a-zA-Z0-9]','-', self.link.title))[:15].strip(' -')
-                chat_channel = g.live_config['chat_channel_name_prefix'] + self.link.subreddit.name + g.live_config['chat_channel_topic_separator'] + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
+                chat_channel = g.chat_channel_name_prefix + self.link.subreddit.name + g.chat_channel_topic_separator + irc_sanitized_post_title + g.chat_channel_name_suffix
                 chat_channel = quote(chat_channel)
 
                 # NOTE - Don't have to check c.user_is_loggedin before accessing c.user.pref_*, there are defaults
@@ -5156,7 +5159,7 @@ class SelfTextChild(LinkChild):
                     chat_user = c.user.pref_chat_user
                     chat_client_user = c.user.pref_chat_client_user
                     chat_client_password = c.user.pref_chat_client_password
-                    chat_client = g.live_config['chat_client']
+                    chat_client = g.chat_client
                     chat_client_url = g.chat_client_url
                     if c.user_is_loggedin:
                         chat_user_is_guest = False

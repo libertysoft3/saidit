@@ -285,6 +285,9 @@ class Globals(object):
             'allow_top_affects_new',
             'block_user_show_comments',
             'block_user_show_links',
+            'chat_guest_chat_enabled',
+            'chat_all',
+            'chat_front',
         ],
 
         ConfigValue.tuple: [

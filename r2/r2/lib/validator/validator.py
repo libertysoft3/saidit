@@ -2343,7 +2343,7 @@ class VChatUser(Validator):
         if val is "" and c.user_is_loggedin:
             val = c.user.name
         elif val is "" and not c.user_is_loggedin:
-            val = g.live_config['chat_default_username']
+            val = g.chat_default_username
         return val
 
     def param_docs(self):
@@ -2361,7 +2361,7 @@ class VChatClientUser(Validator):
         if val is "" and c.user_is_loggedin:
             val = "".join(random.choice(string.ascii_letters+string.digits) for i in range(self.max_chat_client_user_length))
         elif val is "" and not c.user_is_loggedin:
-            val = g.live_config['chat_default_username']
+            val = g.chat_default_username
 
         if val and len(val) > self.max_chat_client_user_length:
             self.set_error(errors.TOO_LONG, {'max_length': self.max_chat_client_user_length}, code=400)

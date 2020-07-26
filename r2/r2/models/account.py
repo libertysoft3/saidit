@@ -166,9 +166,9 @@ class Account(Thing):
 
                      # CUSTOM
                      pref_chat_enabled=True,
-                     pref_chat_sidebar_size=g.live_config['chat_default_sidebar_size'],
-                     pref_chat_user=g.live_config['chat_default_username'],
-                     pref_chat_client_user=g.live_config['chat_default_username'],
+                     pref_chat_sidebar_size=g.chat_default_sidebar_size,
+                     pref_chat_user=g.chat_default_username,
+                     pref_chat_client_user=g.chat_default_username,
                      pref_chat_client_password='',
                      pref_subscriptions_unsubscribe='subs_do_nothing',
                      pref_site_index=g.site_index_user_configurable_default,

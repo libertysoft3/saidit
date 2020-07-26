@@ -1976,7 +1976,7 @@ class Comment(Thing, Printable):
             # CUSTOM - Chat widgets in comments
             is_chat_post = False
             chat_popout_url = ''
-            chat_enabling_post_content = g.live_config['chat_enabling_post_content']
+            chat_enabling_post_content = g.chat_enabling_post_content
             chat_client = ''
             chat_client_url = ''
             chat_channel = ''
@@ -1985,18 +1985,18 @@ class Comment(Thing, Printable):
             chat_client_password = ''
             chat_channels = ''
 
-            if feature.is_enabled('chat') and c.user.pref_chat_enabled and item.subreddit and item.subreddit.chat_enabled and item.body.find(chat_enabling_post_content) == 0:
-              is_chat_post = True
-              chat_client = g.live_config['chat_client']
-              chat_client_url = g.chat_client_url
-              chat_user = c.user.pref_chat_user
-              chat_client_user = c.user.pref_chat_client_user
-              chat_client_password = c.user.pref_chat_client_password
-                
-              irc_sanitized_post_title = item.body.replace(chat_enabling_post_content,"")[:15]
-              irc_sanitized_post_title = re.sub('\-+', '-', re.sub(r'[^a-zA-Z0-9]','-', irc_sanitized_post_title)).strip(' -')
-              chat_channels = g.live_config['chat_channel_name_prefix'] + item.subreddit.name + '/' + irc_sanitized_post_title + g.live_config['chat_channel_name_suffix']
-              chat_channels = quote(chat_channels)
+            if feature.is_enabled('chat') and c.user_is_loggedin or (not c.user_is_loggedin and g.chat_guest_chat_enabled):
+                if c.user.pref_chat_enabled and item.subreddit and item.subreddit.chat_enabled and item.body.find(chat_enabling_post_content) == 0:
+                    is_chat_post = True
+                    chat_client = g.chat_client
+                    chat_client_url = g.chat_client_url
+                    chat_user = c.user.pref_chat_user
+                    chat_client_user = c.user.pref_chat_client_user
+                    chat_client_password = c.user.pref_chat_client_password
+                    irc_sanitized_post_title = item.body.replace(chat_enabling_post_content,"")[:15]
+                    irc_sanitized_post_title = re.sub('\-+', '-', re.sub(r'[^a-zA-Z0-9]','-', irc_sanitized_post_title)).strip(' -')
+                    chat_channels = g.chat_channel_name_prefix + item.subreddit.name + '/' + irc_sanitized_post_title + g.chat_channel_name_suffix
+                    chat_channels = quote(chat_channels)
 
             item.usertext = UserText(item, item.body,
                                      editable=item.is_author,
