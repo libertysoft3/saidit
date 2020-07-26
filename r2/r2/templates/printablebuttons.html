@@ -370,8 +370,8 @@
         access_required=False, event_action="mute_subreddit", hidden_data=dict(id=thing.thing.subreddit._fullname))}</li>
     %endif
 
-    ## SAIDIT: block user in links
-    %if thing.can_block:
+    ## SAIDIT: show block user link for Links
+    %if thing.show_block_user:
       <li class="block-user-button">
             ${ynbutton(_("block user"), _("blocked"), "block", "hide_thing",
                 access_required=False, event_action="block_user")}
@@ -527,8 +527,8 @@
         access_required=False, event_action="mute_subreddit", hidden_data=dict(id=thing.thing.subreddit._fullname))}</li>
     %endif
 
-    ## SAIDIT: block user in comments
-    %if thing.can_block:
+    ## SAIDIT: show block user links for Comments
+    %if g.block_user_show_comments and not thing.hide_block_user:
       <li class="block-user-button">
             ${ynbutton(_("block user"), _("blocked"), "block", "hide_thing",
                 access_required=False, event_action="block_user")}

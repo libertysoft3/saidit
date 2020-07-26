@@ -606,6 +606,11 @@ class Link(Thing, Printable):
         pref_media = user.pref_media
         pref_media_preview = user.pref_media_preview
         site = c.site
+        # SAIDIT
+        sub_muting_enabled = g.sub_muting_enabled
+        block_user_show_links = g.block_user_show_links
+        user_enemies = user_friends = []
+        admins = g.admins
 
         saved = hidden = visited = {}
 
@@ -657,13 +662,18 @@ class Link(Thing, Printable):
         # CUSTOM: sub muting for Links
         srs_mutes_by_account = {}
         sub_muting_hide_eligible = False
-        if user_is_loggedin and g.sub_muting_enabled:
+        if sub_muting_enabled and user_is_loggedin:
             if isinstance(site, AllSR) or (isinstance(site, DynamicSR) and site.name == g.all_name):
                 sub_muting_hide_eligible = True
             try:
                 srs_mutes_by_account = SubredditMutesByAccount.fast_query(user, srs)
             except tdb_cassandra.TRANSIENT_EXCEPTIONS as e:
                 g.log.warning("Cassandra muted lookup failed: %r", e)
+
+        # SAIDIT: show block user link for Links
+        if user_is_loggedin:
+            user_enemies = c.user.enemies
+            user_friends = c.user.friends
 
         # set the nofollow state where needed
         cls.update_nofollow(user, wrapped)
@@ -837,10 +847,17 @@ class Link(Thing, Printable):
 
             # CUSTOM: sub muting for Links
             item.muted = False
-            if g.sub_muting_enabled and user_is_loggedin and (user, item.subreddit) in srs_mutes_by_account:
+            if sub_muting_enabled and user_is_loggedin and (user, item.subreddit) in srs_mutes_by_account:
                 item.muted = True
                 if sub_muting_hide_eligible and not item.is_author and not item.user_is_moderator and not user_is_admin:
                     item.hidden = True
+
+            # SAIDIT: show block user link for Links
+            item.show_block_user = False
+            item.author_is_admin = item.author and item.author.name in admins
+            if block_user_show_links and user_is_loggedin and not user_is_admin:
+              if not item.is_author and not item.user_is_moderator and not item.author_is_admin and not item.author_id in user_enemies and not item.author_id in user_friends:
+                item.show_block_user = True
 
             # do we hide the score?
             if user_is_admin:
@@ -1667,7 +1684,7 @@ class Comment(Thing, Printable):
             try:
                 srs_mutes_by_account = SubredditMutesByAccount.fast_query(user, subreddits)
             except tdb_cassandra.TRANSIENT_EXCEPTIONS as e:
-                g.log.warning("Cassandra subreddit muted lookup failed: %r", e)
+                g.log.warning("Cassandra subreddit muted lookup failed: %r", e) 
 
         if c.user_is_loggedin:
             is_moderator_subreddits = {
@@ -1696,6 +1713,15 @@ class Comment(Thing, Printable):
         user_is_loggedin = c.user_is_loggedin
         focal_comment = c.focal_comment
         site = c.site
+
+        # SAIDIT
+        block_user_show_comments = g.block_user_show_comments
+        user_enemies = user_friends = []
+        admins = g.admins
+        if user_is_loggedin:
+            user_enemies = c.user.enemies
+            user_friends = c.user.friends
+
 
         if user_is_loggedin:
             gilded = [thing for thing in wrapped if thing.gildings > 0]
@@ -1901,7 +1927,7 @@ class Comment(Thing, Printable):
             item.user_is_moderator = item.sr_id in is_moderator_subreddits
 
             if item.score_hidden and c.user_is_loggedin:
-                if c.user_is_admin or item.user_is_moderator:
+                if user_is_admin or item.user_is_moderator:
                     item.score_hidden = False
 
             if item.score_hidden:
@@ -1935,6 +1961,17 @@ class Comment(Thing, Printable):
                 item.muted = True
                 if sub_muting_hide_eligible and not item.is_author and not item.user_is_moderator and not user_is_admin:
                     item.hidden = True
+
+            # SAIDIT: show block user link for Comments
+            # Cannot hide the links for logged out users here because full comment trees (as opposed to permalinks or
+            # permalink trees) are always built as a logged out user. js+ajax are responsible for updating the UI state of
+            # full comment tree pages for logged in users, see CommentPane::__init__. block user links for logged out
+            # users are hidden with CSS, like .save-button.
+            item.hide_block_user = False
+            if block_user_show_comments:
+                author_is_admin = item.author and item.author.name in admins
+                if user_is_admin or author_is_admin or item.is_author or item.user_is_moderator or item.author_id in user_enemies or item.author_id in user_friends:
+                    item.hide_block_user = True
 
             # CUSTOM - Chat widgets in comments
             is_chat_post = False

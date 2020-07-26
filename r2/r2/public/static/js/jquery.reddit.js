@@ -410,6 +410,11 @@ $.fn.updateThing = function(update) {
         $entry.find('.save-button a')
               .text(r._('unsave'));
     }
+
+    // SAIDIT: show block user links for Comments
+    if ('hide_block_user' in update) {
+        $entry.find('.block-user-button').remove();
+    }
 }
 
 $.fn.resetInput = function() {

@@ -2341,6 +2341,10 @@ class CommentPane(Templated):
                     if t.user_gilded:
                         update['gilded'] = (t.gilded_message, t.gildings)
 
+                    # SAIDIT: show block user link for Comments
+                    if t.hide_block_user:
+                        update['hide_block_user'] = True
+
                     if update:
                         update['id'] = t._fullname
                         updates.append(update)
