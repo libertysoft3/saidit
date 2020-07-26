@@ -220,6 +220,7 @@ menu =   MenuHandler(hot          = _('hot'),
                      theme_daymode                  = _('Day mode'),
                      site_index_front               = _(g.front_name.title()),
                      site_index_all                 = _(g.all_name.title()),
+                     notall                         = _(g.allow_top_false_subreddits_tab_name),
                      )
 
 def menu_style(type):

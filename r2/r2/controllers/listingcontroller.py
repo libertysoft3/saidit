@@ -1561,6 +1561,16 @@ class RedditsController(ListingController):
                     sr._fullname
                     for sr in Subreddit.featured_subreddits()
                 ]
+            # SAIDIT
+            elif self.where == 'notall' and g.allow_top_false_subreddits_tab:
+                reddits = Subreddit._query(
+                    Subreddit.c.allow_top==False,
+                    write_cache=True,
+                    read_cache=True,
+                    cache_time=5 * 60,
+                    stale=True,
+                )
+                reddits._sort = desc('_downs')
             else:
                 reddits = Subreddit._query( write_cache = True,
                                             read_cache = True,
@@ -1605,6 +1615,7 @@ class RedditsController(ListingController):
                          '/subs/new',
                          '/subs/gold',
                          '/subs/default',
+                         '/subs/notall',
                      ])
     def GET_listing(self, where, **env):
         """Get all subreddits.

@@ -283,6 +283,7 @@ class Globals(object):
             'allsr_prefilter_allow_top',
             'site_index_user_configurable',
             'allow_top_affects_new',
+            'allow_top_false_subreddits_tab',
             'block_user_show_comments',
             'block_user_show_links',
             'chat_guest_chat_enabled',

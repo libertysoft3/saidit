@@ -2439,6 +2439,11 @@ class SubredditsPage(Reddit):
     def build_toolbars(self):
         buttons =  [NavButton(menu.popular, "", sr_path=False),
                     NamedButton("new", sr_path=False)]
+
+        # SAIDIT
+        if g.allow_top_false_subreddits_tab:
+            buttons.append(NamedButton("notall", sr_path=False))
+
         if c.user_is_admin:
             buttons.append(NamedButton("banned", sr_path=False))
         if c.user.employee:

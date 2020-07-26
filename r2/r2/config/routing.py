@@ -104,12 +104,12 @@ def make_map(config):
       mc('/subs/:where', controller='reddits', action='listing',
         where='popular', conditions={'function':not_in_sr},
         requirements=dict(where="popular|new|banned|employee|gold|default|"
-                                "quarantine|featured"))
+                                "quarantine|featured|notall"))
     else:
       mc('/subs/:where', controller='reddits', action='listing',
         where='popular', conditions={'function':not_in_sr},
         requirements=dict(where="popular|new|banned|employee|default|"
-                                "quarantine|featured"))
+                                "quarantine|featured|notall"))
 
     # If no subreddit is specified, might as well show a list of 'em.
     mc('/' + config['pylons.app_globals'].brander_community_abbr, controller='redirect', action='redirect', dest='/subs')
@@ -124,7 +124,7 @@ def make_map(config):
     mc('/subreddits/login', controller='forms', action='login')
     mc('/subreddits/:where', controller='reddits', action='listing',
        where='popular', conditions={'function':not_in_sr},
-       requirements=dict(where="popular|new|banned"))
+       requirements=dict(where="popular|new|banned|notall"))
 
     mc('/subreddits/mine/:where', controller='myreddits', action='listing',
        where='subscriber', conditions={'function':not_in_sr},
