@@ -592,7 +592,7 @@ class NewController(ListingWithPromos):
     def keep_fn(self):
         def keep(item):
             wouldkeep = item.keep_item(item)
-            if g.allow_top_affects_new and (isinstance(c.site, AllSR) or (isinstance(c.site, DynamicSR) and c.site.name == g.all_name)):
+            if g.allow_top_affects_new and (isinstance(c.site, AllSR) or (isinstance(c.site, DynamicSR) and c.site.name == g.all_name)) and not (c.user_is_loggedin and c.user_is_admin):
                 if hasattr(item, 'subreddit') and not item.subreddit.discoverable:
                     return False
                 elif hasattr(item, 'discoverable') and not item.discoverable:
