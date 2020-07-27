@@ -261,10 +261,13 @@ def get_title(url):
         return None
 
     try:
-        req = Request(url)
-
+        # SAIDIT
+        last_proxy = None
         if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+            last_proxy = os.environ["HTTPS_PROXY"]
             os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
+
+        req = Request(url)
         if g.useragent:
             req.add_header('User-Agent', g.useragent)
         opener = urlopen(req, timeout=15)
@@ -283,22 +286,33 @@ def get_title(url):
             data = reader.read(10024)
             title = extract_title(data)
 
-            # Title not found in the first kb, try searching an additional 1000kb
+            # Title not found in the first kb, try searching an additional 10kb
             if not title:
-                data += reader.read(1000024000)
+                data += reader.read(10000240)
                 title = extract_title(data)
 
+            # SAIDIT
+            # Title not found in the first 10kb, try searching an additional 100kb
             if not title:
-                headers = {'headers':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0'}
-                proxies = None
-                if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-                    proxies = {"http": g.remote_fetch_proxy_url, "https": g.remote_fetch_proxy_url}
-                n = requests.get(url, headers=headers, proxies=proxies)
-                al = n.text
-                title = al[al.find('<title>') + 7 : al.find('</title>')]
+                data += reader.read(100002400)
+                title = extract_title(data)
 
+            g.log.warning("extract_title() failed for url: %s" % url)
+
+        # SAIDIT
         if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-            os.environ["HTTPS_PROXY"] = ""
+            os.environ["HTTPS_PROXY"] = last_proxy
+
+        # TODO: redo the request with requests in case of SSL compatibility issues?
+        # headers = {'User-Agent': g.useragent}
+        # proxies = None
+        # if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+        #     proxies = {"http": g.remote_fetch_proxy_url, "https": g.remote_fetch_proxy_url}
+        # response = requests.get(url, headers=headers, proxies=proxies)
+        # if response and response.text:
+        #     html = response.text
+        #     title = extract_title(html)
+        #     # title = html[html.find('<title>') + 7 : html.find('</title>')]
 
         return title
 
@@ -307,7 +321,6 @@ def get_title(url):
 
 def extract_title(data):
     """Try to extract the page title from a string of HTML.
-
     An og:title meta tag is preferred, but will fall back to using
     the <title> tag instead if one is not found. If using <title>,
     also attempts to trim off the site's name from the end.
@@ -316,7 +329,6 @@ def extract_title(data):
     if not bs or not bs.html.head:
         return
     head_soup = bs.html.head
-    body_soup = bs.html.body
 
     title = None
 
@@ -326,65 +338,22 @@ def extract_title(data):
     if og_title:
         title = og_title.get("content")
 
-    if not title:
-        # try to find an og:title meta tag to use
-        og_title_body = (body_soup.find("meta", attrs={"property": "og:title"}) or
-                    body_soup.find("meta", attrs={"name": "og:title"}))
-        if og_title_body:
-            title = og_title_body.get("content")    
-
     # if that failed, look for a <title> tag to use instead
     if not title and head_soup.title and head_soup.title.string:
         title = head_soup.title.string
 
-    if not title and head_soup.title:
-        title = head_soup.title
-
-    if not title:
-        find_other_title_header = (head_soup.find("title"))
-        if find_other_title_header:
-            title = find_other_title_header.get("content") 
-
-
-    if not title:
-        find_other_title_body = (body_soup.find("title"))
-        if og_title_body:
-            title = find_other_title_body.get("content") 
-
-
         # remove end part that's likely to be the site's name
         # looks for last delimiter char between spaces in strings
         # delimiters: |, -, emdash, endash,
         #             left- and right-pointing double angle quotation marks
-        # reverse_title = title[::-1]
-        # to_trim = re.search(u'\s[\u00ab\u00bb\u2013\u2014|-]\s',
-                            # reverse_title,
-                            # flags=re.UNICODE)
+        reverse_title = title[::-1]
+        to_trim = re.search(u'\s[\u00ab\u00bb\u2013\u2014|-]\s',
+                            reverse_title,
+                            flags=re.UNICODE)
 
         # only trim if it won't take off over half the title
-        # if to_trim and (to_trim.end() > (len(title) / 2)):
-            # title = title[:-(to_trim.end())]
-
-    # if that failed, look for a <title> tag in the body to use instead
-    if not title and body_soup.title and body_soup.title.string:
-        title = body_soup.title.string
-
-        # remove end part that's likely to be the site's name
-        # looks for last delimiter char between spaces in strings
-        # delimiters: |, -, emdash, endash,
-        #             left- and right-pointing double angle quotation marks
-        # reverse_title = title[::-1]
-        # to_trim = re.search(u'\s[\u00ab\u00bb\u2013\u2014|-]\s',
-                            # reverse_title,
-                            # flags=re.UNICODE)
-
-        # only trim if it won't take off over half the title
-        # if to_trim and (to_trim.end() > (len(title) / 2)):
-            # title = title[:-(to_trim.end())]
-
-    if not title:
-        bs2 = BeautifulSoup(data, 'html.parser')
-        title = bs2.find('title')        
+        if to_trim and to_trim.end() < len(title) / 2:
+            title = title[:-(to_trim.end())]
 
     if not title:
         return

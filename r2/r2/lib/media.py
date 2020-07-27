@@ -247,9 +247,7 @@ def _fetch_url_requests(url, params=None):
     if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
         proxies = {"http": g.remote_fetch_proxy_url, "https": g.remote_fetch_proxy_url}
 
-    response = requests.get(url, params=params, proxies=proxies)
-
-    return response
+    return requests.get(url, params=params, headers={'User-Agent': g.useragent}, proxies=proxies)
 
 @memoize('media.fetch_size', time=3600)
 def _fetch_image_size(url, referer):
