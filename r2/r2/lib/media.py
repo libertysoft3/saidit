@@ -216,75 +216,128 @@ def _initialize_request(url, referer, gzip=False):
         req.add_header('Referer', referer)
     return req
 
+# def _fetch_url(url, referer=None):
+#     request = _initialize_request(url, referer=referer, gzip=True)
+#     if not request:
+#         return None, None
 
+#     last_https_proxy = ''
+#     if g.remote_fetch_proxy_enabled:
+#         if "HTTPS_PROXY" in os.environ:
+#             last_https_proxy = os.environ["HTTPS_PROXY"]
+#         os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
+
+#     response = urllib2.urlopen(request)
+#     response_data = response.read()
+#     content_encoding = response.info().get("Content-Encoding")
+#     if content_encoding and content_encoding.lower() in ["gzip", "x-gzip"]:
+#         buf = cStringIO.StringIO(response_data)
+#         f = gzip.GzipFile(fileobj=buf)
+#         response_data = f.read()
+#     content_type = response.headers.get("Content-Type")
+
+#     if g.remote_fetch_proxy_enabled:
+#             os.environ["HTTPS_PROXY"] = last_https_proxy
+
+#     return content_type, response_data
+
+# SAIDIT: re-implement with requests instead of urllib2 for SSL compatibility on python 2.7.6
 def _fetch_url(url, referer=None):
-    request = _initialize_request(url, referer=referer, gzip=True)
-    if not request:
+    if g.disable_remote_fetch:
         return None, None
 
-    last_https_proxy = ''
-    if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-        if "HTTPS_PROXY" in os.environ:
-            last_https_proxy = os.environ["HTTPS_PROXY"]
-        os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
+    url = _clean_url(url)
+    if not url.startswith(("http://", "https://")):
+        return None, None
 
-    response = urllib2.urlopen(request)
-    response_data = response.read()
-    content_encoding = response.info().get("Content-Encoding")
-    if content_encoding and content_encoding.lower() in ["gzip", "x-gzip"]:
-        buf = cStringIO.StringIO(response_data)
-        f = gzip.GzipFile(fileobj=buf)
-        response_data = f.read()
-    content_type = response.headers.get("Content-Type")
+    proxies = None
+    if g.remote_fetch_proxy_enabled:
+        proxies = {"http": g.remote_fetch_proxy_url, "https": g.remote_fetch_proxy_url}
 
-    if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-            os.environ["HTTPS_PROXY"] = last_https_proxy
-
-    return content_type, response_data
+    try:
+        r = requests.get(url, headers={'Accept-Encoding': 'gzip', 'User-Agent': g.useragent, 'Referer': referer}, proxies=proxies, timeout=15)
+        return r.headers['Content-Type'], r.content
+    except:
+        return None, None
 
 def _fetch_url_requests(url, params=None):
     proxies = None
-    if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+    if g.remote_fetch_proxy_enabled:
         proxies = {"http": g.remote_fetch_proxy_url, "https": g.remote_fetch_proxy_url}
 
-    return requests.get(url, params=params, headers={'User-Agent': g.useragent}, proxies=proxies)
+    return requests.get(url, params=params, headers={'Accept-Encoding': 'gzip', 'User-Agent': g.useragent}, proxies=proxies, timeout=15)
 
+# @memoize('media.fetch_size', time=3600)
+# def _fetch_image_size(url, referer):
+#     """Return the size of an image by URL downloading as little as possible."""
+
+#     request = _initialize_request(url, referer)
+#     if not request:
+#         return None
+
+#     parser = ImageFile.Parser()
+#     response = None
+#     try:
+#         if g.remote_fetch_proxy_enabled:
+#             os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
+
+#         response = urllib2.urlopen(request)
+
+#         while True:
+#             chunk = response.read(1024)
+#             if not chunk:
+#                 break
+
+#             parser.feed(chunk)
+#             if parser.image:
+#                 if g.remote_fetch_proxy_enabled:
+#                     os.environ["HTTPS_PROXY"] = ""
+#                 return parser.image.size
+
+#         if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
+#             os.environ["HTTPS_PROXY"] = ""
+
+#     except urllib2.URLError:
+#         return None
+#     finally:
+#         if response:
+#             response.close()
+
+# SAIDIT: re-implement with requests instead of urllib2 for SSL compatibility on python 2.7.6
 @memoize('media.fetch_size', time=3600)
 def _fetch_image_size(url, referer):
     """Return the size of an image by URL downloading as little as possible."""
+    if g.disable_remote_fetch:
+        return None, None
 
-    request = _initialize_request(url, referer)
-    if not request:
-        return None
+    url = _clean_url(url)
+    if not url.startswith(("http://", "https://")):
+        return None, None
+
+    proxies = None
+    if g.remote_fetch_proxy_enabled:
+        proxies = {"http": g.remote_fetch_proxy_url, "https": g.remote_fetch_proxy_url}
 
     parser = ImageFile.Parser()
-    response = None
     try:
-        if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-            os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
 
-        response = urllib2.urlopen(request)
-
-        while True:
-            chunk = response.read(1024)
-            if not chunk:
-                break
-
+        # timeout is connection timeout only
+        r = requests.get(url, headers={'Accept-Encoding': 'gzip', 'User-Agent': g.useragent, 'Referer': referer}, proxies=proxies, timeout=5, stream=True)
+        content = ''
+        for chunk in r.iter_content(1024, decode_unicode=False):
             parser.feed(chunk)
             if parser.image:
-                if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-                    os.environ["HTTPS_PROXY"] = ""
+                r.close()
                 return parser.image.size
 
-        if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-            os.environ["HTTPS_PROXY"] = ""
-
-    except urllib2.URLError:
-        return None
+    except Exception as e:
+        if g.debug:
+            if hasattr(e, 'message') and len(e.message):
+                g.log.error("_fetch_image_size() exception: %s" % e.message)
+            else:
+                g.log.error("_fetch_image_size() exception: %s" % e)
     finally:
-        if response:
-            response.close()
-
+        r.close()
 
 def optimize_jpeg(filename):
     with open(os.path.devnull, 'w') as devnull:

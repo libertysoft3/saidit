@@ -33,6 +33,7 @@ import re
 import signal
 import time
 import traceback
+import requests
 
 from collections import OrderedDict
 from copy import deepcopy
@@ -252,6 +253,63 @@ def path_component(s):
     res = r_path_component.findall(base_url(s))
     return (res and res[0]) or s
 
+# def get_title(url):
+#     if g.disable_remote_fetch:
+#         return None
+
+#     """Fetch the contents of url and try to extract the page's title."""
+#     if not url or not url.startswith(('http://', 'https://')):
+#         return None
+
+#     try:
+#         # SAIDIT
+#         last_proxy = None
+#         if g.remote_fetch_proxy_enabled:
+#             last_proxy = os.environ["HTTPS_PROXY"]
+#             os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
+
+#         req = Request(url)
+#         if g.useragent:
+#             req.add_header('User-Agent', g.useragent)
+#         opener = urlopen(req, timeout=15)
+
+#         # determine the encoding of the response
+#         for param in opener.info().getplist():
+#             if param.startswith("charset="):
+#                 param_name, sep, charset = param.partition("=")
+#                 codec = codecs.getreader(charset)
+#                 break
+#         else:
+#             codec = codecs.getreader("utf-8")
+
+#         with codec(opener, "ignore") as reader:
+#             # Attempt to find the title in the first 1kb
+#             data = reader.read(10024)
+#             title = extract_title(data)
+
+#             # Title not found in the first kb, try searching an additional 10kb
+#             if not title:
+#                 data += reader.read(10000240)
+#                 title = extract_title(data)
+
+#             # SAIDIT
+#             # Title not found in the first 10kb, try searching an additional max
+#             if not title:
+#                 data += reader.read(g.fetch_title_max_download_kb * 1024)
+#                 title = extract_title(data)
+
+#             g.log.warning("extract_title() failed for url: %s" % url)
+
+#         # SAIDIT
+#         if g.remote_fetch_proxy_enabled:
+#             os.environ["HTTPS_PROXY"] = last_proxy
+
+#         return title
+
+#     except:
+#         return None
+
+# SAIDIT: re-implement with requests instead of urllib2 for SSL compatibility on python 2.7.6
 def get_title(url):
     if g.disable_remote_fetch:
         return None
@@ -260,64 +318,52 @@ def get_title(url):
     if not url or not url.startswith(('http://', 'https://')):
         return None
 
+    title = None
+    proxies = None
+
+    if g.remote_fetch_proxy_enabled:
+        proxies = {"http": g.remote_fetch_proxy_url, "https": g.remote_fetch_proxy_url}
+
     try:
-        # SAIDIT
-        last_proxy = None
-        if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-            last_proxy = os.environ["HTTPS_PROXY"]
-            os.environ["HTTPS_PROXY"] = g.remote_fetch_proxy_url
+        # timeout is connection timeout only
+        r = requests.get(url, headers={'Accept-Encoding': 'gzip', 'User-Agent': g.useragent}, proxies=proxies, timeout=5, stream=True)
 
-        req = Request(url)
-        if g.useragent:
-            req.add_header('User-Agent', g.useragent)
-        opener = urlopen(req, timeout=15)
-
-        # determine the encoding of the response
-        for param in opener.info().getplist():
-            if param.startswith("charset="):
-                param_name, sep, charset = param.partition("=")
-                codec = codecs.getreader(charset)
+        # read 10k
+        content = ''
+        for chunk in r.iter_content(2048, decode_unicode=True):
+            content += chunk
+            if len(content) >= 10000:
                 break
-        else:
-            codec = codecs.getreader("utf-8")
+        title = extract_title(content)
 
-        with codec(opener, "ignore") as reader:
-            # Attempt to find the title in the first 1kb
-            data = reader.read(10024)
-            title = extract_title(data)
+        # read 100k
+        if not title:
+            for chunk in r.iter_content(2048, decode_unicode=True):
+                content += chunk
+                if len(content) >= 100000:
+                    break
+            title = extract_title(content)
 
-            # Title not found in the first kb, try searching an additional 10kb
-            if not title:
-                data += reader.read(10000240)
-                title = extract_title(data)
-
-            # SAIDIT
-            # Title not found in the first 10kb, try searching an additional 100kb
-            if not title:
-                data += reader.read(100002400)
-                title = extract_title(data)
-
-            g.log.warning("extract_title() failed for url: %s" % url)
-
-        # SAIDIT
-        if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-            os.environ["HTTPS_PROXY"] = last_proxy
-
-        # TODO: redo the request with requests in case of SSL compatibility issues?
-        # headers = {'User-Agent': g.useragent}
-        # proxies = None
-        # if g.remote_fetch_proxy_enabled and len(g.remote_fetch_proxy_url) > 0:
-        #     proxies = {"http": g.remote_fetch_proxy_url, "https": g.remote_fetch_proxy_url}
-        # response = requests.get(url, headers=headers, proxies=proxies)
-        # if response and response.text:
-        #     html = response.text
-        #     title = extract_title(html)
-        #     # title = html[html.find('<title>') + 7 : html.find('</title>')]
+        # read max
+        if not title:
+            max_size_bytes = g.fetch_title_max_download_kb * 1024
+            for chunk in r.iter_content(2048, decode_unicode=True):
+                content += chunk
+                if len(content) >= max_size_bytes:
+                    break
+            title = extract_title(content)
 
         return title
 
-    except:
+    except Exception as e:
+        if g.debug:
+            if hasattr(e, 'message') and len(e.message):
+                g.log.error("get_title() exception: %s" % e.message)
+            else:
+                g.log.error("get_title() exception: %s" % e)
         return None
+    finally:
+        r.close()
 
 def extract_title(data):
     """Try to extract the page title from a string of HTML.
@@ -326,7 +372,7 @@ def extract_title(data):
     also attempts to trim off the site's name from the end.
     """
     bs = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-    if not bs or not bs.html.head:
+    if not bs or not bs.html or not bs.html.head:
         return
     head_soup = bs.html.head
 
