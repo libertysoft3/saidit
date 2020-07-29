@@ -97,7 +97,7 @@ Visit https://reddit.local and create accounts for users 'reddit' and 'automoder
 
     $ reddit-run ~/src/reddit/scripts/inject_test_data.py -c 'inject_test_data()'
 
-SaidIt is now fully functional aside from search and optional chat. The [SaidIt Admin Guide](https://github.com/libertysoft3/saidit#saidit-admin-guide) has instructions for changing your site configuration.
+SaidIt is now fully functional aside from search and optional chat. The [SaidIt Admin Guide](https://github.com/libertysoft3/saidit/wiki/Admin-guide) has instructions for changing your site configuration.
 
 ---
 
@@ -240,37 +240,6 @@ ensure backend server(s) misc. configuration:
 * /etc/init/reddit-activity.conf `--bind remote-interface-ip:9002`
 * /etc/gunicorn.d/geoip.conf `--bind=remote-interface-ip:5000`
 
----
-
-## SaidIt Admin Guide
-
-### Updating configuration
-
-    $ cd ~/src/reddit/r2
-    $ nano development.update
-    $ make ini
-    $ sudo reddit-restart
-
-Override `example.ini` settings in `development.update`. Changes to section `[live_config]` can be applied with `reddit-flush` rather than `reddit-restart`.
-
-### Updating/refreshing CSS and static assets
-
-For production environments where `uncompressedJS = false`
-
-    $ cd ~/src/reddit/r2
-    $ ./refresh-css.sh
-
-### Set the default subs
-
-    $ cd ~/src/reddit/r2
-    $ paster shell run.ini
-    # paste the following, hit enter:
-    from r2.models import *
-    srs = [Subreddit._by_name(n) for n in ("pics", "videos", "science", "technology")]
-    LocalizedDefaultSubreddits.set_global_srs(srs)
-    LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
-    exit()
-
 ### Use a custom domain
 
 Rather than accessing the site/app at https://reddit.local you can use your own domain. Change the configuration values for `domain` and `oauth_domain` in the main configuration file, `src/reddit/r2/development.update`. You should also update your SSL certificate accordingly, see the next section.
@@ -295,32 +264,6 @@ Re-configure your services for your new cert:
 Renew your cert every 90 days:
 
     $ sudo certbot renew
-    
-### Production configuration
-
-reddit open source
-
-- your `development.update` settings should look like:
-  - debug = false
-  - uncompressedJS = false
-  - domain = yourdomain.com
-  - oauth_domain = yourdomain.com`
-  - db_pass = not the default! set a new password in postgres, then copy it to here and `/etc/cron.d/reddit`
-  - Change the `[secrets]` section
-- Use the gunicorn application server not paster:
-  - edit `/etc/init/reddit-paster.conf`, comment out the `paster serve` line and uncomment the gunicorn line
-  - set `workers` in `development.update` and uncomment `max_requests` and `timeout`
-  - run `$ sudo service reddit-paster restart`
-- Change the password for installer created users `reddit` and `automoderator` (their default password is 'password')
-
-OS
-
-- Ensure swap space is configured, check `$ free -h`
-- Make sure you OS file limits are high, want > 1024 for `$ ulimit -Hn` and `$ ulimit -Sn`
-- Configure fail2ban
-- Configure the firewall, need at least ports 22 and 443 open
-- If you want email, install something like postfix and enable `reddit-job-email` in `/etc/cron.d/reddit`
-- Make backups by adding a cron job for `scripts/saidit-backup.sh`
 
 ### SSL upgrade, for improved "Suggest Title" compatibility
 
@@ -370,6 +313,7 @@ WARNING: this currently breaks Cython dependencies in reddit PPAs/repos, so `ins
 
 ## Next Steps
 
+* [admin guide](https://github.com/libertysoft3/saidit/wiki/Admin-guide)
 * [install chat](https://github.com/libertysoft3/saidit/wiki/Chat#saidit-chat-installation)
 
 ## Additional documentation
