@@ -165,21 +165,16 @@ Index site content and test:
 
 ---
 
-## Next Steps
+## Next steps
 
 * [admin guide](https://github.com/libertysoft3/saidit/wiki/Admin-guide)
 * [dev guide](https://github.com/libertysoft3/saidit/wiki/Dev-guide)
 * [install chat](https://github.com/libertysoft3/saidit/wiki/Chat#saidit-chat-installation)
 
-## Additional documentation
-
-* https://github.com/libertysoft3/saidit/wiki
-* https://web.archive.org/web/20191121131055/https://qconsf.com/sf2017/system/files/presentation-slides/qconsf-20171113-reddits-architecture.pdf
-* [r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
-* [r/redditdev](https://www.reddit.com/r/redditdev)
-
 ## See also
 
+* [r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
+* [r/redditdev](https://www.reddit.com/r/redditdev)
 * [r/RedditAlternatives](https://www.reddit.com/r/RedditAlternatives)
 
 
