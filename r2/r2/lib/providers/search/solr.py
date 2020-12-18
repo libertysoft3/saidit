@@ -292,7 +292,7 @@ class LinkSearchQuery(SolrSearchQuery):
     search_api = g.solr_search_host
     sorts = {
         'relevance': 'score desc',
-        'hot': 'max(hot/' + g.hot_period_seconds + ', 1.0) desc',
+        'hot': 'max(hot/' + str(g.hot_period_seconds) + ', 1.0) desc',
         # reddit score model
         # 'top': 'sum(ups, product(downs,-1)) desc',
         'top': 'sum(product(ups,2), downs) desc',
