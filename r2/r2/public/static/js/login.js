@@ -118,12 +118,12 @@ r.login.ui = {
       if ($el.hasClass('up')) {
         return {
             eventName: 'upvote',
-            description: r._('You need to be logged in to upvote things.')
+            description: r._('You need to be logged in to vote on things.')
         };
       } else if ($el.hasClass('down')) {
         return {
             eventName: 'downvote',
-            description: r._('You need to be logged in to downvote things.')
+            description: r._('You need to be logged in to vote on things.')
         };
       } else if ($el.hasClass('arrow')) {
         return {
@@ -142,7 +142,7 @@ r.login.ui = {
       } else if ($el.parents('.subscribe-button').length) {
         return {
             eventName: 'subscribe-button',
-            description: r._('You need to be logged in to subscribe to subreddits.')
+            description: r._('You need to be logged in to subscribe to subs.')
         };
       } else if ($el.parents('.submit-link').length) {
         return {

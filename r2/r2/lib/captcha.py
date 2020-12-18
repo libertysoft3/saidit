@@ -33,13 +33,13 @@ from Captcha.Visual import Text, Backgrounds, Distortions, ImageCaptcha
 IDEN_LENGTH = 32
 
 class RandCaptcha(ImageCaptcha):
-    defaultSize = (120, 50)
+    defaultSize = (290, 50)
     fontFactory = Text.FontFactory(g.captcha_font_size, "vera/VeraBd.ttf")
 
     def getLayers(self, solution="blah"):
         self.addSolution(solution)
-        return ((Backgrounds.Grid(size=8, foreground="white"),
-                 Distortions.SineWarp(amplitudeRange=(5,9))),
+        return ((Backgrounds.Grid(size=3, foreground="white"),
+                 Distortions.SineWarp(amplitudeRange=(6,9))),
                 (Text.TextLayer(solution,
                                alignment = (0.5,0.5),
                                textColor = 'white',

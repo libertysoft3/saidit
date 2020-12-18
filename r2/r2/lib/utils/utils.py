@@ -401,6 +401,15 @@ def extract_title(data):
         if to_trim and to_trim.end() < len(title) / 2:
             title = title[:-(to_trim.end())]
 
+    # SAIDIT: try for meta titles in the body for YouTube
+    if not title and bs.html.body:
+        body_soup = bs.html.body
+        body_title = (body_soup.find("meta", attrs={"property": "og:title"}) or
+                body_soup.find("meta", attrs={"name": "og:title"}) or
+                body_soup.find("meta", attrs={"name": "title"}))
+        if body_title:
+            title = body_title.get("content")
+
     if not title:
         return
 
