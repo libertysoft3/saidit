@@ -2380,6 +2380,10 @@ class ApiController(RedditController):
         # Don't allow users in timeout to vote
         VNotInTimeout().run(target=thing)
 
+        # SaidIt: don't allow globally banned users to vote
+        if c.user._spam or c.user.is_global_banned:
+            self.abort403()
+
         # convert vote direction to enum value
         if direction == 1:
             direction = Vote.DIRECTIONS.up

@@ -90,6 +90,3 @@ ${globalbannew()}
    </tbody>
   </table>
 </div>
-<br/>
-<br/>
-<p>bans are cached until new/delete or reddit-restart</p>
