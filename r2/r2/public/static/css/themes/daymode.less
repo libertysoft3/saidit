@@ -22,109 +22,82 @@
     h2, a, .tagline a { color: #369; }
     .flat-vert.title { color: #777; }
 
-.arrow {   
+    .arrow {
+        background-color: #fbfbfb;
+        border-color: #fbfbfb;
+        border-top-color: #f4f4f4;
+    }
+    .arrow.upmod {
+        background-image: url(../bulb_black.svg);
+        border: 1px solid;
+        border-color: #e6e6e6;
+        background-color: #f5f5f5;
 
-    background-color: #fbfbfb;
-    border-color: #fbfbfb;
-    border-top-color: #f4f4f4;
-    
+    }
+    .arrow.downmod {
+        background-image: url(../lol.svg);
+        border: 1px solid;
+        border-color: #e6e6e6;
+        background-color: #f5f5f5;
+     }
+    .arrow.up {
+        background-image: url(../bulb_black.svg);
+    }
+    .arrow.down {
+        background-image: url(../lol.svg);
     }
 
-
-
-
-.arrow.upmod { 
-    background-image: url(../daymode_insightful_voted.png);  /* SPRITE */
-    border: 1px solid;
-    border-color: #e6e6e6;
-    background-color: #f5f5f5;
-
-}
-.arrow.downmod { 
-    background-image: url(../daymode_funny_voted.png);  /* SPRITE */
-    border: 1px solid;
-    border-color: #e6e6e6;
-    background-color: #f5f5f5;
- }
-.arrow.up { 
-    background-image: url(../daymode_insightful_unvoted.png);  /* SPRITE */
-   
-}
-.arrow.down { 
-    background-image: url(../daymode_funny_unvoted.png);  /* SPRITE */
-}
-
-#header {
-    
-    border-color: #8c8c8c;
-
-}
-
-
-#header-bottom-left{
-    border-bottom: 1px solid #afafaf;
-}
-
- .commentarea .comment a.expand { 
-
-    color: gray;
-
-}
-
-
-.comment.collapsed {
-    .tagline, .tagline a {
-            }
-}
-
-.comment.collapsed {
-    .tagline, .tagline a:hover {
-           }
-}
-
- .commentarea .comment a.expand:hover { 
-
-    color: white;
-
-}
-
- .comment .expand:hover { 
-
-    color: white;
-
-}
-
-.sidecontentbox .more a { 
-    color: #336699; 
-}
-
-.raisedbox{
-    background: #eaeaea;
-    color: black;
-    border-color: #dadada;
-    border-radius: 7px;
-}
-
-.search-expando {
-
-  &.collapsed {
-
-
-    &:before {
-
-      .linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+    #header {
+        border-color: #8c8c8c;
     }
-  }
-}
 
-.search-result-group-header {
-  border-bottom: 2px solid #E5E3DA;
-  }
+    #header-bottom-left{
+        border-bottom: 1px solid #afafaf;
+    }
 
-.link {  background-color: white; border-color: #f7f7f7; border-bottom-color: #f3f3f3; border-right-color: #f7f7f7; background-image: linear-gradient(to right, #ffffff, #f8f8f8) !important;}
+    .commentarea .comment a.expand {
+        color: gray;
+    }
 
-.link .midcol {font-size: small; text-align: center;  }
+    .commentarea .comment a.expand:hover {
+        color: white;
+    }
 
+    .comment .expand:hover {
+        color: white;
+    }
+
+    .sidecontentbox .more a {
+        color: #336699;
+    }
+
+    .raisedbox{
+        background: #eaeaea;
+        color: black;
+        border-color: #dadada;
+        border-radius: 7px;
+    }
+
+    .search-expando {
+      &.collapsed {
+        &:before {
+          .linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+        }
+      }
+    }
+
+    .search-result-group-header {
+        border-bottom: 2px solid #E5E3DA;
+    }
+
+    .link {
+        background-color: white;
+        border-color: #f7f7f7;
+        border-bottom-color: #f3f3f3;
+        border-right-color: #f7f7f7;
+        background-image: linear-gradient(to right, #ffffff, #f8f8f8) !important;
+    }
+    .link .midcol {font-size: small; text-align: center;  }
     .tabmenu li a { background-color: #F8F8F8; color: #3b65a5; }
     .tabmenu li.selected a { border-color:  #8c8c8c; border-bottom-color: white; }
     .content, .sitetable, .menuarea, .comment, .content .details,
@@ -142,12 +115,9 @@
     .thing .title:visited, .thing.visited .title { color: #767fab; }
     .nextprev, .next-suggestions {
         a {
-
-
             background: #eee;
             border-color: #ddd;
         }
-
         a:hover {
         border: 1px solid #82A6C9;
         transition: 200ms; 
@@ -187,13 +157,13 @@
     }
 
     .gold-accent.comment-visits-box {
-    color: #583800;
-}
+        color: #583800;
+    }
 
     .gold-only #header .tabmenu li.selected a {
         background-color: #ffffff;
-          border-color: #9a7d2e;;
-          border-bottom-color: #ffffff;
+        border-color: #9a7d2e;;
+        border-bottom-color: #ffffff;
     }
     .subreddit-report-form {
         @theme-daymode-bg-color: #FBFBFB;
@@ -229,32 +199,31 @@
     .usertext.border .md {
         :not(pre) > code,
         pre {
-    	    background-color: @theme-daymode-color-off-white; /* @markdown-color-code-alt */
+            background-color: @theme-daymode-color-off-white; /* @markdown-color-code-alt */
         }
     }
 
-      /* search.less overrides */
-      .search-result-body { color: @theme-daymode-color-text-grey; }
+    /* search.less overrides */
+    .search-result-body { color: @theme-daymode-color-text-grey; }
 
 
-      /* subreddit-rules.less overrides */
-      .subreddit-rules-page .md-container .md .subreddit-rule-description { color: @theme-daymode-color-text-grey; }
+    /* subreddit-rules.less overrides */
+    .subreddit-rules-page .md-container .md .subreddit-rule-description { color: @theme-daymode-color-text-grey; }
 
 
     /* components/infobar.less overrides */
     .infobar {
           background-color: @theme-daymode-infobar-legacy-color;
           border-color: @theme-daymode-infobar-legacy-color-border;
-      }
-      .reddit-infobar {
-          background-color: @theme-daymode-infobar-color;
+    }
+    .reddit-infobar {
+        background-color: @theme-daymode-infobar-color;
         border-color: @theme-daymode-infobar-color-border;
         .md {
             color: @theme-daymode-infobar-color-text;
           }
           &.with-icon &:before { background-color: @theme-daymode-infobar-color-border; }
-      }
-
+    }
 
     /* components/read-next.less overrides */
     .read-next {
@@ -267,17 +236,17 @@
     }
 
     .drop-choices {
-	background-color: #ffffff;
-	a.choice {
-		color: #369;
-	}
-	a.choice:hover {
-		background-color: #EFF7FF;
-	}
+        background-color: #ffffff;
+        a.choice {
+            color: #369;
+        }
+        a.choice:hover {
+            background-color: #EFF7FF;
+        }
     }
 
-a.adminbox {
-    border: solid 1px #eeeeee;
+    a.adminbox {
+        border: solid 1px #eeeeee;
     }
 
     /* saidit custom dark header styles */
