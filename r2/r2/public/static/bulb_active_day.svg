@@ -13,10 +13,10 @@
    viewBox="0 0 6.6145835 6.6145835"
    version="1.1"
    id="svg8"
-   sodipodi:docname="bulb.svg"
+   sodipodi:docname="bulb_on_light.svg"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
   <sodipodi:namedview
-     pagecolor="#ffffff"
+     pagecolor="#000000"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -24,27 +24,25 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1914"
+     inkscape:window-width="3834"
      inkscape:window-height="2082"
      id="namedview1661"
      showgrid="true"
      inkscape:zoom="22.94"
-     inkscape:cx="11.088583"
-     inkscape:cy="25.564411"
+     inkscape:cx="35.343741"
+     inkscape:cy="5.4535255"
      inkscape:window-x="1920"
      inkscape:window-y="30"
      inkscape:window-maximized="0"
      inkscape:current-layer="g1609"
      inkscape:snap-global="true"
      showguides="true"
-     inkscape:guide-bbox="true">
+     inkscape:guide-bbox="true"
+     inkscape:document-rotation="0"
+     inkscape:pagecheckerboard="true">
     <inkscape:grid
        type="xygrid"
        id="grid2347" />
-    <sodipodi:guide
-       position="3.2785374,2.9104167"
-       orientation="1,0"
-       id="guide2368" />
   </sodipodi:namedview>
   <defs
      id="defs2">
@@ -52,7 +50,7 @@
        inkscape:collect="always"
        id="linearGradient2364">
       <stop
-         style="stop-color:#ffe514;stop-opacity:1"
+         style="stop-color:#ffae14;stop-opacity:1"
          offset="0"
          id="stop2360" />
       <stop
@@ -103,11 +101,12 @@
        sodipodi:nodetypes="zscsccz" />
     <path
        id="socket"
-       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#999999;fill-rule:evenodd;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
        d="m 2.9146331,4.4150734 c 0,0 0.00691,0.5178192 0.01125,0.5683172 0.00434,0.050498 0.122542,0.1125311 0.250914,0.1320146 l 0.028551,0.058057 c 0,0 0.033136,0.024804 0.1016747,0.024809 0.068539,5e-6 0.1016739,-0.024809 0.1016739,-0.024809 l 0.028551,-0.058057 C 3.5711527,5.0920859 3.6838246,5.0338886 3.688161,4.9833906 3.692497,4.9328928 3.6985436,4.1309995 3.6985436,4.1309995 3.6365903,4.2171582 3.5838922,4.3231098 3.306599,4.3380261 3.0293039,4.323109 2.976606,4.2171578 2.9146521,4.1309995 Z"
        sodipodi:nodetypes="cscccccscccc" />
     <g
-       id="shine">
+       id="shine"
+       style="stroke:#000000">
       <path
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="M 1.6054057,4.0313374 2.1977676,3.7048854"
