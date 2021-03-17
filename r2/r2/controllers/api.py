@@ -383,6 +383,12 @@ class ApiController(RedditController):
         if from_sr and from_sr._spam:
             return
 
+        # SaidIt: globally banned users can only message admin_message_acct
+        if c.user._spam or c.user.is_global_banned:
+            if (to and not (isinstance(to, Subreddit) and
+                    '/%s/%s' % (g.brander_community_abbr, to.name) == g.admin_message_acct)):
+                return
+
         if from_sr:
             if not from_sr.is_moderator_with_perms(c.user, "mail"):
                 abort(403)
