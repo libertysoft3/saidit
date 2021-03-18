@@ -260,7 +260,7 @@ db_user = reddit
 db_pass = password
 automoderator_account = automoderator
 system_user = reddit
-admin_message_acct = reddit
+admin_message_acct = /r/reddit
 
 short_description = open source is awesome
 
