@@ -5313,6 +5313,7 @@ class ApiController(RedditController):
         c.user._commit()
         jquery.refresh()
 
+    # SAIDIT
     # TODO: form validation and error display is janky
     @validatedForm(VAdmin(),
                    VModhash(),
@@ -5337,6 +5338,13 @@ class ApiController(RedditController):
         if globalban is None:
             GlobalBan._new(recipient._id, notes)
             form.set_html(".status", "saved, <a href='#' onclick='location.reload();'>reload</a> to see changes")
+
+            if g.globalban_vote_rollback:
+                min_account_age = timedelta(days=g.globalban_vote_rollback_account_age_days)
+                if g.globalban_vote_rollback_account_age_days == -1:
+                    admintools.rollback_account_votes(recipient)
+                elif recipient._age < timedelta(days=1) or recipient._age <= min_account_age:
+                    admintools.rollback_account_votes(recipient)
             return
 
         globalban.notes = notes

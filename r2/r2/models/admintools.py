@@ -35,6 +35,9 @@ from r2.models import (
     NotFound,
     Report,
     Subreddit,
+    Vote,
+    LinkVotesByAccount,
+    CommentVotesByAccount,
 )
 from r2.models.award import Award
 from r2.models.gold import append_random_bottlecap_phrase, creddits_lock
@@ -263,6 +266,30 @@ class AdminTools(object):
             thing._commit()
             return True
         return False
+
+    # SAIDIT
+    def rollback_account_votes(self, account):
+        query = LinkVotesByAccount._cf.xget(account._id36)
+        for thing_id, vote_state in query:
+            link = Link._byID36(thing_id)
+            if int(vote_state) == int(Vote.SERIALIZED_DIRECTIONS[Vote.DIRECTIONS.onon]): # 3
+                link._incr("_ups", -1)
+                link._incr("_downs", -1)
+            elif int(vote_state) == int(Vote.SERIALIZED_DIRECTIONS[Vote.DIRECTIONS.onoff]): # 4
+                link._incr("_ups", -1)
+            elif int(vote_state) == int(Vote.SERIALIZED_DIRECTIONS[Vote.DIRECTIONS.offon]): # 5
+                link._incr("_downs", -1)
+
+        query = CommentVotesByAccount._cf.xget(account._id36)
+        for thing_id, vote_state in query:
+            comment = Comment._byID36(thing_id)
+            if int(vote_state) == int(Vote.SERIALIZED_DIRECTIONS[Vote.DIRECTIONS.onon]): # 3
+                comment._incr("_ups", -1)
+                comment._incr("_downs", -1)
+            elif int(vote_state) == int(Vote.SERIALIZED_DIRECTIONS[Vote.DIRECTIONS.onoff]): # 4
+                comment._incr("_ups", -1)
+            elif int(vote_state) == int(Vote.SERIALIZED_DIRECTIONS[Vote.DIRECTIONS.offon]): # 5
+                comment._incr("_downs", -1)
 
 admintools = AdminTools()
 

@@ -233,6 +233,7 @@ class Globals(object):
             'precompute_limit_hot',
             'hot_max_links_per_subreddit',
             'fetch_title_max_download_kb',
+            'globalban_vote_rollback_account_age_days',
         ],
 
         ConfigValue.float: [
@@ -290,6 +291,7 @@ class Globals(object):
             'chat_guest_chat_enabled',
             'chat_all',
             'chat_front',
+            'globalban_vote_rollback',
         ],
 
         ConfigValue.tuple: [
