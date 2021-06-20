@@ -1251,6 +1251,7 @@ class RedditFooter(CachedTemplate):
                 separator = ""),
 
             NavMenu([
+                    NavButton(_("report spam and site abuse"), "/message/compose?to=%2Fs%2Fsaidit", sr_path=False),
                     NavButton(_("list of subs"), "/subs", sr_path=False),
                     NavButton(_("contact"), "/s/help"),
                     NavButton(_("terms & content policy"), "/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/"),
