@@ -43,9 +43,10 @@ def admin_menu(**kwargs):
         OffsiteButton("traffic", "/traffic"),
         NavButton(menu.awards, "awards", sr_path=False),
         NavButton(menu.errors, "error log", sr_path=False),
-        # CUSTOM
+        # SAIDIT
         NavButton(menu.global_user_bans, "globaluserbans", sr_path=False),
         NavButton(menu.ip_bans, "ipbans", sr_path=False),
+        NavButton(menu.nuke_user_content, "nukecontent", sr_path=False),
     ]
 
     admin_menu = NavMenu(buttons, title='admin tools', base_path='/admin',
@@ -84,6 +85,7 @@ class AdminProfileMenu(NavMenu):
         # CUSTOM
         buttons = [
             OffsiteButton(menu.ip_history, '/admin/iphistory?username=' + urllib.quote_plus(user.name)),
+            OffsiteButton(menu.nuke_user_content, '/admin/nukecontent?recipient=' + urllib.quote_plus(user.name)),
         ]
         NavMenu.__init__(self, buttons, base_path = path,
                          title = 'admin', type="tabdrop")

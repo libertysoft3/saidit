@@ -6161,3 +6161,8 @@ class AdminIpHistory(Templated):
         self.iphistory = []
         if user:
             self.iphistory = IpHistory._ips_by_user(user);
+
+class AdminNukeContent(Templated):
+    def __init__(self, recipient):
+        Templated.__init__(self)
+        self.recipient = recipient
