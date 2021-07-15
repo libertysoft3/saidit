@@ -1,3 +1,9 @@
+/* reddit.less overrides */
+.thing.spam { background-color: #FA8072 !important; background-image: none !important; }
+.comment.spam > .child, .message.spam > .child {
+    background-color: inherit;
+}
+
 /* misc styles for all themes */
 .thumbnail {
     margin-right: 10px;
@@ -360,11 +366,11 @@
  .theme-daymode .comments-page .commentarea .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment {
      /* background: #fff !important; */
      border-radius: 12px;
-     background-image: linear-gradient(to right, #fff, #f8f8f8) !important;
+     background-image: linear-gradient(to right, #fff, #f8f8f8);
 }
  .theme-daymode .comments-page .commentarea .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment .comment .comment .comment, .theme-daymode .comments-page .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment {
      /* background-color: #f5f5f5 !important; */
-     background-image: linear-gradient(to right, #f5f5f5, #f8f8f8) !important;
+     background-image: linear-gradient(to right, #f5f5f5, #f8f8f8);
      border-radius: 12px;
 }
 
@@ -374,7 +380,10 @@
 .commentarea .comment .comment .comment .comment .comment .comment,
 .commentarea .comment .comment .comment .comment .comment .comment .comment .comment,
 .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment {
-  /* background: #f5f5f5 !important; */ border-radius: 12px;  background-image: linear-gradient(to right, #f5f5f5, #f8f8f8) !important;}
+  /* background: #f5f5f5 !important; */
+  border-radius: 12px;
+  background-image: linear-gradient(to right, #f5f5f5, #f8f8f8);
+}
 
 
 .commentarea .comment,
@@ -383,7 +392,10 @@
 .commentarea .comment .comment .comment .comment .comment .comment .comment,
 .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment,
 .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment {
-  /* background: #fff !important; */ border-radius: 12px; background-image: linear-gradient(to right, #fff, #f8f8f8) !important;}
+  /* background: #fff !important; */
+  border-radius: 12px;
+  background-image: linear-gradient(to right, #fff, #f8f8f8);
+}
 
 
 
@@ -392,7 +404,10 @@
 .theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment,
 .theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment .comment .comment,
 .theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment {
-  /* background: #2d2d2d !important; */ border-radius: 12px;  background-image: linear-gradient(to right, #2d2d2d, #2f2f2f) !important;}
+  /* background: #2d2d2d !important; */
+  border-radius: 12px;
+  background-image: linear-gradient(to right, #2d2d2d, #2f2f2f);
+}
 
 .theme-nightmode .commentarea .comment,
 .theme-nightmode .commentarea .comment .comment .comment,
@@ -400,7 +415,10 @@
 .theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment .comment,
 .theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment,
 .theme-nightmode .commentarea .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment .comment {
-  /* background: #323232 !important; */ border-radius: 12px; background-image: linear-gradient(to right, #323232, #2f2f2f) !important;}
+  /* background: #323232 !important; */
+  border-radius: 12px;
+  background-image: linear-gradient(to right, #323232, #2f2f2f);
+}
 
 
 /* vote buttons */
