@@ -5,8 +5,7 @@
 <%namespace file="printablebuttons.html" import="ynbutton" />
 
 <%def name="globalbannew()">
- <form action="/post/editglobalban" method="post" class="pretty-form medium-text"
-       style="display:none" onsubmit="return post_form(this, 'editglobalban');" id="addglobalban">
+ <form action="/post/editglobalban" method="post" class="pretty-form medium-text" onsubmit="return post_form(this, 'editglobalban');" id="addglobalban">
   
   <input type="hidden" name="fullname" value="NEW" />
   
@@ -14,7 +13,7 @@
     <tr>
       <td><label for="recipient">who to ban?</label></td>
       <td>
-          <input type="text" name="recipient" id="recipient" required="required" />
+          <input type="text" name="recipient" id="recipient" required="required" value="${thing.recipient}" />
           ${error_field("NO_TEXT", "recipient", "span")}
           ${error_field("INVALID_OPTION", "recipient", "span")}
           ${error_field("USER_DOESNT_EXIST", "recipient", "span")}
@@ -51,7 +50,6 @@
 </%def>
 
 <h1>global user bans</h1>
-<a href="#" onclick="$('#addglobalban').toggle(); return false;">add ban</a>
 ${globalbannew()}
 <br/>
 <br/>

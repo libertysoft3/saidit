@@ -202,6 +202,7 @@ menu =   MenuHandler(hot          = _('hot'),
 
                      # CUSTOM
                      global_user_bans               = _('global user bans'),
+                     global_ban_user                = _('globally ban user'),
                      ip_bans                        = _('ip bans'),
                      ip_history                     = _('ip history'),
                      nuke_user_content              = _('nuke user content'),

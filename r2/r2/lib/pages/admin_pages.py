@@ -86,6 +86,7 @@ class AdminProfileMenu(NavMenu):
         buttons = [
             OffsiteButton(menu.ip_history, '/admin/iphistory?username=' + urllib.quote_plus(user.name)),
             OffsiteButton(menu.nuke_user_content, '/admin/nukecontent?recipient=' + urllib.quote_plus(user.name)),
+            OffsiteButton(menu.global_ban_user, '/admin/globaluserbans?recipient=' + urllib.quote_plus(user.name)),
         ]
         NavMenu.__init__(self, buttons, base_path = path,
                          title = 'admin', type="tabdrop")

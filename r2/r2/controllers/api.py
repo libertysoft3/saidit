@@ -5365,8 +5365,8 @@ class ApiController(RedditController):
         thing._commit()
 
         # _new() handles this for creation
-        cache_clear = GlobalBan._all_global_bans(_update=True)
         cache_clear = GlobalBan._all_banned_users_cache(_update=True)
+        cache_clear = GlobalBan._recent_global_bans_cache(_update=True)
         form.set_html(".status", _('deleted, <a href="#" onclick="location.reload();">reload</a> to see it'))
 
     # SAIDIT: IP bans
