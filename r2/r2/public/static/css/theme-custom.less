@@ -80,6 +80,10 @@
     a, .user, .separator {
         color: #ffffff;
     }
+    a.login-required {
+        text-decoration: underline;
+        font-weight: bold;
+    }
     .user a:hover {
         text-decoration: underline;
     }
@@ -499,16 +503,6 @@ body:not(.loggedin) .block-user-button {
 .pref-lang, .user .userkarma {
     font-weight: normal;
 }
-.theme-nightmode #header-bottom-right .user a {
-    font-weight: bold;
-}
-.loggedin.theme-nightmode #header-bottom-right .user a {
-    font-weight: normal;
-}
-.loggedin.theme-nightmode #header-bottom-right .user a:hover {
-    text-decoration: underline;
-}
-
 
 /* MOBILE STYLES */
 @media only screen and (max-width: 1400px) {
