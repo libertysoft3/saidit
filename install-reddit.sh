@@ -32,7 +32,8 @@ RUNDIR=$(dirname $0)
 SCRIPTDIR="$RUNDIR/install"
 
 # the canonical source of all installers
-GITREPO="https://raw.github.com/libertysoft3/saidit/master/install"
+# TODO should be 'master' after merge
+GITREPO="https://raw.github.com/libertysoft3/saidit/docker/install"
 NEEDED=(
     "done.sh"
     "install_apt.sh"
