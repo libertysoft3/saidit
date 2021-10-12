@@ -1008,11 +1008,13 @@ class Reddit(Templated):
             if c.user.pref_lightswitch:
                 buttons += [JsButton('lights off',
                     onclick = "lightswitch(); return false;",
-                    css_class = "pref-lightswitch pref-lightswitch-on")]
+                    css_class = "pref-lightswitch pref-lightswitch-on",
+                    title = _("donate"))]
             else:
                 buttons += [JsButton('lights on',
                     onclick = "lightswitch(); return false;",
-                    css_class = "pref-lightswitch pref-lightswitch-off")]
+                    css_class = "pref-lightswitch pref-lightswitch-off",
+                    title = _("donate"),)]
 
             buttons += [NamedButton("prefs", False,
                                   css_class = "pref-lang")]

@@ -40,8 +40,8 @@ wget -qO- -L https://debian.datastax.com/debian/repo_key | \
     sudo apt-key add -
 
 # add the reddit ppa for some custom packages
-apt-get install $APTITUDE_OPTIONS python-software-properties
-apt-add-repository -y ppa:reddit/ppa
+apt-get install $APTITUDE_OPTIONS software-properties-common python-software-properties
+apt-add-repository $APTITUDE_OPTIONS ppa:reddit/ppa
 
 # pin the ppa -- packages present in the ppa will take precedence over
 # ones in other repositories (unless further pinning is done)
