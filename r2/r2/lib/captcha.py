@@ -50,8 +50,13 @@ def get_iden():
     return randomIdentifier(length=IDEN_LENGTH)
 
 def make_solution():
-    alphabets = [string.ascii_letters + string.punctuation, string.digits + string.punctuation]
-    return randomIdentifier(alphabet=random.choice(alphabets), length = g.captcha_sol_length).upper()
+    easyPunctuation = '!@#$%&+=?'
+    easyDigits = '2346789'
+    hardCharacters = 'dDiIjJlLoOsS'
+    alphabet = string.ascii_letters + easyPunctuation + easyDigits
+    for character in hardCharacters:
+        alphabet = alphabet.replace(character, '')
+    return randomIdentifier(alphabet=alphabet, length = g.captcha_sol_length).upper()
 
 def get_image(iden):
     key = "captcha:%s" % iden
