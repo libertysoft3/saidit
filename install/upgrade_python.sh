@@ -17,9 +17,8 @@ cd ..
 rm -rf Python-2.7.18*
 python -m ensurepip --upgrade
 
-# avoid having to uninstall and reinstall, was getting error "ImportError: cannot import name _AES" on "initctl emit reddit-start"
+# avoid "ImportError: cannot import name _AES" on reddit-start
 pip install --upgrade --force-reinstall pycryptodome
-
 
 # verify upgrade success
 # python --version

@@ -75,7 +75,6 @@ python-chardet
 python-psycopg2
 python-pycassa
 python-imaging
-python-pycaptcha
 python-pylibmc=1.2.2-1~trusty5
 python-amqplib
 python-bcrypt
