@@ -46,6 +46,7 @@ NEEDED=(
     "setup_postgres.sh"
     "setup_rabbitmq.sh"
     "travis.sh"
+    "upgrade_python.sh"
 )
 
 MISSING=""

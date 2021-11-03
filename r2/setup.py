@@ -90,13 +90,14 @@ setup(
         "httpagentparser==1.7.8",
         "raven",
         "ndg-httpsclient",
+        "pycryptodome",
     ],
     # setup tests (allowing for "python setup.py test")
     tests_require=['mock', 'nose', 'coverage'],
     test_suite="nose.collector",
     dependency_links=[
+        "https://github.com/libertysoft3/PyCAPTCHA/archive/v0.4.tar.gz#egg=pycaptcha-0.4",
         "https://github.com/libertysoft3/snudown/archive/v1.5.1.tar.gz#egg=snudown-1.5.1",
-        "https://s3.amazonaws.com/code.reddit.com/pycaptcha-0.4.tar.gz#egg=pycaptcha-0.4",
     ],
     packages=find_packages(exclude=["ez_setup"]),
     cmdclass=commands,

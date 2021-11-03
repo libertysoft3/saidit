@@ -106,6 +106,14 @@ done
 # Install prerequisites
 ###############################################################################
 
+# run an aptitude update to make sure python-software-properties
+# dependencies are found
+apt-get update
+apt-get -y upgrade
+
+# upgrade python
+$RUNDIR/upgrade_python.sh
+
 # install primary packages
 $RUNDIR/install_apt.sh
 
