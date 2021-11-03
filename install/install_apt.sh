@@ -25,11 +25,6 @@
 RUNDIR=$(dirname $0)
 source $RUNDIR/install.cfg
 
-# run an aptitude update to make sure python-software-properties
-# dependencies are found
-apt-get update
-apt-get -y upgrade
-
 # add the datastax cassandra repos (NB: this is required for
 # install_cassandra.sh to work correctly, and the non-existence of this
 # file will trigger install_cassandra.sh to rerun this script)

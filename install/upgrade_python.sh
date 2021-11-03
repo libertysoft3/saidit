@@ -17,10 +17,12 @@ cd ..
 rm -rf Python-2.7.18*
 python -m ensurepip --upgrade
 
+# avoid having to uninstall and reinstall, was getting error "ImportError: cannot import name _AES" on "initctl emit reddit-start"
+pip install --upgrade --force-reinstall pycryptodome
+
+
 # verify upgrade success
 # python --version
-# python -c "import requests; requests.get('https://www.paypal.com/');"
 # python -c "import urllib3.contrib.pyopenssl; urllib3.contrib.pyopenssl.inject_into_urllib3();"
-# wget https://curl.haxx.se
-# python -c 'import ssl; print ssl.OPENSSL_VERSION'
 # python -c "import ssl; print(ssl.HAS_SNI)"
+# python -c "import Crypto.Cipher.AES"
