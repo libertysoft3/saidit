@@ -7,26 +7,19 @@ SaidIt is a [reddit open source](https://github.com/reddit-archive/reddit) conti
 * configurable home page
 * enhanced expandos/embeds: more media providers, direct media links, expandos in comments/sidebars/wiki pages
 
-SaidIt customizations include:
+Optional SaidIt customizations include:
 
 * two dimensional voting where insightful is +2 and fun is +1
 * public moderator logs
 * chat integration with a custom [TheLounge](https://github.com/libertysoft3/lounge-autoconnect) web IRC client
 
-Goals:
-
-* easily setup your own saidit/reddit open source clone
-* platform upgrades, longevity
-* enhancements and quality of life improvements
-* reddit API compatibility
-
 ---
 
-# Installation
+## Installation
 
 There are two ways to set up a saidit server: on a standalone physical server, or through a Virtual Machine environment (running within another OS such as linux, MacOS, or Windows) for development and testing purposes.
 
-## Setting up a virtual machine
+### Setting up a virtual machine
 
 1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 1. Download the latest [Ubuntu 14.04](http://releases.ubuntu.com/14.04/) server .iso file "64-bit PC (AMD64) server install image"
@@ -46,7 +39,7 @@ There are two ways to set up a saidit server: on a standalone physical server, o
 
 From this point forward you can start your VM with Start -> Headless Start and connect via ssh as user 'reddit' if you wish, using a program like [PuTTY](https://www.putty.org/). Don't forget to shut down your VM by right clicking it and choosing Close -> ACPI Shutdown before shutting down your host OS or you may corrupt your VM.
 
-## Setting up a physical server
+### Setting up a physical server
 
 1. Download the latest [Ubuntu 14.04](http://releases.ubuntu.com/14.04/) server .ISO file "64-bit PC (AMD64) server install image"
 1. Download [Rufus](https://rufus.ie/) (as recommended by Ubuntu) and use it to write the .ISO to a USB drive
@@ -59,7 +52,7 @@ From this point forward you can start your VM with Start -> Headless Start and c
 From this point forward physical access to the server is no longer needed and you can ssh in as the 'reddit' user remotely if you wish, using a program like [PuTTY](https://www.putty.org/).
 
 
-## Configure DNS for reddit.local
+### Configure DNS for reddit.local
 
 To use your reddit server, you are expected to be able to resolve reddit.local and https://reddit.local. First, find the ip address of your saidit server by running:
 
@@ -73,7 +66,7 @@ Then update your `hosts` file on your development machine/host OS. For example, 
 For Windows and MacOS see https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
 
 
-## Install reddit open source
+### Install reddit open source
 
 SSH into your saidit server
 
@@ -100,7 +93,7 @@ Option B: populate sample users, posts, comments, and subs
     $ sudo start reddit-job-update_reddits
 
 
-## Install search (optional)
+### Install search (optional)
  
 Install Solr
 
@@ -159,7 +152,7 @@ Index site content
     $ sudo start reddit-job-solr_subreddits
     $ sudo start reddit-job-solr_links
 
-# Next steps
+## Next steps
 
 * access your site at https://reddit.local
 * change the default password of 'password' for accounts 'reddit' and 'automoderator'
@@ -167,7 +160,7 @@ Index site content
 * [dev guide](https://github.com/libertysoft3/saidit/wiki/Dev-guide)
 * [install chat](https://github.com/libertysoft3/saidit/wiki/Chat#saidit-chat-installation)
 
-# See also
+## See also
 
 * [r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
 * [r/redditdev](https://www.reddit.com/r/redditdev)
