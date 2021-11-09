@@ -166,7 +166,7 @@ Index site content
 ## Next steps
 
 * access your site at https://reddit.local
-* change the default password for users 'reddit' and 'automoderator'
+* change the default password of 'password' for accounts 'reddit' and 'automoderator'
 * [admin guide](https://github.com/libertysoft3/saidit/wiki/Admin-guide)
 * [dev guide](https://github.com/libertysoft3/saidit/wiki/Dev-guide)
 * [install chat](https://github.com/libertysoft3/saidit/wiki/Chat#saidit-chat-installation)
