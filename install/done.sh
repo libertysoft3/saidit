@@ -66,13 +66,20 @@ steps:
 
 * Ensure that $REDDIT_DOMAIN resolves to this machine.
 
-* To populate the database with test data, run:
+* Option A: To populate minimal required database data, run:
+
+    cd $REDDIT_SRC/reddit
+    reddit-run scripts/inject_test_data.py -c 'inject_configuration_data()'
+
+* Option B: To populate the database with test data, run:
 
     cd $REDDIT_SRC/reddit
     reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
 
 * Manually run reddit-job-update_reddits immediately after populating the db
   or adding your own subreddits.
+
+    sudo start reddit-job-update_reddits
 
 Congratulations! reddit is now installed.
 CONCLUSION

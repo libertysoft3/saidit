@@ -358,3 +358,22 @@ def inject_test_data(num_links=25, num_comments=25, num_votes=5):
     srs = [Subreddit._by_name(n) for n in ("pics", "videos", "askhistorians")]
     LocalizedDefaultSubreddits.set_global_srs(srs)
     LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
+
+def inject_configuration_data(num_links=25, num_comments=25, num_votes=5):
+    """Create required users and subreddits such that user registration works out of the box"""
+
+    print ">>>> Ensuring configured objects exist"
+    system_user = ensure_account(g.system_user)
+    ensure_account(g.automoderator_account)
+    ensure_subreddit(g.default_sr, system_user)
+    ensure_subreddit(g.takedown_sr, system_user)
+    ensure_subreddit(g.beta_sr, system_user)
+    ensure_subreddit(g.promo_sr_name, system_user)
+
+    print
+    print
+
+    print ">>>> Setting default and featured subreddits"
+    srs = [Subreddit._by_name(n) for n in (g.default_sr, )]
+    LocalizedDefaultSubreddits.set_global_srs(srs)
+    LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name(g.default_sr)])

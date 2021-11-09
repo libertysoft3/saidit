@@ -266,9 +266,11 @@ profile_directory =
 
 db_user = reddit
 db_pass = password
-automoderator_account = automoderator
 system_user = reddit
-admin_message_acct = /r/reddit
+admin_message_acct = reddit
+# the default subreddit for submissions and wiki. created by inject_test_data.py
+default_sr = frontpage
+automoderator_account = automoderator
 
 short_description = open source is awesome
 
@@ -288,9 +290,6 @@ media_fs_root = /srv/www/media
 media_fs_base_url_http = https://%(domain)s/media/
 
 min_membership_create_community = 0
-
-# the default subreddit for submissions and wiki. created by inject_test_data.py
-default_sr = frontpage
 
 [server:main]
 port = 8001
