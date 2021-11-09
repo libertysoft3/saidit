@@ -1,3 +1,5 @@
+## SaidIt
+
 SaidIt is a [reddit open source](https://github.com/reddit-archive/reddit) continuation and fork with:
 
 * critical configurations restored
@@ -11,9 +13,7 @@ Optional SaidIt customizations include:
 
 * two dimensional voting where insightful is +2 and fun is +1
 * public moderator logs
-* chat integration with a custom [TheLounge](https://github.com/libertysoft3/lounge-autoconnect) web IRC client
-
----
+* [web IRC](https://github.com/libertysoft3/lounge-autoconnect) chat integration
 
 ## Installation
 
@@ -167,3 +167,4 @@ Index site content
 * [r/RedditAlternatives](https://www.reddit.com/r/RedditAlternatives)
 
 
+![Image of Saidit logo](https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWA5A1rZZJu_oFjSkUk42Ds5-UDm6c9HNkwSngMYAtvc_Dybkt)
