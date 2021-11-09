@@ -2,16 +2,14 @@
 
 SaidIt is a [reddit open source](https://github.com/reddit-archive/reddit) continuation and fork with:
 
-* critical configurations restored
-* critical bug fixes
+* critical bug fixes and restored configurations
 * admin user bans and ip bans
-* configurable site branding
-* configurable home page
+* configurable site branding and home page
 * enhanced expandos/embeds: more media providers, direct media links, expandos in comments/sidebars/wiki pages
 
 Optional SaidIt customizations include:
 
-* two dimensional voting where insightful is +2 and fun is +1
+* two dimensional voting and content sorting where insightful is +2 and fun is +1
 * public moderator logs
 * [web IRC](https://github.com/libertysoft3/lounge-autoconnect) chat integration
 
