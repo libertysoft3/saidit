@@ -55,8 +55,10 @@ PACKAGES
 
 fi
 
-# memcached doesn't auto-start after install in docker
+# docker compatibility
 sudo service memcached start
+sudo service postgresql start
+sudo service rabbitmq-server start
 
 ###############################################################################
 # Wait for all the services to be up
