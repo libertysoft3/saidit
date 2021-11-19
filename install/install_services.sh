@@ -55,6 +55,8 @@ PACKAGES
 
 fi
 
+# memcached doesn't auto-start after install in docker
+sudo service memcached start
 
 ###############################################################################
 # Wait for all the services to be up
