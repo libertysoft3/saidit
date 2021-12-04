@@ -1,0 +1,69 @@
+version: '3'
+
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: docker/postgres/Dockerfile
+    environment:
+      POSTGRES_USER: reddit
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: reddit
+      POSTGRES_INITDB_ARGS: '--encoding=utf8 --lc-collate=en_US.utf8 --lc-ctype=en_US.utf8'
+    ports:
+      - 5432:5432
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
+    restart: always
+
+  cassandra:
+    image: reddit/cassandra:single-1.2.19-v1
+    ports:
+      - 9160:9160
+    volumes:
+      - ./volumes/cassandra:/var/lib/cassandra/data
+    restart: always
+
+  memcached:
+    build:
+      context: .
+      dockerfile: docker/memcached/Dockerfile
+    ports:
+      - 11211:11211
+    restart: always
+
+  mcrouter:
+    build:
+      context: .
+      dockerfile: docker/mcrouter/Dockerfile
+    ports:
+      - 5050:5050
+    restart: always
+    depends_on:
+      - memcached
+
+  rabbitmq:
+    image: rabbitmq:3.5.7
+    environment:
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_DEFAULT_USER: reddit
+      RABBITMQ_DEFAULT_PASS: reddit
+    ports:
+      - 5672:5672
+    restart: always
+
+  reddit:
+    build:
+      context: .
+      dockerfile: docker/reddit/Dockerfile
+    environment:
+      PYTHONBUFFERED: 1
+    ports:
+      - 8001:8001
+    restart: always
+    depends_on:
+      - postgres
+      - cassandra
+      - memcached
+      - mcrouter
+      - rabbitmq

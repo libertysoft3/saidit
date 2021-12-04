@@ -60,9 +60,6 @@ END
 fi
 
 if [[ -z "$INSTALL_PROFILE" ]]; then
-    # in a production install, you'd want the code to be owned by root and run
-    # by a less privileged user. this script is intended to build a development
-    # install, so we expect the owner to run the app and not be root.
     cat <<END
 ERROR: You have not specified an installation profile.
 END
@@ -120,15 +117,13 @@ $RUNDIR/install_apt.sh
 # install npm packages
 $RUNDIR/install_npm.sh
 
-# install cassandra from datastax
 if [ "$INSTALL_PROFILE" = "all" ]; then
+    # install cassandra from datastax
     $RUNDIR/install_cassandra.sh
-else
-    echo "install profile $INSTALL_PROFILE: skipping cassandra install"
-fi
 
-# install zookeeper
-$RUNDIR/install_zookeeper.sh
+    # install zookeeper
+    $RUNDIR/install_zookeeper.sh
+fi
 
 # install services (rabbitmq, postgres, memcached, etc.)
 $RUNDIR/install_services.sh
@@ -162,46 +157,27 @@ function clone_reddit_service_repo {
     clone_reddit_repo $1 reddit-archive/reddit-service-$1
 }
 
-if [ "$INSTALL_PROFILE" = "all" ]; then
-    clone_reddit_repo reddit libertysoft3/saidit
-elif [ "$INSTALL_PROFILE" = "app" ]; then
-    destination=$REDDIT_SRC/reddit
-    if [ ! -d $destination ]; then
-        sudo -u $REDDIT_USER -H git clone https://github.com/libertysoft3/saidit.git $destination
-    fi
-    if [ -d $destination/upstart ]; then
-        cp $destination/upstart/reddit-boot.conf /etc/init/
-        cp $destination/upstart/reddit-paster.conf /etc/init/
-    fi
-fi
-
+clone_reddit_repo reddit libertysoft3/saidit
 clone_reddit_repo i18n libertysoft3/reddit-i18n
-if [ "$INSTALL_PROFILE" = "all" ]; then
-    clone_reddit_service_repo websockets
-    clone_reddit_service_repo activity
-fi
+clone_reddit_service_repo websockets
+clone_reddit_service_repo activity
 clone_reddit_repo snudown libertysoft3/snudown
 
 ###############################################################################
 # Configure Services
 ###############################################################################
 
-# Configure Cassandra
+# Configure Cassandra - creates keyspaces if they don't exist
+$RUNDIR/setup_cassandra.sh
 
 if [ "$INSTALL_PROFILE" = "all" ]; then
-    $RUNDIR/setup_cassandra.sh
-fi
-
-# Configure PostgreSQL
-if [ "$INSTALL_PROFILE" = "all" ]; then
+    # Configure PostgreSQL
     $RUNDIR/setup_postgres.sh
-fi
 
-# Configure mcrouter
-$RUNDIR/setup_mcrouter.sh
+    # Configure mcrouter
+    $RUNDIR/setup_mcrouter.sh
 
-# Configure RabbitMQ
-if [ "$INSTALL_PROFILE" = "all" ]; then
+    # Configure RabbitMQ
     $RUNDIR/setup_rabbitmq.sh
 fi
 
@@ -221,10 +197,8 @@ for plugin in $REDDIT_AVAILABLE_PLUGINS; do
     copy_upstart $REDDIT_SRC/$plugin
     install_reddit_repo $plugin
 done
-if [ "$INSTALL_PROFILE" = "all" ]; then
-    install_reddit_repo websockets
-    install_reddit_repo activity
-fi
+install_reddit_repo websockets
+install_reddit_repo activity
 install_reddit_repo snudown
 
 # generate binary translation files from source
@@ -370,16 +344,15 @@ REDDITSERVE
 ###############################################################################
 # pixel and click server
 ###############################################################################
-if [ "$INSTALL_PROFILE" = "all" ]; then
-    mkdir -p /var/opt/reddit/
-    chown $REDDIT_USER:$REDDIT_GROUP /var/opt/reddit/
+mkdir -p /var/opt/reddit/
+chown $REDDIT_USER:$REDDIT_GROUP /var/opt/reddit/
 
-    mkdir -p /srv/www/pixel
-    chown $REDDIT_USER:$REDDIT_GROUP /srv/www/pixel
-    cp $REDDIT_SRC/reddit/r2/r2/public/static/pixel.png /srv/www/pixel
+mkdir -p /srv/www/pixel
+chown $REDDIT_USER:$REDDIT_GROUP /srv/www/pixel
+cp $REDDIT_SRC/reddit/r2/r2/public/static/pixel.png /srv/www/pixel
 
-    if [ ! -f /etc/gunicorn.d/click.conf ]; then
-        cat > /etc/gunicorn.d/click.conf <<CLICK
+if [ ! -f /etc/gunicorn.d/click.conf ]; then
+    cat > /etc/gunicorn.d/click.conf <<CLICK
 CONFIG = {
     "mode": "wsgi",
     "working_dir": "$REDDIT_SRC/reddit/scripts",
@@ -392,9 +365,8 @@ CONFIG = {
     ),
 }
 CLICK
-    fi
-    service gunicorn start
 fi
+service gunicorn start
 
 ###############################################################################
 # nginx
@@ -602,9 +574,8 @@ service haproxy restart
 ###############################################################################
 # websocket service
 ###############################################################################
-if [ "$INSTALL_PROFILE" = "all" ]; then
-    if [ ! -f /etc/init/reddit-websockets.conf ]; then
-        cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
+if [ ! -f /etc/init/reddit-websockets.conf ]; then
+    cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
 description "websockets service"
 
 stop on runlevel [!2345] or reddit-restart all or reddit-restart websockets
@@ -618,16 +589,14 @@ limit nofile 65535 65535
 
 exec baseplate-serve2 --bind localhost:9001 $REDDIT_SRC/websockets/example.ini
 UPSTART_WEBSOCKETS
-    fi
-    service reddit-websockets restart
 fi
+service reddit-websockets restart
 
 ###############################################################################
 # activity service
 ###############################################################################
-if [ "$INSTALL_PROFILE" = "all" ]; then
-    if [ ! -f /etc/init/reddit-activity.conf ]; then
-        cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
+if [ ! -f /etc/init/reddit-activity.conf ]; then
+    cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
 description "activity service"
 
 stop on runlevel [!2345] or reddit-restart all or reddit-restart activity
@@ -639,16 +608,14 @@ kill timeout 15
 
 exec baseplate-serve2 --bind localhost:9002 $REDDIT_SRC/activity/example.ini
 UPSTART_ACTIVITY
-    fi
-    service reddit-activity restart
 fi
+service reddit-activity restart
 
 ###############################################################################
 # geoip service
 ###############################################################################
-if [ "$INSTALL_PROFILE" = "all" ]; then
-    if [ ! -f /etc/gunicorn.d/geoip.conf ]; then
-        cat > /etc/gunicorn.d/geoip.conf <<GEOIP
+if [ ! -f /etc/gunicorn.d/geoip.conf ]; then
+    cat > /etc/gunicorn.d/geoip.conf <<GEOIP
 CONFIG = {
     "mode": "wsgi",
     "working_dir": "$REDDIT_SRC/reddit/scripts",
@@ -662,9 +629,8 @@ CONFIG = {
     ),
 }
 GEOIP
-    fi
-    service gunicorn restart
 fi
+service gunicorn restart
 
 ###############################################################################
 # Job Environment
@@ -728,20 +694,17 @@ done
 # vying with eachother to get there first.
 # the 'app' install profile fails until 'cassandra_seeds', etc. are configured
 # so don't bother starting the app yet.
-if [ "$INSTALL_PROFILE" = "all" ]; then
-    reddit-run -c 'print "ok done"'
+reddit-run -c 'print "ok done"'
 
-    # ok, now start everything else up
-    initctl emit reddit-stop
-    initctl emit reddit-start
-fi
+# ok, now start everything else up
+initctl emit reddit-stop
+initctl emit reddit-start
 
 ###############################################################################
 # Cron Jobs
 ###############################################################################
 if [ ! -f /etc/cron.d/reddit ]; then
-    if [ "$INSTALL_PROFILE" = "all" ]; then
-        cat > /etc/cron.d/reddit <<CRON
+    cat > /etc/cron.d/reddit <<CRON
 # install profile: all
 0    3 * * * root /sbin/start --quiet reddit-job-update_sr_names
 30  16 * * * root /sbin/start --quiet reddit-job-update_reddits
@@ -774,11 +737,6 @@ PGPASSWORD=password
 0 * * * * root /sbin/start --quiet reddit-job-solr_subreddits
 */15 * * * * root /sbin/start --quiet reddit-job-solr_links
 CRON
-    elif [ "$INSTALL_PROFILE" = "app" ]; then
-        cat > /etc/cron.d/reddit <<CRON
-# install profile: app
-CRON
-    fi
 
 fi
 

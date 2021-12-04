@@ -39,43 +39,29 @@ postgresql-client
 rabbitmq-server
 haproxy
 nginx
-gunicorn
 redis-server
+gunicorn
 PACKAGES
 
-# skip: postgresql, postgresql-client
-elif [ "$INSTALL_PROFILE" = "app" ]; then
+elif [ "$INSTALL_PROFILE" = "docker" ]; then
     cat <<PACKAGES | xargs apt-get install $APTITUDE_OPTIONS
-mcrouter
-memcached
-haproxy
-nginx
+postgresql-client
+redis-server
 gunicorn
 PACKAGES
 
 fi
-
-# docker compatibility
-sudo service memcached start
-sudo service postgresql start
-sudo service rabbitmq-server start
 
 ###############################################################################
 # Wait for all the services to be up
 ###############################################################################
 # check each port for connectivity
 echo "Waiting for services to be available, see source for port meanings..."
-# 11211 - memcache
-# 5432 - postgres
-# 5672 - rabbitmq
+# 11211 - memcache, 5432 - postgres, 5672 - rabbitmq
 if [ "$INSTALL_PROFILE" = "all" ]; then
     for port in 11211 5432 5672; do
         while ! nc -vz localhost $port; do
             sleep 1
         done
-    done
-elif [ "$INSTALL_PROFILE" = "app" ]; then
-    while ! nc -vz localhost 11211; do
-        sleep 1
     done
 fi
