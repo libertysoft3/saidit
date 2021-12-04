@@ -8,15 +8,12 @@ RUN useradd --create-home --shell /bin/bash reddit
 # RUN usermod -aG sudo reddit
 WORKDIR /home/reddit
 
-# USER root
 RUN wget https://raw.github.com/libertysoft3/saidit/master/install-reddit.sh
-
 RUN chmod +x install-reddit.sh
 RUN yes | REDDIT_DOMAIN=reddit.local REDDIT_USER=reddit REDDIT_HOME=/home/reddit INSTALL_PROFILE=docker ./install-reddit.sh
 
-# Add all files from current directory on host to dockerised-example directory in container 
-# ADD ./ /dockerised-example/
-# COPY docker/entrypoint.sh /sbin/entrypoint.sh
+# startup/init script
+COPY docker/reddit/init-cassandra.sh /docker-entrypoint-initdb.d/init-cassandra.sh
 
 # Expose a port so that we can map it with a host port
 EXPOSE 8001

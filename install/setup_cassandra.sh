@@ -43,22 +43,4 @@ if "permacache" not in sys.get_keyspace_column_families("reddit"):
     sys.create_column_family("reddit", "permacache")
     print "done"
 END
-
-# using the docker compose service name and port
-elif [ "$INSTALL_PROFILE" = "docker" ]; then
-    python <<END
-import pycassa
-sys = pycassa.SystemManager("cassandra:9160")
-
-if "reddit" not in sys.list_keyspaces():
-    print "creating keyspace 'reddit'"
-    sys.create_keyspace("reddit", "SimpleStrategy", {"replication_factor": "1"})
-    print "done"
-
-if "permacache" not in sys.get_keyspace_column_families("reddit"):
-    print "creating column family 'permacache'"
-    sys.create_column_family("reddit", "permacache")
-    print "done"
-END
-
 fi
