@@ -27,7 +27,9 @@
 
 # update the per-thread stack size. this used to be set to 256k in cassandra
 # version 1.2.19, but we recently downgraded to 1.2.11 where it's set too low
-sed -i -e 's/-Xss180k/-Xss256k/g' /etc/cassandra/cassandra-env.sh
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    sed -i -e 's/-Xss180k/-Xss256k/g' /etc/cassandra/cassandra-env.sh
+fi
 
 python <<END
 import pycassa
