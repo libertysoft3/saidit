@@ -39,7 +39,7 @@ class RandCaptcha(ImageCaptcha):
     def getLayers(self, solution="blah"):
         self.addSolution(solution)
         return ((Backgrounds.Grid(size=3, foreground="white"),
-                 Distortions.SineWarp(amplitudeRange=(6,9))),
+                 Distortions.SineWarp(amplitudeRange=(5,9))),
                 (Text.TextLayer(solution,
                                alignment = (0.5,0.5),
                                textColor = 'white',
@@ -50,7 +50,13 @@ def get_iden():
     return randomIdentifier(length=IDEN_LENGTH)
 
 def make_solution():
-    return randomIdentifier(alphabet=string.ascii_letters, length = g.captcha_sol_length).upper()
+    easyPunctuation = '!@#$%&+=?'
+    easyDigits = '2346789'
+    hardCharacters = 'dDiIjJlLoOsS'
+    alphabet = string.ascii_letters + easyPunctuation + easyDigits
+    for character in hardCharacters:
+        alphabet = alphabet.replace(character, '')
+    return randomIdentifier(alphabet=alphabet, length = g.captcha_sol_length).upper()
 
 def get_image(iden):
     key = "captcha:%s" % iden

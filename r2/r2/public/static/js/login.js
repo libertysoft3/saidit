@@ -192,7 +192,13 @@ r.login.ui = {
             return true
         } else {
 
-            // SaidIt: if LoginPopup loading this was deferred, load it now
+            // SaidIt: optionally force redirect to /login
+            if (r.config.feature_login_popup_disabled) {
+                window.location = r.config.https_endpoint + '/login'
+                return false
+            }
+
+            // SaidIt: if LoginPopup loading was deferred, load it now
             if ($('#login-popup').length) {
                 this.popup = new r.ui.LoginPopup();
             }

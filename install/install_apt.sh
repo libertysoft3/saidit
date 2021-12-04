@@ -25,11 +25,6 @@
 RUNDIR=$(dirname $0)
 source $RUNDIR/install.cfg
 
-# run an aptitude update to make sure python-software-properties
-# dependencies are found
-apt-get update
-apt-get -y upgrade
-
 # add the datastax cassandra repos (NB: this is required for
 # install_cassandra.sh to work correctly, and the non-existence of this
 # file will trigger install_cassandra.sh to rerun this script)
@@ -42,6 +37,7 @@ wget -qO- -L https://debian.datastax.com/debian/repo_key | \
 # add the reddit ppa for some custom packages
 apt-get install $APTITUDE_OPTIONS software-properties-common python-software-properties
 apt-add-repository $APTITUDE_OPTIONS ppa:reddit/ppa
+apt-add-repository -y ppa:reddit/ppa
 
 # pin the ppa -- packages present in the ppa will take precedence over
 # ones in other repositories (unless further pinning is done)
@@ -80,7 +76,6 @@ python-chardet
 python-psycopg2
 python-pycassa
 python-imaging
-python-pycaptcha
 python-pylibmc=1.2.2-1~trusty5
 python-amqplib
 python-bcrypt

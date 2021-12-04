@@ -202,8 +202,10 @@ menu =   MenuHandler(hot          = _('hot'),
 
                      # CUSTOM
                      global_user_bans               = _('global user bans'),
+                     global_ban_user                = _('globally ban user'),
                      ip_bans                        = _('ip bans'),
                      ip_history                     = _('ip history'),
+                     nuke_user_content              = _('nuke user content'),
                      chat_size_default              = _('default (300px)'),
                      chat_size_s                    = _('small (380px)'),
                      chat_size_m                    = _('medium (480px)'),

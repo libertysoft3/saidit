@@ -33,7 +33,7 @@
   op = "login-main"
   base = g.https_endpoint
 %>
-%if not feature.is_enabled('login_disabled'):
+%if not feature.is_enabled('login_disabled') and not feature.is_enabled('login_popup_disabled'):
 <form method="post"
       action="${add_sr(base + '/post/login')}"
       id="login_${op}"

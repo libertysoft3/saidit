@@ -162,6 +162,7 @@ def make_map(config):
     mc('/admin/globaluserbans', controller='globaluserbans')
     mc('/admin/iphistory', controller='iphistory')
     mc('/admin/ipbans', controller='ipbans')
+    mc('/admin/nukecontent', controller='nukecontent')
 
     mc('/user/:username/about', controller='user', action='about',
        where='overview')

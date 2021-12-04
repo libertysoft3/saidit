@@ -2,10 +2,10 @@ import urllib
 from pylons import request
 from pylons import app_globals as g
 from reddit_base import RedditController
-from r2.lib.pages import AdminPage, AdminGlobalUserBans
+from r2.lib.pages import AdminPage, AdminNukeContent
 from r2.lib.validator import *
 
-class GlobalUserBansController(RedditController):
+class NukeContentController(RedditController):
 
     @validate(
         VAdmin(),
@@ -16,6 +16,6 @@ class GlobalUserBansController(RedditController):
             recipient = urllib.unquote_plus(recipient)
         else:
             recipient = None
-        res = AdminPage(content = AdminGlobalUserBans(recipient=recipient), title = '[ADMIN] Global User Bans').render()
+        res = AdminPage(content = AdminNukeContent(recipient=recipient), title = '[ADMIN] Nuke User Content').render()
         return res
 

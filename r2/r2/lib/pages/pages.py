@@ -6132,10 +6132,12 @@ class ShareClose(Templated):
 
 # CUSTOM
 class AdminGlobalUserBans(Templated):
-    def __init__(self):
+    def __init__(self, recipient):
         from r2.models import GlobalBan
         Templated.__init__(self)
-        self.bans = GlobalBan._all_global_bans()
+        self.recipient = recipient
+
+        self.bans = GlobalBan._recent_global_bans()
 
         # load accounts by ban's user_id, not using proper reddit relationships here
         self.accounts = {}
@@ -6161,3 +6163,8 @@ class AdminIpHistory(Templated):
         self.iphistory = []
         if user:
             self.iphistory = IpHistory._ips_by_user(user);
+
+class AdminNukeContent(Templated):
+    def __init__(self, recipient):
+        Templated.__init__(self)
+        self.recipient = recipient

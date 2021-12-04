@@ -15,6 +15,7 @@ class IpHistory(object):
         lookback = 100
         ips = []
 
+        # TODO: get vote ips
         # TODO: get working, see set_account_ip()
         # ips = IPsByAccount.get(user._id, column_count=1000)
         # g.log.warning("!!! IPsByAccount %s" % ips)

@@ -297,6 +297,7 @@ def js_config(extra_config=None):
         "brander_community_abbr": g.brander_community_abbr,
         "chat_client_url": g.chat_client_url,
         "imgur_client_id": imgur_client_id,
+        "feature_login_popup_disabled": feature.is_enabled('login_popup_disabled'),
     }
 
     if g.tracker_url:

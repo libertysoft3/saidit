@@ -106,5 +106,6 @@ def load_controllers():
     from globaluserbans import GlobalUserBansController
     from iphistory import IpHistoryController
     from ipbans import IpBansController
+    from nukecontent import NukeContentController
 
     _reddit_controllers.update((name.lower(), obj) for name, obj in locals().iteritems())

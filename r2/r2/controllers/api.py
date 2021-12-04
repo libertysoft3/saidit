@@ -5313,7 +5313,7 @@ class ApiController(RedditController):
         c.user._commit()
         jquery.refresh()
 
-    # SAIDIT
+    # SAIDIT: global/sitewide user bans
     # TODO: form validation and error display is janky
     @validatedForm(VAdmin(),
                    VModhash(),
@@ -5365,10 +5365,11 @@ class ApiController(RedditController):
         thing._commit()
 
         # _new() handles this for creation
-        cache_clear = GlobalBan._all_global_bans(_update=True)
         cache_clear = GlobalBan._all_banned_users_cache(_update=True)
+        cache_clear = GlobalBan._recent_global_bans_cache(_update=True)
         form.set_html(".status", _('deleted, <a href="#" onclick="location.reload();">reload</a> to see it'))
 
+    # SAIDIT: IP bans
     # TODO: validate is ip
     @validatedForm(VAdmin(),
                    VModhash(),
@@ -5397,8 +5398,6 @@ class ApiController(RedditController):
         ipban._commit()
         form.set_html(".status", _('saved, <a href="#" onclick="location.reload();">reload</a> to see changes'))
 
-
-    # CUSTOM: IP Bans
     @validatedForm(VAdmin(),
                 VModhash(),
                 thing = VByName('ipban_id'))
@@ -5415,7 +5414,7 @@ class ApiController(RedditController):
         cache_clear = IpBan._all_bans(_update=True)
         form.set_html(".status", _('deleted, <a href="#" onclick="location.reload();">reload</a> to see it'))
 
-    # CUSTOM: Site Theme
+    # SAIDIT: site theme
     @csrf_exempt
     @validate(pref_lightswitch = VBoolean('lightswitch'))
     def POST_lightswitch(self, pref_lightswitch):
@@ -5425,3 +5424,20 @@ class ApiController(RedditController):
         prefs = {"pref_lightswitch": pref_lightswitch, "pref_site_theme": theme}
         set_prefs(c.user, prefs)
         c.user._commit()
+
+    # SAIDIT: mark all links and comments as spam unless approved
+    @validatedForm(VAdmin(),
+                   VModhash(),
+                   recipient=VExistingUname("recipient"))
+    def POST_nukeusercontent(self, form, jquery, recipient):
+        if form.has_error():
+            return
+
+        if recipient is None:
+            form.set_text(".status", "user does not exist")
+            return
+
+        admintools.spam_account_links(recipient)
+        admintools.spam_account_comments(recipient)
+
+        form.set_html(".status", _('somebody set up us the bomb'))

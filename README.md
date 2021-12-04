@@ -1,32 +1,17 @@
-# SaidIt
-
-![Image of Saidit logo](https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWA5A1rZZJu_oFjSkUk42Ds5-UDm6c9HNkwSngMYAtvc_Dybkt)
-
-
+## SaidIt
 
 SaidIt is a [reddit open source](https://github.com/reddit-archive/reddit) continuation and fork with:
 
-* critical configurations restored
-* critical bug fixes
+* critical bug fixes and restored configurations
 * admin user bans and ip bans
-* configurable site branding
-* configurable home page
-* enhanced expandos/embeds: more media providers, direct media links, used in comments, sidebars and wiki pages
+* configurable site branding and home page
+* enhanced expandos/embeds: more media providers, direct media links, expandos in comments/sidebars/wiki pages
 
-SaidIt customizations include:
+Optional SaidIt customizations include:
 
-* two dimensional voting where insightful is +2 and fun is +1
+* two dimensional voting and content sorting where insightful is +2 and fun is +1
 * public moderator logs
-* chat integration with a custom [TheLounge](https://github.com/libertysoft3/lounge-autoconnect) web IRC client
-
-Goals:
-
-* easily setup your own saidit/reddit open source clone
-* platform upgrades, longevity
-* enhancements and quality of life improvements
-* reddit API compatibility
-
----
+* [web IRC](https://github.com/libertysoft3/lounge-autoconnect) chat integration
 
 ## Installation
 
@@ -79,31 +64,34 @@ Then update your `hosts` file on your development machine/host OS. For example, 
 For Windows and MacOS see https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
 
 
-### Install SaidIt
+### Install reddit open source
 
 SSH into your saidit server
 
     $ ssh reddit@reddit.local
 
-Install SaidIt
+Run the installer
 
-    $ wget https://raw.github.com/libertysoft3/saidit/master/install-reddit.sh
+    $ wget --no-check-certificate https://raw.github.com/libertysoft3/saidit/master/install-reddit.sh
     $ chmod +x install-reddit.sh
     $ sudo ./install-reddit.sh
 
-You should see success message "Congratulations! reddit is now installed." Do not proceed if the installation failed with an error.
+The installer should complete with success message "Congratulations! reddit is now installed". Do not proceed unless you see this message.
 
-Visit https://reddit.local and create accounts for users 'reddit' and 'automoderator'. Alternatively, you can install some default/sample data including users 'reddit' and 'automoderator' (with password 'password'), subs, posts, and comments with:
+Option A: start with an empty reddit
 
-    $ reddit-run ~/src/reddit/scripts/inject_test_data.py -c 'inject_test_data()'
+    $ cd ~/src/reddit
+    $ reddit-run scripts/inject_test_data.py -c 'inject_configuration_data()'
+    $ sudo start reddit-job-update_reddits
 
-SaidIt is now fully functional aside from search and optional chat. The [SaidIt Admin Guide](https://github.com/libertysoft3/saidit/wiki/Admin-guide) has instructions for changing your site configuration.
+Option B: populate sample users, posts, comments, and subs
 
----
+    $ cd ~/src/reddit
+    $ reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
+    $ sudo start reddit-job-update_reddits
 
-## Install search
 
-SaidIt comes pre-configured for Solr search, but Solr and Tomcat are not installed yet.
+### Install search (optional)
  
 Install Solr
 
@@ -114,12 +102,12 @@ Install Solr
     $ sudo mv solr-4.10.4 /usr/share/solr
     $ sudo chown -R tomcat7:tomcat7 /usr/share/solr/example
  
-Setup Solr, install Reddit schema
+Setup Solr and schema
 
     $ sudo cp /usr/share/solr/example/webapps/solr.war /usr/share/solr/example/solr/
     $ sudo cp /usr/share/solr/example/lib/ext/* /usr/share/tomcat7/lib/
     $ sudo cp /usr/share/solr/example/resources/log4j.properties /usr/share/tomcat7/lib/
-    $ sudo cp src/reddit/solr/schema4.xml /usr/share/solr/example/solr/collection1/conf/schema.xml
+    $ sudo cp ~/src/reddit/solr/schema4.xml /usr/share/solr/example/solr/collection1/conf/schema.xml
     $ sudo chown tomcat7:tomcat7 /usr/share/solr/example/solr/collection1/conf/schema.xml
  
 Setup Tomcat for Solr
@@ -148,7 +136,7 @@ Setup Tomcat for Solr
     # verify tomcat all good (ignore warnings):
     $ /usr/share/tomcat7/bin/configtest.sh
 
-Start solr:
+Start solr
 
     $ sudo service tomcat7 restart
     # any errors logged must be fixed
@@ -157,16 +145,15 @@ Start solr:
     $ wget 127.0.0.1:8983
     $ wget 127.0.0.1:8983/solr
 
-Index site content and test:
+Index site content
 
     $ sudo start reddit-job-solr_subreddits
     $ sudo start reddit-job-solr_links
-    # do a search on the site, verify working
-
----
 
 ## Next steps
 
+* access your site at https://reddit.local
+* change the default password of 'password' for accounts 'reddit' and 'automoderator'
 * [admin guide](https://github.com/libertysoft3/saidit/wiki/Admin-guide)
 * [dev guide](https://github.com/libertysoft3/saidit/wiki/Dev-guide)
 * [install chat](https://github.com/libertysoft3/saidit/wiki/Chat#saidit-chat-installation)
@@ -178,3 +165,4 @@ Index site content and test:
 * [r/RedditAlternatives](https://www.reddit.com/r/RedditAlternatives)
 
 
+![Image of Saidit logo](https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWA5A1rZZJu_oFjSkUk42Ds5-UDm6c9HNkwSngMYAtvc_Dybkt)

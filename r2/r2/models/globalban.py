@@ -12,16 +12,19 @@ class GlobalBan(Thing):
     def _cache_prefix(cls):
         return "globalban:"
 
-    # TODO - method named all wrong, theres a limit of 5000
     @classmethod
-    @memoize('globalban.all_global_bans')
-    def _all_global_bans_cache(cls):
-        # g.log.warning("!!! dbg: _all_global_bans_cache was flushed, running a db query")
-        return [ a._id for a in GlobalBan._query(sort=desc('_date'), limit=5000) ]
+    @memoize('globalban.all_banned_users')
+    def _all_banned_users_cache(cls):
+        return [ a.user_id for a in GlobalBan._query() ]
 
     @classmethod
-    def _all_global_bans(cls, _update=False):
-        all = GlobalBan._all_global_bans_cache(_update=_update)
+    @memoize('globalban.recent_global_bans')
+    def _recent_global_bans_cache(cls):
+        return [ a._id for a in GlobalBan._query(sort=desc('_date'), limit=100) ]
+
+    @classmethod
+    def _recent_global_bans(cls, _update=False):
+        all = GlobalBan._recent_global_bans_cache(_update=_update)
         # "Can't just return Award._byID() results because the ordering will be lost"
         d = GlobalBan._byID(all, data=True)
         return [ d[id] for id in all ]
@@ -31,8 +34,8 @@ class GlobalBan(Thing):
     def _new(cls, user_id, notes=''):
         a = GlobalBan(user_id=user_id, notes=notes)
         a._commit()
-        GlobalBan._all_global_bans_cache(_update=True)
         GlobalBan._all_banned_users_cache(_update=True)
+        GlobalBan._recent_global_bans_cache(_update=True)
 
     @classmethod
     def _by_user_id(cls, user_id):
@@ -45,13 +48,7 @@ class GlobalBan(Thing):
         else:
             raise NotFound, 'GlobalBan for user %s' % user_id
 
-    @classmethod
-    @memoize('globalban.all_banned_users')
-    def _all_banned_users_cache(cls):
-        # g.log.warning("!!! dbg: _all_banned_users_cache was flushed, running a db query")
-        return [ a.user_id for a in GlobalBan._query() ]
-
-    # TODO - with enough globally banned users, this will no longer be performant. Move ban state to being an Account attribute.
+    # TODO - with enough globally banned users, this will no longer be performant. Move ban state to being an Account attribute. Set user._spam = True?
     @classmethod
     def _user_banned(self, user_id):
         if user_id and user_id > 0:

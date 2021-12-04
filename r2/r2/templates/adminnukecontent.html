@@ -1,0 +1,31 @@
+<%!
+  from r2.lib.template_helpers import display_link_karma
+%>
+<%namespace file="utils.html" import="error_field, thing_timestamp, plain_link" />
+<%namespace file="printablebuttons.html" import="ynbutton" />
+
+<h1>nuke user content</h1>
+<p>marks all links and comments as spam unless previously approved. you may need to run this tool multiple times as only 1,000 items are processed per form submission.</p>
+<br/>
+<form action="/post/nukeusercontent"
+  method="post"
+  class="pretty-form medium-text"
+  onsubmit="return post_form(this, 'nukeusercontent');"
+  id="addnukecontent">
+  <input type="hidden" name="fullname" value="NEW" />
+  <table class="off-lined-table borderless">
+    <tr>
+      <td><label for="recipient">recipient</label></td>
+      <td>
+          <input type="text" name="recipient" id="recipient" required="required" value="${thing.recipient}" />
+          ${error_field("NO_TEXT", "recipient", "span")}
+          ${error_field("INVALID_OPTION", "recipient", "span")}
+          ${error_field("USER_DOESNT_EXIST", "recipient", "span")}
+      </td>
+    </tr>
+  </table>
+  <button class="btn" type="submit">nuke</button>
+  <button class="btn" onclick="$(this).closest('form').hide(); return false;">cancel</button>
+  <span class="status"></span>
+  <br/>
+</form>
