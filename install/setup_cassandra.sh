@@ -29,9 +29,7 @@
 # version 1.2.19, but we recently downgraded to 1.2.11 where it's set too low
 if [ "$INSTALL_PROFILE" = "all" ]; then
     sed -i -e 's/-Xss180k/-Xss256k/g' /etc/cassandra/cassandra-env.sh
-fi
-
-python <<END
+    python <<END
 import pycassa
 sys = pycassa.SystemManager("localhost:9160")
 
@@ -45,3 +43,22 @@ if "permacache" not in sys.get_keyspace_column_families("reddit"):
     sys.create_column_family("reddit", "permacache")
     print "done"
 END
+
+# using the docker compose service name and port
+elif [ "$INSTALL_PROFILE" = "docker" ]; then
+    python <<END
+import pycassa
+sys = pycassa.SystemManager("cassandra:9160")
+
+if "reddit" not in sys.list_keyspaces():
+    print "creating keyspace 'reddit'"
+    sys.create_keyspace("reddit", "SimpleStrategy", {"replication_factor": "1"})
+    print "done"
+
+if "permacache" not in sys.get_keyspace_column_families("reddit"):
+    print "creating column family 'permacache'"
+    sys.create_column_family("reddit", "permacache")
+    print "done"
+END
+
+fi
