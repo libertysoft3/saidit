@@ -1,8 +1,9 @@
 #!/bin/bash
 
+# exit immediately if a command exits with a non-zero status
 set -e
 
-# from setup_cassandra.sh
+# from setup_cassandra.sh, can't run until 2 containers are running
 python <<END
 import pycassa
 sys = pycassa.SystemManager("cassandra:9160")

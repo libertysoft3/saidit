@@ -1,5 +1,4 @@
 FROM ubuntu:14.04
-LABEL Author="libertysoft3"
 
 RUN apt-get update && apt-get -y upgrade
 RUN apt-get -y install software-properties-common

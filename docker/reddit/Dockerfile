@@ -1,25 +1,34 @@
 FROM ubuntu:14.04
-LABEL Author="libertysoft3"
 
-RUN apt-get update && apt-get -y upgrade
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update
+RUN apt-get -y upgrade
+
+# locale stuff
+RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
+ENV LANG en_US.UTF-8
+
+# reddit app
 RUN apt-get -y install wget
-
 RUN useradd --create-home --shell /bin/bash reddit
-# RUN usermod -aG sudo reddit
+RUN usermod -aG sudo reddit
 WORKDIR /home/reddit
-
-# TODO - change 'docker' back to 'master'
-RUN wget https://raw.github.com/libertysoft3/saidit/docker/install-reddit.sh
+# TODO: change 'docker' back to 'master'
+ADD https://raw.github.com/libertysoft3/saidit/docker/install-reddit.sh install-reddit.sh
 RUN chmod +x install-reddit.sh
 RUN yes | REDDIT_DOMAIN=reddit.local REDDIT_USER=reddit REDDIT_HOME=/home/reddit INSTALL_PROFILE=docker ./install-reddit.sh
 
-# startup/init script
-COPY docker/reddit/init-cassandra.sh /docker-entrypoint-initdb.d/init-cassandra.sh
+# cron
+RUN apt-get -y install cron
+RUN touch /var/log/cron.log
+RUN apt-get -y install cron
 
-# Expose a port so that we can map it with a host port
 EXPOSE 8001
 
-# USER reddit
+# init scripts
+COPY docker/reddit/init_cassandra.sh init_cassandra.sh
+RUN chmod +x init_cassandra.sh
+COPY docker/reddit/wrapper.sh wrapper.sh
+RUN chmod +x wrapper.sh
 
-# Execute command when container starts (not executed with image build)
-# ENTRYPOINT ["/sbin/entrypoint.sh"]
+CMD ["./wrapper.sh"]

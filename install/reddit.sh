@@ -105,8 +105,10 @@ done
 
 # run an aptitude update to make sure python-software-properties
 # dependencies are found
-apt-get update
-apt-get -y upgrade
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    apt-get update
+    apt-get -y upgrade
+fi
 
 # upgrade python
 $RUNDIR/upgrade_python.sh
@@ -662,6 +664,7 @@ export REDDIT_INI=$REDDIT_SRC/reddit/r2/run.ini
 export REDDIT_USER=$REDDIT_USER
 export REDDIT_GROUP=$REDDIT_GROUP
 export REDDIT_CONSUMER_CONFIG=$CONSUMER_CONFIG_ROOT
+export REDDIT_SRC=$REDDIT_SRC
 alias wrap-job=$REDDIT_SRC/reddit/scripts/wrap-job
 alias manage-consumers=$REDDIT_SRC/reddit/scripts/manage-consumers
 DEFAULT
@@ -709,9 +712,7 @@ done
 ###############################################################################
 
 # the initial database setup should be done by one process rather than a bunch
-# vying with eachother to get there first.
-# the 'app' install profile fails until 'cassandra_seeds', etc. are configured
-# so don't bother starting the app yet.
+# vying with eachother to get there first
 if [ "$INSTALL_PROFILE" = "all" ]; then
     reddit-run -c 'print "ok done"'
 
@@ -725,7 +726,6 @@ fi
 ###############################################################################
 if [ ! -f /etc/cron.d/reddit ]; then
     cat > /etc/cron.d/reddit <<CRON
-# install profile: all
 0    3 * * * root /sbin/start --quiet reddit-job-update_sr_names
 30  16 * * * root /sbin/start --quiet reddit-job-update_reddits
 0    * * * * root /sbin/start --quiet reddit-job-update_promos
