@@ -8,7 +8,8 @@ RUN useradd --create-home --shell /bin/bash reddit
 # RUN usermod -aG sudo reddit
 WORKDIR /home/reddit
 
-RUN wget https://raw.github.com/libertysoft3/saidit/master/install-reddit.sh
+# TODO - change 'docker' back to 'master'
+RUN wget https://raw.github.com/libertysoft3/saidit/docker/install-reddit.sh
 RUN chmod +x install-reddit.sh
 RUN yes | REDDIT_DOMAIN=reddit.local REDDIT_USER=reddit REDDIT_HOME=/home/reddit INSTALL_PROFILE=docker ./install-reddit.sh
 

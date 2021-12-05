@@ -375,13 +375,15 @@ service gunicorn start
 mkdir -p /srv/www/media
 chown $REDDIT_USER:$REDDIT_GROUP /srv/www/media
 
-cat > /etc/nginx/conf.d/reddit.conf <<NGINX
+if [ "$INSTALL_PROFILE" = "all" ]; then
+
+    cat > /etc/nginx/conf.d/reddit.conf <<NGINX
 log_format directlog '\$remote_addr - \$remote_user [\$time_local] '
                       '"\$request_method \$request_uri \$server_protocol" \$status \$body_bytes_sent '
                       '"\$http_referer" "\$http_user_agent"';
 NGINX
 
-cat > /etc/nginx/sites-available/reddit-media <<MEDIA
+    cat > /etc/nginx/sites-available/reddit-media <<MEDIA
 server {
     listen 9000;
 
@@ -393,7 +395,7 @@ server {
 }
 MEDIA
 
-cat > /etc/nginx/sites-available/reddit-pixel <<PIXEL
+    cat > /etc/nginx/sites-available/reddit-pixel <<PIXEL
 upstream click_server {
   server unix:/var/opt/reddit/click.sock fail_timeout=0;
 }
@@ -419,7 +421,7 @@ server {
 }
 PIXEL
 
-cat > /etc/nginx/sites-available/reddit-ssl <<SSL
+    cat > /etc/nginx/sites-available/reddit-ssl <<SSL
 map \$http_upgrade \$connection_upgrade {
   default upgrade;
   ''      close;
@@ -463,42 +465,46 @@ server {
 }
 SSL
 
-# SSL stuff
-if [ ! -f /etc/nginx/dhparam.pem ]; then
-    openssl dhparam -out /etc/nginx/dhparam.pem 2048
+    # SSL stuff
+    if [ ! -f /etc/nginx/dhparam.pem ]; then
+        openssl dhparam -out /etc/nginx/dhparam.pem 2048
+    fi
+
+    # remove the default nginx site that may conflict with haproxy
+    rm -rf /etc/nginx/sites-enabled/default
+    # put our config in place
+    ln -nsf /etc/nginx/sites-available/reddit-media /etc/nginx/sites-enabled/
+    ln -nsf /etc/nginx/sites-available/reddit-pixel /etc/nginx/sites-enabled/
+    ln -nsf /etc/nginx/sites-available/reddit-ssl /etc/nginx/sites-enabled/
+
+    # make the pixel log directory
+    mkdir -p /var/log/nginx/traffic
 fi
-
-# remove the default nginx site that may conflict with haproxy
-rm -rf /etc/nginx/sites-enabled/default
-# put our config in place
-ln -nsf /etc/nginx/sites-available/reddit-media /etc/nginx/sites-enabled/
-ln -nsf /etc/nginx/sites-available/reddit-pixel /etc/nginx/sites-enabled/
-ln -nsf /etc/nginx/sites-available/reddit-ssl /etc/nginx/sites-enabled/
-
-# make the pixel log directory
-mkdir -p /var/log/nginx/traffic
 
 # link the ini file for the Flask click tracker
 ln -nsf $REDDIT_SRC/reddit/r2/development.ini $REDDIT_SRC/reddit/scripts/production.ini
 
-service nginx restart
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    service nginx restart
+fi
 
 ###############################################################################
 # haproxy
 ###############################################################################
-if [ -e /etc/haproxy/haproxy.cfg ]; then
-    BACKUP_HAPROXY=$(mktemp /etc/haproxy/haproxy.cfg.XXX)
-    echo "Backing up /etc/haproxy/haproxy.cfg to $BACKUP_HAPROXY"
-    cat /etc/haproxy/haproxy.cfg > $BACKUP_HAPROXY
-fi
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    if [ -e /etc/haproxy/haproxy.cfg ]; then
+        BACKUP_HAPROXY=$(mktemp /etc/haproxy/haproxy.cfg.XXX)
+        echo "Backing up /etc/haproxy/haproxy.cfg to $BACKUP_HAPROXY"
+        cat /etc/haproxy/haproxy.cfg > $BACKUP_HAPROXY
+    fi
 
-# make sure haproxy is enabled
-cat > /etc/default/haproxy <<DEFAULT
+    # make sure haproxy is enabled
+    cat > /etc/default/haproxy <<DEFAULT
 ENABLED=1
 DEFAULT
 
-# configure haproxy
-cat > /etc/haproxy/haproxy.cfg <<HAPROXY
+    # configure haproxy
+    cat > /etc/haproxy/haproxy.cfg <<HAPROXY
 global
     maxconn 350
 
@@ -568,8 +574,9 @@ backend pixel
     server nginx localhost:8082 maxconn 20
 HAPROXY
 
-# this will start it even if currently stopped
-service haproxy restart
+    # this will start it even if currently stopped
+    service haproxy restart
+fi
 
 ###############################################################################
 # websocket service
