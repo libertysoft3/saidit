@@ -52,6 +52,12 @@ services:
       - 5672:5672
     restart: always
 
+  zookeeper:
+    image: jplock/zookeeper:3.4.6
+    ports:
+      - 2181:2181
+    restart: always
+
   reddit:
     build:
       context: .
@@ -67,3 +73,4 @@ services:
       - memcached
       - mcrouter
       - rabbitmq
+      - zookeeper

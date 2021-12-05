@@ -211,6 +211,11 @@ pushd $REDDIT_SRC/reddit/r2
 sudo -u $REDDIT_USER make clean pyx
 
 plugin_str=$(echo -n "$REDDIT_AVAILABLE_PLUGINS" | tr " " ,)
+zookeeper_str="localhost:2181"
+if [ "$INSTALL_PROFILE" = "docker" ]; then
+    zookeeper_str="zookeeper:2181"
+fi
+
 if [ ! -f development.update ]; then
     cat > development.update <<DEVELOPMENT
 # after editing this file, run "make ini" to
@@ -264,6 +269,8 @@ media_fs_root = /srv/www/media
 media_fs_base_url_http = https://%(domain)s/media/
 
 min_membership_create_community = 0
+
+zookeeper_connection_string = $zookeeper_str
 
 [server:main]
 port = 8001
