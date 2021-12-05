@@ -581,8 +581,9 @@ fi
 ###############################################################################
 # websocket service
 ###############################################################################
-if [ ! -f /etc/init/reddit-websockets.conf ]; then
-    cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    if [ ! -f /etc/init/reddit-websockets.conf ]; then
+        cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
 description "websockets service"
 
 stop on runlevel [!2345] or reddit-restart all or reddit-restart websockets
@@ -596,14 +597,16 @@ limit nofile 65535 65535
 
 exec baseplate-serve2 --bind localhost:9001 $REDDIT_SRC/websockets/example.ini
 UPSTART_WEBSOCKETS
+    fi
+    service reddit-websockets restart
 fi
-service reddit-websockets restart
 
 ###############################################################################
 # activity service
 ###############################################################################
-if [ ! -f /etc/init/reddit-activity.conf ]; then
-    cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    if [ ! -f /etc/init/reddit-activity.conf ]; then
+        cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
 description "activity service"
 
 stop on runlevel [!2345] or reddit-restart all or reddit-restart activity
@@ -615,8 +618,9 @@ kill timeout 15
 
 exec baseplate-serve2 --bind localhost:9002 $REDDIT_SRC/activity/example.ini
 UPSTART_ACTIVITY
+    fi
+    service reddit-activity restart
 fi
-service reddit-activity restart
 
 ###############################################################################
 # geoip service
