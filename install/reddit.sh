@@ -712,11 +712,13 @@ done
 # vying with eachother to get there first.
 # the 'app' install profile fails until 'cassandra_seeds', etc. are configured
 # so don't bother starting the app yet.
-reddit-run -c 'print "ok done"'
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    reddit-run -c 'print "ok done"'
 
-# ok, now start everything else up
-initctl emit reddit-stop
-initctl emit reddit-start
+    # ok, now start everything else up
+    initctl emit reddit-stop
+    initctl emit reddit-start
+fi
 
 ###############################################################################
 # Cron Jobs
