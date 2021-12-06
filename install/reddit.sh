@@ -213,11 +213,6 @@ pushd $REDDIT_SRC/reddit/r2
 sudo -u $REDDIT_USER make clean pyx
 
 plugin_str=$(echo -n "$REDDIT_AVAILABLE_PLUGINS" | tr " " ,)
-zookeeper_str="localhost:2181"
-if [ "$INSTALL_PROFILE" = "docker" ]; then
-    zookeeper_str="zookeeper:2181"
-fi
-
 if [ ! -f development.update ]; then
     cat > development.update <<DEVELOPMENT
 # after editing this file, run "make ini" to
@@ -263,6 +258,10 @@ disable_require_admin_otp = true
 domain = $REDDIT_DOMAIN
 oauth_domain = $REDDIT_DOMAIN
 https_endpoint = https://%(domain)s
+share_reply = noreply@$REDDIT_DOMAIN
+feedback_email = noreply@$REDDIT_DOMAIN
+notification_email = noreply@$REDDIT_DOMAIN
+ads_email = noreply@$REDDIT_DOMAIN
 
 plugins = $plugin_str
 
@@ -272,7 +271,21 @@ media_fs_base_url_http = https://%(domain)s/media/
 
 min_membership_create_community = 0
 
-zookeeper_connection_string = $zookeeper_str
+# docker compatibility
+activity_endpoint = localhost:9002
+amqp_host = localhost:5672
+cassandra_seeds = 127.0.0.1:9160
+geoip_location = http://127.0.0.1:5000
+hardcache_memcaches = 127.0.0.1:11211
+lockcaches = 127.0.0.1:11211
+main_db = reddit, 127.0.0.1, *, *, *, *, *
+mcrouter_addr = 127.0.0.1:5050
+permacache_memcaches = 127.0.0.1:11211
+solr_search_host = 127.0.0.1
+solr_doc_host = 127.0.0.1
+solr_subreddit_search_host = 127.0.0.1
+solr_subreddit_doc_host = 127.0.0.1
+zookeeper_connection_string = localhost:2181
 
 [server:main]
 port = 8001
@@ -297,6 +310,23 @@ else
     sed -i "s/^plugins = .*$/plugins = $plugin_str/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^domain = .*$/domain = $REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^oauth_domain = .*$/oauth_domain = $REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
+fi
+
+if [ "$INSTALL_PROFILE" = "docker" ]; then
+    # sed -i "s/^activity_endpoint = .*$/activity_endpoint = localhost:9002/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^amqp_host = .*$/amqp_host = rabbitmq:5672/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^cassandra_seeds = .*$/cassandra_seeds = cassandra:9160/" $REDDIT_SRC/reddit/r2/development.update
+    # sed -i "s/^geoip_location = .*$/geoip_location = http://127.0.0.1:5000/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^hardcache_memcaches = .*$/hardcache_memcaches = memcached:11211/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^lockcaches = .*$/lockcaches = memcached:11211/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^main_db = .*$/main_db = reddit, postgres, *, *, *, *, */" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^mcrouter_addr = .*$/mcrouter_addr = mcrouter:5050/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^permacache_memcaches = .*$/permacache_memcaches = memcached:11211/" $REDDIT_SRC/reddit/r2/development.update
+    # sed -i "s/^solr_search_host = .*$/solr_search_host = 127.0.0.1/" $REDDIT_SRC/reddit/r2/development.update
+    # sed -i "s/^solr_doc_host = .*$/solr_doc_host = 127.0.0.1/" $REDDIT_SRC/reddit/r2/development.update
+    # sed -i "s/^solr_subreddit_search_host = .*$/solr_subreddit_search_host = 127.0.0.1/" $REDDIT_SRC/reddit/r2/development.update
+    # sed -i "s/^solr_subreddit_doc_host = .*$/solr_subreddit_doc_host = 127.0.0.1/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^zookeeper_connection_string = .*$/zookeeper_connection_string = zookeeper:2181/" $REDDIT_SRC/reddit/r2/development.update
 fi
 
 sudo -u $REDDIT_USER make ini
