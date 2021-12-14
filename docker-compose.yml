@@ -1,6 +1,15 @@
 version: '3'
 
 services:
+  # host's nginx is expected to terminate SSL and route all requests here
+  haproxy:
+    build:
+      context: .
+      dockerfile: docker/haproxy/Dockerfile
+    ports:
+      - 8080:8080
+    restart: always
+
   postgres:
     build:
       context: .
@@ -62,8 +71,6 @@ services:
     build:
       context: .
       dockerfile: docker/reddit/Dockerfile
-    environment:
-      PYTHONBUFFERED: 1
     ports:
       - 8001:8001
     restart: always

@@ -110,7 +110,7 @@ if [ "$INSTALL_PROFILE" = "all" ]; then
     apt-get -y upgrade
 fi
 
-# upgrade python
+# upgrade ubuntu 14 python
 $RUNDIR/upgrade_python.sh
 
 # install primary packages
@@ -239,6 +239,7 @@ debug = true
 uncompressedJS = true
 sqlprinting = false
 profile_directory =
+disable_geoip_service = false
 
 db_user = reddit
 db_pass = password
@@ -262,6 +263,9 @@ share_reply = noreply@$REDDIT_DOMAIN
 feedback_email = noreply@$REDDIT_DOMAIN
 notification_email = noreply@$REDDIT_DOMAIN
 ads_email = noreply@$REDDIT_DOMAIN
+login_cookie = redditopensource_session
+admin_cookie = redditopensource_admin
+otp_cookie = redditopensource_otp
 
 plugins = $plugin_str
 
@@ -313,6 +317,7 @@ else
 fi
 
 if [ "$INSTALL_PROFILE" = "docker" ]; then
+    sed -i "s/^disable_geoip_service = .*$/disable_geoip_service = true/" $REDDIT_SRC/reddit/r2/development.update
     # sed -i "s/^activity_endpoint = .*$/activity_endpoint = localhost:9002/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^amqp_host = .*$/amqp_host = rabbitmq:5672/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^cassandra_seeds = .*$/cassandra_seeds = cassandra:9160/" $REDDIT_SRC/reddit/r2/development.update
