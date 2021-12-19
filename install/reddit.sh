@@ -759,8 +759,9 @@ fi
 ###############################################################################
 # Cron Jobs
 ###############################################################################
-if [ ! -f /etc/cron.d/reddit ]; then
-    cat > /etc/cron.d/reddit <<CRON
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    if [ ! -f /etc/cron.d/reddit ]; then
+        cat > /etc/cron.d/reddit <<CRON
 0    3 * * * root /sbin/start --quiet reddit-job-update_sr_names
 30  16 * * * root /sbin/start --quiet reddit-job-update_reddits
 0    * * * * root /sbin/start --quiet reddit-job-update_promos
@@ -792,7 +793,7 @@ PGPASSWORD=password
 0 * * * * root /sbin/start --quiet reddit-job-solr_subreddits
 */15 * * * * root /sbin/start --quiet reddit-job-solr_links
 CRON
-
+    fi
 fi
 
 ###############################################################################

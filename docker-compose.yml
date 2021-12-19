@@ -72,11 +72,19 @@ services:
       context: .
       dockerfile: docker/reddit/Dockerfile
     ports:
+      # main app
       - 8001:8001
+      # websockets
+      - 9001:9001
+      # activity
+      - 9002:9002
+      # geoip
+      - 5000:5000
     restart: always
     depends_on:
       - postgres
       - cassandra
+      # local memcached is required regardless of mcrouter configuration
       - memcached
       - mcrouter
       - rabbitmq

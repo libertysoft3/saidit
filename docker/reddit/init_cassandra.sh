@@ -3,7 +3,7 @@
 # from setup_cassandra.sh
 python <<END
 import pycassa
-sys = pycassa.SystemManager("cassandra:9160")
+sys = pycassa.SystemManager("$CASSANDRA_HOST:$CASSANDRA_PORT")
 
 if "reddit" not in sys.list_keyspaces():
     print "creating keyspace 'reddit'"

@@ -1,0 +1,32 @@
+# Docker version calls the scripts directly instead of starting upstart services
+
+0    3 * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import subreddit_search; subreddit_search.load_all_reddits()'
+30  16 * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import sr_pops; sr_pops.run()'
+0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import promote; promote.Run()'
+*/5  * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib.hardcachebackend import delete_expired; delete_expired()'
+*/2  * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib.utils import utils; utils.find_recent_broken_things(delete=True)'
+*/2  * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import rising; rising.set_rising()'
+0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.trylater import TryLater; TryLater.run()'
+*/15 * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.subreddit import Subreddit; Subreddit.update_popular_subreddits()'
+0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c "from r2.lib.traffic import process_hour; process_hour(\"$slice\")"
+0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.subreddit import SubscriptionsByDay; SubscriptionsByDay.write_counts(days_ago=1); SubscriptionsByDay.write_counts(days_ago=0)'
+
+# liveupdate plugin
+#*    * * * * root /sbin/start --quiet reddit-job-liveupdate_activity
+
+# gold plugin
+#0    0 * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models import update_gold_users; update_gold_users()'
+
+# jobs that recalculate time-limited listings (e.g. top this year)
+# password must match 'db_pass' in development.update
+PGPASSWORD=password
+*/15 * * * * $REDDIT_USER $REDDIT_SRC/reddit/scripts/compute_time_listings link year "['hour', 'day', 'week', 'month', 'year']"
+*/15 * * * * $REDDIT_USER $REDDIT_SRC/reddit/scripts/compute_time_listings comment year "['hour', 'day', 'week', 'month', 'year']"
+
+# disabled by default, uncomment if you need these jobs
+#*     * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import emailer; emailer.send_queued_mail()'
+#*/15  * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib.trending import update_trending_subreddits; update_trending_subreddits()'
+
+# solr search
+0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs.rebuild_subreddit_index()'
+*/15 * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index(sleeptime=2)'

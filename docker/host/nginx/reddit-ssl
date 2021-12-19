@@ -12,6 +12,7 @@ server {
     # run this and uncomment the next line for maximum whatever: sudo openssl dhparam -out /etc/nginx/dhparam.pem 2048
     # ssl_dhparam /etc/nginx/dhparam.pem;
 
+    # TODO: TLSv1.3 is now possible without the host being Ubuntu 14. Modernize this whole shit.
     # Support TLSv1 for Android 4.3 (Samsung Galaxy S3) https://www.ssllabs.com/ssltest/viewClient.html?name=Android&version=4.3&key=61
     # ciphers from https://cipherli.st legacy / old list
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
