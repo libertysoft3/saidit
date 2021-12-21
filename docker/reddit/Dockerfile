@@ -17,10 +17,15 @@ ENV RABBITMQ_PORT 5672
 # for reddit app, replaces sourcing /etc/default/reddit
 ENV REDDIT_ROOT /home/reddit/src/reddit/r2
 ENV REDDIT_INI /home/reddit/src/reddit/r2/run.ini
+# WARNING: hardcoded in 'cron'
 ENV REDDIT_USER reddit
 ENV REDDIT_GROUP nogroup
 ENV REDDIT_CONSUMER_CONFIG /home/reddit/consumer-count.d
 ENV REDDIT_SRC /home/reddit/src
+# for reddit app's compute_time_listings
+# WARNING should match docker-compose POSTGRES_USER
+ENV PGUSER reddit
+ENV PGHOST postgres
 
 RUN apt-get update
 RUN apt-get -y upgrade
@@ -33,7 +38,7 @@ ENV LANG en_US.UTF-8
 RUN apt-get -y install rsyslog cron
 RUN touch /var/log/syslog
 RUN chown syslog:adm /var/log/syslog
-RUN touch /var/log/cron.log
+COPY docker/reddit/cron /etc/cron.d/reddit
 
 # supervisor
 RUN apt-get -y install supervisor
@@ -53,18 +58,9 @@ ADD https://raw.github.com/libertysoft3/saidit/docker/install-reddit.sh install-
 RUN chmod +x install-reddit.sh
 RUN yes | ./install-reddit.sh
 
-# finalize cron setup
-COPY docker/reddit/cron /etc/cron.d/reddit
-RUN crontab /etc/cron.d/reddit
-
-# TODO: click, pixel server
-# EXPOSE 8001
-
 # supervisor cannot easily the control order of execution, so
 # initialize the container with a shell script
 COPY docker/reddit/init_container.sh init_container.sh
 RUN chmod +x init_container.sh
-COPY docker/reddit/init_cassandra.sh init_cassandra.sh
-RUN chmod +x init_cassandra.sh
 
 CMD ["./init_container.sh"]

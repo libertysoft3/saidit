@@ -16,6 +16,7 @@ services:
       dockerfile: docker/postgres/Dockerfile
     environment:
       POSTGRES_USER: reddit
+      # WARNING: also hardcoded in reddit's 'cron' file
       POSTGRES_PASSWORD: password
       POSTGRES_DB: reddit
       POSTGRES_INITDB_ARGS: '--encoding=utf8 --lc-collate=en_US.utf8 --lc-ctype=en_US.utf8'
