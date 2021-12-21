@@ -7,6 +7,9 @@ ENV REDDIT_HOME /home/reddit
 ENV REDDIT_DOMAIN reddit.local
 ENV INSTALL_PROFILE docker
 ENV REDDIT_PLUGINS ''
+# WARNING: should match docker-compose POSTGRES_USER and service name
+ENV PGUSER reddit
+ENV PGHOST postgres
 # for container init
 ENV CASSANDRA_HOST cassandra
 ENV CASSANDRA_PORT 9160
@@ -22,10 +25,6 @@ ENV REDDIT_USER reddit
 ENV REDDIT_GROUP nogroup
 ENV REDDIT_CONSUMER_CONFIG /home/reddit/consumer-count.d
 ENV REDDIT_SRC /home/reddit/src
-# for reddit app's compute_time_listings
-# WARNING should match docker-compose POSTGRES_USER
-ENV PGUSER reddit
-ENV PGHOST postgres
 
 RUN apt-get update
 RUN apt-get -y upgrade

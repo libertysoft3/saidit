@@ -700,6 +700,8 @@ export REDDIT_USER=$REDDIT_USER
 export REDDIT_GROUP=$REDDIT_GROUP
 export REDDIT_CONSUMER_CONFIG=$CONSUMER_CONFIG_ROOT
 export REDDIT_SRC=$REDDIT_SRC
+export PGUSER=$PGUSER
+export PGHOST=$PGHOST
 alias wrap-job=$REDDIT_SRC/reddit/scripts/wrap-job
 alias manage-consumers=$REDDIT_SRC/reddit/scripts/manage-consumers
 DEFAULT
