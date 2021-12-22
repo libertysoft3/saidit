@@ -2,12 +2,17 @@ FROM ubuntu:14.04
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHONBUFFERED 1
-# for reddit installer on container build
+
+# WARNING: some of this is hardcoded in 'cron' and 'supervisord.conf' and 'docker-compose.yml'
+# for reddit installer and wrap-job compatibility
+ENV REDDIT_USER reddit
+ENV REDDIT_GROUP nogroup
+ENV REDDIT_ROOT /home/reddit/src/reddit/r2
+# for reddit installer
 ENV REDDIT_HOME /home/reddit
 ENV REDDIT_DOMAIN reddit.local
-ENV INSTALL_PROFILE docker
 ENV REDDIT_PLUGINS ''
-# WARNING: should match docker-compose POSTGRES_USER and service name
+ENV INSTALL_PROFILE docker
 ENV PGUSER reddit
 ENV PGHOST postgres
 # for container init
@@ -17,14 +22,6 @@ ENV POSTGRES_HOST postgres
 ENV POSTGRES_PORT 5432
 ENV RABBITMQ_HOST rabbitmq
 ENV RABBITMQ_PORT 5672
-# for reddit app, replaces sourcing /etc/default/reddit
-ENV REDDIT_ROOT /home/reddit/src/reddit/r2
-ENV REDDIT_INI /home/reddit/src/reddit/r2/run.ini
-# WARNING: hardcoded in 'cron'
-ENV REDDIT_USER reddit
-ENV REDDIT_GROUP nogroup
-ENV REDDIT_CONSUMER_CONFIG /home/reddit/consumer-count.d
-ENV REDDIT_SRC /home/reddit/src
 
 RUN apt-get update
 RUN apt-get -y upgrade

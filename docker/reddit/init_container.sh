@@ -42,8 +42,7 @@ REDDIT_INIT_ONCE="/home/reddit/install-complete"
 if [ ! -e $REDDIT_INIT_ONCE ]; then
     echo "Initializing reddit with inject_configuration_data()..."
     touch $REDDIT_INIT_ONCE
-    cd $REDDIT_SRC/reddit
-    reddit-run scripts/inject_test_data.py -c 'inject_configuration_data()'
+    reddit-run $REDDIT_HOME/src/reddit/scripts/inject_test_data.py -c 'inject_configuration_data()'
 fi
 
 # start cron service
