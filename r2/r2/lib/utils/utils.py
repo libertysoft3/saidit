@@ -362,9 +362,6 @@ def get_title(url):
             else:
                 g.log.error("get_title() exception: %s" % e)
         return None
-    finally:
-        if r:
-            r.close()
 
 def extract_title(data):
     """Try to extract the page title from a string of HTML.

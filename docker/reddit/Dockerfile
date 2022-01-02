@@ -34,12 +34,10 @@ ENV LANG en_US.UTF-8
 RUN apt-get -y install rsyslog cron
 RUN touch /var/log/syslog
 RUN chown syslog:adm /var/log/syslog
-COPY docker/reddit/cron /etc/cron.d/reddit
 
 # supervisor
 RUN apt-get -y install supervisor
 RUN mkdir -p /var/log/supervisor
-COPY docker/reddit/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # reddit user
 RUN apt-get -y install sudo
@@ -54,9 +52,13 @@ ADD https://raw.github.com/libertysoft3/saidit/docker/install-reddit.sh install-
 RUN chmod +x install-reddit.sh
 RUN yes | ./install-reddit.sh
 
-# supervisor cannot easily the control order of execution, so
-# initialize the container with a shell script
-COPY docker/reddit/init_container.sh init_container.sh
+# reddit app cron replacement
+COPY cron /etc/cron.d/reddit
+
+# reddit app upstart replacement
+# TODO: this and cron and development.update should be editable without rebuilding image? need it on a volume? want quick down change up.
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY init_container.sh init_container.sh
 RUN chmod +x init_container.sh
 
 CMD ["./init_container.sh"]

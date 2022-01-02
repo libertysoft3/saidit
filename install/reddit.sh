@@ -275,6 +275,9 @@ media_fs_base_url_http = https://%(domain)s/media/
 
 min_membership_create_community = 0
 
+# small site tuning
+solr_min_batch = 20
+
 # docker compatibility
 activity_endpoint = localhost:9002
 amqp_host = localhost:5672
@@ -316,6 +319,7 @@ else
     sed -i "s/^oauth_domain = .*$/oauth_domain = $REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
 fi
 
+# TODO no commented out code
 if [ "$INSTALL_PROFILE" = "docker" ]; then
     sed -i "s/^disable_geoip_service = .*$/disable_geoip_service = true/" $REDDIT_SRC/reddit/r2/development.update
     # sed -i "s/^activity_endpoint = .*$/activity_endpoint = localhost:9002/" $REDDIT_SRC/reddit/r2/development.update
@@ -419,118 +423,118 @@ service gunicorn start
 mkdir -p /srv/www/media
 chown $REDDIT_USER:$REDDIT_GROUP /srv/www/media
 
-if [ "$INSTALL_PROFILE" = "all" ]; then
-
-    cat > /etc/nginx/conf.d/reddit.conf <<NGINX
+cat > /etc/nginx/conf.d/reddit.conf <<NGINX
 log_format directlog '\$remote_addr - \$remote_user [\$time_local] '
-                      '"\$request_method \$request_uri \$server_protocol" \$status \$body_bytes_sent '
-                      '"\$http_referer" "\$http_user_agent"';
+                  '"\$request_method \$request_uri \$server_protocol" \$status \$body_bytes_sent '
+                  '"\$http_referer" "\$http_user_agent"';
 NGINX
 
-    cat > /etc/nginx/sites-available/reddit-media <<MEDIA
+cat > /etc/nginx/sites-available/reddit-media <<MEDIA
 server {
-    listen 9000;
+listen 9000;
 
-    expires max;
+expires max;
 
-    location /media/ {
-        alias /srv/www/media/;
-    }
+location /media/ {
+    alias /srv/www/media/;
+}
 }
 MEDIA
 
-    cat > /etc/nginx/sites-available/reddit-pixel <<PIXEL
+cat > /etc/nginx/sites-available/reddit-pixel <<PIXEL
 upstream click_server {
-  server unix:/var/opt/reddit/click.sock fail_timeout=0;
+server unix:/var/opt/reddit/click.sock fail_timeout=0;
 }
 
 server {
-  listen 8082;
-  access_log      /var/log/nginx/traffic/traffic.log directlog;
+listen 8082;
+access_log      /var/log/nginx/traffic/traffic.log directlog;
 
-  location / {
+location / {
 
-    rewrite ^/pixel/of_ /pixel.png;
+rewrite ^/pixel/of_ /pixel.png;
 
-    add_header Last-Modified "";
-    add_header Pragma "no-cache";
+add_header Last-Modified "";
+add_header Pragma "no-cache";
 
-    expires -1;
-    root /srv/www/pixel/;
-  }
+expires -1;
+root /srv/www/pixel/;
+}
 
-  location /click {
-    proxy_pass http://click_server;
-  }
+location /click {
+proxy_pass http://click_server;
+}
 }
 PIXEL
 
+if [ "$INSTALL_PROFILE" = "all" ]; then
     cat > /etc/nginx/sites-available/reddit-ssl <<SSL
 map \$http_upgrade \$connection_upgrade {
-  default upgrade;
-  ''      close;
+default upgrade;
+''      close;
 }
 
 server {
-    listen 443;
+listen 443;
 
-    ssl on;
-    ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
-    ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
-    ssl_dhparam /etc/nginx/dhparam.pem;
+ssl on;
+ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
+ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
+ssl_dhparam /etc/nginx/dhparam.pem;
 
-    # Support TLSv1 for Android 4.3 (Samsung Galaxy S3) https://www.ssllabs.com/ssltest/viewClient.html?name=Android&version=4.3&key=61
-    # ciphers from https://cipherli.st legacy / old list
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA128:DHE-RSA-AES128-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA128:ECDHE-RSA-AES128-SHA384:ECDHE-RSA-AES128-SHA128:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA384:AES128-GCM-SHA128:AES128-SHA128:AES128-SHA128:AES128-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
-    ssl_prefer_server_ciphers on;
-    ssl_session_cache shared:SSL:1m;
-    ssl_stapling on;
-    ssl_stapling_verify on;
-    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
-    # reddit code manages these headers
-    # add_header X-Frame-Options DENY;
-    # add_header X-Content-Type-Options nosniff;
-    # add_header X-XSS-Protection "1; mode=block";
+# Support TLSv1 for Android 4.3 (Samsung Galaxy S3) https://www.ssllabs.com/ssltest/viewClient.html?name=Android&version=4.3&key=61
+# ciphers from https://cipherli.st legacy / old list
+ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA128:DHE-RSA-AES128-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA128:ECDHE-RSA-AES128-SHA384:ECDHE-RSA-AES128-SHA128:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA384:AES128-GCM-SHA128:AES128-SHA128:AES128-SHA128:AES128-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
+ssl_prefer_server_ciphers on;
+ssl_session_cache shared:SSL:1m;
+ssl_stapling on;
+ssl_stapling_verify on;
+add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
+# reddit code manages these headers
+# add_header X-Frame-Options DENY;
+# add_header X-Content-Type-Options nosniff;
+# add_header X-XSS-Protection "1; mode=block";
 
-    location / {
-        proxy_pass http://127.0.0.1:8080;
-        proxy_set_header Host \$http_host;
-        proxy_http_version 1.1;
-        proxy_set_header X-Forwarded-For \$remote_addr;
-        # if CloudFlare instead set
-        # proxy_set_header X-Forwarded-For \$http_cf_connecting_ip;
-        proxy_pass_header Server;
+location / {
+    proxy_pass http://127.0.0.1:8080;
+    proxy_set_header Host \$http_host;
+    proxy_http_version 1.1;
+    proxy_set_header X-Forwarded-For \$remote_addr;
+    # if CloudFlare instead set
+    # proxy_set_header X-Forwarded-For \$http_cf_connecting_ip;
+    proxy_pass_header Server;
 
-        # allow websockets through if desired
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection \$connection_upgrade;
-    }
+    # allow websockets through if desired
+    proxy_set_header Upgrade \$http_upgrade;
+    proxy_set_header Connection \$connection_upgrade;
+}
 }
 SSL
 
-    # SSL stuff
+    # SSL upgrades
     if [ ! -f /etc/nginx/dhparam.pem ]; then
         openssl dhparam -out /etc/nginx/dhparam.pem 2048
     fi
-
-    # remove the default nginx site that may conflict with haproxy
-    rm -rf /etc/nginx/sites-enabled/default
-    # put our config in place
-    ln -nsf /etc/nginx/sites-available/reddit-media /etc/nginx/sites-enabled/
-    ln -nsf /etc/nginx/sites-available/reddit-pixel /etc/nginx/sites-enabled/
-    ln -nsf /etc/nginx/sites-available/reddit-ssl /etc/nginx/sites-enabled/
-
-    # make the pixel log directory
-    mkdir -p /var/log/nginx/traffic
 fi
+
+# remove the default nginx site that may conflict with haproxy
+rm -rf /etc/nginx/sites-enabled/default
+# put our config in place
+ln -nsf /etc/nginx/sites-available/reddit-media /etc/nginx/sites-enabled/
+ln -nsf /etc/nginx/sites-available/reddit-pixel /etc/nginx/sites-enabled/
+
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    ln -nsf /etc/nginx/sites-available/reddit-ssl /etc/nginx/sites-enabled/
+fi
+
+# make the pixel log directory
+mkdir -p /var/log/nginx/traffic
 
 # link the ini file for the Flask click tracker
 ln -nsf $REDDIT_SRC/reddit/r2/development.ini $REDDIT_SRC/reddit/scripts/production.ini
 
-if [ "$INSTALL_PROFILE" = "all" ]; then
-    service nginx restart
-fi
+service nginx restart
 
 ###############################################################################
 # haproxy
@@ -718,7 +722,7 @@ function set_consumer_count {
     fi
 }
 
-set_consumer_count search_q 0
+set_consumer_count search_q 1
 set_consumer_count del_account_q 1
 set_consumer_count scraper_q 1
 set_consumer_count markread_q 1
@@ -731,6 +735,10 @@ set_consumer_count butler_q 1
 set_consumer_count author_query_q 1
 set_consumer_count subreddit_query_q 1
 set_consumer_count domain_query_q 1
+set_consumer_count modmail_email_q 0
+set_consumer_count sitemaps_q 0
+# TODO: workaround consumer being broken, see issues/44
+set_consumer_count event_collector_q 0
 
 chown -R $REDDIT_USER:$REDDIT_GROUP $CONSUMER_CONFIG_ROOT/
 
@@ -794,6 +802,9 @@ PGPASSWORD=password
 # solr search
 0 * * * * root /sbin/start --quiet reddit-job-solr_subreddits
 */15 * * * * root /sbin/start --quiet reddit-job-solr_links
+
+# TODO: workaround consumer being broken, see issues/44
+*/5 * * * * $REDDIT_USER $REDDIT_HOME/rabbitmqadmin purge queue name=event_collector
 CRON
     fi
 fi

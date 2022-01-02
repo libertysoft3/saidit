@@ -4,16 +4,16 @@ services:
   # host's nginx is expected to terminate SSL and route all requests here
   haproxy:
     build:
-      context: .
-      dockerfile: docker/haproxy/Dockerfile
+      context: docker/haproxy
+      dockerfile: Dockerfile
     ports:
       - 8080:8080
     restart: always
 
   postgres:
     build:
-      context: .
-      dockerfile: docker/postgres/Dockerfile
+      context: docker/postgres
+      dockerfile: Dockerfile
     environment:
       POSTGRES_USER: reddit
       # WARNING: also hardcoded in reddit's 'cron' file
@@ -36,16 +36,16 @@ services:
 
   memcached:
     build:
-      context: .
-      dockerfile: docker/memcached/Dockerfile
+      context: docker/memcached
+      dockerfile: Dockerfile
     ports:
       - 11211:11211
     restart: always
 
   mcrouter:
     build:
-      context: .
-      dockerfile: docker/mcrouter/Dockerfile
+      context: docker/mcrouter
+      dockerfile: Dockerfile
     ports:
       - 5050:5050
     restart: always
@@ -53,13 +53,16 @@ services:
       - memcached
 
   rabbitmq:
-    image: rabbitmq:3.5.7
+    build:
+      context: docker/rabbitmq
+      dockerfile: Dockerfile
     environment:
       RABBITMQ_DEFAULT_VHOST: /
       RABBITMQ_DEFAULT_USER: reddit
       RABBITMQ_DEFAULT_PASS: reddit
     ports:
       - 5672:5672
+      - 15672:15672
     restart: always
 
   zookeeper:
@@ -70,17 +73,23 @@ services:
 
   reddit:
     build:
-      context: .
-      dockerfile: docker/reddit/Dockerfile
+      context: docker/reddit
+      dockerfile: Dockerfile
     ports:
       # main app
       - 8001:8001
       # websockets
       - 9001:9001
+      # media
+      - 9000:9000
+      # pixel
+      - 8082:8082
       # activity
-      - 9002:9002
+      # - 9002:9002
       # geoip
-      - 5000:5000
+      # - 5000:5000
+    volumes:
+      - ./volumes/media:/srv/www/media
     restart: always
     depends_on:
       - postgres
