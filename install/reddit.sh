@@ -130,6 +130,11 @@ fi
 # install services (rabbitmq, postgres, memcached, etc.)
 $RUNDIR/install_services.sh
 
+# TODO: workaround consumer being broken, cron needs to purge a queue, see issues/44
+wget https://raw.githubusercontent.com/rabbitmq/rabbitmq-management/v3.7.8/bin/rabbitmqadmin $REDDIT_HOME
+chown $REDDIT_USER $REDDIT_HOME/rabbitmqadmin
+chmod +x rabbitmqadmin
+
 ###############################################################################
 # Install the reddit source repositories
 ###############################################################################
