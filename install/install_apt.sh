@@ -122,4 +122,5 @@ python-pyasn1
 python-openssl
 
 ssl-cert
+python-manhole
 PACKAGES

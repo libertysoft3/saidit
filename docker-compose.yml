@@ -84,10 +84,6 @@ services:
       - 9000:9000
       # pixel
       - 8082:8082
-      # activity
-      # - 9002:9002
-      # geoip
-      # - 5000:5000
     volumes:
       - ./volumes/media:/srv/www/media
     restart: always

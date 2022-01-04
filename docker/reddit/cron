@@ -10,6 +10,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 */2  * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import rising; rising.set_rising()' 2>&1 | /usr/bin/logger -t CRON
 0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.trylater import TryLater; TryLater.run()' 2>&1 | /usr/bin/logger -t CRON
 */15 * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.subreddit import Subreddit; Subreddit.update_popular_subreddits()' 2>&1 | /usr/bin/logger -t CRON
+# TODO: broken, depends on Amazon EMR. This is subreddit traffic statistics.
 0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c "from r2.lib.traffic import process_hour; process_hour(\"$slice\")" 2>&1 | /usr/bin/logger -t CRON
 0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.subreddit import SubscriptionsByDay; SubscriptionsByDay.write_counts(days_ago=1); SubscriptionsByDay.write_counts(days_ago=0)' 2>&1 | /usr/bin/logger -t CRON
 
@@ -37,4 +38,4 @@ PGPASSWORD=password
 
 # TODO: workaround consumer being broken, see issues/44
 # WARNING: $REDDIT_USER and $REDDIT_SRC are hardcoded here. fix with existing Dockerfile and docker-compose environment variables.
-*/5 * * * * reddit /home/reddit/rabbitmqadmin purge queue name=event_collector
+*/5 * * * * reddit /home/reddit/rabbitmqadmin -H rabbitmq -P 15672 -u reddit -p reddit purge queue name=event_collector

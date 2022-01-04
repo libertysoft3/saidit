@@ -3,6 +3,11 @@
 # start rsyslog service
 rsyslogd
 
+# fix permissions of docker-compose volume
+# https://github.com/moby/moby/issues/2259
+# https://github.com/docker/compose/issues/3270
+chown -R $REDDIT_USER:$REDDIT_GROUP /srv/www/media
+
 # wait for cassandra
 while ! nc -vz $CASSANDRA_HOST $CASSANDRA_PORT; do
     echo "Waiting for Cassandra..."

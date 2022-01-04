@@ -327,10 +327,8 @@ fi
 # TODO no commented out code
 if [ "$INSTALL_PROFILE" = "docker" ]; then
     sed -i "s/^disable_geoip_service = .*$/disable_geoip_service = true/" $REDDIT_SRC/reddit/r2/development.update
-    # sed -i "s/^activity_endpoint = .*$/activity_endpoint = localhost:9002/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^amqp_host = .*$/amqp_host = rabbitmq:5672/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^cassandra_seeds = .*$/cassandra_seeds = cassandra:9160/" $REDDIT_SRC/reddit/r2/development.update
-    # sed -i "s/^geoip_location = .*$/geoip_location = http://127.0.0.1:5000/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^hardcache_memcaches = .*$/hardcache_memcaches = memcached:11211/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^lockcaches = .*$/lockcaches = memcached:11211/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^main_db = .*$/main_db = reddit, postgres, *, *, *, *, */" $REDDIT_SRC/reddit/r2/development.update
