@@ -324,7 +324,6 @@ else
     sed -i "s/^oauth_domain = .*$/oauth_domain = $REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
 fi
 
-# TODO no commented out code
 if [ "$INSTALL_PROFILE" = "docker" ]; then
     sed -i "s/^disable_geoip_service = .*$/disable_geoip_service = true/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^amqp_host = .*$/amqp_host = rabbitmq:5672/" $REDDIT_SRC/reddit/r2/development.update
@@ -334,11 +333,11 @@ if [ "$INSTALL_PROFILE" = "docker" ]; then
     sed -i "s/^main_db = .*$/main_db = reddit, postgres, *, *, *, *, */" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^mcrouter_addr = .*$/mcrouter_addr = mcrouter:5050/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^permacache_memcaches = .*$/permacache_memcaches = memcached:11211/" $REDDIT_SRC/reddit/r2/development.update
-    # sed -i "s/^solr_search_host = .*$/solr_search_host = 127.0.0.1/" $REDDIT_SRC/reddit/r2/development.update
-    # sed -i "s/^solr_doc_host = .*$/solr_doc_host = 127.0.0.1/" $REDDIT_SRC/reddit/r2/development.update
-    # sed -i "s/^solr_subreddit_search_host = .*$/solr_subreddit_search_host = 127.0.0.1/" $REDDIT_SRC/reddit/r2/development.update
-    # sed -i "s/^solr_subreddit_doc_host = .*$/solr_subreddit_doc_host = 127.0.0.1/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^zookeeper_connection_string = .*$/zookeeper_connection_string = zookeeper:2181/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^solr_search_host = .*$/solr_search_host = solr/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^solr_doc_host = .*$/solr_doc_host = solr/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^solr_subreddit_search_host = .*$/solr_subreddit_search_host = solr/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^solr_subreddit_doc_host = .*$/solr_subreddit_doc_host = solr" $REDDIT_SRC/reddit/r2/development.update
 fi
 
 sudo -u $REDDIT_USER make ini

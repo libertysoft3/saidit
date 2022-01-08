@@ -112,9 +112,7 @@ Setup Solr and schema
  
 Setup Tomcat for Solr
 
-    $ sudo nano /usr/share/tomcat7/lib/log4j.properties
-    # edit to set:
-    solr.log=/usr/share/solr
+    $ sudo sed -i "s/^solr.log=.*$/solr.log=/usr/share/solr" /usr/share/tomcat7/lib/log4j.properties
  
     $ sudo nano /etc/tomcat7/Catalina/localhost/solr.xml
     # add content:

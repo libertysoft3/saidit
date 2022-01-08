@@ -71,6 +71,14 @@ services:
       - 2181:2181
     restart: always
 
+  solr:
+    build:
+      context: docker/solr
+      dockerfile: Dockerfile
+    ports:
+      - 8983:8983
+    restart: always
+
   reddit:
     build:
       context: docker/reddit
@@ -95,3 +103,4 @@ services:
       - mcrouter
       - rabbitmq
       - zookeeper
+      - solr

@@ -1,0 +1,3 @@
+<Context docBase="/usr/share/solr/example/solr/solr.war" debug="0" crossContext="true">
+  <Environment name="solr/home" type="java.lang.String" value="/usr/share/solr/example/solr" override="true" />
+</Context>
