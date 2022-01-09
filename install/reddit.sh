@@ -337,7 +337,7 @@ if [ "$INSTALL_PROFILE" = "docker" ]; then
     sed -i "s/^solr_search_host = .*$/solr_search_host = solr/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^solr_doc_host = .*$/solr_doc_host = solr/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^solr_subreddit_search_host = .*$/solr_subreddit_search_host = solr/" $REDDIT_SRC/reddit/r2/development.update
-    sed -i "s/^solr_subreddit_doc_host = .*$/solr_subreddit_doc_host = solr" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^solr_subreddit_doc_host = .*$/solr_subreddit_doc_host = solr/" $REDDIT_SRC/reddit/r2/development.update
 fi
 
 sudo -u $REDDIT_USER make ini
