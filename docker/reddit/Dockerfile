@@ -47,7 +47,7 @@ RUN adduser reddit sudo
 
 # reddit app
 RUN apt-get -y install wget
-# TODO: change 'docker' back to 'master' when merged
+# TODO change docker to master
 ADD https://raw.github.com/libertysoft3/saidit/docker/install-reddit.sh install-reddit.sh
 RUN chmod +x install-reddit.sh
 RUN yes | ./install-reddit.sh

@@ -351,6 +351,9 @@ fi
 
 sudo -u $REDDIT_USER make ini
 
+# generate CSS if uncompressedJS = false
+sudo -u $REDDIT_USER make
+
 if [ ! -L run.ini ]; then
     sudo -u $REDDIT_USER ln -nsf development.ini run.ini
 fi

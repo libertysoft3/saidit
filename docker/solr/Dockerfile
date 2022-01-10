@@ -15,7 +15,7 @@ RUN cp -r solr-4.10.4/* /usr/share/solr/
 RUN cp /usr/share/solr/example/webapps/solr.war /usr/share/solr/example/solr/
 RUN cp /usr/share/solr/example/lib/ext/* /usr/share/tomcat7/lib/
 RUN cp /usr/share/solr/example/resources/log4j.properties /usr/share/tomcat7/lib/
-COPY schema4.xml /usr/share/solr/example/solr/collection1/conf/schema.xml
+ADD https://raw.github.com/libertysoft3/saidit/master/solr/schema4.xml /usr/share/solr/example/solr/collection1/conf/schema.xml
 RUN chown -R tomcat7:tomcat7 /usr/share/solr/example
 RUN touch /usr/share/solr/solr.log && chown tomcat7:tomcat7 /usr/share/solr/solr.log
 RUN mkdir -p /usr/share/tomcat7/temp && chown tomcat7:tomcat7 /usr/share/tomcat7/temp
