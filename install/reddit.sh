@@ -244,7 +244,7 @@ debug = true
 uncompressedJS = true
 sqlprinting = false
 profile_directory =
-disable_geoip_service = false
+disable_geoip_service = true
 
 db_user = reddit
 db_pass = password
@@ -254,6 +254,7 @@ admin_message_acct = reddit
 default_sr = frontpage
 automoderator_account = automoderator
 
+brander_site = [DEV] reddit open source
 short_description = open source is awesome
 
 disable_ads = true
@@ -284,10 +285,8 @@ min_membership_create_community = 0
 solr_min_batch = 20
 
 # docker compatibility
-activity_endpoint = localhost:9002
 amqp_host = localhost:5672
 cassandra_seeds = 127.0.0.1:9160
-geoip_location = http://127.0.0.1:5000
 hardcache_memcaches = 127.0.0.1:11211
 lockcaches = 127.0.0.1:11211
 main_db = reddit, 127.0.0.1, *, *, *, *, *
@@ -301,7 +300,7 @@ zookeeper_connection_string = localhost:2181
 
 [server:main]
 port = 8001
-# gunicorn settings, enable in /etc/init/reddit-paster.conf
+# production gunicorn_paster settings, enable in supervisord.conf or /etc/init/reddit-paster.conf
 # set workers (and haproxy's maxconn) to num CPU cores or less for max single server performance
 # workers = 2
 # max_requests = 500
@@ -322,10 +321,13 @@ else
     sed -i "s/^plugins = .*$/plugins = $plugin_str/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^domain = .*$/domain = $REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^oauth_domain = .*$/oauth_domain = $REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^share_reply = .*$/share_reply = noreply@$REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^feedback_email = .*$/feedback_email = noreply@$REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^notification_email = .*$/notification_email = noreply@$REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^ads_email = .*$/ads_email = noreply@$REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
 fi
 
 if [ "$INSTALL_PROFILE" = "docker" ]; then
-    sed -i "s/^disable_geoip_service = .*$/disable_geoip_service = true/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^amqp_host = .*$/amqp_host = rabbitmq:5672/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^cassandra_seeds = .*$/cassandra_seeds = cassandra:9160/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^hardcache_memcaches = .*$/hardcache_memcaches = memcached:11211/" $REDDIT_SRC/reddit/r2/development.update
@@ -338,6 +340,13 @@ if [ "$INSTALL_PROFILE" = "docker" ]; then
     sed -i "s/^solr_doc_host = .*$/solr_doc_host = solr/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^solr_subreddit_search_host = .*$/solr_subreddit_search_host = solr/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^solr_subreddit_doc_host = .*$/solr_subreddit_doc_host = solr/" $REDDIT_SRC/reddit/r2/development.update
+
+    # docker version uses production settings by default, like supervisord.conf
+    sed -i "s/^debug = .*$/debug = false/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^uncompressedJS = .*$/uncompressedJS = false/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^# workers = .*$/workers = 2/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^# max_requests = .*$/max_requests = 500/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^# timeout = .*$/timeout = 10/" $REDDIT_SRC/reddit/r2/development.update
 fi
 
 sudo -u $REDDIT_USER make ini

@@ -19,6 +19,7 @@ COPY schema4.xml /usr/share/solr/example/solr/collection1/conf/schema.xml
 RUN chown -R tomcat7:tomcat7 /usr/share/solr/example
 RUN touch /usr/share/solr/solr.log && chown tomcat7:tomcat7 /usr/share/solr/solr.log
 RUN mkdir -p /usr/share/tomcat7/temp && chown tomcat7:tomcat7 /usr/share/tomcat7/temp
+RUN mkdir -p /usr/share/tomcat7/logs && chown tomcat7:tomcat7 /usr/share/tomcat7/logs
 RUN sed -i "s/^solr.log=.*$/solr.log=\/usr\/share\/solr/" /usr/share/tomcat7/lib/log4j.properties
 COPY solr.xml /etc/tomcat7/Catalina/localhost/solr.xml
 RUN sed -i "s/<Connector port=.*$/<Connector port='8983' protocol='HTTP\/1.1'/" /etc/tomcat7/server.xml
@@ -32,5 +33,6 @@ RUN ln -s /var/lib/tomcat7/conf/    /usr/share/tomcat7/conf
 CMD ["/usr/share/tomcat7/bin/catalina.sh", "run"]
 
 # verify configuration valid
-# $ docker exec -it dev_solr_1 /bin/bash
-# $ /usr/share/tomcat7/bin/configtest.sh
+# $ /usr/share/tomcat7/bin/catalina.sh configtest
+# logs
+# $ tail -f /usr/share/tomcat7/logs/*

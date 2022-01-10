@@ -1,12 +1,12 @@
 version: '3'
 
 services:
-  # host's nginx is expected to terminate SSL and route all requests here
   haproxy:
     build:
       context: docker/haproxy
       dockerfile: Dockerfile
     ports:
+      # host's nginx is expected to terminate SSL and route all reddit requests here
       - 8080:8080
     restart: always
 
@@ -23,6 +23,7 @@ services:
     ports:
       - 5432:5432
     volumes:
+      # can alternatively be a named volume
       - ./volumes/postgres:/var/lib/postgresql/data
     restart: always
 
@@ -31,7 +32,8 @@ services:
     ports:
       - 9160:9160
     volumes:
-      - ./volumes/cassandra:/var/lib/cassandra/data
+      # can alternatively be a named volume
+      - ./volumes/cassandra:/var/lib/cassandra
     restart: always
 
   memcached:
@@ -84,23 +86,26 @@ services:
       context: docker/reddit
       dockerfile: Dockerfile
     ports:
-      # main app
       - 8001:8001
-      # websockets
-      - 9001:9001
-      # media
       - 9000:9000
-      # pixel
       - 8082:8082
     volumes:
+      # starts empty so bind mount can replace container directory, can alternatively be a named volume
       - ./volumes/media:/srv/www/media
+      # persist existing development.update and future changes
+      - reddit_r2_data:/home/reddit/src/reddit/r2
+      # persist existing cron and future changes
+      - reddit_cron_data:/etc/cron.d
     restart: always
     depends_on:
       - postgres
       - cassandra
-      # local memcached is required regardless of mcrouter configuration
       - memcached
       - mcrouter
       - rabbitmq
       - zookeeper
       - solr
+
+volumes:
+  reddit_r2_data:
+  reddit_cron_data:

@@ -3,12 +3,10 @@ FROM ubuntu:14.04
 ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHONBUFFERED 1
 
+# for reddit installer
 # WARNING: some of this is hardcoded in 'cron' and 'supervisord.conf' and 'docker-compose.yml'
-# for reddit installer and wrap-job compatibility
 ENV REDDIT_USER reddit
 ENV REDDIT_GROUP nogroup
-ENV REDDIT_ROOT /home/reddit/src/reddit/r2
-# for reddit installer
 ENV REDDIT_HOME /home/reddit
 ENV REDDIT_DOMAIN reddit.local
 ENV REDDIT_PLUGINS ''
@@ -22,6 +20,8 @@ ENV POSTGRES_HOST postgres
 ENV POSTGRES_PORT 5432
 ENV RABBITMQ_HOST rabbitmq
 ENV RABBITMQ_PORT 5672
+# for container run
+ENV PYTHONPATH "${PYTHONPATH}:/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2.7/dist-packages"
 
 RUN apt-get update
 RUN apt-get -y upgrade
@@ -56,7 +56,6 @@ RUN yes | ./install-reddit.sh
 COPY cron /etc/cron.d/reddit
 
 # reddit app upstart replacement
-# TODO: this and cron and development.update should be editable without rebuilding image? need it on a volume? want quick down change up.
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY init_container.sh init_container.sh
 RUN chmod +x init_container.sh
