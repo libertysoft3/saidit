@@ -51,6 +51,7 @@ if [ ! -e $REDDIT_INIT_ONCE ]; then
 fi
 
 # start cron service
+chmod go-rwx /etc/cron.d/reddit
 cron
 
 # supervisord is the main docker foreground process

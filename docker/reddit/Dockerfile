@@ -47,13 +47,13 @@ RUN adduser reddit sudo
 
 # reddit app
 RUN apt-get -y install wget
-# TODO change docker to master
-ADD https://raw.github.com/libertysoft3/saidit/docker/install-reddit.sh install-reddit.sh
+ADD https://raw.github.com/libertysoft3/saidit/master/install-reddit.sh install-reddit.sh
 RUN chmod +x install-reddit.sh
 RUN yes | ./install-reddit.sh
 
 # reddit app cron replacement
 COPY cron /etc/cron.d/reddit
+RUN chmod go-rwx /etc/cron.d/reddit
 
 # reddit app upstart replacement
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf

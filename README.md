@@ -2,73 +2,58 @@
 
 SaidIt is a [reddit open source](https://github.com/reddit-archive/reddit) continuation and fork with:
 
-* critical bug fixes and restored configurations
-* admin user bans and ip bans
+* critical bug fixes and documentation
 * configurable site branding and home page
 * enhanced expandos/embeds: more media providers, direct media links, expandos in comments/sidebars/wiki pages
+* admin user bans and ip bans
 
-Optional SaidIt customizations include:
+Optional SaidIt features include:
 
 * two dimensional voting and content sorting where insightful is +2 and fun is +1
 * public moderator logs
 * [web IRC](https://github.com/libertysoft3/lounge-autoconnect) chat integration
 
-## Installation
+There are two supported installation methods- Docker or an Ubuntu 14 LTS server. Docker is recommended for production use and comes pre-configured for maximum performance. Running Ubuntu 14 LTS in a virtual machine is more flexible and is recommended for development use. Both approaches can be accomplished with Windows, MacOS, or Linux. Both approaches require that you make DNS changes to your machine to resolve https://reddit.local to your server.
 
-There are two ways to set up a saidit server: on a standalone physical server, or through a Virtual Machine environment (running within another OS such as linux, MacOS, or Windows) for development and testing purposes.
+## Docker installation
 
-### Setting up a virtual machine
+The instructions assume that you are using Ubuntu 20 LTS as your Docker host.
 
-1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-1. Download the latest [Ubuntu 14.04](http://releases.ubuntu.com/14.04/) server .iso file "64-bit PC (AMD64) server install image"
-1. Start VirtualBox and click 'New'
-   1. Type: Linux
-   1. Version: Ubuntu (64-bit)
-   1. Memory Size: 4000 MB (minimum)
-   1. File location and size: 30.0 GB (minimim)
-1. Right click the new VM and choose 'Settings'
-   1. Network: Adapter 1: Attached to: "Bridged Adapter"
-   1. Storage: select the empty CD icon and click "Choose Virtual Optical Disk File" and choose the ubuntu server .iso file
-1. Select the new VM and click 'Start'
-1. Install Ubuntu and choose following options, but leaving all other options with the default selection:
-   1. Username: reddit
-   1. Choose software to install: select OpenSSH, but no others
-1. Complete Ubuntu installation
+### Prepare host OS
 
-From this point forward you can start your VM with Start -> Headless Start and connect via ssh as user 'reddit' if you wish, using a program like [PuTTY](https://www.putty.org/). Don't forget to shut down your VM by right clicking it and choosing Close -> ACPI Shutdown before shutting down your host OS or you may corrupt your VM.
+    $ sudo apt update && sudo apt -y upgrade
+    $ sudo apt install nginx docker docker-compose git
+    $ sudo usermod -a -G docker $USER
+    $ sudo systemctl enable docker && sudo systemctl restart docker
 
-### Setting up a physical server
+Optionally fix any DNS timeout issues, for virtual machines (warning is Google DNS)
 
-1. Download the latest [Ubuntu 14.04](http://releases.ubuntu.com/14.04/) server .ISO file "64-bit PC (AMD64) server install image"
-1. Download [Rufus](https://rufus.ie/) (as recommended by Ubuntu) and use it to write the .ISO to a USB drive
-1. Once finished, put the USB drive in the server and boot to it
-1. Install Ubuntu with the following options, but leaving all other options with the default selection:
-   1. Username: reddit
-   1. Choose software to install: select OpenSSH, but no others
-1. When install finishes, remove USB drive and boot to linux
-
-From this point forward physical access to the server is no longer needed and you can ssh in as the 'reddit' user remotely if you wish, using a program like [PuTTY](https://www.putty.org/).
-
-
-### Configure DNS for reddit.local
-
-To use your reddit server, you are expected to be able to resolve reddit.local and https://reddit.local. First, find the ip address of your saidit server by running:
-
-    $ ifconfig
-    # note the 'inet addr' for device 'eth0' or similar
-
-Then update your `hosts` file on your development machine/host OS. For example, on linux with saidit server ip 192.168.1.20  run:
-
-    $ sudo sed -i '1i 192.168.1.20 reddit.local' /etc/hosts
-
-For Windows and MacOS see https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
-
+    $ sudo apt install resolvconf
+    $ sudo sed -i "1i nameserver 8.8.4.4" /etc/resolv.conf && sudo sed -i "1i nameserver 8.8.8.8" /etc/resolv.conf
+    $ sudo systemctl enable resolvconf.service && sudo systemctl restart resolvconf.service
 
 ### Install reddit open source
 
-SSH into your saidit server
+    $ cd ~
+    $ git clone https://github.com/libertysoft3/saidit.git
+    $ cp saidit/docker-compose.yml . && cp -r saidit/docker .
+    $ rm -rf saidit
+    $ docker-compose up -d
 
-    $ ssh reddit@reddit.local
+### Configure host OS's nginx
+
+    $ sudo cp docker/host/nginx/reddit-ssl /etc/nginx/sites-available/reddit-ssl
+    $ sudo ln -s /etc/nginx/sites-available/reddit-ssl /etc/nginx/sites-enabled/reddit-ssl
+    $ sudo openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout /etc/ssl/private/key.pem -out /etc/ssl/certs/cert.pem
+    $ sudo openssl dhparam -out /etc/ssl/dhparam.pem 2048
+    $ sudo nginx -t
+    $ sudo service nginx restart
+
+## Ubuntu 14 installation
+
+These instructions assume that you have setup a [VirtualBox](https://www.virtualbox.org/wiki/Downloads) virtual machine running [Ubuntu 14.04](http://releases.ubuntu.com/14.04/) with 2+ CPU cores, 4GB of RAM, 30GB of disk space, user 'reddit' and OpenSSH server. Connecting to your virtual machine using SSH is recommended for easy copy and paste.
+
+### Install reddit open source
 
 Run the installer
 
@@ -84,14 +69,13 @@ Option A: start with an empty reddit
     $ reddit-run scripts/inject_test_data.py -c 'inject_configuration_data()'
     $ sudo start reddit-job-update_reddits
 
-Option B: populate sample users, posts, comments, and subs
+Option B: populate sample user data including posts, comments, and subs
 
     $ cd ~/src/reddit
     $ reddit-run scripts/inject_test_data.py -c 'inject_test_data()'
     $ sudo start reddit-job-update_reddits
 
-
-### Install search (optional)
+### Install search
  
 Install Solr
 
@@ -148,10 +132,14 @@ Index site content
     $ sudo start reddit-job-solr_subreddits
     $ sudo start reddit-job-solr_links
 
+## Configure DNS for reddit.local
+
+To access your reddit open source app, you must be able to resolve https://reddit.local to your Docker host or virtual machine. First, find the ip address of your Docker host or virtual machine. Then update your 'hosts' file (on your desktop or wherever your web browser is running). On linux, update `/etc/hosts`, on Windows and MacOS, see https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
+
 ## Next steps
 
-* access your site at https://reddit.local
-* change the default password of 'password' for accounts 'reddit' and 'automoderator'
+* access reddit open source at https://reddit.local
+* login and change the passwords of accounts 'reddit' and 'automoderator', they have default password 'password'
 * [admin guide](https://github.com/libertysoft3/saidit/wiki/Admin-guide)
 * [dev guide](https://github.com/libertysoft3/saidit/wiki/Dev-guide)
 * [install chat](https://github.com/libertysoft3/saidit/wiki/Chat#saidit-chat-installation)
@@ -161,6 +149,5 @@ Index site content
 * [r/RedditOpenSource](https://www.reddit.com/r/RedditOpenSource)
 * [r/redditdev](https://www.reddit.com/r/redditdev)
 * [r/RedditAlternatives](https://www.reddit.com/r/RedditAlternatives)
-
 
 ![Image of Saidit logo](https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWA5A1rZZJu_oFjSkUk42Ds5-UDm6c9HNkwSngMYAtvc_Dybkt)

@@ -2,23 +2,23 @@
 # docker compatibility, compute_time_listings needs /usr/local/bin in PATH, default is /usr/bin:/bin
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-0    3 * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import subreddit_search; subreddit_search.load_all_reddits()' 2>&1 | /usr/bin/logger -t CRON
-30  16 * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import sr_pops; sr_pops.run()' 2>&1 | /usr/bin/logger -t CRON
-0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import promote; promote.Run()' 2>&1 | /usr/bin/logger -t CRON
-*/5  * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib.hardcachebackend import delete_expired; delete_expired()' 2>&1 | /usr/bin/logger -t CRON
-*/2  * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib.utils import utils; utils.find_recent_broken_things(delete=True)' 2>&1 | /usr/bin/logger -t CRON
-*/2  * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import rising; rising.set_rising()' 2>&1 | /usr/bin/logger -t CRON
-0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.trylater import TryLater; TryLater.run()' 2>&1 | /usr/bin/logger -t CRON
-*/15 * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.subreddit import Subreddit; Subreddit.update_popular_subreddits()' 2>&1 | /usr/bin/logger -t CRON
+0    3 * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import subreddit_search; subreddit_search.load_all_reddits()' 2>&1 | /usr/bin/logger -t CRON
+30  16 * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import sr_pops; sr_pops.run()' 2>&1 | /usr/bin/logger -t CRON
+0    * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import promote; promote.Run()' 2>&1 | /usr/bin/logger -t CRON
+*/5  * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib.hardcachebackend import delete_expired; delete_expired()' 2>&1 | /usr/bin/logger -t CRON
+*/2  * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib.utils import utils; utils.find_recent_broken_things(delete=True)' 2>&1 | /usr/bin/logger -t CRON
+*/2  * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import rising; rising.set_rising()' 2>&1 | /usr/bin/logger -t CRON
+0    * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.trylater import TryLater; TryLater.run()' 2>&1 | /usr/bin/logger -t CRON
+*/15 * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.subreddit import Subreddit; Subreddit.update_popular_subreddits()' 2>&1 | /usr/bin/logger -t CRON
 # TODO: subreddit traffic stats are broken, depends on Amazon EMR, see issues/110
-0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c "from r2.lib.traffic import process_hour; process_hour(\"$slice\")" 2>&1 | /usr/bin/logger -t CRON
-0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.subreddit import SubscriptionsByDay; SubscriptionsByDay.write_counts(days_ago=1); SubscriptionsByDay.write_counts(days_ago=0)' 2>&1 | /usr/bin/logger -t CRON
+0    * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c "from r2.lib.traffic import process_hour; process_hour(\"$slice\")" 2>&1 | /usr/bin/logger -t CRON
+0    * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models.subreddit import SubscriptionsByDay; SubscriptionsByDay.write_counts(days_ago=1); SubscriptionsByDay.write_counts(days_ago=0)' 2>&1 | /usr/bin/logger -t CRON
 
 # liveupdate plugin
 #*    * * * * root /sbin/start --quiet reddit-job-liveupdate_activity 2>&1 | /usr/bin/logger -t CRON
 
 # gold plugin
-#0    0 * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models import update_gold_users; update_gold_users()' 2>&1 | /usr/bin/logger -t CRON
+#0    0 * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.models import update_gold_users; update_gold_users()' 2>&1 | /usr/bin/logger -t CRON
 
 # jobs that recalculate time-limited listings (e.g. top this year)
 # WARNING: password must match docker-compose.yml's 'POSTGRES_PASSWORD' and development.update's 'db_pass'
@@ -28,12 +28,12 @@ PGPASSWORD=password
 */15 * * * * reddit /home/reddit/src/reddit/scripts/compute_time_listings comment year "['hour', 'day', 'week', 'month', 'year']" 2>&1 | /usr/bin/logger -t CRON
 
 # disabled by default, uncomment if you need these jobs
-#*     * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import emailer; emailer.send_queued_mail()' 2>&1 | /usr/bin/logger -t CRON
-#*/15  * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib.trending import update_trending_subreddits; update_trending_subreddits()' 2>&1 | /usr/bin/logger -t CRON
+#*     * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib import emailer; emailer.send_queued_mail()' 2>&1 | /usr/bin/logger -t CRON
+#*/15  * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'from r2.lib.trending import update_trending_subreddits; update_trending_subreddits()' 2>&1 | /usr/bin/logger -t CRON
 
 # solr search
-0    * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs.rebuild_subreddit_index()' 2>&1 | /usr/bin/logger -t CRON
-*/15 * * * * root /bin/bash . /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()' 2>&1 | /usr/bin/logger -t CRON
+0    * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs.rebuild_subreddit_index()' 2>&1 | /usr/bin/logger -t CRON
+*/15 * * * * root /bin/bash source /etc/default/reddit && wrap-job paster run $REDDIT_INI -c 'import r2.lib.providers.search.solr as cs; cs._rebuild_link_index()' 2>&1 | /usr/bin/logger -t CRON
 
 # TODO: workaround consumer being broken, see issues/44
 # WARNING: $REDDIT_USER and $REDDIT_SRC are hardcoded here. fix with existing Dockerfile and docker-compose environment variables.
