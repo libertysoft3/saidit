@@ -48,6 +48,7 @@ elif [ "$INSTALL_PROFILE" = "docker" ]; then
 postgresql-client
 redis-server
 gunicorn
+nginx
 PACKAGES
 
 fi

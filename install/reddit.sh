@@ -105,10 +105,12 @@ done
 
 # run an aptitude update to make sure python-software-properties
 # dependencies are found
-apt-get update
-apt-get -y upgrade
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    apt-get update
+    apt-get -y upgrade
+fi
 
-# upgrade python
+# upgrade ubuntu 14 python
 $RUNDIR/upgrade_python.sh
 
 # install primary packages
@@ -127,6 +129,11 @@ fi
 
 # install services (rabbitmq, postgres, memcached, etc.)
 $RUNDIR/install_services.sh
+
+# TODO: workaround consumer being broken, cron needs to purge a queue, see issues/44
+wget https://raw.githubusercontent.com/rabbitmq/rabbitmq-management/v3.7.8/bin/rabbitmqadmin -O $REDDIT_HOME/rabbitmqadmin
+chown $REDDIT_USER:$REDDIT_GROUP $REDDIT_HOME/rabbitmqadmin
+chmod +x $REDDIT_HOME/rabbitmqadmin
 
 ###############################################################################
 # Install the reddit source repositories
@@ -237,6 +244,7 @@ debug = true
 uncompressedJS = true
 sqlprinting = false
 profile_directory =
+disable_geoip_service = true
 
 db_user = reddit
 db_pass = password
@@ -246,6 +254,7 @@ admin_message_acct = reddit
 default_sr = frontpage
 automoderator_account = automoderator
 
+brander_site = [DEV] reddit open source
 short_description = open source is awesome
 
 disable_ads = true
@@ -256,6 +265,13 @@ disable_require_admin_otp = true
 domain = $REDDIT_DOMAIN
 oauth_domain = $REDDIT_DOMAIN
 https_endpoint = https://%(domain)s
+share_reply = noreply@$REDDIT_DOMAIN
+feedback_email = noreply@$REDDIT_DOMAIN
+notification_email = noreply@$REDDIT_DOMAIN
+ads_email = noreply@$REDDIT_DOMAIN
+login_cookie = redditopensource_session
+admin_cookie = redditopensource_admin
+otp_cookie = redditopensource_otp
 
 plugins = $plugin_str
 
@@ -265,9 +281,26 @@ media_fs_base_url_http = https://%(domain)s/media/
 
 min_membership_create_community = 0
 
+# small site tuning
+solr_min_batch = 20
+
+# docker compatibility
+amqp_host = localhost:5672
+cassandra_seeds = 127.0.0.1:9160
+hardcache_memcaches = 127.0.0.1:11211
+lockcaches = 127.0.0.1:11211
+main_db = reddit, 127.0.0.1, *, *, *, *, *
+mcrouter_addr = 127.0.0.1:5050
+permacache_memcaches = 127.0.0.1:11211
+solr_search_host = 127.0.0.1
+solr_doc_host = 127.0.0.1
+solr_subreddit_search_host = 127.0.0.1
+solr_subreddit_doc_host = 127.0.0.1
+zookeeper_connection_string = localhost:2181
+
 [server:main]
 port = 8001
-# gunicorn settings, enable in /etc/init/reddit-paster.conf
+# production gunicorn_paster settings, enable in supervisord.conf or /etc/init/reddit-paster.conf
 # set workers (and haproxy's maxconn) to num CPU cores or less for max single server performance
 # workers = 2
 # max_requests = 500
@@ -288,9 +321,38 @@ else
     sed -i "s/^plugins = .*$/plugins = $plugin_str/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^domain = .*$/domain = $REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
     sed -i "s/^oauth_domain = .*$/oauth_domain = $REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^share_reply = .*$/share_reply = noreply@$REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^feedback_email = .*$/feedback_email = noreply@$REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^notification_email = .*$/notification_email = noreply@$REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^ads_email = .*$/ads_email = noreply@$REDDIT_DOMAIN/" $REDDIT_SRC/reddit/r2/development.update
+fi
+
+if [ "$INSTALL_PROFILE" = "docker" ]; then
+    sed -i "s/^amqp_host = .*$/amqp_host = rabbitmq:5672/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^cassandra_seeds = .*$/cassandra_seeds = cassandra:9160/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^hardcache_memcaches = .*$/hardcache_memcaches = memcached:11211/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^lockcaches = .*$/lockcaches = memcached:11211/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^main_db = .*$/main_db = reddit, postgres, *, *, *, *, */" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^mcrouter_addr = .*$/mcrouter_addr = mcrouter:5050/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^permacache_memcaches = .*$/permacache_memcaches = memcached:11211/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^zookeeper_connection_string = .*$/zookeeper_connection_string = zookeeper:2181/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^solr_search_host = .*$/solr_search_host = solr/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^solr_doc_host = .*$/solr_doc_host = solr/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^solr_subreddit_search_host = .*$/solr_subreddit_search_host = solr/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^solr_subreddit_doc_host = .*$/solr_subreddit_doc_host = solr/" $REDDIT_SRC/reddit/r2/development.update
+
+    # docker version uses production settings by default, like supervisord.conf
+    sed -i "s/^debug = .*$/debug = false/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^uncompressedJS = .*$/uncompressedJS = false/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^# workers = .*$/workers = 2/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^# max_requests = .*$/max_requests = 500/" $REDDIT_SRC/reddit/r2/development.update
+    sed -i "s/^# timeout = .*$/timeout = 10/" $REDDIT_SRC/reddit/r2/development.update
 fi
 
 sudo -u $REDDIT_USER make ini
+
+# generate CSS if uncompressedJS = false
+sudo -u $REDDIT_USER make
 
 if [ ! -L run.ini ]; then
     sudo -u $REDDIT_USER ln -nsf development.ini run.ini
@@ -419,9 +481,10 @@ server {
 }
 PIXEL
 
-cat > /etc/nginx/sites-available/reddit-ssl <<SSL
-map \$http_upgrade \$connection_upgrade {
-  default upgrade;
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    cat > /etc/nginx/sites-available/reddit-ssl <<SSL
+  map \$http_upgrade \$connection_upgrade {
+default upgrade;
   ''      close;
 }
 
@@ -463,9 +526,10 @@ server {
 }
 SSL
 
-# SSL stuff
-if [ ! -f /etc/nginx/dhparam.pem ]; then
-    openssl dhparam -out /etc/nginx/dhparam.pem 2048
+    # SSL upgrades
+    if [ ! -f /etc/nginx/dhparam.pem ]; then
+        openssl dhparam -out /etc/nginx/dhparam.pem 2048
+    fi
 fi
 
 # remove the default nginx site that may conflict with haproxy
@@ -473,7 +537,10 @@ rm -rf /etc/nginx/sites-enabled/default
 # put our config in place
 ln -nsf /etc/nginx/sites-available/reddit-media /etc/nginx/sites-enabled/
 ln -nsf /etc/nginx/sites-available/reddit-pixel /etc/nginx/sites-enabled/
-ln -nsf /etc/nginx/sites-available/reddit-ssl /etc/nginx/sites-enabled/
+
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    ln -nsf /etc/nginx/sites-available/reddit-ssl /etc/nginx/sites-enabled/
+fi
 
 # make the pixel log directory
 mkdir -p /var/log/nginx/traffic
@@ -486,19 +553,20 @@ service nginx restart
 ###############################################################################
 # haproxy
 ###############################################################################
-if [ -e /etc/haproxy/haproxy.cfg ]; then
-    BACKUP_HAPROXY=$(mktemp /etc/haproxy/haproxy.cfg.XXX)
-    echo "Backing up /etc/haproxy/haproxy.cfg to $BACKUP_HAPROXY"
-    cat /etc/haproxy/haproxy.cfg > $BACKUP_HAPROXY
-fi
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    if [ -e /etc/haproxy/haproxy.cfg ]; then
+        BACKUP_HAPROXY=$(mktemp /etc/haproxy/haproxy.cfg.XXX)
+        echo "Backing up /etc/haproxy/haproxy.cfg to $BACKUP_HAPROXY"
+        cat /etc/haproxy/haproxy.cfg > $BACKUP_HAPROXY
+    fi
 
-# make sure haproxy is enabled
-cat > /etc/default/haproxy <<DEFAULT
+    # make sure haproxy is enabled
+    cat > /etc/default/haproxy <<DEFAULT
 ENABLED=1
 DEFAULT
 
-# configure haproxy
-cat > /etc/haproxy/haproxy.cfg <<HAPROXY
+    # configure haproxy
+    cat > /etc/haproxy/haproxy.cfg <<HAPROXY
 global
     maxconn 350
 
@@ -568,14 +636,16 @@ backend pixel
     server nginx localhost:8082 maxconn 20
 HAPROXY
 
-# this will start it even if currently stopped
-service haproxy restart
+    # this will start it even if currently stopped
+    service haproxy restart
+fi
 
 ###############################################################################
 # websocket service
 ###############################################################################
-if [ ! -f /etc/init/reddit-websockets.conf ]; then
-    cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    if [ ! -f /etc/init/reddit-websockets.conf ]; then
+        cat > /etc/init/reddit-websockets.conf << UPSTART_WEBSOCKETS
 description "websockets service"
 
 stop on runlevel [!2345] or reddit-restart all or reddit-restart websockets
@@ -589,14 +659,16 @@ limit nofile 65535 65535
 
 exec baseplate-serve2 --bind localhost:9001 $REDDIT_SRC/websockets/example.ini
 UPSTART_WEBSOCKETS
+    fi
+    service reddit-websockets restart
 fi
-service reddit-websockets restart
 
 ###############################################################################
 # activity service
 ###############################################################################
-if [ ! -f /etc/init/reddit-activity.conf ]; then
-    cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    if [ ! -f /etc/init/reddit-activity.conf ]; then
+        cat > /etc/init/reddit-activity.conf << UPSTART_ACTIVITY
 description "activity service"
 
 stop on runlevel [!2345] or reddit-restart all or reddit-restart activity
@@ -608,8 +680,9 @@ kill timeout 15
 
 exec baseplate-serve2 --bind localhost:9002 $REDDIT_SRC/activity/example.ini
 UPSTART_ACTIVITY
+    fi
+    service reddit-activity restart
 fi
-service reddit-activity restart
 
 ###############################################################################
 # geoip service
@@ -644,6 +717,9 @@ export REDDIT_INI=$REDDIT_SRC/reddit/r2/run.ini
 export REDDIT_USER=$REDDIT_USER
 export REDDIT_GROUP=$REDDIT_GROUP
 export REDDIT_CONSUMER_CONFIG=$CONSUMER_CONFIG_ROOT
+export REDDIT_SRC=$REDDIT_SRC
+export PGUSER=$PGUSER
+export PGHOST=$PGHOST
 alias wrap-job=$REDDIT_SRC/reddit/scripts/wrap-job
 alias manage-consumers=$REDDIT_SRC/reddit/scripts/manage-consumers
 DEFAULT
@@ -660,7 +736,7 @@ function set_consumer_count {
     fi
 }
 
-set_consumer_count search_q 0
+set_consumer_count search_q 1
 set_consumer_count del_account_q 1
 set_consumer_count scraper_q 1
 set_consumer_count markread_q 1
@@ -673,6 +749,10 @@ set_consumer_count butler_q 1
 set_consumer_count author_query_q 1
 set_consumer_count subreddit_query_q 1
 set_consumer_count domain_query_q 1
+set_consumer_count modmail_email_q 0
+set_consumer_count sitemaps_q 0
+# TODO: workaround consumer being broken, see issues/44
+set_consumer_count event_collector_q 0
 
 chown -R $REDDIT_USER:$REDDIT_GROUP $CONSUMER_CONFIG_ROOT/
 
@@ -691,21 +771,21 @@ done
 ###############################################################################
 
 # the initial database setup should be done by one process rather than a bunch
-# vying with eachother to get there first.
-# the 'app' install profile fails until 'cassandra_seeds', etc. are configured
-# so don't bother starting the app yet.
-reddit-run -c 'print "ok done"'
+# vying with eachother to get there first
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    reddit-run -c 'print "ok done"'
 
-# ok, now start everything else up
-initctl emit reddit-stop
-initctl emit reddit-start
+    # ok, now start everything else up
+    initctl emit reddit-stop
+    initctl emit reddit-start
+fi
 
 ###############################################################################
 # Cron Jobs
 ###############################################################################
-if [ ! -f /etc/cron.d/reddit ]; then
-    cat > /etc/cron.d/reddit <<CRON
-# install profile: all
+if [ "$INSTALL_PROFILE" = "all" ]; then
+    if [ ! -f /etc/cron.d/reddit ]; then
+        cat > /etc/cron.d/reddit <<CRON
 0    3 * * * root /sbin/start --quiet reddit-job-update_sr_names
 30  16 * * * root /sbin/start --quiet reddit-job-update_reddits
 0    * * * * root /sbin/start --quiet reddit-job-update_promos
@@ -736,8 +816,11 @@ PGPASSWORD=password
 # solr search
 0 * * * * root /sbin/start --quiet reddit-job-solr_subreddits
 */15 * * * * root /sbin/start --quiet reddit-job-solr_links
-CRON
 
+# TODO: workaround consumer being broken, see issues/44
+*/5 * * * * $REDDIT_USER $REDDIT_HOME/rabbitmqadmin purge queue name=event_collector
+CRON
+    fi
 fi
 
 ###############################################################################

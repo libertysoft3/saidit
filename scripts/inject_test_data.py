@@ -359,8 +359,8 @@ def inject_test_data(num_links=25, num_comments=25, num_votes=5):
     LocalizedDefaultSubreddits.set_global_srs(srs)
     LocalizedFeaturedSubreddits.set_global_srs([Subreddit._by_name('pics')])
 
-def inject_configuration_data(num_links=25, num_comments=25, num_votes=5):
-    """Create required users and subreddits such that user registration works out of the box"""
+def inject_configuration_data():
+    """Create required users and subreddits such that user registration works without exception out of the box"""
 
     print ">>>> Ensuring configured objects exist"
     system_user = ensure_account(g.system_user)

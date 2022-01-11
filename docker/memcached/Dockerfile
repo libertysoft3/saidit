@@ -1,10 +1,9 @@
 FROM ubuntu:14.04
-LABEL Author="libertysoft3"
 
 RUN apt-get update && apt-get -y upgrade
 RUN apt-get -y install software-properties-common
 RUN apt-add-repository -y ppa:reddit/ppa
-COPY docker/apt-preferences /etc/apt/preferences.d/reddit
+COPY apt-preferences /etc/apt/preferences.d/reddit
 RUN apt-get update
 
 # travis gives us a stock libmemcached.  We have to remove that

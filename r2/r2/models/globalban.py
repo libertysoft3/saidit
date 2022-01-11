@@ -20,7 +20,7 @@ class GlobalBan(Thing):
     @classmethod
     @memoize('globalban.recent_global_bans')
     def _recent_global_bans_cache(cls):
-        return [ a._id for a in GlobalBan._query(sort=desc('_date'), limit=100) ]
+        return [ a._id for a in GlobalBan._query(sort=desc('_date'), limit=500) ]
 
     @classmethod
     def _recent_global_bans(cls, _update=False):

@@ -1,18 +1,29 @@
 version: '3'
 
 services:
+  haproxy:
+    build:
+      context: docker/haproxy
+      dockerfile: Dockerfile
+    ports:
+      # host's nginx is expected to terminate SSL and route all reddit requests here
+      - 8080:8080
+    restart: always
+
   postgres:
     build:
-      context: .
-      dockerfile: docker/postgres/Dockerfile
+      context: docker/postgres
+      dockerfile: Dockerfile
     environment:
       POSTGRES_USER: reddit
+      # WARNING: also hardcoded in reddit's 'cron' file
       POSTGRES_PASSWORD: password
       POSTGRES_DB: reddit
       POSTGRES_INITDB_ARGS: '--encoding=utf8 --lc-collate=en_US.utf8 --lc-ctype=en_US.utf8'
     ports:
       - 5432:5432
     volumes:
+      # can alternatively be a named volume
       - ./volumes/postgres:/var/lib/postgresql/data
     restart: always
 
@@ -21,21 +32,22 @@ services:
     ports:
       - 9160:9160
     volumes:
-      - ./volumes/cassandra:/var/lib/cassandra/data
+      # can alternatively be a named volume
+      - ./volumes/cassandra:/var/lib/cassandra
     restart: always
 
   memcached:
     build:
-      context: .
-      dockerfile: docker/memcached/Dockerfile
+      context: docker/memcached
+      dockerfile: Dockerfile
     ports:
       - 11211:11211
     restart: always
 
   mcrouter:
     build:
-      context: .
-      dockerfile: docker/mcrouter/Dockerfile
+      context: docker/mcrouter
+      dockerfile: Dockerfile
     ports:
       - 5050:5050
     restart: always
@@ -43,23 +55,47 @@ services:
       - memcached
 
   rabbitmq:
-    image: rabbitmq:3.5.7
+    build:
+      context: docker/rabbitmq
+      dockerfile: Dockerfile
     environment:
       RABBITMQ_DEFAULT_VHOST: /
       RABBITMQ_DEFAULT_USER: reddit
       RABBITMQ_DEFAULT_PASS: reddit
     ports:
       - 5672:5672
+      - 15672:15672
+    restart: always
+
+  zookeeper:
+    image: jplock/zookeeper:3.4.6
+    ports:
+      - 2181:2181
+    restart: always
+
+  solr:
+    build:
+      context: docker/solr
+      dockerfile: Dockerfile
+    ports:
+      - 8983:8983
     restart: always
 
   reddit:
     build:
-      context: .
-      dockerfile: docker/reddit/Dockerfile
-    environment:
-      PYTHONBUFFERED: 1
+      context: docker/reddit
+      dockerfile: Dockerfile
     ports:
       - 8001:8001
+      - 9000:9000
+      - 8082:8082
+    volumes:
+      # starts empty so bind mount can replace container directory, can alternatively be a named volume
+      - ./volumes/media:/srv/www/media
+      # persist existing development.update and future changes
+      - reddit_r2_data:/home/reddit/src/reddit/r2
+      # persist existing cron and future changes
+      - reddit_cron_data:/etc/cron.d
     restart: always
     depends_on:
       - postgres
@@ -67,3 +103,9 @@ services:
       - memcached
       - mcrouter
       - rabbitmq
+      - zookeeper
+      - solr
+
+volumes:
+  reddit_r2_data:
+  reddit_cron_data:

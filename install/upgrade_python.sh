@@ -9,6 +9,7 @@ cd Python-2.7.18
 ./configure --prefix=/usr/local --enable-unicode=ucs4 --enable-shared --with-system-expat --with-system-ffi --with-ensurepip=install
 make -j $(nproc)
 make install
+# make system aware of upgrade, could be improved, scare documentation exists
 echo '/usr/lib/python2.7/dist-packages' | sudo tee -a /usr/local/lib/python2.7/site-packages/dist-packages.pth
 echo '/usr/local/lib/python2.7/dist-packages' | sudo tee -a /usr/local/lib/python2.7/site-packages/dist-packages.pth
 ldconfig
