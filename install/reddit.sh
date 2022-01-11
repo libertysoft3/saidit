@@ -439,90 +439,90 @@ chown $REDDIT_USER:$REDDIT_GROUP /srv/www/media
 
 cat > /etc/nginx/conf.d/reddit.conf <<NGINX
 log_format directlog '\$remote_addr - \$remote_user [\$time_local] '
-                  '"\$request_method \$request_uri \$server_protocol" \$status \$body_bytes_sent '
-                  '"\$http_referer" "\$http_user_agent"';
+                      '"\$request_method \$request_uri \$server_protocol" \$status \$body_bytes_sent '
+                      '"\$http_referer" "\$http_user_agent"';
 NGINX
 
 cat > /etc/nginx/sites-available/reddit-media <<MEDIA
 server {
-listen 9000;
+    listen 9000;
 
-expires max;
+    expires max;
 
-location /media/ {
-    alias /srv/www/media/;
-}
+    location /media/ {
+        alias /srv/www/media/;
+    }
 }
 MEDIA
 
 cat > /etc/nginx/sites-available/reddit-pixel <<PIXEL
 upstream click_server {
-server unix:/var/opt/reddit/click.sock fail_timeout=0;
+  server unix:/var/opt/reddit/click.sock fail_timeout=0;
 }
 
 server {
-listen 8082;
-access_log      /var/log/nginx/traffic/traffic.log directlog;
+  listen 8082;
+  access_log      /var/log/nginx/traffic/traffic.log directlog;
 
-location / {
+  location / {
 
-rewrite ^/pixel/of_ /pixel.png;
+    rewrite ^/pixel/of_ /pixel.png;
 
-add_header Last-Modified "";
-add_header Pragma "no-cache";
+    add_header Last-Modified "";
+    add_header Pragma "no-cache";
 
-expires -1;
-root /srv/www/pixel/;
-}
+    expires -1;
+    root /srv/www/pixel/;
+  }
 
-location /click {
-proxy_pass http://click_server;
-}
+  location /click {
+    proxy_pass http://click_server;
+  }
 }
 PIXEL
 
 if [ "$INSTALL_PROFILE" = "all" ]; then
     cat > /etc/nginx/sites-available/reddit-ssl <<SSL
-map \$http_upgrade \$connection_upgrade {
+  map \$http_upgrade \$connection_upgrade {
 default upgrade;
-''      close;
+  ''      close;
 }
 
 server {
-listen 443;
+    listen 443;
 
-ssl on;
-ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
-ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
-ssl_dhparam /etc/nginx/dhparam.pem;
+    ssl on;
+    ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
+    ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
+    ssl_dhparam /etc/nginx/dhparam.pem;
 
-# Support TLSv1 for Android 4.3 (Samsung Galaxy S3) https://www.ssllabs.com/ssltest/viewClient.html?name=Android&version=4.3&key=61
-# ciphers from https://cipherli.st legacy / old list
-ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA128:DHE-RSA-AES128-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA128:ECDHE-RSA-AES128-SHA384:ECDHE-RSA-AES128-SHA128:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA384:AES128-GCM-SHA128:AES128-SHA128:AES128-SHA128:AES128-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
-ssl_prefer_server_ciphers on;
-ssl_session_cache shared:SSL:1m;
-ssl_stapling on;
-ssl_stapling_verify on;
-add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
-# reddit code manages these headers
-# add_header X-Frame-Options DENY;
-# add_header X-Content-Type-Options nosniff;
-# add_header X-XSS-Protection "1; mode=block";
+    # Support TLSv1 for Android 4.3 (Samsung Galaxy S3) https://www.ssllabs.com/ssltest/viewClient.html?name=Android&version=4.3&key=61
+    # ciphers from https://cipherli.st legacy / old list
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA128:DHE-RSA-AES128-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA128:ECDHE-RSA-AES128-SHA384:ECDHE-RSA-AES128-SHA128:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA384:AES128-GCM-SHA128:AES128-SHA128:AES128-SHA128:AES128-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:1m;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
+    # reddit code manages these headers
+    # add_header X-Frame-Options DENY;
+    # add_header X-Content-Type-Options nosniff;
+    # add_header X-XSS-Protection "1; mode=block";
 
-location / {
-    proxy_pass http://127.0.0.1:8080;
-    proxy_set_header Host \$http_host;
-    proxy_http_version 1.1;
-    proxy_set_header X-Forwarded-For \$remote_addr;
-    # if CloudFlare instead set
-    # proxy_set_header X-Forwarded-For \$http_cf_connecting_ip;
-    proxy_pass_header Server;
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header Host \$http_host;
+        proxy_http_version 1.1;
+        proxy_set_header X-Forwarded-For \$remote_addr;
+        # if CloudFlare instead set
+        # proxy_set_header X-Forwarded-For \$http_cf_connecting_ip;
+        proxy_pass_header Server;
 
-    # allow websockets through if desired
-    proxy_set_header Upgrade \$http_upgrade;
-    proxy_set_header Connection \$connection_upgrade;
-}
+        # allow websockets through if desired
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection \$connection_upgrade;
+    }
 }
 SSL
 
