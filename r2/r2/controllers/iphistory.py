@@ -12,7 +12,7 @@ class IpHistoryController(RedditController):
         username=nop('username'),
     )
     def GET_index(self, username):
-        if username:
+        if g.admin_enable_ip_history and username:
             username = urllib.unquote_plus(username)
             user = Account._by_name(username, True) # allow deleted
             if user:

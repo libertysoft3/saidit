@@ -5378,6 +5378,8 @@ class ApiController(RedditController):
                    ip=VLength("ip", max_length = 1000),
                    notes=VLength("notes", max_length = 1000, empty_error=None))
     def POST_editipban(self, form, jquery, ipban, colliding_ipban, ip, notes):
+        if not g.admin_enable_ip_ban:
+            return
         if form.has_errors("ip", errors.INVALID_OPTION):
             form.set_text(".status", "ip already banned")
             return
@@ -5402,6 +5404,8 @@ class ApiController(RedditController):
                 VModhash(),
                 thing = VByName('ipban_id'))
     def POST_deleteipban(self, form, jquery, thing):
+        if not g.admin_enable_ip_ban:
+            return
         if not thing or thing._deleted: return
         if not isinstance(thing, IpBan): return
         if form.has_error():
@@ -5430,6 +5434,8 @@ class ApiController(RedditController):
                    VModhash(),
                    recipient=VExistingUname("recipient"))
     def POST_nukeusercontent(self, form, jquery, recipient):
+        if not g.admin_enable_mass_content_removal:
+            return
         if form.has_error():
             return
 

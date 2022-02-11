@@ -292,6 +292,9 @@ class Globals(object):
             'chat_all',
             'chat_front',
             'globalban_vote_rollback',
+            'admin_enable_ip_history',
+            'admin_enable_ip_ban',
+            'admin_enable_mass_content_removal',
         ],
 
         ConfigValue.tuple: [
