@@ -173,18 +173,10 @@ clone_reddit_repo snudown libertysoft3/snudown
 ###############################################################################
 # Configure Services
 ###############################################################################
-
-# Configure Cassandra - creates keyspaces if they don't exist
-$RUNDIR/setup_cassandra.sh
-
 if [ "$INSTALL_PROFILE" = "all" ]; then
-    # Configure PostgreSQL
+    $RUNDIR/setup_cassandra.sh
     $RUNDIR/setup_postgres.sh
-
-    # Configure mcrouter
     $RUNDIR/setup_mcrouter.sh
-
-    # Configure RabbitMQ
     $RUNDIR/setup_rabbitmq.sh
 fi
 
