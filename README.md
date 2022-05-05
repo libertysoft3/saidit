@@ -25,6 +25,8 @@ The instructions assume that you are using Ubuntu 20 LTS as your Docker host.
     $ sudo apt install nginx docker docker-compose git
     $ sudo usermod -a -G docker $USER
     $ sudo systemctl enable docker && sudo systemctl restart docker
+    # or logout and login again to reload your group permissions
+    $ exec su -l $USER
 
 Optionally fix any DNS timeout issues, for virtual machines (warning is Google DNS)
 
