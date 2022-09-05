@@ -1640,7 +1640,7 @@ class LoginRatelimit(object):
 
 class VThrottledLogin(VRequired):
     def __init__(self, params):
-        VRequired.__init__(self, params, error=errors.WRONG_PASSWORD)
+        VRequired.__init__(self, params, error=errors.INCORRECT_USERNAME_OR_PASSWORD)
         self.vlength = VLength("user", max_length=100)
         self.seconds = None
 
@@ -1696,6 +1696,17 @@ class VThrottledLogin(VRequired):
 
             hooks.get_hook("account.spotcheck").call(account=account)
             if account._banned:
+                try:
+                    str(password)
+                except UnicodeEncodeError:
+                    password = password.encode("utf8")
+                # TODO: create a contagious cookie to spread this to alt
+                # accounts
+                self.set_error(errors.WRONG_PASSWORD,
+                               {'contagious': account._banned > 1
+                                   and valid_password(account, password)},
+                               field='passwd',
+                               code=403)
                 raise AuthenticationFailed
 
             # if already logged in, you're exempt from your own ratelimit

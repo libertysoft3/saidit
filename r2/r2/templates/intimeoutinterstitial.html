@@ -40,10 +40,10 @@
     <%
       days = ungettext('day', 'days', thing.timeout_days_remaining)
     %>
-    ${_wsf("Your account has been %(suspended_link)s from Reddit  \nfor %(num)s %(days)s",
+    ${_wsf("Your account has been %(suspended_link)s from Saidit  \nfor %(num)s %(days)s",
            suspended_link=suspended_link, num=thing.timeout_days_remaining, days=days)}
   %else:
-    ${_wsf("Your account has been permanently %(suspended_link)s from Reddit",
+    ${_wsf("Your account has been permanently %(suspended_link)s from Saidit",
            suspended_link=suspended_link)}
   %endif
 </%def>

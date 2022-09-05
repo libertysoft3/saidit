@@ -278,6 +278,7 @@ class VoteEffects(object):
 
     def determine_affects_score(self, vote):
         """Determine whether the vote should affect the thing's score."""
+
         # If it's the automatic upvote on the user's own post, it won't affect
         # the score because we create it with a score of 1 already.
         if vote.is_automatic_initial_vote:
@@ -288,6 +289,10 @@ class VoteEffects(object):
             if not vote.previous_vote.effects.affects_score and g.voting_allow_selfvote == 'false':
                 self.add_note("PREVIOUS_VOTE_NO_EFFECT")
                 return False
+
+        # Shadowbanned users can vote, but make it not actually count
+        if vote.user._spam:
+            return False
 
         if self.validator:
             affects_score = self.validator.determine_affects_score()
@@ -319,6 +324,10 @@ class VoteEffects(object):
             if vote.thing._id == link.sticky_comment_id:
                 self.add_note("COMMENT_STICKIED")
                 return False
+
+        # Shadowbanned users can vote, but make it not actually count
+        if vote.user._spam:
+            return False
 
         if self.validator:
             affects_karma = self.validator.determine_affects_karma()

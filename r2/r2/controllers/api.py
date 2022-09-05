@@ -384,7 +384,7 @@ class ApiController(RedditController):
             return
 
         # SaidIt: globally banned users can only message admin_message_acct
-        if c.user._spam or c.user.is_global_banned:
+        if c.user.is_global_banned:
             if (to and not (isinstance(to, Subreddit) and
                     '/%s/%s' % (g.brander_community_abbr, to.name) == g.admin_message_acct)):
                 return
@@ -818,7 +818,9 @@ class ApiController(RedditController):
                 # The requesting user is marked as spam or banned, and is
                 # trying to do a mod action. The only action they should be
                 # allowed to do and have it stick is demodding themself.
-                if c.user._spam or c.user.is_global_banned:
+                if c.user.is_global_banned:
+                    self.abort403()
+                if c.user._spam:
                     return
                 VNotInTimeout().run(action_name=action, target=victim)
         else:
@@ -892,7 +894,9 @@ class ApiController(RedditController):
         if form.has_errors('permissions', errors.INVALID_PERMISSIONS):
             return
 
-        if c.user._spam or c.user.is_global_banned:
+        if c.user.is_global_banned:
+            self.abort403()
+        if c.user._spam:
             return
 
         type, permissions = type_and_permissions
@@ -1003,7 +1007,9 @@ class ApiController(RedditController):
                 abort(403, 'forbidden')
 
             # Don't let banned users make subreddit access changes
-            if c.user._spam or c.user.is_global_banned:
+            if c.user.is_global_banned:
+                self.abort403()
+            if c.user._spam:
                 return
             VNotInTimeout().run(action_name=action, target=friend)
 
@@ -1211,7 +1217,9 @@ class ApiController(RedditController):
         perm = 'wiki' if type.startswith('wiki') else 'access'
         if (not c.user_is_admin
             and (not c.site.is_moderator_with_perms(c.user, perm))):
-            if c.user._spam or c.user.is_global_banned:
+            if c.user.is_global_banned:
+                self.abort403()
+            if c.user._spam:
                 return
             else:
                 abort(403, 'forbidden')
@@ -2387,7 +2395,7 @@ class ApiController(RedditController):
         VNotInTimeout().run(target=thing)
 
         # SaidIt: don't allow globally banned users to vote
-        if c.user._spam or c.user.is_global_banned:
+        if c.user.is_global_banned:
             self.abort403()
 
         # convert vote direction to enum value
@@ -3171,8 +3179,10 @@ class ApiController(RedditController):
         """
         if not thing: return
         if thing._deleted: return
-        if c.user._spam or c.user.is_global_banned:
+        if c.user.is_global_banned:
            self.abort403()
+        if c.user._spam:
+            return
 
         # Don't allow user in timeout to approve link or comment
         VNotInTimeout().run(target=thing)
@@ -5442,6 +5452,11 @@ class ApiController(RedditController):
         if recipient is None:
             form.set_text(".status", "user does not exist")
             return
+
+        # Obviously someone who is getting all their posts removed should
+        # be banned
+        recipient._spam = True
+        recipient._commit()
 
         admintools.spam_account_links(recipient)
         admintools.spam_account_comments(recipient)

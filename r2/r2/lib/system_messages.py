@@ -170,3 +170,42 @@ def send_ban_message(subreddit, mod, user, note=None, days=None, new=True):
         mod, user, subject, message, request.ip, sr=subreddit, from_sr=True,
         can_send_email=False)
     queries.new_message(item, inbox_rel, update_modmail=False)
+
+def send_suspension_message(user, admin, note=None, days=None, reason=None):
+    if reason == None:
+        reason = "breaking saidit's sitewide rules"
+    subject = "Important notification about your account"
+    if days:
+        message = ("Your account has been suspended from saidit for %(duration)s day(s) for %(reason)s.")
+    else:
+        message = "Your account has been permanently suspended from saidit for %(reason)s."
+
+    message %= {"reason": reason, "duration": days}
+
+    if note:
+        message += "\n\n" + 'Note from the admins:'
+        message += "\n\n" + blockquote_text(note)
+
+    message += "\n\n" + ("Make sure to review [the %(site_name)s Content Policy](/s/SaidIt/comments/j1/the_saiditnet_terms_and_content_policy/).") % {"site_name": g.brander_site}
+
+    messager = g.admin_message_acct
+    from_sr = False
+    if messager.startswith('/%s/' % g.brander_community_abbr):
+        messager = messager[3:]
+        from_sr = True
+    elif messager.startswith('#'):
+        messager = messager[1:]
+        from_sr = True
+
+    subreddit = None
+    if from_sr:
+        from r2.models import subreddit
+        subreddit = Subreddit._by_name(messager)
+    else:
+        from r2.models import account
+        admin = Account._by_name(g.system_user)
+
+    item, inbox_rel = Message._new(
+        admin, user, subject, message, request.ip,
+        sr=subreddit, from_sr=from_sr, can_send_email=True)
+    queries.new_message(item, inbox_rel, update_modmail=False)
