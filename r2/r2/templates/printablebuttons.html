@@ -235,11 +235,8 @@
   <span class="big-mod-buttons">
     %if not thing._deleted:
       <span role="radiogroup">
-        %if not getattr(thing, "moderator_banned", None) or getattr(thing, "autobanned", False):
-          ${pretty_button(_("spam"), "big_mod_action", -2, "negative", event_action="spam")}
-          ${pretty_button(_("remove"), "big_mod_action", -1, "neutral", event_action="remove")}
-        %endif
-
+        ${pretty_button(_("spam"), "big_mod_action", -2, "negative", event_action="spam")}
+        ${pretty_button(_("remove"), "big_mod_action", -1, "neutral", event_action="remove")}
         %if getattr(thing, "approval_checkmark", None):
           ${pretty_button(_("reapprove"), "big_mod_action",  1, "positive", event_action="approve")}
         %else:
