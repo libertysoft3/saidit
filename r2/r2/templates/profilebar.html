@@ -128,18 +128,18 @@
     </span>
   </div>
 
-  %if c.user_is_admin:
-    <div class="bans">
+  %if c.user_is_admin and not thing.user.name in g.admins:
+    <br>
+    <a class="ban-tools-expander" id="ban-tools-expander" href="#" onclick="expandUserBanTools();">+ Show ban tools</a>
+    <div class="admin-ban-user" id="ban-tools" style="display: none;">
       <li>
         <input class="nomargin" type="checkbox" name="ban" id="ban" ${'checked="checked"' if thing.user._spam else ''} onclick="$.request(&quot;admin/ban_user&quot;, {uh: &quot;${c.modhash}&quot;, recipient: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
         <label for="ban">user is shadowbanned</label>
       </li>
-      %if not thing.viewing_self:
-        <li>
-          <input class="nomargin" type="checkbox" name="lock" id="lock" ${'checked="checked"' if thing.user._banned == 1 else ''} onclick="$.request(&quot;admin/lock_user&quot;, {uh: &quot;${c.modhash}&quot;, recipient: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
-          <label for="locked">user is password locked</label>
-        </li>
-      %endif
+      <li>
+        <input class="nomargin" type="checkbox" name="lock" id="lock" ${'checked="checked"' if thing.user._banned == 1 else ''} onclick="$.request(&quot;admin/lock_user&quot;, {uh: &quot;${c.modhash}&quot;, recipient: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
+        <label for="locked">user is password locked</label>
+      </li>
       <br>
       <form action="/api/admin/suspend_user" method="post" class="pretty-form medium-text" onsubmit="return post_form(this, 'admin/suspend_user')" id="adminsuspend-form">
         <h1>Issue suspension</h1>
@@ -181,6 +181,24 @@
         )}
       %endif
     </div>
+    <script>
+      var banToolsExpander = document.getElementById('ban-tools-expander');
+      var banTools = document.getElementById('ban-tools');
+
+      function expandUserBanTools()
+      {
+          banToolsExpander.onclick = collapseUserBanTools;
+          banToolsExpander.innerHTML = "- Hide ban tools";
+          banTools.style = "";
+      }
+
+      function collapseUserBanTools()
+      {
+          banToolsExpander.onclick = expandUserBanTools;
+          banToolsExpander.innerHTML = "+ Show ban tools";
+          banTools.style = "display: none;";
+      }
+    </script>
   %endif
 
   <div class="clear"> </div>
