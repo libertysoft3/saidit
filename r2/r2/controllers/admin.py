@@ -68,7 +68,7 @@ class AdminToolController(RedditController):
             return
         if reverse:
             recipient._spam = False
-        else:
+        elif not recipient.name in g.admins:
             recipient._spam = True
         recipient._commit()
 
@@ -82,15 +82,9 @@ class AdminToolController(RedditController):
     def POST_lock_user(self, recipient, reverse):
         if recipient == None:
             return
-
-        # Letting an admin lock themselves out of their own account would
-        # be a serious hazard, as they couldn't undo it.
-        if recipient._id == c.user._id:
-            return
-
         if reverse:
             recipient._banned = 0
-        else:
+        elif not recipient.name in g.admins:
             recipient._banned = 1
         # _commit() isn't necessary here, because setting _banned handles
         # everything
@@ -112,6 +106,8 @@ class AdminToolController(RedditController):
         if form.has_errors("ban_reason", "ban_message", errors.TOO_LONG):
             return
         if recipient == None:
+            return
+        if recipient.name in g.admins:
             return
         recipient.in_timeout = True
         recipient._commit()
