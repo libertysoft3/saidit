@@ -199,7 +199,7 @@ def send_suspension_message(user, admin, note=None, days=None, reason=None):
 
     subreddit = None
     if from_sr:
-        from r2.models import subreddit
+        from r2.models import Subreddit
         subreddit = Subreddit._by_name(messager)
     else:
         from r2.models import account
