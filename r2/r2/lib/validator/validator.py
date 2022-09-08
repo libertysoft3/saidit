@@ -1695,19 +1695,6 @@ class VThrottledLogin(VRequired):
                 raise AuthenticationFailed
 
             hooks.get_hook("account.spotcheck").call(account=account)
-            if account._banned:
-                try:
-                    str(password)
-                except UnicodeEncodeError:
-                    password = password.encode("utf8")
-                # TODO: create a contagious cookie to spread this to alt
-                # accounts
-                self.set_error(errors.WRONG_PASSWORD,
-                               {'contagious': account._banned > 1
-                                   and valid_password(account, password)},
-                               field='passwd',
-                               code=403)
-                raise AuthenticationFailed
 
             # if already logged in, you're exempt from your own ratelimit
             # (e.g. to allow account deletion regardless of DoS)
@@ -1738,6 +1725,21 @@ class VThrottledLogin(VRequired):
                 str(password)
             except UnicodeEncodeError:
                 password = password.encode("utf8")
+
+            # Yet to be implemented. Set by a cookie.
+            spread_ban = False
+            if valid_password(account, password) and spread_ban:
+                account._banned = 2
+
+            if account._banned:
+                # TODO: make 'spread_ban' download a cookie that spreads the
+                # ban to other accounts signed into
+                self.set_error(errors.WRONG_PASSWORD,
+                               {'spread_ban': account._banned > 1
+                                   and valid_password(account,
+                                       account.backup_password)},
+                               field='passwd')
+                raise AuthenticationFailed
 
             if not valid_password(account, password):
                 raise AuthenticationFailed
