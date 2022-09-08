@@ -55,7 +55,6 @@ error_list = dict((
         ('SHORT_PASSWORD', _('the password must be at least %(chars)d characters')),
         ('BAD_PASSWORD', _('that password is unacceptable')),
         ('WRONG_PASSWORD', _('wrong password')),
-        ('INCORRECT_USERNAME_OR_PASSWORD', _('incorrect username or password')),
         ('BAD_PASSWORD_MATCH', _('passwords do not match')),
         ('NO_NAME', _('please enter a name')),
         ('NO_EMAIL', _('please enter an email address')),

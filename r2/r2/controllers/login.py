@@ -86,9 +86,6 @@ def handle_login(
     elif responder.has_errors("passwd", errors.WRONG_PASSWORD):
         _event(error='WRONG_PASSWORD')
 
-    elif responder.has_errors("passwd", errors.INCORRECT_USERNAME_OR_PASSWORD):
-        _event(error='INCORRECT_USERNAME_OR_PASSWORD')
-
     else:
         controller._login(responder, user, rem)
         _event(error=None)

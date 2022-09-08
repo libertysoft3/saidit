@@ -1640,7 +1640,7 @@ class LoginRatelimit(object):
 
 class VThrottledLogin(VRequired):
     def __init__(self, params):
-        VRequired.__init__(self, params, error=errors.INCORRECT_USERNAME_OR_PASSWORD)
+        VRequired.__init__(self, params, error=errors.WRONG_PASSWORD)
         self.vlength = VLength("user", max_length=100)
         self.seconds = None
 
