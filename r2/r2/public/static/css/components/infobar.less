@@ -1,7 +1,7 @@
-@infobar-legacy-color: #f6e66c;
-@infobar-legacy-color-border: orange;
-@infobar-color: #fff7a4;
-@infobar-color-border: darken(@theme-daymode-infobar-color, 32%);
+@infobar-legacy-color: #081819;
+@infobar-legacy-color-border: #3a5869;
+@infobar-color: #081819;
+@infobar-color-border: #3a5869;
 @infobar-color-text: @color-semi-black;
 @infobar-padding: unit(@margin-small, px);
 @infobar-min-text-height: unit(@line-x-small, px) + unit(2 * @margin-x-small, px);
@@ -39,10 +39,6 @@
   padding: @infobar-padding;
   position: relative;
 
-  .md {
-    color: #3e3e3e;
-  }
-
   &.with-icon {
     min-height: @infobar-icon-size;
     padding-left: @infobar-padding + @infobar-icon-size;
@@ -61,11 +57,24 @@
   }
 }
 
-.locked-infobar:before {
-  @1x: url('../infobar-icon-lock.png');
-  @2x: url('../infobar-icon-lock_2x.png');
-  @2x-bg-size: 20px 25px;
-  .hdpi-bg-image(@1x: @1x, @2x: @2x, @2x-bg-size);
+.locked-infobar {
+  @locked-infobar-color: #fff7c4;
+  @locked-infobar-color-border: darken(@locked-infobar-color, 32%);
+  @locked-infobar-color-text: #3e3e3e;
+  background-color: @locked-infobar-color;
+  border-color: @locked-infobar-color-border;
+  
+  .md {
+    color: @locked-infobar-color-text;
+  }
+
+  &.with-icon:before {
+    @1x: url('../infobar-icon-lock.png');
+    @2x: url('../infobar-icon-lock_2x.png');
+    @2x-bg-size: 20px 25px;
+    .hdpi-bg-image(@1x: @1x, @2x: @2x, @2x-bg-size);
+    background-color: @locked-infobar-color-border;
+  }
 }
 
 .archived-infobar {
@@ -86,14 +95,19 @@
 .timeout-infobar {
   @timeout-infobar-color: #ffd0d0;
   @timeout-infobar-color-border: #e70028;
+  @timeout-infobar-color-text: #3e3e3e;
   background-color: @timeout-infobar-color;
   border-color: @timeout-infobar-color-border;
+
+  .md {
+    color: @timeout-infobar-color-text;
+  }
 
   &.with-icon:before {
     @1x: url('../infobar-icon-banhammer.png');
     @2x: url('../infobar-icon-banhammer_2x.png');
     @2x-bg-size: 20px 27px;
-    .hdpi-bg-image(@1x: @1x, @2x: @2x, @2x-bg-size);   
+    .hdpi-bg-image(@1x: @1x, @2x: @2x, @2x-bg-size);
     background-color: @timeout-infobar-color-border;
   }
 }
