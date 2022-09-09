@@ -71,6 +71,7 @@
     <input name="user" id="deactivate-user" type="text" />
     <label for="deactivate-password">${_("password")}</label>
     ${error_field("WRONG_PASSWORD", "passwd")}
+    ${error_field("INCORRECT_USERNAME_OR_PASSWORD", "passwd")}
     <input name="passwd" id="deactivate-password" type="password" />
   </%utils:round_field>
 </div>  
