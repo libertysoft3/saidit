@@ -130,7 +130,7 @@
 
   %if c.user_is_admin and not thing.user.name in g.admins:
     <br>
-    <a class="ban-tools-expander" id="ban-tools-expander" href="#" onclick="expandUserBanTools();">+ Show ban tools</a>
+    <a class="ban-tools-expander" id="ban-tools-expander" href="javascript:void(0);" onclick="expandUserBanTools();">+ Show ban tools</a>
     <div class="admin-ban-user" id="ban-tools" style="display: none;">
       <li>
         <input class="nomargin" type="checkbox" name="ban" id="ban" ${'checked="checked"' if thing.user._spam else ''} onclick="$.request(&quot;admin/ban_user&quot;, {uh: &quot;${c.modhash}&quot;, recipient: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
