@@ -399,7 +399,7 @@ class Account(Thing):
                         # g.log.warning("!!! dbg: user %s cannot create sub, created %s at %s, once every %s days max" % (self.name, sr.name, sr._date, g.live_config["create_sr_ratelimit_once_per_days"]))
                         return False
 
-        if self.is_global_banned:
+        if self._spam or self.is_global_banned:
             return False
 
         return True

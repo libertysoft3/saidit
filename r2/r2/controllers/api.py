@@ -3050,7 +3050,7 @@ class ApiController(RedditController):
             sr.update_search_index()
 
         #editting an existing reddit
-        elif sr.is_moderator_with_perms(c.user, 'config') or c.user_is_admin:
+        elif not c.user._spam and (sr.is_moderator_with_perms(c.user, 'config') or c.user_is_admin):
             # Don't allow user in timeout to edit subreddit settings
             VNotInTimeout().run(action_name="editsettings", target=sr)
 
