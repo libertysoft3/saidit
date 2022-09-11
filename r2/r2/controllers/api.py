@@ -1404,6 +1404,7 @@ class ApiController(RedditController):
         if not (form.has_errors('ratelimit', errors.RATELIMIT) or
                 form.has_errors("user", errors.NOT_USER) or
                 form.has_errors("passwd", errors.WRONG_PASSWORD) or
+                form.has_errors("passwd", errors.INCORRECT_USERNAME_OR_PASSWORD) or
                 form.has_errors("deactivate_message", errors.TOO_LONG) or
                 form.has_errors("confirm", errors.CONFIRM)):
             redirect_url = "/?deactivated=true"
