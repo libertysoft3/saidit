@@ -13,6 +13,10 @@
 @theme-daymode-infobar-color: #fff7d7;
 @theme-daymode-infobar-color-border: darken(@theme-daymode-infobar-color, 32%);
 @theme-daymode-infobar-color-text: @theme-daymode-color-semi-black;
+@theme-daymode-timeout-infobar-color: #fff0f0;
+@theme-daymode-timeout-infobar-color-border: #e70028;
+
+@theme-daymode-modal-content-bg: #f8fbfd;
 
 .theme-daymode {
 
@@ -20,6 +24,7 @@
     background-color: #F8F8F8;
     textarea { color: black; background-color: white; }
     h2, a, .tagline a { color: #369; }
+    .c-btn-primary { color: #ffffff; }
     .flat-vert.title { color: #777; }
 
 .arrow {   background-position: left;
@@ -175,7 +180,14 @@
         .md {
             color: @theme-daymode-infobar-color-text;
           }
-          &.with-icon &:before { background-color: @theme-daymode-infobar-color-border; }
+          &.with-icon { &:before { background-color: @theme-daymode-infobar-color-border; } }
+      }
+      .timeout-infobar {
+        background-color: @theme-daymode-timeout-infobar-color;
+        border-color: @theme-daymode-timeout-infobar-color-border;
+        &.with-icon:before {
+          background-color: @theme-daymode-timeout-infobar-color-border;
+        }
       }
 
 
@@ -203,6 +215,10 @@
     /* saidit custom dark header styles */
     .pagename, .pagename a {
         color: white;
+    }
+
+    .modal-content {
+        background-color: @theme-daymode-modal-content-bg;
     }
 }
 
