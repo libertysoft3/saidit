@@ -138,6 +138,9 @@ from r2.lib.merge import ConflictException
 from datetime import datetime, timedelta
 from urlparse import urlparse
 
+from r2.lib.ip_events import account_ids_by_ip
+from r2.models.account import Account
+
 # CUSTOM: Site Theme
 from r2.lib.validator.preferences import set_prefs
 
@@ -3825,7 +3828,7 @@ class ApiController(RedditController):
 
         # add this ip to the user's account so they can sign in even if
         # their account is being brute forced by a third party.
-        set_account_ip(user._id, request.ip, c.start_time)
+        set_account_ip(user, request.ip, c.start_time)
 
         # if the token is for the current user, their cookies will be
         # invalidated and they'll have to log in again.
@@ -5387,8 +5390,9 @@ class ApiController(RedditController):
                    ipban=VByName("fullname"), # all things have a fullname
                    colliding_ipban=VIpBanByIp(("ip", "fullname")),
                    ip=VLength("ip", max_length = 1000),
-                   notes=VLength("notes", max_length = 1000, empty_error=None))
-    def POST_editipban(self, form, jquery, ipban, colliding_ipban, ip, notes):
+                   notes=VLength("notes", max_length = 1000, empty_error=None),
+                   level=VInt('level', min=1, max=4))
+    def POST_editipban(self, form, jquery, ipban, colliding_ipban, ip, notes, level):
         if not g.admin_enable_ip_ban:
             return
         if form.has_errors("ip", errors.INVALID_OPTION):
@@ -5403,12 +5407,20 @@ class ApiController(RedditController):
             return
 
         if ipban is None:
-            IpBan._new(ip, notes)
-            form.set_html(".status", "saved, <a href='#' onclick='location.reload();'>reload</a> to see changes")
-            return
+            IpBan._new(ip, level, notes)
+        else:
+            ipban.notes = notes
+            ipban.level = level
+            ipban._commit()
 
-        ipban.notes = notes
-        ipban._commit()
+        if level >= 3:
+            # retroactive IP ban
+            for ip_tup in account_ids_by_ip(ip):
+                account_id = ip_tup[0]
+                user = Account._byID(account_id)
+                user._spam = True
+                user._commit()
+
         form.set_html(".status", _('saved, <a href="#" onclick="location.reload();">reload</a> to see changes'))
 
     @validatedForm(VAdmin(),

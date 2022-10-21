@@ -41,7 +41,6 @@ from promo import *
 # CUSTOM
 from globalban import *
 from ipban import *
-from ip_history import *
 
 # r2.models.builder will import other models, so pulling its classes/vars into
 # r2.models needs to be done last to ensure that the models it depends

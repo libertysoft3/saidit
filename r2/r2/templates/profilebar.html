@@ -128,7 +128,12 @@
     </span>
   </div>
 
-  %if c.user_is_admin and not thing.user.name in g.admins:
+  %if thing.viewing_self:
+    <br>
+    <a href="/account-activity">Account IP activity</a>
+  %endif
+
+  %if c.user_is_admin:
     <br>
     <a class="ban-tools-expander" id="ban-tools-expander" href="javascript:void(0);" onclick="expandUserBanTools();">+ Show ban tools</a>
     <div class="admin-ban-user" id="ban-tools" style="display: none;">
@@ -199,6 +204,8 @@
           banTools.style = "display: none;";
       }
     </script>
+    <br>
+    <a href=/admin/iphistory?username=${thing.user.name}>IP History</a>
   %endif
 
   <div class="clear"> </div>

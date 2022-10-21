@@ -57,6 +57,9 @@ from r2.models.globalban import GlobalBan
 
 from pycassa.cassandra.ttypes import NotFoundException
 
+# CUSTOM: IP bans
+from r2.models.ipban import IpBan
+
 trylater_hooks = hooks.HookRegistrar()
 COOKIE_TIMESTAMP_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
@@ -968,6 +971,10 @@ def register(name, password, registration_ip):
                 pref_chat_client_password=''.join(random.choice(string.ascii_letters+string.digits) for i in range(30)),
 
             )
+            # CUSTOM: IP bans
+            if IpBan._by_ip(registration_ip):
+                # autoban account registered on banned IP
+                account._spam = True
             account._commit()
 
             # update Account._by_name to pick up this new name->Account

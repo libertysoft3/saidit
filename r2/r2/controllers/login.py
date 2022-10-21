@@ -33,6 +33,8 @@ from r2.lib.errors import errors, reddit_http_error
 
 from r2.models.account import register, AccountExists
 
+from r2.lib.db.thing import NotFound
+
 # CUSTOM: Auto Subscribe All
 from r2.config import feature
 from r2.models.subreddit import Subreddit

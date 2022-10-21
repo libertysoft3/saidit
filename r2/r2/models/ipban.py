@@ -7,6 +7,12 @@ from r2.lib.memoize import memoize
 class IpBan(Thing):
     _cache = g.thingcache
     _essentials = ('ip', ) # wow python
+    _defaults = dict(level=4, # 1 = new accounts banned,
+                              # 2 = all accounts banned,
+                              # 3 = all accounts banned retroactively,
+                              # 4 = access entirely blocked (default because this is the original IP ban)
+    )
+    _data_int_props = Thing._data_int_props + ('level', )
 
     @classmethod
     def _cache_prefix(cls):
@@ -14,8 +20,8 @@ class IpBan(Thing):
 
     # NOTE: THIS SPECIFIES THE DATA MODEL
     @classmethod
-    def _new(cls, ip, notes=''):
-        a = IpBan(ip=ip, notes=notes)
+    def _new(cls, ip, level=1, notes=''):
+        a = IpBan(ip=ip, level=level, notes=notes)
         a._commit()
         IpBan._all_bans_cache(_update=True)
 

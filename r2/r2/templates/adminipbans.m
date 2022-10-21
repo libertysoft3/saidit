@@ -23,6 +23,17 @@
       </td>
     </tr>
     <tr>
+      <td><label for="level">ban level</label></td>
+      <td>
+        <select name="level">
+          <option value="1">1: New accounts banned</option>
+          <option value="2">2: All logged-in accounts banned</option>
+          <option value="3">3: Level 2 but accounts are retroactively banned</option>
+          <option value="4">4: Can't access the site at all</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
       <td><label for="notes">admin note</label></td>
       <td>
         <input type="text" name="notes" id="notes" value="" />
@@ -37,12 +48,19 @@
  </form>
 </%def>
 
-<%def name="ipbanedit(formid, ip='', notes='')">
+<%def name="ipbanedit(formid, ip='', level=1, notes='')">
  <form action="/post/editipban" method="post" class="pretty-form medium-text"
        style="display:none" onsubmit="return post_form(this, 'editipban');" id="ipbanedit-${formid}">
 
   <input type="hidden" name="fullname" value="${formid}" />
   <input type="hidden" name="ip" value="${ip}" />
+
+  <select name="level" autocomplete="off">
+    <option value="1" ${'selected="selected"' if level == 1 else '' }>1: New accounts banned</option>
+    <option value="2" ${'selected="selected"' if level == 2 else '' }>2: All logged-in accounts banned</option>
+    <option value="3" ${'selected="selected"' if level == 3 else '' }>3: Level 2 but accounts are retroactively banned</option>
+    <option value="4" ${'selected="selected"' if level == 4 else '' }>4: Can't access the site at all</option>
+  </select>
 
   <input type="text" name="notes" id="notes" value="${notes}" />
         ${error_field("NO_TEXT", "notes", "span")}
@@ -75,8 +93,9 @@ ${ipbannew()}
        </td>
        <td><a href="#" onclick="$('#ipbanedit-${ban._fullname}').toggle(); return false;">edit</a></td>
        <td>
+         <p>Level: ${ban.level}</p>
          ${ban.notes}
-         ${ipbanedit(ban._fullname, ban.ip, ban.notes)}
+         ${ipbanedit(ban._fullname, ban.ip, ban.level, ban.notes)}
        </td>
      </tr>
     %endfor
