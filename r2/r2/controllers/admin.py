@@ -81,6 +81,8 @@ class AdminToolController(RedditController):
         reverse=VBoolean("reverse")
     )
     def POST_lock_user(self, victim, reverse):
+        if not g.admin_enable_password_locking and not c.user_is_superadmin:
+            return
         if victim == None:
             return
         if reverse:
@@ -144,6 +146,12 @@ class AdminToolController(RedditController):
     )
     def POST_spiderban_user(self, victim, reverse):
         if victim == None:
+            return
+        # This blocks spiderbanning password locking without pw-locking
+        # permissions
+        if (not g.admin_enable_password_locking
+            and not c.user_is_superadmin
+            and victim._banned):
             return
         if reverse:
             victim.spiderbanned = False

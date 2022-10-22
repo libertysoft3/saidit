@@ -141,10 +141,12 @@
         <input class="nomargin" type="checkbox" name="ban" id="ban" ${'checked="checked"' if thing.user._spam else ''} onclick="$.request(&quot;admin/ban_user&quot;, {uh: &quot;${c.modhash}&quot;, victim: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
         <label for="ban">user is shadowbanned</label>
       </li>
-      <li>
-        <input class="nomargin" type="checkbox" name="lock" id="lock" ${'checked="checked"' if thing.user._banned else ''} onclick="$.request(&quot;admin/lock_user&quot;, {uh: &quot;${c.modhash}&quot;, victim: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
-        <label for="locked">user is password locked</label>
-      </li>
+      %if g.admin_enable_password_locking or c.user_is_superadmin:
+        <li>
+          <input class="nomargin" type="checkbox" name="lock" id="lock" ${'checked="checked"' if thing.user._banned else ''} onclick="$.request(&quot;admin/lock_user&quot;, {uh: &quot;${c.modhash}&quot;, victim: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
+          <label for="locked">user is password locked</label>
+        </li>
+      %endif
       <li>
         <input class="nomargin" type="checkbox" name="spiderban" id="spiderban" ${'checked="checked"' if thing.user.spiderbanned else ''} onclick="$.request(&quot;admin/spiderban_user&quot;, {uh: &quot;${c.modhash}&quot;, victim: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
         <label for="spiderban">bans spread to alts through cookies</label>
@@ -209,7 +211,9 @@
       }
     </script>
     <br>
-    <a href=/admin/iphistory?username=${thing.user.name}>IP History</a>
+    %if g.admin_enable_ip_history or c.user_is_superadmin:
+      <a href=/admin/iphistory?username=${thing.user.name}>IP History</a>
+    %endif
   %endif
 
   <div class="clear"> </div>

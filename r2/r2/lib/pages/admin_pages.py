@@ -47,9 +47,9 @@ def admin_menu(**kwargs):
 
     # SAIDIT
     buttons.append(NavButton(menu.global_user_bans, "globaluserbans", sr_path=False))
-    if g.admin_enable_ip_ban:
+    if g.admin_enable_ip_ban or c.user_is_superadmin:
         buttons.append(NavButton(menu.ip_bans, "ipbans", sr_path=False))
-    if g.admin_enable_mass_content_removal:
+    if g.admin_enable_mass_content_removal or c.user_is_superadmin:
         buttons.append(NavButton(menu.nuke_user_content, "nukecontent", sr_path=False))
 
     admin_menu = NavMenu(buttons, title='admin tools', base_path='/admin',
@@ -87,9 +87,9 @@ class AdminProfileMenu(NavMenu):
     def __init__(self, path, user):
         # CUSTOM
         buttons = []
-        if g.admin_enable_ip_history:
+        if g.admin_enable_ip_history or c.user_is_superadmin:
             buttons.append(OffsiteButton(menu.ip_history, '/admin/iphistory?username=' + urllib.quote_plus(user.name)))
-        if g.admin_enable_mass_content_removal:
+        if g.admin_enable_mass_content_removal or c.user_is_superadmin:
             buttons.append(OffsiteButton(menu.nuke_user_content, '/admin/nukecontent?recipient=' + urllib.quote_plus(user.name)))
         buttons.append(OffsiteButton(menu.global_ban_user, '/admin/globaluserbans?recipient=' + urllib.quote_plus(user.name)))
         NavMenu.__init__(self, buttons, base_path = path,

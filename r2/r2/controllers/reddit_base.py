@@ -1372,6 +1372,7 @@ class RedditController(OAuth2ResourceController):
             self.set_up_user_context()
             c.modhash = generate_modhash()
             c.user_is_admin = maybe_admin and c.user.name in g.admins
+            c.user_is_superadmin = c.user_is_admin and c.user.name in g.superadmins
             c.user_is_sponsor = c.user_is_admin or c.user.name in g.sponsors
             c.otp_cached = is_otpcookie_valid
 

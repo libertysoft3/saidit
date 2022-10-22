@@ -179,7 +179,6 @@ class Account(Thing):
                      pref_lightswitch=False if g.live_config['site_theme_lightswitch_default'] == 'off' else True,
                      pref_sendreplies=True,
                      spiderbanned=False,
-                     spidershadowbanned=False,
                      )
     _preference_attrs = tuple(k for k in _defaults.keys()
                               if k.startswith("pref_"))
