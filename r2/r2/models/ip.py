@@ -159,8 +159,9 @@ def set_account_ip(user, ip, date=None):
     try:
         ipban = IpBan._by_ip(ip)
         if ipban and ipban.level >= 2:
-            # ban account if IP is level 2 or higher
-            user._spam = True
-            user._commit()
+            # ban the account being accessed if the IP ban is level 2 or higher
+            if not user._spam:
+                user._spam = True
+                user._commit()
     except NotFound:
         pass

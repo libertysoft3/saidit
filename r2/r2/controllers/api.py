@@ -5418,8 +5418,9 @@ class ApiController(RedditController):
             for ip_tup in account_ids_by_ip(ip):
                 account_id = ip_tup[0]
                 user = Account._byID(account_id)
-                user._spam = True
-                user._commit()
+                if not user._spam:
+                    user._spam = True
+                    user._commit()
 
         form.set_html(".status", _('saved, <a href="#" onclick="location.reload();">reload</a> to see changes'))
 
