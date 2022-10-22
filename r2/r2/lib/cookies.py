@@ -74,6 +74,8 @@ class Cookie(object):
             return "ga"
         elif cookie_name.startswith("beta_"):
             return "beta"
+        elif cookie_name == "spiderban":
+            return "spiderban"
         else:
             return "other"
 

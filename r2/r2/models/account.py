@@ -178,6 +178,8 @@ class Account(Thing):
                      pref_site_theme=g.live_config['site_theme_default'],
                      pref_lightswitch=False if g.live_config['site_theme_lightswitch_default'] == 'off' else True,
                      pref_sendreplies=True,
+                     spiderbanned=False,
+                     spidershadowbanned=False,
                      )
     _preference_attrs = tuple(k for k in _defaults.keys()
                               if k.startswith("pref_"))
@@ -972,9 +974,12 @@ def register(name, password, registration_ip):
 
             )
             # CUSTOM: IP bans
-            if IpBan._by_ip(registration_ip):
+            try:
                 # autoban account registered on banned IP
+                ipban = IpBan._by_ip(registration_ip)
                 account._spam = True
+            except:
+                pass
             account._commit()
 
             # update Account._by_name to pick up this new name->Account

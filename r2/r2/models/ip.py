@@ -8,6 +8,8 @@ import pytz
 from r2.lib.contrib.ipaddress import ip_address
 from r2.lib.db import tdb_cassandra
 
+from r2.lib.db.thing import NotFound
+
 # CUSTOM: IP bans
 from r2.models import IpBan
 

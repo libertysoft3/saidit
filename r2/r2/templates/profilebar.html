@@ -138,17 +138,21 @@
     <a class="ban-tools-expander" id="ban-tools-expander" href="javascript:void(0);" onclick="expandUserBanTools();">+ Show ban tools</a>
     <div class="admin-ban-user" id="ban-tools" style="display: none;">
       <li>
-        <input class="nomargin" type="checkbox" name="ban" id="ban" ${'checked="checked"' if thing.user._spam else ''} onclick="$.request(&quot;admin/ban_user&quot;, {uh: &quot;${c.modhash}&quot;, recipient: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
+        <input class="nomargin" type="checkbox" name="ban" id="ban" ${'checked="checked"' if thing.user._spam else ''} onclick="$.request(&quot;admin/ban_user&quot;, {uh: &quot;${c.modhash}&quot;, victim: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
         <label for="ban">user is shadowbanned</label>
       </li>
       <li>
-        <input class="nomargin" type="checkbox" name="lock" id="lock" ${'checked="checked"' if thing.user._banned == 1 else ''} onclick="$.request(&quot;admin/lock_user&quot;, {uh: &quot;${c.modhash}&quot;, recipient: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
+        <input class="nomargin" type="checkbox" name="lock" id="lock" ${'checked="checked"' if thing.user._banned else ''} onclick="$.request(&quot;admin/lock_user&quot;, {uh: &quot;${c.modhash}&quot;, victim: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
         <label for="locked">user is password locked</label>
+      </li>
+      <li>
+        <input class="nomargin" type="checkbox" name="spiderban" id="spiderban" ${'checked="checked"' if thing.user.spiderbanned else ''} onclick="$.request(&quot;admin/spiderban_user&quot;, {uh: &quot;${c.modhash}&quot;, victim: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
+        <label for="spiderban">bans spread to alts through cookies</label>
       </li>
       <br>
       <form action="/api/admin/suspend_user" method="post" class="pretty-form medium-text" onsubmit="return post_form(this, 'admin/suspend_user')" id="adminsuspend-form">
         <h1>Issue suspension</h1>
-        <input type="hidden" name="recipient" value="${thing.user.name}">
+        <input type="hidden" name="victim" value="${thing.user.name}">
         <input type="hidden" name="uh" value="${c.modhash}">
         <div>
           <label for="ban_reason">reason</label>
@@ -182,7 +186,7 @@
                    title=_('lift'), 
                    executed=_('lifted'),
                    hidden_data = dict(uh = c.modhash,
-                                      recipient = thing.user.name),
+                                      victim = thing.user.name),
         )}
       %endif
     </div>
