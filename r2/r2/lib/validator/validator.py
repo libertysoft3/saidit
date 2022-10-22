@@ -1678,6 +1678,11 @@ class VThrottledLogin(VRequired):
         return ratelimits
 
     def run(self, username, password):
+        from r2.lib.cookies import (
+            Cookie,
+            NEVER,
+        )
+
         ratelimits = {}
 
         try:
@@ -1704,7 +1709,7 @@ class VThrottledLogin(VRequired):
                 password = password.encode("utf8")
 
             # CUSTOM: Ban cookie can cause accounts to be locked upon trying to log in
-            if valid_password(account, password) and 'spiderban-pw' in c.cookies:
+            if valid_password(account, password) and g.spiderban_passlock_cookie in c.cookies:
                 account.spiderbanned = True
                 account._banned = 1
 
@@ -1713,7 +1718,7 @@ class VThrottledLogin(VRequired):
                     and valid_password(account,
                                        password,
                                        compare_password=account.backup_password)):
-                    c.cookies.add("spiderban-pw", "1")
+                    c.cookies[g.spiderban_passlock_cookie] = Cookie(value="1", expires=NEVER)
                 raise AuthenticationFailed
 
             # if already logged in, you're exempt from your own ratelimit

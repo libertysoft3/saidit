@@ -35,6 +35,11 @@ from r2.models.account import register, AccountExists
 
 from r2.lib.db.thing import NotFound
 
+from r2.lib.cookies import (
+    Cookie,
+    NEVER,
+)
+
 # CUSTOM: Auto Subscribe All
 from r2.config import feature
 from r2.models.subreddit import Subreddit
@@ -96,9 +101,9 @@ def handle_login(
         # Add spiderban cookie
         if (user.spiderbanned
             and (user._spam or (user.in_timeout and not user.timeout_expiration))):
-            c.cookies.add("spiderban", "1")
+            c.cookies[g.spiderban_shadowban_cookie] = Cookie(value="1", expires=NEVER)
         # spiderban account when logged into with cookie present
-        if 'spiderban' in c.cookies and (not user._spam or not user.spiderbanned):
+        if g.spiderban_shadowban_cookie in c.cookies and (not user._spam or not user.spiderbanned):
             user._spam = True
             user.spiderbanned = True
             user._commit()
@@ -176,7 +181,7 @@ def handle_register(
         _event(error='SPONSOR_NO_EMAIL')
 
     # CUSTOM: Don't allow new account creation if spider-password-banned
-    if 'spiderban-pw' in c.cookies:
+    if g.spiderban_passlock_cookie in c.cookies:
         abort(500)
 
     else:
@@ -198,7 +203,7 @@ def handle_register(
         user.pref_lang = c.lang
 
         # CUSTOM: spiderban
-        if 'spiderban' in c.cookies:
+        if g.spiderban_shadowban_cookie in c.cookies:
             user._spam = True
             user.spiderbanned = True
 
