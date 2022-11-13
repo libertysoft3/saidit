@@ -7,20 +7,25 @@
 <table class="lined-table">
  <thead>
    <tr>
-    <th>IP</th>
-    <th>Source</th>
-    <th>Ago</th>
-    <th>Date</th>
+    <th>${_("IP address")}</th>
+    <th>${_("Location")}</th>
+    <th>${_("Last Visit")}</th>
+    <th>${_("Organization")}</th>
   </tr>
  </thead>
  <tbody>
   %for item in thing.iphistory:
+  <% 
+    ip, last_visit, location, org = item[:4]
+  %>
    <tr>
-     <td>${item['ip']}&nbsp;<a target="_blank" href="https://tools.keycdn.com/geo?host=${item['ip']}">[1]</a>&nbsp;<a target="_blank" href="https://fullip.info/service/lookup/${item['ip']}">[2]</a></td>
-     <td>${item['type']}</td>
-     <td>${timestamp(item['date'])}</td>
-     <td>${item['date'].strftime("%Y-%m-%dT%H:%M:%S")}</td>
+     <td>${ip}&nbsp;<a target="_blank" href="https://tools.keycdn.com/geo?host=${ip}">[1]</a>&nbsp;<a target="_blank" href="https://fullip.info/service/lookup/${ip}">[2]</a></td>
+     <td>${location.get('country_name', '')}</td>
+     <td>${timestamp(last_visit, live=True, include_tense=True)}</td>
+     <td>${org}</td>
    </tr>
   %endfor
  </tbody>
 </table>
+
+<a href="/admin/ipbans">IP Bans</a>

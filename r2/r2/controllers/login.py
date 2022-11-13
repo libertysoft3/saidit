@@ -33,6 +33,13 @@ from r2.lib.errors import errors, reddit_http_error
 
 from r2.models.account import register, AccountExists
 
+from r2.lib.db.thing import NotFound
+
+from r2.lib.cookies import (
+    Cookie,
+    NEVER,
+)
+
 # CUSTOM: Auto Subscribe All
 from r2.config import feature
 from r2.models.subreddit import Subreddit
@@ -83,13 +90,24 @@ def handle_login(
     if responder.has_errors("ratelimit", errors.RATELIMIT):
         _event(error='RATELIMIT')
 
-    elif responder.has_errors("passwd", errors.WRONG_PASSWORD):
-        _event(error='WRONG_PASSWORD')
-
     elif responder.has_errors("passwd", errors.INCORRECT_USERNAME_OR_PASSWORD):
         _event(error='INCORRECT_USERNAME_OR_PASSWORD')
 
+    elif responder.has_errors("passwd", errors.WRONG_PASSWORD):
+        _event(error='WRONG_PASSWORD')
+
     else:
+        # CUSTOM: spiderban
+        # Add spiderban cookie
+        if (user.spiderbanned
+            and (user._spam or (user.in_timeout and not user.timeout_expiration))):
+            c.cookies[g.spiderban_shadowban_cookie] = Cookie(value="1", expires=NEVER)
+        # spiderban account when logged into with cookie present
+        if g.spiderban_shadowban_cookie in c.cookies and (not user._spam or not user.spiderbanned):
+            user._spam = True
+            user.spiderbanned = True
+            user._commit()
+
         controller._login(responder, user, rem)
         _event(error=None)
 
@@ -162,6 +180,10 @@ def handle_register(
         form.has_errors("email", errors.SPONSOR_NO_EMAIL)
         _event(error='SPONSOR_NO_EMAIL')
 
+    # CUSTOM: Don't allow new account creation if spider-password-banned
+    if g.spiderban_passlock_cookie in c.cookies:
+        abort(500)
+
     else:
         try:
             user = register(name, password, request.ip)
@@ -179,6 +201,12 @@ def handle_register(
             emailer.verify_email(user)
 
         user.pref_lang = c.lang
+
+        # CUSTOM: spiderban
+        if g.spiderban_shadowban_cookie in c.cookies:
+            user._spam = True
+            user.spiderbanned = True
+
         user._commit()
 
         amqp.add_item('new_account', user._fullname)
@@ -196,10 +224,10 @@ def handle_register(
             except newsletter.NewsletterError as e:
                 g.log.warning("Failed to subscribe: %r" % e)
 
-        controller._login(responder, user, rem)
-
         # CUSTOM: Auto Subscribe All, calling subscribe_defaults() asap
         if feature.is_enabled('auto_subscribe_all'):
-            Subreddit.subscribe_defaults(c.user)
+            Subreddit.subscribe_defaults(user)
+
+        controller._login(responder, user, rem)
 
         _event(error=None)

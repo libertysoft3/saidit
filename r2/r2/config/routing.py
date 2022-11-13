@@ -58,10 +58,13 @@ def make_map(config):
 
     mc('/admin/', controller='awards')
     mc('/api/admin/add_ban_message', controller='admintool', action='add_ban_message')
+
+    # CUSTOM: Admin user bans
     mc('/api/admin/ban_user', controller='admintool', action='ban_user')
     mc('/api/admin/lock_user', controller='admintool', action='lock_user')
     mc('/api/admin/suspend_user', controller='admintool', action='suspend_user')
     mc('/api/admin/unsuspend_user', controller='admintool', action='unsuspend_user')
+    mc('/api/admin/spiderban_user', controller='admintool', action='spiderban_user')
 
     mc('/robots.txt', controller='robots', action='robots')
     mc('/crossdomain', controller='robots', action='crossdomain')

@@ -128,6 +128,94 @@
     </span>
   </div>
 
+  %if thing.viewing_self:
+    <br>
+    <a href="/account-activity">Account IP activity</a>
+  %endif
+
+  %if c.user_is_admin:
+    <br>
+    <a class="ban-tools-expander" id="ban-tools-expander" href="javascript:void(0);" onclick="expandUserBanTools();">+ Show ban tools</a>
+    <div class="admin-ban-user" id="ban-tools" style="display: none;">
+      <li>
+        <input class="nomargin" type="checkbox" name="ban" id="ban" ${'checked="checked"' if thing.user._spam else ''} onclick="$.request(&quot;admin/ban_user&quot;, {uh: &quot;${c.modhash}&quot;, victim: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
+        <label for="ban">user is shadowbanned</label>
+      </li>
+      %if g.admin_enable_password_locking or c.user_is_superadmin:
+        <li>
+          <input class="nomargin" type="checkbox" name="lock" id="lock" ${'checked="checked"' if thing.user._banned else ''} onclick="$.request(&quot;admin/lock_user&quot;, {uh: &quot;${c.modhash}&quot;, victim: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
+          <label for="locked">user is password locked</label>
+        </li>
+      %endif
+      <li>
+        <input class="nomargin" type="checkbox" name="spiderban" id="spiderban" ${'checked="checked"' if thing.user.spiderbanned else ''} onclick="$.request(&quot;admin/spiderban_user&quot;, {uh: &quot;${c.modhash}&quot;, victim: &quot;${thing.user.name}&quot;, reverse: !event.target.checked});">
+        <label for="spiderban">bans spread to alts through cookies</label>
+      </li>
+      <br>
+      <form action="/api/admin/suspend_user" method="post" class="pretty-form medium-text" onsubmit="return post_form(this, 'admin/suspend_user')" id="adminsuspend-form">
+        <h1>Issue suspension</h1>
+        <input type="hidden" name="victim" value="${thing.user.name}">
+        <input type="hidden" name="uh" value="${c.modhash}">
+        <div>
+          <label for="ban_reason">reason</label>
+          <select name="ban_reason">
+            <option value="spamming the site">Spam</option>
+            <option value="dragging down the Pyramid of Debate">Dragging Down the Pyramid of Debate</option>
+            <option value="advocating violence">Advocating Violence</option>
+            <option value="posting illegal content">Illegal Content</option>
+            <option value="engaging in vote manipulation">Vote Manipulation</option>
+            <option value="posting pornography">Porn</option>
+            <option value="sexualizing minors">Sexualizing Minors</option>
+            <option value="breaking the saidit rules">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="duration">${_('how long?')}</label>
+          <input type="number" min="1" max="999" name="duration" id="duration">
+          <span>${_('days (leave blank for permanent)')}</span>
+        </div>
+        <div>
+          <label for="ban_message">${_('note to include in ban PM')}</label>
+          <textarea name="ban_message" id="ban_message"></textarea>
+        </div>
+        <button class="btn" type="submit">suspend</button>
+        <span class="status"></span>
+      </form>
+
+      %if thing.user.in_timeout:
+        <p style="color: red;">User is suspended ${'for ' + str(thing.user.days_remaining_in_timeout) + ' more day(s)' if thing.user.timeout_expiration else 'indefinitely'}</p>
+        ${ynbutton(op='admin/unsuspend_user',
+                   title=_('lift'), 
+                   executed=_('lifted'),
+                   hidden_data = dict(uh = c.modhash,
+                                      victim = thing.user.name),
+        )}
+      %endif
+    </div>
+    <script>
+      var banToolsExpander = document.getElementById('ban-tools-expander');
+      var banTools = document.getElementById('ban-tools');
+
+      function expandUserBanTools()
+      {
+          banToolsExpander.onclick = collapseUserBanTools;
+          banToolsExpander.innerHTML = "- Hide ban tools";
+          banTools.style = "";
+      }
+
+      function collapseUserBanTools()
+      {
+          banToolsExpander.onclick = expandUserBanTools;
+          banToolsExpander.innerHTML = "+ Show ban tools";
+          banTools.style = "display: none;";
+      }
+    </script>
+    <br>
+    %if g.admin_enable_ip_history or c.user_is_superadmin:
+      <a href=/admin/iphistory?username=${thing.user.name}>IP History</a>
+    %endif
+  %endif
+
   <div class="clear"> </div>
 
 </div>

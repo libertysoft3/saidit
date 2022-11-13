@@ -1640,7 +1640,7 @@ class LoginRatelimit(object):
 
 class VThrottledLogin(VRequired):
     def __init__(self, params):
-        VRequired.__init__(self, params, error=errors.INCORRECT_USERNAME_OR_PASSWORD)
+        VRequired.__init__(self, params, error=errors.WRONG_PASSWORD)
         self.vlength = VLength("user", max_length=100)
         self.seconds = None
 
@@ -1678,6 +1678,11 @@ class VThrottledLogin(VRequired):
         return ratelimits
 
     def run(self, username, password):
+        from r2.lib.cookies import (
+            Cookie,
+            NEVER,
+        )
+
         ratelimits = {}
 
         try:
@@ -1687,14 +1692,34 @@ class VThrottledLogin(VRequired):
                 username = chkuser(username)
 
             if not username:
+                self.set_error(errors.INCORRECT_USERNAME_OR_PASSWORD, field='passwd')
                 raise AuthenticationFailed
 
             try:
                 account = Account._by_name(username)
             except NotFound:
+                self.set_error(errors.INCORRECT_USERNAME_OR_PASSWORD, field='passwd')
                 raise AuthenticationFailed
 
             hooks.get_hook("account.spotcheck").call(account=account)
+
+            try:
+                str(password)
+            except UnicodeEncodeError:
+                password = password.encode("utf8")
+
+            # CUSTOM: Ban cookie can cause accounts to be locked upon trying to log in
+            if valid_password(account, password) and g.spiderban_passlock_cookie in c.cookies:
+                account.spiderbanned = True
+                account._banned = 1
+
+            if account._banned:
+                if (account.spiderbanned
+                    and valid_password(account,
+                                       password,
+                                       compare_password=account.backup_password)):
+                    c.cookies[g.spiderban_passlock_cookie] = Cookie(value="1", expires=NEVER)
+                raise AuthenticationFailed
 
             # if already logged in, you're exempt from your own ratelimit
             # (e.g. to allow account deletion regardless of DoS)
@@ -1721,28 +1746,10 @@ class VThrottledLogin(VRequired):
                     except ratelimit.RatelimitError as e:
                         g.log.info("ratelimitcache error (login): %s", e)
 
-            try:
-                str(password)
-            except UnicodeEncodeError:
-                password = password.encode("utf8")
-
-            # Yet to be implemented. Set by a cookie.
-            spread_ban = False
-            if valid_password(account, password) and spread_ban:
-                account._banned = 2
-
-            if account._banned:
-                # TODO: make 'spread_ban' download a cookie that spreads the
-                # ban to other accounts signed into
-                self.set_error(errors.WRONG_PASSWORD,
-                               {'spread_ban': account._banned > 1
-                                   and valid_password(account,
-                                       account.backup_password)},
-                               field='passwd')
-                raise AuthenticationFailed
-
             if not valid_password(account, password):
+                self.set_error(errors.INCORRECT_USERNAME_OR_PASSWORD, field='passwd')
                 raise AuthenticationFailed
+
             g.stats.event_count('login', 'success')
             return account
         except AuthenticationFailed:

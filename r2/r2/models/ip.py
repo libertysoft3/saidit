@@ -8,6 +8,11 @@ import pytz
 from r2.lib.contrib.ipaddress import ip_address
 from r2.lib.db import tdb_cassandra
 
+from r2.lib.db.thing import NotFound
+
+# CUSTOM: IP bans
+from r2.models import IpBan
+
 
 __all__ = ["IPsByAccount", "AccountsByIP"]
 
@@ -132,7 +137,7 @@ class AccountsByIP(tdb_cassandra.View):
         return results
 
 
-def set_account_ip(account_id, ip, date=None):
+def set_account_ip(user, ip, date=None):
     """Set an IP address as having accessed an account.
 
     Updates all underlying datastores.
@@ -146,6 +151,17 @@ def set_account_ip(account_id, ip, date=None):
     if date is None:
         date = datetime.datetime.now(g.tz)
     m = Mutator(CONNECTION_POOL)
-    m.insert(IPsByAccount._cf, str(account_id), {date: ip}, ttl=CF_TTL)
-    m.insert(AccountsByIP._cf, ip, {date: str(account_id)}, ttl=CF_TTL)
+    m.insert(IPsByAccount._cf, str(user._id), {date: ip}, ttl=CF_TTL)
+    m.insert(AccountsByIP._cf, ip, {date: str(user._id)}, ttl=CF_TTL)
     m.send()
+
+    # CUSTOM: IP ban
+    try:
+        ipban = IpBan._by_ip(ip)
+        if ipban and ipban.level >= 2:
+            # ban the account being accessed if the IP ban is level 2 or higher
+            if not user._spam:
+                user._spam = True
+                user._commit()
+    except NotFound:
+        pass

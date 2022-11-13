@@ -143,6 +143,8 @@ from r2.models import (
 )
 from r2.lib.db import tdb_cassandra
 
+from r2.models.ip import set_account_ip
+
 
 # Cookies which may be set in a response without making it uncacheable
 CACHEABLE_COOKIES = ()
@@ -1247,6 +1249,7 @@ class OAuth2OnlyController(OAuth2ResourceController):
         OAuth2ResourceController.pre(self)
         if request.method != "OPTIONS":
             self.authenticate_with_token()
+            set_account_ip(c.user, request.ip)
             self.set_up_user_context()
             self.run_sitewide_ratelimits()
 
@@ -1365,9 +1368,11 @@ class RedditController(OAuth2ResourceController):
                     c.user._commit()
 
         if c.user_is_loggedin:
+            set_account_ip(c.user, request.ip)
             self.set_up_user_context()
             c.modhash = generate_modhash()
             c.user_is_admin = maybe_admin and c.user.name in g.admins
+            c.user_is_superadmin = c.user_is_admin and c.user.name in g.superadmins
             c.user_is_sponsor = c.user_is_admin or c.user.name in g.sponsors
             c.otp_cached = is_otpcookie_valid
 
