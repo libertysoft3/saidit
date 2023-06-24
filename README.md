@@ -1,3 +1,7 @@
+### Archived
+
+Recommended alternative repo: https://github.com/CrystalVulpine/saidit
+
 ## SaidIt
 
 SaidIt is a [reddit open source](https://github.com/reddit-archive/reddit) continuation and fork with:
